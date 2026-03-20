@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
@@ -59,10 +60,19 @@ class FAISSVectorStore:
 
         self.store.add_documents(documents)
 
-    def search(self, query: str, top_k: int) -> list[tuple[LCDocument, float]]:
+    def search(
+        self, query: str, top_k: int, metadata_filter: dict[str, Any] | None = None
+    ) -> list[tuple[LCDocument, float]]:
         """Return top-k similar documents and FAISS distance scores."""
         if self.store is None:
             return []
+
+        if metadata_filter:
+            return self.store.similarity_search_with_score(
+                query=query,
+                k=top_k,
+                filter=metadata_filter,
+            )
 
         return self.store.similarity_search_with_score(query=query, k=top_k)
 

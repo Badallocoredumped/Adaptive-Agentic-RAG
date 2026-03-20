@@ -54,3 +54,39 @@ TEXT_KEYWORDS = {
     "policy",
     "report",
 }
+
+DOMAIN_KEYWORDS = {
+    "sales": {
+        "sale",
+        "sales",
+        "order",
+        "orders",
+        "revenue",
+        "customer",
+        "customers",
+        "invoice",
+        "amount",
+    },
+    "legal": {
+        "law",
+        "legal",
+        "contract",
+        "compliance",
+        "policy",
+        "regulation",
+        "gdpr",
+        "terms",
+    },
+}
+
+FILENAME_DOMAIN_HINTS = {
+    "sales": "sales",
+    "order": "sales",
+    "invoice": "sales",
+    "finance": "sales",
+    "law": "legal",
+    "legal": "legal",
+    "contract": "legal",
+    "policy": "legal",
+    "compliance": "legal",
+}
