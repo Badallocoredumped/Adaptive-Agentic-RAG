@@ -18,10 +18,11 @@ CHUNKER_MODE = "recursive"
 RECURSIVE_SEPARATORS = ["\n\n", "\n", ". ", " ", ""]
 
 DEFAULT_ROUTE = "text"
-ROUTER_MODE = "llm"
+ROUTER_MODE = "zeroshot"
 ROUTER_LLM_TEMPERATURE = 0.0
 ROUTER_MODEL = "Qwen"
 ROUTER_BASE_URL = "http://localhost:8080"
+ROUTER_API_KEY = "local"
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"
 ROUTER_COMPLETION_ENDPOINT = "/completion"
 ROUTER_TIMEOUT_SECONDS = 10

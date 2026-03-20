@@ -59,7 +59,9 @@ class AdaptiveAgenticRAGSystem:
 
     def run_query(self, user_query: str) -> str:
         """End-to-end query flow: route -> execute source pipelines -> synthesize answer."""
-        if config.ROUTER_MODE == "llm":
+        if config.ROUTER_MODE == "zeroshot":
+            route = self.router.route_with_zeroshot(user_query)
+        elif config.ROUTER_MODE == "llm":
             route = self.router.route_with_llm(user_query)
         else:
             route = self.router.route(user_query)
@@ -94,5 +96,5 @@ def run_query(user_query: str) -> str:
 
 
 if __name__ == "__main__":
-    demo_question = "What is the total number of orders and summarize related documents?"
+    demo_question = "What is the total number of orders?"
     print(run_query(demo_question))

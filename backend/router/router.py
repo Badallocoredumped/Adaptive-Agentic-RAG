@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import importlib
 import re
 
+from langchain_core.prompts import ChatPromptTemplate
 import requests
 
 from backend import config
@@ -49,6 +51,60 @@ class QueryRouter:
             pass
 
         return self.route(query)
+
+    def route_with_zeroshot(self, query: str) -> str:
+        """Classify query intent using LangChain + OpenAI-compatible chat model."""
+        chat_openai_cls = self._resolve_chat_openai_class()
+        if chat_openai_cls is None:
+            return self.route(query)
+
+        try:
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        "You are a zero-shot intent classifier for retrieval routing. "
+                        "Classify each query into exactly one label: sql, text, or hybrid. "
+                        "Return only the label with no explanation. "
+                        "Use sql for database/aggregation intents, text for document retrieval/summarization intents, "
+                        "and hybrid when both are clearly needed.",
+                    ),
+                    ("human", "User query: {query}"),
+                ]
+            )
+
+            llm = chat_openai_cls(
+                model=config.ROUTER_MODEL,
+                temperature=config.ROUTER_LLM_TEMPERATURE,
+                base_url=f"{config.ROUTER_BASE_URL.rstrip('/')}/v1",
+                api_key=config.ROUTER_API_KEY,
+                timeout=config.ROUTER_TIMEOUT_SECONDS,
+            )
+
+            chain = prompt | llm
+            response = chain.invoke({"query": query})
+            content = getattr(response, "content", "")
+            label = self._normalize_label(str(content))
+            if label in {"sql", "text", "hybrid"}:
+                return label
+        except Exception:  # noqa: BLE001
+            pass
+
+        return self.route(query)
+
+    @staticmethod
+    def _resolve_chat_openai_class():
+        try:
+            module = importlib.import_module("langchain_openai")
+            return getattr(module, "ChatOpenAI")
+        except Exception:  # noqa: BLE001
+            pass
+
+        try:
+            module = importlib.import_module("langchain_community.chat_models")
+            return getattr(module, "ChatOpenAI")
+        except Exception:  # noqa: BLE001
+            return None
 
     @staticmethod
     def _keyword_hits(query: str, keywords: set[str]) -> int:
