@@ -130,5 +130,6 @@ def run_query(user_query: str) -> str:
 
 
 if __name__ == "__main__":
-    demo_question = "How is unstructured layer implemented?"
+    demo_question = "Where should students upload their presentation files and do they need to bring a laptop?"
+
     print(run_query(demo_question))
