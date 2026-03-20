@@ -9,11 +9,16 @@ INDEX_PATH = INDEX_DIR / "faiss.index"
 METADATA_PATH = INDEX_DIR / "chunk_metadata.json"
 SQLITE_DB_PATH = DATA_DIR / "app.db"
 
-EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-base"
+E5_PREFIX_ENABLED = True
+E5_QUERY_PREFIX = "query: "
+E5_PASSAGE_PREFIX = "passage: "
 DEFAULT_TOP_K = 3
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 100
 CHUNKER_MODE = "recursive"
+VECTOR_DISTANCE_METRIC = "cosine"
+VECTOR_NORMALIZE_L2 = True
 
 RECURSIVE_SEPARATORS = ["\n\n", "\n", ". ", " ", ""]
 

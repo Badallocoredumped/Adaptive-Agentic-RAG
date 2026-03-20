@@ -94,8 +94,11 @@ Notes:
 - `decompose` mode runs an LLM decomposition agent first, producing a JSON list of sub-tasks with per-task routes (`sql|text|hybrid`).
 - In `decompose` mode, any `hybrid` sub-task is normalized into two execution units (`sql` and `text`) before pipeline execution.
 - `zeroshot` mode uses LangChain with an OpenAI-compatible chat endpoint for strict route classification (`sql|text|hybrid`).
+- Embeddings default to `intfloat/multilingual-e5-base` with automatic E5 prefixes (`query: ` for queries, `passage: ` for documents).
+- Vector retrieval is configured explicitly for cosine distance with normalized vectors.
 - LLM routing calls your local llama.cpp REST server (`/v1/chat/completions` primary, `/completion` fallback) with automatic fallback to rule-based routing if the server is unavailable.
 - Chunking mode is controlled via `CHUNKER_MODE` (`recursive` recommended for WP1, `fixed` also available).
+- If you change embedding model or vector metric settings, delete old index files and re-ingest documents.
 
 This runs a single hardcoded demo query through:
 

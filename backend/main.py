@@ -130,5 +130,5 @@ def run_query(user_query: str) -> str:
 
 
 if __name__ == "__main__":
-    demo_question = "What is the total number of orders?"
+    demo_question = "How is unstructured layer implemented?"
     print(run_query(demo_question))

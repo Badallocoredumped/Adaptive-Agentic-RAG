@@ -5,8 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from backend import config
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
+from langchain_community.vectorstores.utils import DistanceStrategy
 from langchain_core.documents import Document as LCDocument
 
 
@@ -55,7 +57,17 @@ class FAISSVectorStore:
             return
 
         if self.store is None:
-            self.store = FAISS.from_documents(documents=documents, embedding=self.embeddings)
+            distance_strategy = (
+                DistanceStrategy.COSINE
+                if config.VECTOR_DISTANCE_METRIC.lower() == "cosine"
+                else DistanceStrategy.EUCLIDEAN_DISTANCE
+            )
+            self.store = FAISS.from_documents(
+                documents=documents,
+                embedding=self.embeddings,
+                distance_strategy=distance_strategy,
+                normalize_L2=config.VECTOR_NORMALIZE_L2,
+            )
             return
 
         self.store.add_documents(documents)
@@ -81,9 +93,19 @@ class FAISSVectorStore:
         """Create an empty FAISS store for advanced initialization scenarios."""
         import faiss
 
+        metric = config.VECTOR_DISTANCE_METRIC.lower()
+        if metric == "cosine":
+            index = faiss.IndexFlatIP(768)
+            distance_strategy = DistanceStrategy.COSINE
+        else:
+            index = faiss.IndexFlatL2(768)
+            distance_strategy = DistanceStrategy.EUCLIDEAN_DISTANCE
+
         return FAISS(
             embedding_function=embeddings,
-            index=faiss.IndexFlatL2(384),
+            index=index,
             docstore=InMemoryDocstore(),
             index_to_docstore_id={},
+            distance_strategy=distance_strategy,
+            normalize_L2=config.VECTOR_NORMALIZE_L2,
         )
