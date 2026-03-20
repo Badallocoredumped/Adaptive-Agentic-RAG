@@ -18,7 +18,7 @@ from backend.rag import (
     SentenceTransformerEmbedder,
     TextChunker,
 )
-from backend.router import QueryRouter
+from backend.router import QueryRouter, SubTask
 from backend.sql import SQLiteDatabase, SQLExecutor, SQLQueryGenerator
 from backend.synthesis import ResponseSynthesizer
 
@@ -59,6 +59,15 @@ class AdaptiveAgenticRAGSystem:
 
     def run_query(self, user_query: str) -> str:
         """End-to-end query flow: route -> execute source pipelines -> synthesize answer."""
+        if config.ROUTER_MODE == "decompose":
+            sub_tasks = self.router.decompose_with_zeroshot(user_query)
+            subtask_results = self._execute_subtasks(sub_tasks)
+            return self.synthesizer.synthesize(
+                user_query=user_query,
+                route="decompose",
+                subtask_results=subtask_results,
+            )
+
         if config.ROUTER_MODE == "zeroshot":
             route = self.router.route_with_zeroshot(user_query)
         elif config.ROUTER_MODE == "llm":
@@ -82,6 +91,31 @@ class AdaptiveAgenticRAGSystem:
             sql_result=sql_result,
             rag_result=rag_result,
         )
+
+    def _execute_subtasks(self, sub_tasks: list[SubTask]) -> list[dict]:
+        """Run each decomposed sub-task on its assigned pipeline(s)."""
+        outputs: list[dict] = []
+        for task in sub_tasks:
+            sql_result: dict | None = None
+            rag_result: list[dict] | None = None
+
+            if task.route in {"sql", "hybrid"}:
+                sql_query = self.query_generator.generate_sql(task.sub_query)
+                sql_result = self.sql_executor.execute(sql_query)
+
+            if task.route in {"text", "hybrid"}:
+                rag_result = self.retriever.retrieve(task.sub_query, top_k=config.DEFAULT_TOP_K)
+
+            outputs.append(
+                {
+                    "sub_query": task.sub_query,
+                    "route": task.route,
+                    "sql_result": sql_result,
+                    "rag_result": rag_result,
+                }
+            )
+
+        return outputs
 
 
 def build_system() -> AdaptiveAgenticRAGSystem:

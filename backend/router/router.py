@@ -4,12 +4,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import importlib
+import json
 import re
+from typing import Any
 
 from langchain_core.prompts import ChatPromptTemplate
 import requests
 
 from backend import config
+
+
+@dataclass
+class SubTask:
+    """A decomposed unit of work with an assigned execution route."""
+
+    sub_query: str
+    route: str
 
 
 @dataclass
@@ -92,6 +102,63 @@ class QueryRouter:
 
         return self.route(query)
 
+    def decompose(self, query: str) -> list[SubTask]:
+        """Fallback decomposition: keep one sub-task using rule routing."""
+        route = self.route(query)
+        return self._expand_hybrid_subtasks([SubTask(sub_query=query, route=route)])
+
+    def decompose_with_zeroshot(self, query: str) -> list[SubTask]:
+        """Decompose a query into multiple routed sub-tasks using LangChain chat model."""
+        chat_openai_cls = self._resolve_chat_openai_class()
+        if chat_openai_cls is None:
+            return self.decompose(query)
+
+        try:
+            prompt = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        "You are a decomposition and routing agent for a hybrid SQL + RAG system. "
+                        "Break the user query into meaningful sub-queries and assign one route for each. "
+                        "Allowed routes are exactly: sql, text, hybrid. "
+                        "Return strict JSON only in this shape: "
+                        "[{\"sub_query\": \"...\", \"route\": \"sql|text|hybrid\"}]. "
+                        "Do not include markdown, comments, or extra keys.",
+                    ),
+                    (
+                        "human",
+                        "User query: {query}\n"
+                        "Max sub-tasks: {max_subtasks}\n"
+                        "If one sub-task is enough, return a one-item JSON list.",
+                    ),
+                ]
+            )
+
+            llm = chat_openai_cls(
+                model=config.ROUTER_MODEL,
+                temperature=config.ROUTER_LLM_TEMPERATURE,
+                base_url=f"{config.ROUTER_BASE_URL.rstrip('/')}/v1",
+                api_key=config.ROUTER_API_KEY,
+                timeout=config.ROUTER_TIMEOUT_SECONDS,
+            )
+
+            chain = prompt | llm
+            response = chain.invoke(
+                {
+                    "query": query,
+                    "max_subtasks": str(config.ROUTER_DECOMPOSE_MAX_SUBTASKS),
+                }
+            )
+            content = str(getattr(response, "content", ""))
+
+            sub_tasks = self._parse_decomposition_output(content)
+            if sub_tasks:
+                return self._expand_hybrid_subtasks(sub_tasks)
+        except Exception:  # noqa: BLE001
+            pass
+
+        return self.decompose(query)
+
     @staticmethod
     def _resolve_chat_openai_class():
         try:
@@ -103,6 +170,74 @@ class QueryRouter:
         try:
             module = importlib.import_module("langchain_community.chat_models")
             return getattr(module, "ChatOpenAI")
+        except Exception:  # noqa: BLE001
+            return None
+
+    def _parse_decomposition_output(self, raw_output: str) -> list[SubTask]:
+        payload = self._safe_json_parse(raw_output)
+        if not isinstance(payload, list):
+            return []
+
+        cleaned: list[SubTask] = []
+        for item in payload:
+            if not isinstance(item, dict):
+                continue
+
+            sub_query = str(item.get("sub_query", "")).strip()
+            route = self._normalize_label(str(item.get("route", "")))
+
+            if not sub_query:
+                continue
+            if route not in {"sql", "text", "hybrid"}:
+                route = self.route(sub_query)
+
+            cleaned.append(SubTask(sub_query=sub_query, route=route))
+            if len(cleaned) >= config.ROUTER_DECOMPOSE_MAX_SUBTASKS:
+                break
+
+        return cleaned
+
+    def _expand_hybrid_subtasks(self, sub_tasks: list[SubTask]) -> list[SubTask]:
+        """Normalize hybrid subtasks into explicit sql and text execution units."""
+        expanded: list[SubTask] = []
+        for task in sub_tasks:
+            if task.route == "hybrid":
+                expanded.append(SubTask(sub_query=task.sub_query, route="sql"))
+                expanded.append(SubTask(sub_query=task.sub_query, route="text"))
+            else:
+                expanded.append(task)
+
+        deduped: list[SubTask] = []
+        seen: set[tuple[str, str]] = set()
+        for task in expanded:
+            key = (task.sub_query.strip().lower(), task.route)
+            if key in seen:
+                continue
+            seen.add(key)
+            deduped.append(task)
+            if len(deduped) >= config.ROUTER_DECOMPOSE_MAX_SUBTASKS:
+                break
+
+        return deduped
+
+    @staticmethod
+    def _safe_json_parse(raw_output: str) -> Any:
+        text = raw_output.strip()
+        if not text:
+            return None
+
+        try:
+            return json.loads(text)
+        except Exception:  # noqa: BLE001
+            pass
+
+        # Fallback for models that wrap JSON with prose.
+        match = re.search(r"\[[\s\S]*\]", text)
+        if not match:
+            return None
+
+        try:
+            return json.loads(match.group(0))
         except Exception:  # noqa: BLE001
             return None
 

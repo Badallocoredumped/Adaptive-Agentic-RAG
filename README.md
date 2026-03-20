@@ -90,7 +90,9 @@ python -c "from backend.main import run_query; print(run_query('summarize the do
 
 Notes:
 
-- Router mode is controlled in `backend/config.py` via `ROUTER_MODE` (`zeroshot`, `llm`, or `rule`).
+- Router mode is controlled in `backend/config.py` via `ROUTER_MODE` (`decompose`, `zeroshot`, `llm`, or `rule`).
+- `decompose` mode runs an LLM decomposition agent first, producing a JSON list of sub-tasks with per-task routes (`sql|text|hybrid`).
+- In `decompose` mode, any `hybrid` sub-task is normalized into two execution units (`sql` and `text`) before pipeline execution.
 - `zeroshot` mode uses LangChain with an OpenAI-compatible chat endpoint for strict route classification (`sql|text|hybrid`).
 - LLM routing calls your local llama.cpp REST server (`/v1/chat/completions` primary, `/completion` fallback) with automatic fallback to rule-based routing if the server is unavailable.
 - Chunking mode is controlled via `CHUNKER_MODE` (`recursive` recommended for WP1, `fixed` also available).
