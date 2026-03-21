@@ -10,14 +10,14 @@ class SQLQueryGenerator:
         """Return a best-effort SQL query from a natural language request."""
         query = user_query.lower()
 
+        if "revenue" in query or "sum" in query:
+            return "SELECT SUM(amount) AS total_revenue FROM orders;"
+
         if "total" in query and "orders" in query:
             return "SELECT COUNT(*) AS total_orders FROM orders;"
 
         if "customers" in query and "city" in query:
             return "SELECT city, COUNT(*) AS total_customers FROM customers GROUP BY city;"
-
-        if "revenue" in query or "sum" in query:
-            return "SELECT SUM(amount) AS total_revenue FROM orders;"
 
         return "SELECT id, name, city FROM customers LIMIT 5;"
 

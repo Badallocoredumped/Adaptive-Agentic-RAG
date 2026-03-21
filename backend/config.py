@@ -39,9 +39,10 @@ DEFAULT_ROUTE = "text"
 ROUTER_MODE = "decompose" 
 
 ROUTER_LLM_TEMPERATURE = 0.0
-ROUTER_MODEL = "Qwen"
+ROUTER_MODEL = "qwen2.5-coder-7b-instruct"
 ROUTER_BASE_URL = "http://localhost:8080"
 ROUTER_API_KEY = "local"
+ROUTER_DEBUG = True
 
 # maximum number of subtasks for initial query
 ROUTER_DECOMPOSE_MAX_SUBTASKS = 4

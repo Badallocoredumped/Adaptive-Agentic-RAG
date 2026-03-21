@@ -50,6 +50,11 @@ class AdaptiveAgenticRAGSystem:
 
         self.synthesizer = ResponseSynthesizer()
 
+    @staticmethod
+    def _debug(message: str) -> None:
+        if getattr(config, "ROUTER_DEBUG", False):
+            print(f"[MAIN DEBUG] {message}")
+
     def ingest_documents(self, paths: list[str]) -> int:
         """Load, chunk, and index documents into FAISS; returns number of indexed chunks."""
         documents = self.loader.load_documents(paths)
@@ -59,18 +64,22 @@ class AdaptiveAgenticRAGSystem:
 
     def run_query(self, user_query: str) -> str:
         """End-to-end query flow: route -> execute source pipelines -> synthesize answer."""
-        if config.ROUTER_MODE == "decompose":
+        self._debug(f"run_query() mode={config.ROUTER_MODE}, query={user_query!r}")
+        if config.ROUTER_MODE in {"decompose", "zeroshot"}:
             sub_tasks = self.router.decompose_with_zeroshot(user_query)
             subtask_results = self._execute_subtasks(sub_tasks)
+            route = self.router.route_from_subtasks(sub_tasks)
+            self._debug(
+                "run_query() subtask routes="
+                f"{[{'route': t.route, 'sub_query': t.sub_query} for t in sub_tasks]}, final_route={route}"
+            )
             return self.synthesizer.synthesize(
                 user_query=user_query,
-                route="decompose",
+                route=route,
                 subtask_results=subtask_results,
             )
 
-        if config.ROUTER_MODE == "zeroshot":
-            route = self.router.route_with_zeroshot(user_query)
-        elif config.ROUTER_MODE == "llm":
+        if config.ROUTER_MODE == "llm":
             route = self.router.route_with_llm(user_query)
         else:
             route = self.router.route(user_query)
@@ -79,10 +88,12 @@ class AdaptiveAgenticRAGSystem:
         rag_result: list[dict] | None = None
 
         if route in {"sql", "hybrid"}:
+            self._debug(f"run_query() executing SQL pipeline for query={user_query!r}")
             sql_query = self.query_generator.generate_sql(user_query)
             sql_result = self.sql_executor.execute(sql_query)
 
         if route in {"text", "hybrid"}:
+            self._debug(f"run_query() executing RAG pipeline for query={user_query!r}")
             rag_result = self.retriever.retrieve(user_query, top_k=config.DEFAULT_TOP_K)
 
         return self.synthesizer.synthesize(
@@ -98,12 +109,15 @@ class AdaptiveAgenticRAGSystem:
         for task in sub_tasks:
             sql_result: dict | None = None
             rag_result: list[dict] | None = None
+            self._debug(f"_execute_subtasks() dispatch route={task.route}, sub_query={task.sub_query!r}")
 
             if task.route in {"sql", "hybrid"}:
+                self._debug("_execute_subtasks() -> SQL pipeline")
                 sql_query = self.query_generator.generate_sql(task.sub_query)
                 sql_result = self.sql_executor.execute(sql_query)
 
             if task.route in {"text", "hybrid"}:
+                self._debug("_execute_subtasks() -> RAG pipeline")
                 rag_result = self.retriever.retrieve(task.sub_query, top_k=config.DEFAULT_TOP_K)
 
             outputs.append(
@@ -128,8 +142,23 @@ def run_query(user_query: str) -> str:
     system = build_system()
     return system.run_query(user_query)
 
-
 if __name__ == "__main__":
-    demo_question = "Where should students upload their presentation files and do they need to bring a laptop?"
+    # Example 1: hybrid expansion — same sentence, two pipelines
+    q1 = "Show me the revenue from customers of Cairo and explain why those happened."
+    print("=" * 60)
+    print(f"QUERY 1: {q1}")
+    print("=" * 60)
+    print(run_query(q1))
 
-    print(run_query(demo_question))
+    print()
+
+    # Example 2: two distinct sub-tasks (sql + text)
+    q2 = (
+        "What is the total revenue from all orders, and also summarize "
+        "the key business insights mentioned in the sales document about "
+        "customer trends and purchasing behavior."
+    )
+    print("=" * 60)
+    print(f"QUERY 2: {q2}")
+    print("=" * 60)
+    print(run_query(q2))

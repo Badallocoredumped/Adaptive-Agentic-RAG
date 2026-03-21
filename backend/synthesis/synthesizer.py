@@ -84,13 +84,25 @@ class ResponseSynthesizer:
 
     @staticmethod
     def _format_sql_section(sql_result: dict) -> str:
+        executed_query = str(sql_result.get("query", "")).strip()
         if not sql_result.get("ok", False):
-            return f"SQL\n  Status : failed\n  Error  : {sql_result.get('error', 'unknown error')}"
+            return (
+                "SQL\n"
+                f"  Query  : {executed_query or 'n/a'}\n"
+                "  Status : failed\n"
+                f"  Error  : {sql_result.get('error', 'unknown error')}"
+            )
 
         row_count = sql_result.get("row_count", 0)
         rows = sql_result.get("rows", [])
         preview = rows[:3]
-        return f"SQL\n  Status : ok\n  Rows   : {row_count}\n  Preview: {preview}"
+        return (
+            "SQL\n"
+            f"  Query  : {executed_query or 'n/a'}\n"
+            "  Status : ok\n"
+            f"  Rows   : {row_count}\n"
+            f"  Preview: {preview}"
+        )
 
     @staticmethod
     def _format_rag_section(rag_result: list[dict]) -> str:

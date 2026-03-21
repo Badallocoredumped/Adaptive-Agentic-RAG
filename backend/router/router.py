@@ -28,18 +28,28 @@ class QueryRouter:
 
     default_route: str = config.DEFAULT_ROUTE
 
+    @staticmethod
+    def _debug(message: str) -> None:
+        if getattr(config, "ROUTER_DEBUG", False):
+            print(f"[ROUTER DEBUG] {message}")
+
     def route(self, query: str) -> str:
         """Return one of: 'sql', 'text', or 'hybrid'."""
         cleaned = query.lower()
         sql_hits = self._keyword_hits(cleaned, config.SQL_KEYWORDS)
         text_hits = self._keyword_hits(cleaned, config.TEXT_KEYWORDS)
+        self._debug(f"route() keyword hits -> sql={sql_hits}, text={text_hits}, query={query!r}")
 
         if sql_hits and text_hits:
+            self._debug("route() selected: hybrid")
             return "hybrid"
         if sql_hits:
+            self._debug("route() selected: sql")
             return "sql"
         if text_hits:
+            self._debug("route() selected: text")
             return "text"
+        self._debug(f"route() selected default: {self.default_route}")
         return self.default_route
 
     def route_with_llm(self, query: str) -> str:
@@ -55,63 +65,46 @@ class QueryRouter:
 
             content = self._call_local_llm(prompt)
             label = self._normalize_label(content)
+            self._debug(f"route_with_llm() raw response={content!r}, normalized={label!r}")
             if label in {"sql", "text", "hybrid"}:
                 return label
-        except Exception:  # noqa: BLE001
-            pass
+        except Exception as exc:  # noqa: BLE001
+            self._debug(
+                "route_with_llm() failed, falling back to keyword route(); "
+                f"error={type(exc).__name__}: {exc}"
+            )
 
         return self.route(query)
 
     def route_with_zeroshot(self, query: str) -> str:
-        """Classify query intent using LangChain + OpenAI-compatible chat model."""
-        chat_openai_cls = self._resolve_chat_openai_class()
-        if chat_openai_cls is None:
-            return self.route(query)
-
-        try:
-            prompt = ChatPromptTemplate.from_messages(
-                [
-                    (
-                        "system",
-                        "You are a zero-shot intent classifier for retrieval routing. "
-                        "Classify each query into exactly one label: sql, text, or hybrid. "
-                        "Return only the label with no explanation. "
-                        "Use sql for database/aggregation intents, text for document retrieval/summarization intents, "
-                        "and hybrid when both are clearly needed.",
-                    ),
-                    ("human", "User query: {query}"),
-                ]
-            )
-
-            llm = chat_openai_cls(
-                model=config.ROUTER_MODEL,
-                temperature=config.ROUTER_LLM_TEMPERATURE,
-                base_url=f"{config.ROUTER_BASE_URL.rstrip('/')}/v1",
-                api_key=config.ROUTER_API_KEY,
-                timeout=config.ROUTER_TIMEOUT_SECONDS,
-            )
-
-            chain = prompt | llm
-            response = chain.invoke({"query": query})
-            content = getattr(response, "content", "")
-            label = self._normalize_label(str(content))
-            if label in {"sql", "text", "hybrid"}:
-                return label
-        except Exception:  # noqa: BLE001
-            pass
-
-        return self.route(query)
+        """Infer overall route from zero-shot LLM subtask decomposition."""
+        sub_tasks = self.decompose_with_zeroshot(query)
+        route = self.route_from_subtasks(sub_tasks)
+        self._debug(
+            "route_with_zeroshot() derived route="
+            f"{route} from subtasks={[{'route': t.route, 'sub_query': t.sub_query} for t in sub_tasks]}"
+        )
+        return route
 
     def decompose(self, query: str) -> list[SubTask]:
         """Fallback decomposition: keep one sub-task using rule routing."""
         route = self.route(query)
-        return self._expand_hybrid_subtasks([SubTask(sub_query=query, route=route)])
+        self._debug(f"decompose() fallback route={route} for query={query!r}")
+        expanded = self._expand_hybrid_subtasks([SubTask(sub_query=query, route=route)])
+        self._debug(
+            "decompose() expanded subtasks="
+            f"{[{'route': t.route, 'sub_query': t.sub_query} for t in expanded]}"
+        )
+        return expanded
 
     def decompose_with_zeroshot(self, query: str) -> list[SubTask]:
         """Decompose a query into multiple routed sub-tasks using LangChain chat model."""
         chat_openai_cls = self._resolve_chat_openai_class()
         if chat_openai_cls is None:
+            self._debug("decompose_with_zeroshot() ChatOpenAI class unavailable, using decompose() fallback")
             return self.decompose(query)
+
+        self._debug(f"decompose_with_zeroshot() using chat class={chat_openai_cls.__module__}.{chat_openai_cls.__name__}")
 
         try:
             prompt = ChatPromptTemplate.from_messages(
@@ -120,9 +113,11 @@ class QueryRouter:
                         "system",
                         "You are a decomposition and routing agent for a hybrid SQL + RAG system. "
                         "Break the user query into meaningful sub-queries and assign one route for each. "
-                        "Allowed routes are exactly: sql, text, hybrid. "
+                        "Allowed routes are exactly: sql, text. "
                         "Return strict JSON only in this shape: "
-                        "[{\"sub_query\": \"...\", \"route\": \"sql|text|hybrid\"}]. "
+                        "[{{\"sub_query\": \"...\", \"route\": \"sql|text\"}}]. "
+                        "If the user asks for mixed intent, split into multiple sub-queries so each sub-query is either sql or text. "
+                        "The sub_query field must be a natural-language request, never raw SQL (no SELECT/INSERT/UPDATE/DELETE statements). "
                         "Do not include markdown, comments, or extra keys.",
                     ),
                     (
@@ -149,15 +144,45 @@ class QueryRouter:
                     "max_subtasks": str(config.ROUTER_DECOMPOSE_MAX_SUBTASKS),
                 }
             )
+            self._debug(f"decompose_with_zeroshot() response type={type(response).__name__}")
             content = str(getattr(response, "content", ""))
+            self._debug(f"decompose_with_zeroshot() raw LLM content={content!r}")
 
             sub_tasks = self._parse_decomposition_output(content)
             if sub_tasks:
-                return self._expand_hybrid_subtasks(sub_tasks)
-        except Exception:  # noqa: BLE001
-            pass
+                expanded = self._expand_hybrid_subtasks(sub_tasks)
+                self._debug(
+                    "decompose_with_zeroshot() parsed subtasks="
+                    f"{[{'route': t.route, 'sub_query': t.sub_query} for t in sub_tasks]}"
+                )
+                self._debug(
+                    "decompose_with_zeroshot() expanded subtasks="
+                    f"{[{'route': t.route, 'sub_query': t.sub_query} for t in expanded]}"
+                )
+                return expanded
+            self._debug("decompose_with_zeroshot() no valid subtasks parsed, using fallback")
+        except Exception as exc:  # noqa: BLE001
+            self._debug(
+                "decompose_with_zeroshot() failed, using decompose() fallback; "
+                f"error={type(exc).__name__}: {exc}"
+            )
 
         return self.decompose(query)
+
+    def route_from_subtasks(self, sub_tasks: list[SubTask]) -> str:
+        """Derive an overall route from routed sub-tasks."""
+        routes = {task.route for task in sub_tasks}
+        if "sql" in routes and "text" in routes:
+            self._debug("route_from_subtasks() selected: hybrid")
+            return "hybrid"
+        if "sql" in routes:
+            self._debug("route_from_subtasks() selected: sql")
+            return "sql"
+        if "text" in routes:
+            self._debug("route_from_subtasks() selected: text")
+            return "text"
+        self._debug(f"route_from_subtasks() selected default: {self.default_route}")
+        return self.default_route
 
     @staticmethod
     def _resolve_chat_openai_class():
@@ -175,7 +200,11 @@ class QueryRouter:
 
     def _parse_decomposition_output(self, raw_output: str) -> list[SubTask]:
         payload = self._safe_json_parse(raw_output)
+        if isinstance(payload, dict):
+            # Accept common model wrapper shapes like {"subtasks": [...]}.
+            payload = payload.get("subtasks") or payload.get("tasks")
         if not isinstance(payload, list):
+            self._debug("_parse_decomposition_output() payload is not a list")
             return []
 
         cleaned: list[SubTask] = []
@@ -189,6 +218,10 @@ class QueryRouter:
             if not sub_query:
                 continue
             if route not in {"sql", "text", "hybrid"}:
+                self._debug(
+                    "_parse_decomposition_output() invalid route from LLM, "
+                    f"fallback to keyword route() for sub_query={sub_query!r}"
+                )
                 route = self.route(sub_query)
 
             cleaned.append(SubTask(sub_query=sub_query, route=route))
