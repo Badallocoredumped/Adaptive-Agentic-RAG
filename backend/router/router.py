@@ -317,18 +317,20 @@ class QueryRouter:
             response = requests.post(chat_url, json=chat_payload, timeout=timeout)
             response.raise_for_status()
             payload = response.json()
-            choices = payload.get("choices") or []
-            if choices:
-                first = choices[0]
-                message = first.get("message") or {}
-                content = message.get("content")
-                if content:
-                    return str(content)
-                text = first.get("text")
-                if text:
-                    return str(text)
+
+            choices = payload.get("choices")
+            if not choices:
+                raise ValueError(f"Chat endpoint returned no 'choices': {payload}")
+
+            first = choices[0]
+            content = (first.get("message") or {}).get("content") or first.get("text")
+            if not content:
+                raise ValueError(f"Chat endpoint choice missing 'content'/'text': {first}")
+
+            return str(content)
+
         except Exception:  # noqa: BLE001
-            pass
+            pass  # intentional fallback to completion endpoint
 
         completion_url = f"{base_url}{config.ROUTER_COMPLETION_ENDPOINT}"
         completion_payload = {
@@ -350,4 +352,4 @@ class QueryRouter:
         if choices and "text" in choices[0]:
             return str(choices[0]["text"])
 
-        return str(payload)
+        raise ValueError(f"Completion endpoint returned unrecognisable payload: {payload}")
