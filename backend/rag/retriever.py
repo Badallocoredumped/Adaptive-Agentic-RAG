@@ -38,10 +38,13 @@ class RagRetriever:
         self.vector_store.add_documents(documents)
         self.vector_store.save()
 
-    def retrieve(self, query: str, top_k: int = config.RAG_TOP_K) -> list[dict]:
-        """Return top-k relevant chunks for a query with similarity scores."""
-        fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, top_k)
+    def retrieve(self, query: str, top_k: int = 5) -> list[dict]:
+        """Return top-k relevant chunks for a query using FAISS retrieval + CrossEncoder Reranking."""
+        fetch_k = 20
         query_domain = self._infer_query_domain(query)
+
+        print(f"\n[RAG Pipeline] Query: {query!r}")
+        print(f"[RAG Pipeline] Fetching top {fetch_k} documents from FAISS...")
 
         if query_domain:
             results = self.vector_store.search(
@@ -49,106 +52,57 @@ class RagRetriever:
                 fetch_k,
                 metadata_filter={"domain": query_domain},
             )
-            if len(results) < top_k:
+            # Fallback if domain filter is too restrictive
+            if len(results) < fetch_k:
                 results = self.vector_store.search(query, fetch_k)
         else:
             results = self.vector_store.search(query, fetch_k)
 
-        if config.RAG_ENABLE_LEXICAL_RERANK:
-            ranked_results = self._rerank_results(query, results)
-        else:
-            ranked_results = [(doc, float(distance), 0.0) for doc, distance in results]
+        # Deduplicate and map text -> metadata
+        doc_map = {}
+        for doc, distance in results:
+            normalized_text = " ".join(doc.page_content.split())
+            if normalized_text not in doc_map:
+                doc_map[normalized_text] = doc
 
+        documents_text = list(doc_map.keys())
+        print(f"[RAG Pipeline] FAISS returned {len(documents_text)} unique chunks.")
+        
+        # CrossEncoder Reranking
+        if not hasattr(self, "_reranker") or self._reranker is None:
+            from backend.rag.reranker import Reranker
+            self._reranker = Reranker()
+            
+        print(f"[RAG Pipeline] Reranking {len(documents_text)} documents using ms-marco-MiniLM-L-6-v2 CrossEncoder...")
+        reranked = self._reranker.rerank(query, documents_text, top_k=top_k)
+        
+        print(f"\n[RAG Pipeline] --- Top {top_k} Reranked Results ---")
         payload: list[dict] = []
-        seen: set[tuple[str, str]] = set()
-
-        for doc, distance, lexical_overlap in ranked_results:
+        for i, res in enumerate(reranked, 1):
+            text = res["text"]
+            score = res["score"]
+            doc = doc_map[text]
             metadata = dict(doc.metadata)
             chunk_id = metadata.pop("chunk_id", None)
             source = metadata.get("source", "unknown")
-            score = 1.0 / (1.0 + float(distance))
-
-            normalized_text = " ".join(doc.page_content.split())
-            dedup_key = (str(source), normalized_text)
-            if dedup_key in seen:
-                continue
-            seen.add(dedup_key)
-
+            
+            print(f"  → Rank {i} | CrossEncoder Score: {score:.4f} | Source: {source}")
+            
             payload.append(
                 {
                     "chunk_id": chunk_id,
                     "text": doc.page_content,
                     "source": source,
                     "score": round(score, 4),
-                    "lexical_overlap": round(lexical_overlap, 4),
                     "metadata": metadata,
                 }
             )
 
-            if len(payload) >= top_k:
-                break
-
         return payload
-
-    def _rerank_results(self, query: str, results: list[tuple[LCDocument, float]]) -> list[tuple[LCDocument, float, float]]:
-        ranked: list[tuple[float, float, float, LCDocument, float]] = []
-        for doc, distance in results:
-            base_score = 1.0 / (1.0 + float(distance))
-            lexical_overlap = self._lexical_overlap_score(query, doc.page_content)
-            combined = base_score + (config.RAG_RERANK_LEXICAL_WEIGHT * lexical_overlap)
-
-            # Hard floor prevents broad semantic matches from dominating when query terms are absent.
-            if lexical_overlap < config.RAG_MIN_LEXICAL_OVERLAP:
-                combined *= 0.8
-
-            ranked.append((combined, lexical_overlap, base_score, doc, float(distance)))
-
-        ranked.sort(key=lambda item: item[0], reverse=True)
-        return [(doc, distance, lexical_overlap) for _, lexical_overlap, _, doc, distance in ranked]
-
-    @staticmethod
-    def _lexical_overlap_score(query: str, text: str) -> float:
-        stop_words = {
-            "a",
-            "an",
-            "and",
-            "are",
-            "as",
-            "at",
-            "be",
-            "by",
-            "for",
-            "from",
-            "how",
-            "in",
-            "is",
-            "it",
-            "of",
-            "on",
-            "or",
-            "should",
-            "the",
-            "to",
-            "what",
-            "where",
-            "who",
-            "with",
-        }
-
-        query_tokens = {
-            token
-            for token in re.findall(r"\b\w+\b", query.lower())
-            if len(token) > 2 and token not in stop_words
-        }
-        if not query_tokens:
-            return 0.0
-
-        text_tokens = set(re.findall(r"\b\w+\b", text.lower()))
-        overlap = len(query_tokens.intersection(text_tokens))
-        return overlap / float(len(query_tokens))
 
     @staticmethod
     def _infer_query_domain(query: str) -> str | None:
+        """Infer domain based on keyword overlap."""
         tokens = set(re.findall(r"\b\w+\b", query.lower()))
         best_domain: str | None = None
         best_hits = 0
