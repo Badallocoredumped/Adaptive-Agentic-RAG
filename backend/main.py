@@ -65,23 +65,15 @@ class AdaptiveAgenticRAGSystem:
         """Run the TableRAG SQL pipeline and adapt the result for the synthesizer."""
         pipeline_result = run_table_rag_pipeline(query)
 
-        # Adapt to the format the synthesizer expects
-        if pipeline_result["error"]:
-            return {
-                "ok": False,
-                "query": pipeline_result["sql"] or "n/a",
-                "error": pipeline_result["error"],
-                "rows": [],
-                "row_count": 0,
-                "schema_used": pipeline_result.get("schema_used", []),
-            }
-
         return {
-            "ok": True,
-            "query": pipeline_result["sql"],
+            "ok": not bool(pipeline_result.get("error")),
+            "query": pipeline_result["sql"] or "n/a",
+            "error": pipeline_result.get("error"),
             "rows": pipeline_result["result"],
             "row_count": len(pipeline_result["result"]),
             "schema_used": pipeline_result.get("schema_used", []),
+            "path": pipeline_result.get("path", "unknown"),
+            "latency": pipeline_result.get("latency", 0.0),
         }
 
     def run_query(self, user_query: str) -> str:

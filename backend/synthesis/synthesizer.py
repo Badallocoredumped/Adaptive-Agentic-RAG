@@ -147,6 +147,11 @@ class ResponseSynthesizer:
             sql_display = sql_display[:55] + "..."
         lines.append(f"{prefix}SQL    : {sql_display}")
 
+        # Add Path / Latency info
+        path = str(sql_result.get("path", "unknown")).upper()
+        latency = float(sql_result.get("latency", 0.0))
+        lines.append(f"{prefix}Path   : {path} ({latency:.2f}s)")
+
         if not sql_result.get("ok", False):
             error = sql_result.get("error", "unknown")
             lines.append(f"{prefix}Status : FAILED")

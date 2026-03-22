@@ -214,6 +214,21 @@ def run_sql_agent(
     )
 
 
+import time
+
+# ---------------------------------------------------------------------------
+# Cache Management
+# ---------------------------------------------------------------------------
+
+def _get_sql_cache() -> "SQLCache":
+    """Lazy initialization of the FAISS SQL cache."""
+    if not hasattr(_get_sql_cache, "instance"):
+        from .sql_cache import SQLCache
+        cache = SQLCache()
+        cache.load_cache()
+        _get_sql_cache.instance = cache
+    return _get_sql_cache.instance
+
 # ---------------------------------------------------------------------------
 # TableRAG pipeline entry point
 # ---------------------------------------------------------------------------
@@ -222,30 +237,54 @@ def run_table_rag_pipeline(
     query: str,
     top_k: int = config.SQL_TOP_K,
 ) -> dict:
-    """End-to-end pipeline: TableRAG schema retrieval → SQL generation → execution.
+    """End-to-end pipeline: SQL Cache Check -> TableRAG schema retrieval → SQL generation → execution."""
+    start_time = time.time()
+    
+    # 1. Check Semantic Cache
+    cache = _get_sql_cache()
+    print(f"\n[TableRAG Pipeline] Analyzing query: {query!r}")
+    cache_result = cache.check_cache_hit(query, threshold=0.85)
 
-    Steps:
-        1. Retrieve relevant schema via TableRAG.
-        2. Format schema into a single context string.
-        3. Pass the pruned schema to run_sql_agent for SQL generation + execution.
-        4. Return a dict with schema_used, sql, and result.
-    """
-    # Step 1 — retrieve relevant schema rows from the FAISS index
+    if cache_result["hit"]:
+        cached_sql = cache_result["sql"]
+        print(f"[TableRAG Pipeline] ⚡ FAST PATH: Executing cached SQL -> {cached_sql}")
+        
+        try:
+            rows = _execute_sql(cached_sql)
+            error = None
+        except Exception as e:
+            rows = []
+            error = str(e)
+            print(f"[TableRAG Pipeline] ❌ Cached SQL execution failed: {error}")
+            
+        latency = time.time() - start_time
+        print(f"[TableRAG Pipeline] ⏱️  Latency: {latency:.2f}s")
+        return {
+            "schema_used": ["<from semantic cache>"],
+            "sql": cached_sql,
+            "result": rows,
+            "error": error,
+            "path": "fast",
+            "latency": latency
+        }
+
+    # 2. RUN FULL PIPELINE (If Cache MISS)
+    print(f"[TableRAG Pipeline] 🤖 AGENT PATH: Routing to TableRAG + LLM")
+    
     _ensure_schema_index_exists()
     schema_rows: list[str] = retrieve_relevant_schema(query, top_k=top_k)
 
     # Logging: which tables were selected
     table_names = _extract_table_names("\n".join(schema_rows))
-    print(f"[TableRAG Pipeline] Query: {query!r}")
     print(f"[TableRAG Pipeline] Retrieved schema rows ({len(schema_rows)}):")
     for row in schema_rows:
         print(f"  → {row}")
     print(f"[TableRAG Pipeline] Selected tables: {table_names}")
 
-    # Step 2 — format into a single context string
+    # Format into a single context string
     schema_context = "\n".join(schema_rows)
 
-    # Step 3 — generate + execute SQL via the single-pass agent
+    # Generate + execute SQL via the single-pass agent
     agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
 
     # Logging: generated SQL
@@ -254,13 +293,24 @@ def run_table_rag_pipeline(
         print(f"[TableRAG Pipeline] Error: {agent_result['error']}")
     else:
         print(f"[TableRAG Pipeline] Rows returned: {len(agent_result['result'])}")
+        
+        # 3. Add successful run to Cache
+        if agent_result["sql"] and not agent_result["error"]:
+            print(f"[TableRAG Pipeline] 💾 Saving successful query to cache...")
+            cache.add_to_cache(query, agent_result["sql"], schema_context)
+            cache.save_cache()
 
-    # Step 4 — return unified result dict
+    latency = time.time() - start_time
+    print(f"[TableRAG Pipeline] ⏱️  Latency: {latency:.2f}s")
+
+    # 4. Return unified result dict
     return {
         "schema_used": schema_rows,
         "sql": agent_result["sql"],
         "result": agent_result["result"],
         "error": agent_result["error"],
+        "path": "agent",
+        "latency": latency
     }
 
 

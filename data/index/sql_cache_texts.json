@@ -1,0 +1,32 @@
+[
+  {
+    "question": "What is the total revenue from all orders?",
+    "sql": "SELECT SUM(amount) AS total_revenue FROM orders;",
+    "schema": "Table: orders | Columns: id, customer_id, amount, status, created_at"
+  },
+  {
+    "question": "Show me the top 3 cities by number of customers.",
+    "sql": "SELECT city, COUNT(id) AS customer_count FROM customers GROUP BY city ORDER BY customer_count DESC LIMIT 3;",
+    "schema": "Table: customers | Columns: id, name, city, created_at"
+  },
+  {
+    "question": "Which warehouse has the most total stock?",
+    "sql": "SELECT warehouse, SUM(stock_qty) AS total_stock FROM inventory GROUP BY warehouse ORDER BY total_stock DESC LIMIT 1;",
+    "schema": "Table: inventory | Columns: id, product_id, warehouse, stock_qty, last_restock"
+  },
+  {
+    "question": "Show all open high-priority support tickets with customer names",
+    "sql": "SELECT st.id, st.subject, st.priority, c.name FROM support_tickets st JOIN customers c ON st.customer_id = c.id WHERE st.priority = 'high' AND st.status = 'open';",
+    "schema": "Table: support_tickets | Columns: id, customer_id, subject, priority, status... Table: customers | Columns: id, name..."
+  },
+  {
+    "question": "What is the average salary per department?",
+    "sql": "SELECT d.name, AVG(e.salary) AS avg_salary FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name;",
+    "schema": "Table: employees | Columns: id, name, department_id, salary... Table: departments | Columns: id, name..."
+  },
+  {
+    "question": "Show me the revenue from customers of Cairo",
+    "sql": "SELECT SUM(orders.amount) AS total_revenue\nFROM orders\nJOIN customers ON orders.customer_id = customers.id\nWHERE customers.city = 'Cairo';",
+    "schema": "Table: customers | Columns: id, name, city, created_at\nTable: orders | Columns: id, customer_id, amount, status, created_at\nTable: support_tickets | Columns: id, customer_id, subject, priority, status, created_at, resolved_at\nTable: products | Columns: id, name, category, price"
+  }
+]
