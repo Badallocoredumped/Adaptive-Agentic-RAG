@@ -19,12 +19,12 @@ from backend.rag import (
     TextChunker,
 )
 from backend.router import QueryRouter, SubTask
-from backend.sql import SQLiteDatabase, SQLExecutor, SQLQueryGenerator
+from backend.sql import SQLiteDatabase, run_table_rag_pipeline
 from backend.synthesis import ResponseSynthesizer
 
 
 class AdaptiveAgenticRAGSystem:
-    """Coordinates router, SQL pipeline, RAG pipeline, and final synthesis."""
+    """Coordinates router, TableRAG SQL pipeline, RAG pipeline, and final synthesis."""
 
     def __init__(self) -> None:
         self.router = QueryRouter()
@@ -45,8 +45,6 @@ class AdaptiveAgenticRAGSystem:
 
         self.database = SQLiteDatabase(str(config.SQLITE_DB_PATH))
         self.database.initialize_schema()
-        self.query_generator = SQLQueryGenerator()
-        self.sql_executor = SQLExecutor(self.database)
 
         self.synthesizer = ResponseSynthesizer()
 
@@ -61,6 +59,30 @@ class AdaptiveAgenticRAGSystem:
         chunks = self.chunker.chunk_documents(documents)
         self.retriever.index_chunks(chunks)
         return len(chunks)
+
+    @staticmethod
+    def _run_sql_pipeline(query: str) -> dict:
+        """Run the TableRAG SQL pipeline and adapt the result for the synthesizer."""
+        pipeline_result = run_table_rag_pipeline(query)
+
+        # Adapt to the format the synthesizer expects
+        if pipeline_result["error"]:
+            return {
+                "ok": False,
+                "query": pipeline_result["sql"] or "n/a",
+                "error": pipeline_result["error"],
+                "rows": [],
+                "row_count": 0,
+                "schema_used": pipeline_result.get("schema_used", []),
+            }
+
+        return {
+            "ok": True,
+            "query": pipeline_result["sql"],
+            "rows": pipeline_result["result"],
+            "row_count": len(pipeline_result["result"]),
+            "schema_used": pipeline_result.get("schema_used", []),
+        }
 
     def run_query(self, user_query: str) -> str:
         """End-to-end query flow: route -> execute source pipelines -> synthesize answer."""
@@ -88,9 +110,8 @@ class AdaptiveAgenticRAGSystem:
         rag_result: list[dict] | None = None
 
         if route in {"sql", "hybrid"}:
-            self._debug(f"run_query() executing SQL pipeline for query={user_query!r}")
-            sql_query = self.query_generator.generate_sql(user_query)
-            sql_result = self.sql_executor.execute(sql_query)
+            self._debug(f"run_query() executing TableRAG SQL pipeline for query={user_query!r}")
+            sql_result = self._run_sql_pipeline(user_query)
 
         if route in {"text", "hybrid"}:
             self._debug(f"run_query() executing RAG pipeline for query={user_query!r}")
@@ -112,9 +133,8 @@ class AdaptiveAgenticRAGSystem:
             self._debug(f"_execute_subtasks() dispatch route={task.route}, sub_query={task.sub_query!r}")
 
             if task.route in {"sql", "hybrid"}:
-                self._debug("_execute_subtasks() -> SQL pipeline")
-                sql_query = self.query_generator.generate_sql(task.sub_query)
-                sql_result = self.sql_executor.execute(sql_query)
+                self._debug("_execute_subtasks() -> TableRAG SQL pipeline")
+                sql_result = self._run_sql_pipeline(task.sub_query)
 
             if task.route in {"text", "hybrid"}:
                 self._debug("_execute_subtasks() -> RAG pipeline")
@@ -143,22 +163,32 @@ def run_query(user_query: str) -> str:
     return system.run_query(user_query)
 
 if __name__ == "__main__":
-    # Example 1: hybrid expansion — same sentence, two pipelines
+    # Example 1: hybrid — SQL + RAG in one query
     q1 = "Show me the revenue from customers of Cairo and explain why those happened."
     print("=" * 60)
-    print(f"QUERY 1: {q1}")
+    print(f"QUERY 1 (hybrid): {q1}")
     print("=" * 60)
     print(run_query(q1))
 
     print()
 
-    # Example 2: two distinct sub-tasks (sql + text)
-    q2 = (
+    # Example 2: pure SQL
+    q2 = "What is the average salary per department?"
+    print("=" * 60)
+    print(f"QUERY 2 (sql): {q2}")
+    print("=" * 60)
+    print(run_query(q2))
+
+    print()
+
+    # Example 3: hybrid with decomposition
+    q3 = (
         "What is the total revenue from all orders, and also summarize "
         "the key business insights mentioned in the sales document about "
         "customer trends and purchasing behavior."
     )
     print("=" * 60)
-    print(f"QUERY 2: {q2}")
+    print(f"QUERY 3 (hybrid decompose): {q3}")
     print("=" * 60)
-    print(run_query(q2))
+    print(run_query(q3))
+

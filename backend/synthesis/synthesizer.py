@@ -85,12 +85,25 @@ class ResponseSynthesizer:
     @staticmethod
     def _format_sql_section(sql_result: dict) -> str:
         executed_query = str(sql_result.get("query", "")).strip()
+        schema_used = sql_result.get("schema_used", [])
+
+        schema_line = ""
+        if schema_used:
+            table_names = []
+            for entry in schema_used:
+                if entry.startswith("Table: "):
+                    table_names.append(entry.split("|")[0].replace("Table:", "").strip())
+                else:
+                    table_names.append(entry)
+            schema_line = f"\n  Tables : {', '.join(table_names)}"
+
         if not sql_result.get("ok", False):
             return (
                 "SQL\n"
                 f"  Query  : {executed_query or 'n/a'}\n"
                 "  Status : failed\n"
                 f"  Error  : {sql_result.get('error', 'unknown error')}"
+                f"{schema_line}"
             )
 
         row_count = sql_result.get("row_count", 0)
@@ -102,6 +115,7 @@ class ResponseSynthesizer:
             "  Status : ok\n"
             f"  Rows   : {row_count}\n"
             f"  Preview: {preview}"
+            f"{schema_line}"
         )
 
     @staticmethod
