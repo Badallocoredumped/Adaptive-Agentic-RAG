@@ -155,35 +155,21 @@ def run_query(user_query: str) -> str:
     return system.run_query(user_query)
 
 if __name__ == "__main__":
+    from backend import config
     
-    print("\n" + "=" * 70)
-    print("TEST 1: Golden Cache HIT (Matches pre-seeded semantic example)")
-    print("=" * 70)
-    q1 = "Give me the total revenue of all orders across the business"
-    print(run_query(q1))
+    test_q = "What were the key drivers of revenue growth in Cairo during Q4, and what are the new customer purchasing trends?"
 
-    print("\n" + "=" * 70)
-    print("TEST 2: Cache MISS -> Agent Generation -> Saves to Cache")
-    print("=" * 70)
-    # This is a new query not in the seed data
-    q2 = "List the names of all our departments along with their IDs"
-    print(run_query(q2))
+    print("\n" + "=" * 80)
+    print("TEST A: RAG retrieval WITHOUT CrossEncoder Reranking (FAISS ONLY)")
+    print("=" * 80)
+    config.RAG_ENABLE_SEMANTIC_RERANK = False
+    print(run_query(test_q))
 
-    print("\n" + "=" * 70)
-    print("TEST 3: Cache HIT (Matches the query we just generated in Test 2)")
-    print("=" * 70)
-    # Semantic match for q2
-    q3 = "Can you show me every department name and its ID?"
-    print(run_query(q3))
-
-    print("\n" + "=" * 70)
-    print("TEST 4: Hybrid RAG + SQL (with Cache HIT)")
-    print("=" * 70)
-    q4 = (
-        "Give me the total revenue of all orders across the business, and also summarize "
-        "the key business insights mentioned in the sales document about "
-        "customer trends."
-    )
-    print(run_query(q4))
+    print("\n\n" + "=" * 80)
+    print("TEST B: RAG retrieval WITH CrossEncoder Reranking")
+    print("=" * 80)
+    config.RAG_ENABLE_SEMANTIC_RERANK = True
+    print(run_query(test_q))
+    
     print()
 

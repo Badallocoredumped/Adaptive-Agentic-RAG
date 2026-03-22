@@ -68,15 +68,24 @@ class RagRetriever:
         documents_text = list(doc_map.keys())
         print(f"[RAG Pipeline] FAISS returned {len(documents_text)} unique chunks.")
         
-        # CrossEncoder Reranking
-        if not hasattr(self, "_reranker") or self._reranker is None:
-            from backend.rag.reranker import Reranker
-            self._reranker = Reranker()
-            
-        print(f"[RAG Pipeline] Reranking {len(documents_text)} documents using ms-marco-MiniLM-L-6-v2 CrossEncoder...")
-        reranked = self._reranker.rerank(query, documents_text, top_k=top_k)
+        # CrossEncoder Reranking Toggle
+        if config.RAG_ENABLE_SEMANTIC_RERANK:
+            if not hasattr(self, "_reranker") or self._reranker is None:
+                from backend.rag.reranker import Reranker
+                self._reranker = Reranker()
+                
+            print(f"[RAG Pipeline] Reranking {len(documents_text)} documents using {self._reranker.model_name} CrossEncoder...")
+            reranked = self._reranker.rerank(query, documents_text, top_k=top_k)
+        else:
+            print(f"[RAG Pipeline] Semantic Reranking is DISABLED. Returning top {top_k} directly from FAISS.")
+            # Mock the format by just using the raw FAISS returns
+            reranked = []
+            for i, text in enumerate(documents_text[:top_k]):
+                # Fallback score logic just to give it a number for UI display
+                fallback_score = 1.0 / (1.0 + float(results[i][1])) if i < len(results) else 0.0
+                reranked.append({"text": text, "score": fallback_score})
         
-        print(f"\n[RAG Pipeline] --- Top {top_k} Reranked Results ---")
+        print(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
         payload: list[dict] = []
         for i, res in enumerate(reranked, 1):
             text = res["text"]
