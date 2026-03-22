@@ -1,0 +1,4 @@
+[
+  "Table: customers | Columns: id, name, city, created_at",
+  "Table: orders | Columns: id, customer_id, amount, status, created_at"
+]
