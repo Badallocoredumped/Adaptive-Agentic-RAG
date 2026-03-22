@@ -7,8 +7,6 @@ import sqlite3
 from pathlib import Path
 from typing import Any, TypedDict
 
-from langchain_openai import ChatOpenAI
-
 from .. import config
 from .table_rag import (
     build_schema_index,
@@ -117,6 +115,7 @@ def _resolve_schema_context(query: str, schema_context: str | None, top_k: int) 
 
 def _generate_sql(query: str, schema_context: str) -> str | None:
     """Generate SQL in a single pass using only pruned schema context."""
+    from langchain_openai import ChatOpenAI
     llm = ChatOpenAI(
         model=config.ROUTER_MODEL,
         temperature=0,

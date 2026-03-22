@@ -28,5 +28,10 @@
     "question": "Show me the revenue from customers of Cairo",
     "sql": "SELECT SUM(orders.amount) AS total_revenue\nFROM orders\nJOIN customers ON orders.customer_id = customers.id\nWHERE customers.city = 'Cairo';",
     "schema": "Table: customers | Columns: id, name, city, created_at\nTable: orders | Columns: id, customer_id, amount, status, created_at\nTable: support_tickets | Columns: id, customer_id, subject, priority, status, created_at, resolved_at\nTable: products | Columns: id, name, category, price"
+  },
+  {
+    "question": "List the names of all our departments along with their IDs",
+    "sql": "SELECT id, name FROM departments;",
+    "schema": "Table: departments | Columns: id, name, budget\nTable: employees | Columns: id, name, department_id, role, salary, hire_date\nTable: support_tickets | Columns: id, customer_id, subject, priority, status, created_at, resolved_at\nTable: inventory | Columns: id, product_id, warehouse, stock_qty, last_restock"
   }
 ]
