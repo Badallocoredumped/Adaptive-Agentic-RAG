@@ -9,8 +9,8 @@ from typing import Any, TypedDict
 
 from langchain_openai import ChatOpenAI
 
-from backend import config
-from backend.sql.table_rag import (
+from .. import config
+from .table_rag import (
     build_schema_index,
     get_schema_texts,
     retrieve_relevant_schema,
@@ -214,6 +214,65 @@ def run_sql_agent(
     )
 
 
+# ---------------------------------------------------------------------------
+# TableRAG pipeline entry point
+# ---------------------------------------------------------------------------
+
+def run_table_rag_pipeline(
+    query: str,
+    top_k: int = 3,
+) -> dict:
+    """End-to-end pipeline: TableRAG schema retrieval → SQL generation → execution.
+
+    Steps:
+        1. Retrieve relevant schema via TableRAG.
+        2. Format schema into a single context string.
+        3. Pass the pruned schema to run_sql_agent for SQL generation + execution.
+        4. Return a dict with schema_used, sql, and result.
+    """
+    # Step 1 — retrieve relevant schema rows from the FAISS index
+    _ensure_schema_index_exists()
+    schema_rows: list[str] = retrieve_relevant_schema(query, top_k=top_k)
+
+    # Logging: which tables were selected
+    table_names = _extract_table_names("\n".join(schema_rows))
+    print(f"[TableRAG Pipeline] Query: {query!r}")
+    print(f"[TableRAG Pipeline] Retrieved schema rows ({len(schema_rows)}):")
+    for row in schema_rows:
+        print(f"  → {row}")
+    print(f"[TableRAG Pipeline] Selected tables: {table_names}")
+
+    # Step 2 — format into a single context string
+    schema_context = "\n".join(schema_rows)
+
+    # Step 3 — generate + execute SQL via the single-pass agent
+    agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
+
+    # Logging: generated SQL
+    print(f"[TableRAG Pipeline] Generated SQL: {agent_result['sql']}")
+    if agent_result["error"]:
+        print(f"[TableRAG Pipeline] Error: {agent_result['error']}")
+    else:
+        print(f"[TableRAG Pipeline] Rows returned: {len(agent_result['result'])}")
+
+    # Step 4 — return unified result dict
+    return {
+        "schema_used": schema_rows,
+        "sql": agent_result["sql"],
+        "result": agent_result["result"],
+        "error": agent_result["error"],
+    }
+
+
 if __name__ == "__main__":
     demo_query = "What is the total revenue from all orders?"
+    print("=" * 60)
+    print("run_sql_agent demo")
+    print("=" * 60)
     print(run_sql_agent(demo_query))
+
+    print()
+    print("=" * 60)
+    print("run_table_rag_pipeline demo")
+    print("=" * 60)
+    print(run_table_rag_pipeline(demo_query))
