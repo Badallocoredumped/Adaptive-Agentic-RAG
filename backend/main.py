@@ -94,7 +94,7 @@ class AdaptiveAgenticRAGSystem:
 
         if route in {"text", "hybrid"}:
             self._debug(f"run_query() executing RAG pipeline for query={user_query!r}")
-            rag_result = self.retriever.retrieve(user_query, top_k=config.DEFAULT_TOP_K)
+            rag_result = self.retriever.retrieve(user_query, top_k=config.RAG_TOP_K)
 
         return self.synthesizer.synthesize(
             user_query=user_query,
@@ -118,7 +118,7 @@ class AdaptiveAgenticRAGSystem:
 
             if task.route in {"text", "hybrid"}:
                 self._debug("_execute_subtasks() -> RAG pipeline")
-                rag_result = self.retriever.retrieve(task.sub_query, top_k=config.DEFAULT_TOP_K)
+                rag_result = self.retriever.retrieve(task.sub_query, top_k=config.RAG_TOP_K)
 
             outputs.append(
                 {

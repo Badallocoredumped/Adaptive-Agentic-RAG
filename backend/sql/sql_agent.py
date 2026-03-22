@@ -170,7 +170,7 @@ def _execute_sql(sql: str) -> list[dict[str, Any]]:
 def run_sql_agent(
     query: str,
     schema_context: str | None = None,
-    top_k: int = 3,
+    top_k: int = config.SQL_TOP_K,
 ) -> AgentResult:
     """Generate SQL from pruned schema context, execute it, and return rows.
 
@@ -220,7 +220,7 @@ def run_sql_agent(
 
 def run_table_rag_pipeline(
     query: str,
-    top_k: int = 3,
+    top_k: int = config.SQL_TOP_K,
 ) -> dict:
     """End-to-end pipeline: TableRAG schema retrieval → SQL generation → execution.
 
@@ -264,15 +264,108 @@ def run_table_rag_pipeline(
     }
 
 
-if __name__ == "__main__":
-    demo_query = "What is the total revenue from all orders?"
-    print("=" * 60)
-    print("run_sql_agent demo")
-    print("=" * 60)
-    print(run_sql_agent(demo_query))
+    """     # 1. Simple aggregation
+    "What is the total revenue from all orders?",
+    # 2. Filter by status
+    "Show all pending orders with customer names",
+    # 3. GROUP BY
+    "How many orders does each customer have?",
+    # 4. Multi-table JOIN + aggregation
+    "What is the total revenue per city?",
+    # 5. HAVING clause
+    "Which customers have placed more than 2 orders?",
+    # 6. Date range filter
+    "Show all orders placed in March 2026",
+    # 7. Product + order_items JOIN
+    "What is the most ordered product by total quantity?",
+    # 8. Complex multi-JOIN
+    "Show total spending per customer on subscription products", """
 
-    print()
-    print("=" * 60)
-    print("run_table_rag_pipeline demo")
-    print("=" * 60)
-    print(run_table_rag_pipeline(demo_query))
+if __name__ == "__main__":
+    from .database import SQLiteDatabase
+
+    # Re-create DB with all 9 tables + seed data
+    import os
+    db_path = str(config.SQLITE_DB_PATH)
+    if os.path.exists(db_path):
+        os.remove(db_path)
+    # Also clear cached schema index
+    for f in ["schema.faiss", "schema_texts.json"]:
+        p = config.INDEX_DIR / f
+        if p.exists():
+            p.unlink()
+
+    db = SQLiteDatabase(db_path)
+    db.initialize_schema()
+    print(f"[SETUP] Database created with 9 tables at {db_path}\n")
+
+    # ── Stress-test queries (15 total) ───────────────────────────
+    test_queries = [
+        # --- DOMAIN ISOLATION: will it ignore unrelated tables? ---
+        # 1. Pure HR query — should use employees + departments only
+        "What is the average salary per department?",
+        # 2. Pure inventory — should ignore orders/HR/blog
+        "Which warehouse has the most total stock?",
+        # 3. Pure support — should use support_tickets + customers
+        "Show all open high-priority support tickets with customer names",
+        # 4. Pure blog — should pick only blog_posts
+        "What is the most viewed blog post?",
+
+        # --- CROSS-DOMAIN JOINS: tables from different domains ---
+        # 5. Sales + support — customer appears in both
+        "Which customers have both completed orders and open support tickets?",
+        # 6. HR + blog — employees are blog authors
+        "Show all blog posts written by Engineering department employees",
+        # 7. Inventory + sales — products bridge both domains
+        "Which products have low stock but high order volume?",
+
+        # --- AMBIGUOUS / TRICKY QUERIES ---
+        # 8. Word "order" could mean SQL ORDER BY or the orders table
+        "List departments in order of budget from highest to lowest",
+        # 9. "Amount" exists in orders — but this is an HR question
+        "What is the total salary amount for employees hired in 2025?",
+        # 10. Needs to distinguish product.name from customer.name
+        "Show product names and their total revenue from completed orders",
+
+        # --- COMPLEX MULTI-TABLE QUERIES ---
+        # 11. 3 tables: customers + orders + support_tickets
+        "For each city, show total order revenue and number of support tickets",
+        # 12. 4 tables: order_items + products + inventory + orders
+        "Show each product with its total units sold and current stock across all warehouses",
+        # 13. Subquery / CTE: top customer by revenue and their tickets
+        "Who is the highest-spending customer and how many support tickets do they have?",
+
+        # --- EDGE CASES ---
+        # 14. Query about table that doesn't exist
+        "Show all shipping addresses for customers",
+        # 15. Vague query that could go many ways
+        "Give me a summary of everything from March 2026",
+    ]
+
+    passed = 0
+    failed = 0
+
+    for i, query in enumerate(test_queries, 1):
+        print(f"\n{'='*70}")
+        print(f"  TEST {i}/{len(test_queries)}: {query}")
+        print(f"{'='*70}")
+
+        result = run_table_rag_pipeline(query)
+
+        print(f"\n  SCHEMA → {result.get('schema_used', [])}")
+        print(f"  SQL    → {result['sql']}")
+        if result["error"]:
+            print(f"  ❌ ERR  → {result['error']}")
+            failed += 1
+        else:
+            print(f"  ✅ ROWS → {len(result['result'])} returned")
+            for row in result["result"][:5]:
+                print(f"           {row}")
+            if len(result["result"]) > 5:
+                print(f"           ... and {len(result['result']) - 5} more")
+            passed += 1
+        print()
+
+    print(f"\n{'='*70}")
+    print(f"  RESULTS: {passed} passed, {failed} failed, {len(test_queries)} total")
+    print(f"{'='*70}")

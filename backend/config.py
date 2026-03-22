@@ -13,7 +13,9 @@ EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-base"
 E5_PREFIX_ENABLED = True
 E5_QUERY_PREFIX = "query: "
 E5_PASSAGE_PREFIX = "passage: "
-DEFAULT_TOP_K = 3
+
+RAG_TOP_K = 6        # number of text chunks to retrieve
+SQL_TOP_K = 4        # number of schema tables to retrieve
 
 
 RAG_FETCH_MULTIPLIER = 6
@@ -50,7 +52,7 @@ ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
 
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"
 ROUTER_COMPLETION_ENDPOINT = "/completion"
-ROUTER_TIMEOUT_SECONDS = 10
+ROUTER_TIMEOUT_SECONDS = 30
 
 SQL_KEYWORDS = {
     "count",

@@ -38,7 +38,7 @@ class RagRetriever:
         self.vector_store.add_documents(documents)
         self.vector_store.save()
 
-    def retrieve(self, query: str, top_k: int = config.DEFAULT_TOP_K) -> list[dict]:
+    def retrieve(self, query: str, top_k: int = config.RAG_TOP_K) -> list[dict]:
         """Return top-k relevant chunks for a query with similarity scores."""
         fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, top_k)
         query_domain = self._infer_query_domain(query)

@@ -1,4 +1,11 @@
 [
+  "Table: blog_posts | Columns: id, title, author, category, views, published_at",
   "Table: customers | Columns: id, name, city, created_at",
-  "Table: orders | Columns: id, customer_id, amount, status, created_at"
+  "Table: departments | Columns: id, name, budget",
+  "Table: employees | Columns: id, name, department_id, role, salary, hire_date",
+  "Table: inventory | Columns: id, product_id, warehouse, stock_qty, last_restock",
+  "Table: order_items | Columns: id, order_id, product_id, quantity",
+  "Table: orders | Columns: id, customer_id, amount, status, created_at",
+  "Table: products | Columns: id, name, category, price",
+  "Table: support_tickets | Columns: id, customer_id, subject, priority, status, created_at, resolved_at"
 ]
