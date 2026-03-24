@@ -38,5 +38,10 @@
     "question": "Identify trends in customer behavior from the sales data.",
     "sql": "WITH customer_sales AS (\n    SELECT \n        customers.id AS customer_id,\n        customers.name AS customer_name,\n        SUM(orders.amount) AS total_spent,\n        COUNT(orders.id) AS number_of_orders\n    FROM \n        customers\n    JOIN \n        orders ON customers.id = orders.customer_id\n    GROUP BY \n        customers.id, customers.name\n)\nSELECT \n    customer_name,\n    total_spent,\n    number_of_orders,\n    AVG(total_spent) OVER () AS avg_total_spent,\n    AVG(number_of_orders) OVER () AS avg_number_of_orders\nFROM \n    customer_sales\nORDER BY \n    total_spent DESC;",
     "schema": "Table: support_tickets | Columns: id, customer_id, subject, priority, status, created_at, resolved_at\nTable: orders | Columns: id, customer_id, amount, status, created_at\nTable: customers | Columns: id, name, city, created_at\nTable: inventory | Columns: id, product_id, warehouse, stock_qty, last_restock"
+  },
+  {
+    "question": "what is the average revenue of customers in Turkey?",
+    "sql": "SELECT AVG(o.amount) AS average_revenue\nFROM orders o\nJOIN customers c ON o.customer_id = c.id\nWHERE c.city = 'Turkey';",
+    "schema": "Table: customers | Columns: id, name, city, created_at\nTable: products | Columns: id, name, category, price\nTable: orders | Columns: id, customer_id, amount, status, created_at\nTable: support_tickets | Columns: id, customer_id, subject, priority, status, created_at, resolved_at"
   }
 ]

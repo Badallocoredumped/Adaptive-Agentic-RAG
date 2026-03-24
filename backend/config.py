@@ -1,6 +1,11 @@
 """Central configuration for the Adaptive Agentic RAG MVP."""
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()  # loads .env from the project root (or current working directory)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
@@ -42,6 +47,12 @@ ROUTER_LLM_TEMPERATURE = 0.0
 ROUTER_MODEL = "qwen2.5-coder-7b-instruct"
 ROUTER_BASE_URL = "http://localhost:8080"
 ROUTER_API_KEY = "local"
+
+# OpenAI settings for SQL generation & refinement
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # set in .env
+SQL_OPENAI_MODEL = "gpt-4o-mini"
+SQL_GENERATE_TEMPERATURE = 0.0
+SQL_REFINE_TEMPERATURE = 0.0
 ROUTER_DEBUG = True
 
 # maximum number of subtasks for initial query

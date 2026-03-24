@@ -113,31 +113,145 @@ def _resolve_schema_context(query: str, schema_context: str | None, top_k: int) 
     return "\n".join(retrieved)
 
 
-def _generate_sql(query: str, schema_context: str) -> str | None:
-    """Generate SQL in a single pass using only pruned schema context."""
-    from langchain_openai import ChatOpenAI
-    llm = ChatOpenAI(
-        model=config.ROUTER_MODEL,
-        temperature=0,
-        base_url=f"{config.ROUTER_BASE_URL.rstrip('/')}/v1",
-        api_key=config.ROUTER_API_KEY,
-        timeout=config.ROUTER_TIMEOUT_SECONDS,
-    )
+# ---------------------------------------------------------------------------
+# Few-shot examples used to guide the cache-hit SQL refiner
+# ---------------------------------------------------------------------------
 
-    prompt = (
-        "You are a SQL expert.\n\n"
-        "You ONLY have access to the following tables:\n\n"
-        f"{schema_context}\n\n"
-        "Task: Write one correct SQLite SELECT query for the user request.\n"
+_REFINE_FEW_SHOT_EXAMPLES = [
+    {
+        "original_question": "What is the total revenue from all orders?",
+        "cached_sql": "SELECT SUM(amount) AS total_revenue FROM orders;",
+        "new_question": "What is the total revenue from completed orders?",
+        "refined_sql": "SELECT SUM(amount) AS total_revenue FROM orders WHERE status = 'completed';",
+    },
+    {
+        "original_question": "Show me the top 3 cities by number of customers.",
+        "cached_sql": "SELECT city, COUNT(id) AS customer_count FROM customers GROUP BY city ORDER BY customer_count DESC LIMIT 3;",
+        "new_question": "Show me the top 5 cities by number of customers.",
+        "refined_sql": "SELECT city, COUNT(id) AS customer_count FROM customers GROUP BY city ORDER BY customer_count DESC LIMIT 5;",
+    },
+    {
+        "original_question": "What is the average salary per department?",
+        "cached_sql": "SELECT d.name, AVG(e.salary) AS avg_salary FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name;",
+        "new_question": "What is the maximum salary per department?",
+        "refined_sql": "SELECT d.name, MAX(e.salary) AS max_salary FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name;",
+    },
+]
+
+
+def _build_refine_few_shot_block() -> str:
+    """Format the few-shot examples into a prompt block."""
+    lines = []
+    for ex in _REFINE_FEW_SHOT_EXAMPLES:
+        lines.append(f"Original question: {ex['original_question']}")
+        lines.append(f"Cached SQL:        {ex['cached_sql']}")
+        lines.append(f"New question:      {ex['new_question']}")
+        lines.append(f"Refined SQL:       {ex['refined_sql']}")
+        lines.append("")
+    return "\n".join(lines).strip()
+
+
+def _refine_sql_from_cache(
+    new_question: str,
+    original_question: str,
+    cached_sql: str,
+    schema_context: str,
+) -> str | None:
+    """Use OpenAI with few-shot examples to make small adjustments to a cached SQL.
+
+    Called on a cache HIT when the new question is semantically similar but not
+    identical to the cached question.  The model only adjusts what is necessary
+    (e.g., a filter value, a LIMIT, or an aggregate function); it should NOT
+    rewrite the query from scratch.
+    """
+    import os
+    from openai import OpenAI
+
+    api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
+    client = OpenAI(api_key=api_key)
+
+    few_shot_block = _build_refine_few_shot_block()
+
+    system_prompt = (
+        "You are a SQL refinement assistant.\n"
+        "You are given a cached SQL query that was written for a similar (but not identical) question.\n"
+        "Your job is to make the SMALLEST possible edits to the cached SQL so that it correctly answers "
+        "the new question.\n"
         "Rules:\n"
-        "- Use only the tables/columns shown above.\n"
-        "- Return SQL only, no explanation, no markdown.\n"
-        "- Must be a SELECT/WITH read query.\n\n"
-        f"User request: {query}"
+        "  - Only change what is necessary (filter values, column names, LIMIT, aggregate function, etc.).\n"
+        "  - Do NOT rewrite the query from scratch unless the structure must change.\n"
+        "  - Return only the final SQL — no explanation, no markdown fences.\n"
+        "  - Must remain a SELECT/WITH read-only query.\n"
+        "  - Use only tables/columns available in the schema context provided.\n\n"
+        "Schema context (available tables and columns):\n"
+        f"{schema_context}"
     )
 
-    response = llm.invoke(prompt)
-    return _normalize_sql(str(getattr(response, "content", "")))
+    user_prompt = (
+        f"Here are examples of how to refine cached SQL:\n\n"
+        f"{few_shot_block}\n\n"
+        "---\n\n"
+        f"Now refine the following:\n"
+        f"Original question: {original_question}\n"
+        f"Cached SQL:        {cached_sql}\n"
+        f"New question:      {new_question}\n"
+        f"Refined SQL:"
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model=config.SQL_OPENAI_MODEL,
+            temperature=config.SQL_REFINE_TEMPERATURE,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+        )
+        raw = response.choices[0].message.content or ""
+        return _normalize_sql(raw)
+    except Exception as exc:
+        print(f"[SQL AGENT] Cache-hit refiner failed: {exc}. Falling back to cached SQL.")
+        return None
+
+
+def _generate_sql(query: str, schema_context: str) -> str | None:
+    """Generate SQL in a single pass using OpenAI and pruned schema context."""
+    import os
+    from openai import OpenAI
+
+    api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
+    client = OpenAI(api_key=api_key)
+
+    system_prompt = (
+        "You are a SQL expert.\n"
+        "You ONLY have access to the tables listed in the schema context.\n"
+        "Rules:\n"
+        "  - Use only the tables/columns shown in the schema.\n"
+        "  - Return SQL only, no explanation, no markdown fences.\n"
+        "  - Must be a SELECT/WITH read query.\n"
+    )
+
+    user_prompt = (
+        f"Schema context (available tables and columns):\n{schema_context}\n\n"
+        f"Task: Write one correct SQLite SELECT query for the following request.\n"
+        f"User request: {query}\n"
+        f"SQL:"
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model=config.SQL_OPENAI_MODEL,
+            temperature=config.SQL_GENERATE_TEMPERATURE,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+        )
+        raw = response.choices[0].message.content or ""
+        return _normalize_sql(raw)
+    except Exception as exc:
+        print(f"[SQL AGENT] OpenAI SQL generation failed: {exc}")
+        return None
 
 
 def _log_schema_tables(schema_context: str) -> None:
@@ -246,21 +360,41 @@ def run_table_rag_pipeline(
 
     if cache_result["hit"]:
         cached_sql = cache_result["sql"]
-        print(f"[TableRAG Pipeline] ⚡ FAST PATH: Executing cached SQL -> {cached_sql}")
-        
+        original_question = cache_result.get("question", query)
+        # Use the schema that was stored in FAISS metadata when this query was cached
+        cached_schema = cache_result.get("schema", "")
+        print(f"[TableRAG Pipeline] ⚡ CACHE HIT: Cached SQL → {cached_sql}")
+
+        # --- Few-shot refinement on cache hit ---
+        # Uses the schema already stored in the cache — no extra retrieval needed
+        print("[TableRAG Pipeline] 🔧 Running few-shot SQL refiner for cache hit...")
+        refined_sql = _refine_sql_from_cache(
+            new_question=query,
+            original_question=original_question,
+            cached_sql=cached_sql,
+            schema_context=cached_schema,
+        )
+
+        if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
+            print(f"[TableRAG Pipeline] ✏️  Refiner adjusted SQL → {refined_sql}")
+            sql_to_execute = refined_sql
+        else:
+            print("[TableRAG Pipeline] ✅ Refiner kept cached SQL unchanged.")
+            sql_to_execute = cached_sql
+
         try:
-            rows = _execute_sql(cached_sql)
+            rows = _execute_sql(sql_to_execute)
             error = None
         except Exception as e:
             rows = []
             error = str(e)
-            print(f"[TableRAG Pipeline] ❌ Cached SQL execution failed: {error}")
-            
+            print(f"[TableRAG Pipeline] ❌ SQL execution failed: {error}")
+
         latency = time.time() - start_time
         print(f"[TableRAG Pipeline] ⏱️  Latency: {latency:.2f}s")
         return {
             "schema_used": ["<from semantic cache>"],
-            "sql": cached_sql,
+            "sql": sql_to_execute,
             "result": rows,
             "error": error,
             "path": "fast",

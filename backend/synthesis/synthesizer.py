@@ -143,9 +143,28 @@ class ResponseSynthesizer:
             lines.append(f"{prefix}Tables : {tables}")
 
         sql_display = query.replace("\n", " ") if query else "n/a"
-        if len(sql_display) > 55:
-            sql_display = sql_display[:55] + "..."
-        lines.append(f"{prefix}SQL    : {sql_display}")
+        # Wrap SQL if too long
+        max_sql_len = 55
+        if len(sql_display) > max_sql_len:
+            # Split into lines
+            wrapped_lines = []
+            while sql_display:
+                if len(sql_display) <= max_sql_len:
+                    wrapped_lines.append(sql_display)
+                    break
+                # Find a good break point (space)
+                break_pos = sql_display.rfind(' ', 0, max_sql_len)
+                if break_pos == -1:
+                    break_pos = max_sql_len
+                wrapped_lines.append(sql_display[:break_pos])
+                sql_display = sql_display[break_pos:].lstrip()
+            for i, line in enumerate(wrapped_lines):
+                if i == 0:
+                    lines.append(f"{prefix}SQL    : {line}")
+                else:
+                    lines.append(f"{prefix}         {line}")
+        else:
+            lines.append(f"{prefix}SQL    : {sql_display}")
 
         # Add Path / Latency info
         path = str(sql_result.get("path", "unknown")).upper()

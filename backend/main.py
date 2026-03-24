@@ -157,7 +157,7 @@ def run_query(user_query: str) -> str:
 if __name__ == "__main__":
     from backend import config
     
-    test_q = "What were the key drivers of revenue growth in Cairo during Q4, and what are the new customer purchasing trends?"
+    test_q = "what is the average revenue of customers in Mexico?"
 
     print("\n" + "=" * 80)
     print("TEST A: RAG retrieval WITHOUT CrossEncoder Reranking (FAISS ONLY)")

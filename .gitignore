@@ -1,3 +1,6 @@
+# Environment variables — never commit secrets
+.env
+
 __pycache__/
 *.py[cod]
 *$py.class

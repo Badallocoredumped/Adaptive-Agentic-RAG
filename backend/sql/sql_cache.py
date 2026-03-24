@@ -135,7 +135,7 @@ class SQLCache:
 
         return results
 
-    def check_cache_hit(self, query: str, threshold: float = 0.85) -> dict[str, Any]:
+    def check_cache_hit(self, query: str, threshold: float = 0.78) -> dict[str, Any]:
         """Check if a query has a semantic match in the cache above the threshold."""
         results = self.search_cache(query, top_k=1)
         
@@ -151,7 +151,9 @@ class SQLCache:
             return {
                 "hit": True,
                 "sql": best_match["sql"],
-                "score": score
+                "score": score,
+                "question": best_match.get("question", query),
+                "schema": best_match.get("schema", ""),
             }
         else:
             print(f"[SQLCache] Decision: MISS | Score: {score:.4f} (Below threshold {threshold:.4f}) | Query: '{query}'")
