@@ -77,9 +77,18 @@ class AdaptiveAgenticRAGSystem:
         }
 
     def run_query(self, user_query: str) -> str:
-        """End-to-end query flow: route -> execute source pipelines -> synthesize answer."""
+        """End-to-end query flow: route -> execute source pipelines -> synthesize answer.
+
+        Routing modes (ROUTER_MODE)
+        ---------------------------
+        decompose : LLM decomposes query into routed sub-tasks (project default).
+        llm       : Local LLM classifies the whole query into a single route.
+        keyword   : Rule-based keyword matching into a single route (fallback).
+        """
         self._debug(f"run_query() mode={config.ROUTER_MODE}, query={user_query!r}")
-        if config.ROUTER_MODE in {"decompose", "zeroshot"}:
+
+        # --- decompose: LLM decomposition into multiple routed sub-tasks ---
+        if config.ROUTER_MODE == "decompose":
             sub_tasks = self.router.decompose_with_zeroshot(user_query)
             subtask_results = self._execute_subtasks(sub_tasks)
             route = self.router.route_from_subtasks(sub_tasks)
@@ -93,10 +102,13 @@ class AdaptiveAgenticRAGSystem:
                 subtask_results=subtask_results,
             )
 
+        # --- single-route modes ---
         if config.ROUTER_MODE == "llm":
             route = self.router.route_with_llm(user_query)
-        else:
+        else:  # "keyword" or any unrecognised value
             route = self.router.route(user_query)
+
+        self._debug(f"run_query() single route={route}")
 
         sql_result: dict | None = None
         rag_result: list[dict] | None = None

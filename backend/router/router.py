@@ -76,16 +76,6 @@ class QueryRouter:
 
         return self.route(query)
 
-    def route_with_zeroshot(self, query: str) -> str:
-        """Infer overall route from zero-shot LLM subtask decomposition."""
-        sub_tasks = self.decompose_with_zeroshot(query)
-        route = self.route_from_subtasks(sub_tasks)
-        self._debug(
-            "route_with_zeroshot() derived route="
-            f"{route} from subtasks={[{'route': t.route, 'sub_query': t.sub_query} for t in sub_tasks]}"
-        )
-        return route
-
     def decompose(self, query: str) -> list[SubTask]:
         """Fallback decomposition: keep one sub-task using rule routing."""
         route = self.route(query)

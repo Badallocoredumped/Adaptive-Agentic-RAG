@@ -37,11 +37,10 @@ RECURSIVE_SEPARATORS = ["\n\n", "\n", ". ", " ", ""]
 
 DEFAULT_ROUTE = "text"
 
-# decompose -> divide into subtask before routing (zeroshot) (project's goal)
-# zeroshot -> zeroshot routing without dividing into subtasks
-# llm -> uses llm for routing process (local)
-# by default it uses predefined keyword check for routing
-ROUTER_MODE = "decompose" 
+# decompose -> LLM decomposes query into routed sub-tasks (project default)
+# llm       -> local LLM classifies the whole query into a single route
+# keyword   -> rule-based keyword matching into a single route (fallback)
+ROUTER_MODE = "decompose"
 
 ROUTER_LLM_TEMPERATURE = 0.0
 ROUTER_MODEL = "qwen2.5-coder-7b-instruct"
