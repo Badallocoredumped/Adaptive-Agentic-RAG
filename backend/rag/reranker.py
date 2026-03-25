@@ -29,43 +29,14 @@ class Reranker:
 
         model = self._get_model()
 
-        # Step 1: Create pairs of (query, document)
         pairs = [[query, doc] for doc in documents]
-
-        # Step 2: Get relevance scores from the model
         scores = model.predict(pairs)
 
-        # Step 3: Combine documents with their calculated scores
         doc_scores = [
             {"text": doc, "score": float(score)}
             for doc, score in zip(documents, scores)
         ]
 
-        # Step 4: Sort documents by score (descending)
         doc_scores.sort(key=lambda x: x["score"], reverse=True)
 
-        # Step 5: Return top_k
         return doc_scores[:top_k]
-
-
-if __name__ == "__main__":
-    # Simple test block
-    print("[1] Initializing Reranker...")
-    reranker = Reranker()
-
-    query = "How do I reset my password?"
-    docs = [
-        "Store hours are 9 AM to 5 PM Monday through Friday.",
-        "To easily reset your password, click the 'Forgot Password' link on the login page.",
-        "Your password must contain at least one number and one special character.",
-        "You can contact support via email at support@example.com.",
-        "Password sharing is strictly prohibited by our security policies."
-    ]
-
-    print(f"\n[2] Reranking {len(docs)} documents for query: {query!r}")
-    results = reranker.rerank(query, docs, top_k=3)
-
-    print("\n[3] Top 3 Results:")
-    for i, res in enumerate(results, 1):
-        print(f"\n--- Rank {i} (Score: {res['score']:.4f}) ---")
-        print(res["text"])
