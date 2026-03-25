@@ -80,12 +80,7 @@ class QueryRouter:
         """Fallback decomposition: keep one sub-task using rule routing."""
         route = self.route(query)
         self._debug(f"decompose() fallback route={route} for query={query!r}")
-        expanded = self._expand_hybrid_subtasks([SubTask(sub_query=query, route=route)])
-        self._debug(
-            "decompose() expanded subtasks="
-            f"{[{'route': t.route, 'sub_query': t.sub_query} for t in expanded]}"
-        )
-        return expanded
+        return [SubTask(sub_query=query, route=route)]
 
     def decompose_with_zeroshot(self, query: str) -> list[SubTask]:
         """Decompose a query into multiple routed sub-tasks using LangChain chat model."""
@@ -140,16 +135,11 @@ class QueryRouter:
 
             sub_tasks = self._parse_decomposition_output(content)
             if sub_tasks:
-                expanded = self._expand_hybrid_subtasks(sub_tasks)
                 self._debug(
                     "decompose_with_zeroshot() parsed subtasks="
                     f"{[{'route': t.route, 'sub_query': t.sub_query} for t in sub_tasks]}"
                 )
-                self._debug(
-                    "decompose_with_zeroshot() expanded subtasks="
-                    f"{[{'route': t.route, 'sub_query': t.sub_query} for t in expanded]}"
-                )
-                return expanded
+                return sub_tasks
             self._debug("decompose_with_zeroshot() no valid subtasks parsed, using fallback")
         except Exception as exc:  # noqa: BLE001
             self._debug(
@@ -219,64 +209,6 @@ class QueryRouter:
                 break
 
         return cleaned
-
-    def _expand_hybrid_subtasks(self, sub_tasks: list[SubTask]) -> list[SubTask]:
-        """Normalize hybrid subtasks into explicit sql and text execution units."""
-        expanded: list[SubTask] = []
-        for task in sub_tasks:
-            if task.route == "hybrid":
-                expanded.append(
-                    SubTask(sub_query=self._specialize_sub_query(task.sub_query, "sql"), route="sql")
-                )
-                expanded.append(
-                    SubTask(sub_query=self._specialize_sub_query(task.sub_query, "text"), route="text")
-                )
-            else:
-                expanded.append(task)
-
-        deduped: list[SubTask] = []
-        seen: set[tuple[str, str]] = set()
-        for task in expanded:
-            key = (task.sub_query.strip().lower(), task.route)
-            if key in seen:
-                continue
-            seen.add(key)
-            deduped.append(task)
-            if len(deduped) >= config.ROUTER_DECOMPOSE_MAX_SUBTASKS:
-                break
-
-        return deduped
-
-    def _specialize_sub_query(self, query: str, target_route: str) -> str:
-        """Extract a route-focused clause from a mixed-intent query when possible."""
-        if target_route not in {"sql", "text"}:
-            return query.strip()
-
-        candidates = self._split_on_connectors(query)
-        best = query.strip()
-        best_hits = -1
-
-        for candidate in candidates:
-            cleaned = candidate.strip(" ,.;")
-            if not cleaned:
-                continue
-
-            hits = self._keyword_hits(
-                cleaned.lower(),
-                config.SQL_KEYWORDS if target_route == "sql" else config.TEXT_KEYWORDS,
-            )
-            if hits > best_hits:
-                best = cleaned
-                best_hits = hits
-
-        return best
-
-    @staticmethod
-    def _split_on_connectors(query: str) -> list[str]:
-        # Split on common coordination patterns used in mixed requests.
-        parts = re.split(r"\b(?:and|also|then|plus|, then|, and)\b", query, flags=re.IGNORECASE)
-        cleaned = [part.strip() for part in parts if part.strip()]
-        return cleaned if cleaned else [query]
 
     @staticmethod
     def _safe_json_parse(raw_output: str) -> Any:
