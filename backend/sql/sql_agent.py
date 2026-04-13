@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import re
-import sqlite3
 from pathlib import Path
 from typing import Any, TypedDict
 
+import psycopg2.extras
+
 from .. import config
+from .database import get_db_connection
 from .table_rag import (
     build_schema_index,
     get_schema_texts,
@@ -75,20 +77,48 @@ def _extract_table_names(schema_context: str) -> list[str]:
     return deduped
 
 
-def _load_sqlite_schema_dict() -> dict[str, list[str]]:
-    """Read SQLite schema into {table: [columns...]} for TableRAG indexing."""
-    schema: dict[str, list[str]] = {}
-    with sqlite3.connect(str(config.SQLITE_DB_PATH)) as conn:
-        cursor = conn.cursor()
-        table_rows = cursor.execute(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"
-        ).fetchall()
+def _load_pg_schema_dict() -> dict[str, list[str]]:
+    """Read PostgreSQL schema into {table: [columns...]} for TableRAG indexing.
 
-        for (table_name,) in table_rows:
-            col_rows = cursor.execute(f"PRAGMA table_info({table_name});").fetchall()
-            schema[str(table_name)] = [str(row[1]) for row in col_rows]
+    Queries information_schema.tables / information_schema.columns so the
+    result is always in sync with the live database.
+    """
+    schema: dict[str, list[str]] = {}
+    conn = get_db_connection()
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+        cur.execute(
+            """
+            SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+              AND table_type   = 'BASE TABLE'
+            ORDER BY table_name;
+            """
+        )
+        tables = [row["table_name"] for row in cur.fetchall()]
+
+        for table_name in tables:
+            cur.execute(
+                """
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_schema = 'public'
+                  AND table_name   = %s
+                ORDER BY ordinal_position;
+                """,
+                (table_name,),
+            )
+            schema[table_name] = [row["column_name"] for row in cur.fetchall()]
+    finally:
+        conn.close()
 
     return schema
+
+
+# Keep the old name as an alias so any external callers continue to work.
+_load_sqlite_schema_dict = _load_pg_schema_dict
 
 
 def _ensure_schema_index_exists() -> None:
@@ -98,7 +128,7 @@ def _ensure_schema_index_exists() -> None:
     if index_path.exists() and texts_path.exists():
         return
 
-    schema_dict = _load_sqlite_schema_dict()
+    schema_dict = _load_pg_schema_dict()
     if schema_dict:
         build_schema_index(schema_dict)
 
@@ -173,7 +203,7 @@ def _refine_sql_from_cache(
     few_shot_block = _build_refine_few_shot_block()
 
     system_prompt = (
-        "You are a SQL refinement assistant.\n"
+        "You are a PostgreSQL SQL refinement assistant.\n"
         "You are given a cached SQL query that was written for a similar (but not identical) question.\n"
         "Your job is to make the SMALLEST possible edits to the cached SQL so that it correctly answers "
         "the new question.\n"
@@ -182,7 +212,8 @@ def _refine_sql_from_cache(
         "  - Do NOT rewrite the query from scratch unless the structure must change.\n"
         "  - Return only the final SQL — no explanation, no markdown fences.\n"
         "  - Must remain a SELECT/WITH read-only query.\n"
-        "  - Use only tables/columns available in the schema context provided.\n\n"
+        "  - Use only tables/columns available in the schema context provided.\n"
+        "  - Write standard PostgreSQL syntax.\n\n"
         "Schema context (available tables and columns):\n"
         f"{schema_context}"
     )
@@ -223,17 +254,18 @@ def _generate_sql(query: str, schema_context: str) -> str | None:
     client = OpenAI(api_key=api_key)
 
     system_prompt = (
-        "You are a SQL expert.\n"
+        "You are a PostgreSQL expert.\n"
         "You ONLY have access to the tables listed in the schema context.\n"
         "Rules:\n"
         "  - Use only the tables/columns shown in the schema.\n"
         "  - Return SQL only, no explanation, no markdown fences.\n"
         "  - Must be a SELECT/WITH read query.\n"
+        "  - Write standard PostgreSQL syntax (e.g. ILIKE, EXTRACT, COALESCE).\n"
     )
 
     user_prompt = (
         f"Schema context (available tables and columns):\n{schema_context}\n\n"
-        f"Task: Write one correct SQLite SELECT query for the following request.\n"
+        f"Task: Write one correct PostgreSQL SELECT query for the following request.\n"
         f"User request: {query}\n"
         f"SQL:"
     )
@@ -265,15 +297,16 @@ def _log_schema_tables(schema_context: str) -> None:
 # ---------------------------------------------------------------------------
 
 def _execute_sql(sql: str) -> list[dict[str, Any]]:
-    """Run *sql* against the configured SQLite DB and return rows as dicts."""
+    """Run *sql* against the configured PostgreSQL DB and return rows as dicts."""
+    conn = get_db_connection()
     try:
-        with sqlite3.connect(str(config.SQLITE_DB_PATH)) as conn:
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
-            cursor.execute(sql)
-            return [dict(row) for row in cursor.fetchall()]
-    except sqlite3.Error as exc:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        return [dict(row) for row in cur.fetchall()]
+    except psycopg2.Error as exc:
         raise RuntimeError(f"SQL execution failed: {exc}\nQuery: {sql}") from exc
+    finally:
+        conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -330,6 +363,17 @@ def run_sql_agent(
 import time
 
 # ---------------------------------------------------------------------------
+# ReAct agent import (lazy alias to keep module load fast and avoid issues
+# when SQL_REACT_ENABLED=False)
+# ---------------------------------------------------------------------------
+
+def _get_react_sql_agent():
+    """Return run_react_sql_agent; imported lazily so the module loads cleanly."""
+    from .react_agent import run_react_sql_agent  # noqa: PLC0415
+    return run_react_sql_agent
+
+
+# ---------------------------------------------------------------------------
 # Cache Management
 # ---------------------------------------------------------------------------
 
@@ -361,13 +405,20 @@ def run_table_rag_pipeline(
     if cache_result["hit"]:
         cached_sql = cache_result["sql"]
         original_question = cache_result.get("question", query)
-        # Use the schema that was stored in FAISS metadata when this query was cached
         cached_schema = cache_result.get("schema", "")
         print(f"[TableRAG Pipeline] ⚡ CACHE HIT: Cached SQL → {cached_sql}")
 
-        # --- Few-shot refinement on cache hit ---
-        # Uses the schema already stored in the cache — no extra retrieval needed
-        print("[TableRAG Pipeline] 🔧 Running few-shot SQL refiner for cache hit...")
+        # Ensure we always have schema context for the refiner.
+        # If the cache entry has no schema, retrieve it fresh now.
+        if not cached_schema.strip():
+            print("[TableRAG Pipeline] 🔍 No schema in cache entry — retrieving fresh schema for refiner...")
+            _ensure_schema_index_exists()
+            cached_schema = "\n".join(retrieve_relevant_schema(query, top_k=top_k))
+
+        # --- LLM refinement on cache hit ---
+        # Send the new question + cached SQL to the LLM so it can make the
+        # minimal changes required to answer the new query.
+        print("[TableRAG Pipeline] 🔧 Running LLM SQL refiner for cache hit...")
         refined_sql = _refine_sql_from_cache(
             new_question=query,
             original_question=original_question,
@@ -378,9 +429,20 @@ def run_table_rag_pipeline(
         if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
             print(f"[TableRAG Pipeline] ✏️  Refiner adjusted SQL → {refined_sql}")
             sql_to_execute = refined_sql
-        else:
+        elif refined_sql:
             print("[TableRAG Pipeline] ✅ Refiner kept cached SQL unchanged.")
             sql_to_execute = cached_sql
+        else:
+            # Refiner failed — generate fresh SQL instead of blindly using
+            # the cached SQL which may be wrong for this new query.
+            print("[TableRAG Pipeline] ⚠️  Refiner failed — generating fresh SQL from schema...")
+            fresh_sql = _generate_sql(query, cached_schema)
+            if fresh_sql:
+                print(f"[TableRAG Pipeline] 🆕 Fresh SQL generated → {fresh_sql}")
+                sql_to_execute = fresh_sql
+            else:
+                print("[TableRAG Pipeline] ⚠️  Fresh generation also failed — using cached SQL as-is.")
+                sql_to_execute = cached_sql
 
         try:
             rows = _execute_sql(sql_to_execute)
@@ -389,6 +451,18 @@ def run_table_rag_pipeline(
             rows = []
             error = str(e)
             print(f"[TableRAG Pipeline] ❌ SQL execution failed: {error}")
+
+            # ── ReAct fallback: only reached when execution fails ──────────
+            # LLM refinement already ran above; this is a true last resort.
+            if getattr(config, "SQL_REACT_ENABLED", True):
+                print("[TableRAG Pipeline] 🔄 Execution failed — escalating to ReAct agent as last resort...")
+                react_fn = _get_react_sql_agent()
+                react_result = react_fn(query, cached_schema)
+                if react_result["sql"] or react_result["result"]:
+                    sql_to_execute = react_result["sql"] or sql_to_execute
+                    rows = react_result["result"]
+                    error = react_result["error"]
+                    print(f"[TableRAG Pipeline] ✅ ReAct agent recovered: sql={sql_to_execute!r}")
 
         latency = time.time() - start_time
         print(f"[TableRAG Pipeline] ⏱️  Latency: {latency:.2f}s")
@@ -417,8 +491,26 @@ def run_table_rag_pipeline(
     # Format into a single context string
     schema_context = "\n".join(schema_rows)
 
-    # Generate + execute SQL via the single-pass agent
-    agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
+    # ── Step 3: Run ReAct agent (primary) ─────────────────────────────────
+    # The ReAct agent receives the original question + the TableRAG schema
+    # context and reasons iteratively (Thought → Action → Observation) to
+    # generate and verify its SQL.  The single-pass run_sql_agent() is kept
+    # as a fallback in case the ReAct layer produces nothing at all.
+    if getattr(config, "SQL_REACT_ENABLED", True):
+        print(f"[TableRAG Pipeline] 🤔 Running ReAct agent with schema context...")
+        react_fn = _get_react_sql_agent()
+        agent_result = react_fn(query, schema_context)
+
+        # Fallback: ReAct returned neither SQL nor rows → use single-pass agent
+        if not agent_result["sql"] and not agent_result["result"]:
+            print(
+                "[TableRAG Pipeline] ⚠️  ReAct agent produced no output — "
+                "falling back to single-pass agent..."
+            )
+            agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
+    else:
+        # ReAct disabled — use the original single-pass SQL agent
+        agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
 
     # Logging: generated SQL
     print(f"[TableRAG Pipeline] Generated SQL: {agent_result['sql']}")
@@ -426,7 +518,7 @@ def run_table_rag_pipeline(
         print(f"[TableRAG Pipeline] Error: {agent_result['error']}")
     else:
         print(f"[TableRAG Pipeline] Rows returned: {len(agent_result['result'])}")
-        
+
         # 3. Add successful run to Cache
         if agent_result["sql"] and not agent_result["error"]:
             print(f"[TableRAG Pipeline] 💾 Saving successful query to cache...")
@@ -436,13 +528,20 @@ def run_table_rag_pipeline(
     latency = time.time() - start_time
     print(f"[TableRAG Pipeline] ⏱️  Latency: {latency:.2f}s")
 
+    # path label: "react" when the ReAct agent ran, "agent" for single-pass fallback
+    path_label = (
+        "react"
+        if getattr(config, "SQL_REACT_ENABLED", True) and agent_result.get("sql")
+        else "agent"
+    )
+
     # 4. Return unified result dict
     return {
         "schema_used": schema_rows,
         "sql": agent_result["sql"],
         "result": agent_result["result"],
         "error": agent_result["error"],
-        "path": "agent",
+        "path": path_label,
         "latency": latency
     }
 
@@ -465,22 +564,19 @@ def run_table_rag_pipeline(
     "Show total spending per customer on subscription products", """
 
 if __name__ == "__main__":
-    from .database import SQLiteDatabase
+    from .database import PostgresDatabase
 
-    # Re-create DB with all 9 tables + seed data
-    import os
-    db_path = str(config.SQLITE_DB_PATH)
-    if os.path.exists(db_path):
-        os.remove(db_path)
-    # Also clear cached schema index
+    # (Re-)initialise the PostgreSQL schema + seed data.
+    # The tables use ON CONFLICT DO NOTHING, so running this again is idempotent.
+    # Clear the FAISS schema index so it gets rebuilt from the live PG schema.
     for f in ["schema.faiss", "schema_texts.json"]:
         p = config.INDEX_DIR / f
         if p.exists():
             p.unlink()
 
-    db = SQLiteDatabase(db_path)
+    db = PostgresDatabase()
     db.initialize_schema()
-    print(f"[SETUP] Database created with 9 tables at {db_path}\n")
+    print(f"[SETUP] PostgreSQL schema initialised (9 tables) on {config.PG_HOST}/{config.PG_DB}\n")
 
     # ── Stress-test queries (15 total) ───────────────────────────
     test_queries = [

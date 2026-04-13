@@ -12,7 +12,16 @@ DATA_DIR = BASE_DIR / "data"
 INDEX_DIR = DATA_DIR / "index"
 INDEX_PATH = INDEX_DIR / "faiss.index"
 METADATA_PATH = INDEX_DIR / "chunk_metadata.json"
-SQLITE_DB_PATH = DATA_DIR / "app.db"
+
+# ── PostgreSQL connection settings ────────────────────────────────────────────
+# Set DATABASE_URL to override all individual vars (preferred in production).
+# Format: postgresql://user:password@host:port/dbname
+DATABASE_URL: str = os.getenv("DATABASE_URL", "")
+PG_HOST: str      = os.getenv("PG_HOST", "localhost")
+PG_PORT: int      = int(os.getenv("PG_PORT", "5432"))
+PG_DB: str        = os.getenv("PG_DB", "adaptive_rag")
+PG_USER: str      = os.getenv("PG_USER", "postgres")
+PG_PASSWORD: str  = os.getenv("PG_PASSWORD", "")
 
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-base"
 E5_PREFIX_ENABLED = True
@@ -57,6 +66,10 @@ ROUTER_DEBUG = True
 # maximum number of subtasks for initial query
 ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
 
+# ReAct agent settings
+# Set SQL_REACT_ENABLED=False to bypass the ReAct layer and use the single-pass agent directly.
+SQL_REACT_ENABLED = True
+SQL_REACT_MAX_ITERATIONS = 6  # max Thought/Action/Observation cycles per query
 
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"
 ROUTER_COMPLETION_ENDPOINT = "/completion"

@@ -2,25 +2,31 @@
 
 from __future__ import annotations
 
-from backend.sql.database import SQLiteDatabase
+from backend.sql.database import PostgresDatabase
 
 
 class SQLExecutor:
-    """Executes SQL queries and serializes rows into plain dictionaries."""
+    """Executes SQL queries against PostgreSQL and serializes rows into plain dicts."""
 
-    def __init__(self, database: SQLiteDatabase) -> None:
+    def __init__(self, database: PostgresDatabase) -> None:
         self.database = database
 
     def execute(self, sql_query: str) -> dict:
         """Execute a SQL query and return rows, columns, and status metadata."""
         try:
-            with self.database.get_connection() as conn:
-                cursor = conn.cursor()
-                cursor.execute(sql_query)
-                rows = cursor.fetchall()
-                columns = [description[0] for description in cursor.description or []]
+            import psycopg2.extras
 
-            payload_rows = [dict(row) for row in rows]
+            conn = self.database.get_connection()
+            try:
+                cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+                cur.execute(sql_query)
+                rows = cur.fetchall()
+                # cursor.description: list of Column objects; [0] is the column name
+                columns = [col[0] for col in (cur.description or [])]
+                payload_rows = [dict(row) for row in rows]
+            finally:
+                conn.close()
+
             return {
                 "ok": True,
                 "query": sql_query,

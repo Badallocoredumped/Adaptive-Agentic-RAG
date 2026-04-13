@@ -19,7 +19,7 @@ from backend.rag import (
     TextChunker,
 )
 from backend.router import QueryRouter, SubTask
-from backend.sql import SQLiteDatabase, run_table_rag_pipeline
+from backend.sql import PostgresDatabase, run_table_rag_pipeline
 from backend.synthesis import ResponseSynthesizer
 
 
@@ -43,7 +43,7 @@ class AdaptiveAgenticRAGSystem:
         self.vector_store.load()
         self.retriever = RagRetriever(self.embedder, self.vector_store)
 
-        self.database = SQLiteDatabase(str(config.SQLITE_DB_PATH))
+        self.database = PostgresDatabase()
         self.database.initialize_schema()
 
         self.synthesizer = ResponseSynthesizer()
