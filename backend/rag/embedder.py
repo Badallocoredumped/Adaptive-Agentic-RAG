@@ -55,12 +55,3 @@ class SentenceTransformerEmbedder:
         """Return prefix-aware embeddings used by vector index/retrieval."""
         return PrefixAwareEmbeddings(self.model, self.model_name)
 
-    def embed_texts(self, texts: list[str]) -> list[list[float]]:
-        """Embed text chunks using LangChain's embed_documents API."""
-        if not texts:
-            return []
-        return self.model.embed_documents(texts)
-
-    def embed_query(self, query: str) -> list[float]:
-        """Embed a single query using LangChain's embed_query API."""
-        return self.model.embed_query(query)

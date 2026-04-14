@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import time
 from pathlib import Path
 from typing import Any, TypedDict
 
@@ -117,8 +118,6 @@ def _load_pg_schema_dict() -> dict[str, list[str]]:
     return schema
 
 
-# Keep the old name as an alias so any external callers continue to work.
-_load_sqlite_schema_dict = _load_pg_schema_dict
 
 
 def _ensure_schema_index_exists() -> None:
@@ -286,12 +285,6 @@ def _generate_sql(query: str, schema_context: str) -> str | None:
         return None
 
 
-def _log_schema_tables(schema_context: str) -> None:
-    tables = _extract_table_names(schema_context)
-    print(f"[SQL AGENT] schema tables passed: {tables if tables else 'none parsed'}")
-    return None
-
-
 # ---------------------------------------------------------------------------
 # SQL execution
 # ---------------------------------------------------------------------------
@@ -323,7 +316,8 @@ def run_sql_agent(
     This is a single-pass flow without retry/fallback chains.
     """
     resolved_schema_context = _resolve_schema_context(query, schema_context, top_k)
-    _log_schema_tables(resolved_schema_context)
+    tables = _extract_table_names(resolved_schema_context)
+    print(f"[SQL AGENT] schema tables passed: {tables if tables else 'none parsed'}")
 
     if not resolved_schema_context.strip():
         return AgentResult(
@@ -360,7 +354,6 @@ def run_sql_agent(
     )
 
 
-import time
 
 # ---------------------------------------------------------------------------
 # ReAct agent import (lazy alias to keep module load fast and avoid issues
@@ -416,15 +409,20 @@ def run_table_rag_pipeline(
             cached_schema = "\n".join(retrieve_relevant_schema(query, top_k=top_k))
 
         # --- LLM refinement on cache hit ---
-        # Send the new question + cached SQL to the LLM so it can make the
-        # minimal changes required to answer the new query.
-        print("[TableRAG Pipeline] 🔧 Running LLM SQL refiner for cache hit...")
-        refined_sql = _refine_sql_from_cache(
-            new_question=query,
-            original_question=original_question,
-            cached_sql=cached_sql,
-            schema_context=cached_schema,
-        )
+        # Skip refinement if the match is near-identical (score >= 0.97); the
+        # cached SQL is correct as-is and calling OpenAI would only add latency.
+        cache_score = cache_result.get("score", 0.0)
+        if cache_score >= 0.93:
+            print(f"[TableRAG Pipeline] ⚡ Score {cache_score:.4f} ≥ 0.93 — skipping refiner, using cached SQL directly.")
+            refined_sql = cached_sql
+        else:
+            print("[TableRAG Pipeline] 🔧 Running LLM SQL refiner for cache hit...")
+            refined_sql = _refine_sql_from_cache(
+                new_question=query,
+                original_question=original_question,
+                cached_sql=cached_sql,
+                schema_context=cached_schema,
+            )
 
         if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
             print(f"[TableRAG Pipeline] ✏️  Refiner adjusted SQL → {refined_sql}")
@@ -544,24 +542,6 @@ def run_table_rag_pipeline(
         "path": path_label,
         "latency": latency
     }
-
-
-    """     # 1. Simple aggregation
-    "What is the total revenue from all orders?",
-    # 2. Filter by status
-    "Show all pending orders with customer names",
-    # 3. GROUP BY
-    "How many orders does each customer have?",
-    # 4. Multi-table JOIN + aggregation
-    "What is the total revenue per city?",
-    # 5. HAVING clause
-    "Which customers have placed more than 2 orders?",
-    # 6. Date range filter
-    "Show all orders placed in March 2026",
-    # 7. Product + order_items JOIN
-    "What is the most ordered product by total quantity?",
-    # 8. Complex multi-JOIN
-    "Show total spending per customer on subscription products", """
 
 if __name__ == "__main__":
     from .database import PostgresDatabase

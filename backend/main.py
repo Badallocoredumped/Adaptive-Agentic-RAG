@@ -167,15 +167,8 @@ def run_query(user_query: str) -> str:
     return system.run_query(user_query)
 
 if __name__ == "__main__":
-    from backend import config
-    
-    test_q = "what is the average revenue of customers in Mexico?"
+    test_q = "what is the average amount of orders for customers living in Giza?"
 
-    print("\n" + "=" * 80)
-    print("TEST A: RAG retrieval WITHOUT CrossEncoder Reranking (FAISS ONLY)")
-    print("=" * 80)
-    config.RAG_ENABLE_SEMANTIC_RERANK = False
-    print(run_query(test_q))
 
     print("\n\n" + "=" * 80)
     print("TEST B: RAG retrieval WITH CrossEncoder Reranking")

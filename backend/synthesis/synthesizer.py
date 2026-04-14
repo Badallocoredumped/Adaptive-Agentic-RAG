@@ -38,23 +38,6 @@ class ResponseSynthesizer:
         lines.append(self._footer())
         return "\n".join(lines)
 
-    def synthesize_with_llm(
-        self,
-        user_query: str,
-        route: str,
-        sql_result: dict | None = None,
-        rag_result: list[dict] | None = None,
-        subtask_results: list[dict] | None = None,
-    ) -> str:
-        """Stub hook for future LLM-based synthesis."""
-        return self.synthesize(
-            user_query,
-            route,
-            sql_result=sql_result,
-            rag_result=rag_result,
-            subtask_results=subtask_results,
-        )
-
     # ── header / footer ──────────────────────────────────────────
 
     @staticmethod

@@ -76,8 +76,9 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
         "  2. Do NOT invent, assume, or guess tables or columns that are not listed.\n"
         "  3. Write only SELECT or WITH (read-only) queries — never INSERT, UPDATE, DELETE.\n"
         "  4. If you think more tables might be needed, call schema_lookup FIRST to verify.\n"
-        "  5. Always call execute_sql to test your SQL before reporting the final answer.\n"
-        "  6. If execute_sql returns an error, read the error message, fix the SQL, and retry.\n"
+        "  5. WRITE COMPLETE QUERIES. Use JOINs to connect tables. Do NOT write exploratory step-by-step queries just to look up intermediate IDs.\n"
+        "  6. Always call execute_sql to test your SQL before reporting the final answer.\n"
+        "  7. If execute_sql returns an error, read the error message, fix the SQL, and retry.\n"
         f"     You have up to {max_iter} tool-calling rounds — use them wisely.\n"
     )
 
@@ -168,7 +169,7 @@ def _make_execute_sql_tool() -> Tool:
         name="execute_sql",
         func=execute_sql,
         description=(
-            "Execute a SQL SELECT or WITH query against the SQLite database. "
+            "Execute a SQL SELECT or WITH query against the PostgreSQL database. "
             "Input: a valid SQL query string (may include markdown fences — they are stripped). "
             "Output: JSON rows on success, or an error message to guide your next attempt. "
             "Always call this tool to verify your SQL before reporting the final answer."

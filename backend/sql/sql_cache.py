@@ -63,7 +63,7 @@ class SQLCache:
     def initialize_cache(self) -> None:
         """Initialize an empty FAISS index."""
         # Get dimensions by embedding a dummy string
-        dummy_vector = self._embed_texts(["dummy"], is_query=False)
+        dummy_vector = self._embed_texts(["dummy"], is_query=True)
         dim = int(dummy_vector.shape[1])
 
         # IndexFlatIP with normalized vectors = Cosine Similarity
@@ -100,8 +100,7 @@ class SQLCache:
         if self.index is None:
             self.initialize_cache()
 
-        vector = self._embed_texts([question], is_query=False)
-        
+        vector = self._embed_texts([question], is_query=True)        
         # We know self.index is not None here because of initialize_cache above
         self.index.add(vector)  # type: ignore
 

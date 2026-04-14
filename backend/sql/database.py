@@ -336,6 +336,3 @@ class PostgresDatabase:
             ],
         )
 
-
-# Backward-compatibility alias so any code still referencing SQLiteDatabase compiles.
-SQLiteDatabase = PostgresDatabase

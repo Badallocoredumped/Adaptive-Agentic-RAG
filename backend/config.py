@@ -5,7 +5,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv()  # loads .env from the project root (or current working directory)
+load_dotenv(override=True)  # loads .env, overriding any pre-existing system env vars
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
