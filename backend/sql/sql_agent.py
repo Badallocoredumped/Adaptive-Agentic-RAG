@@ -7,10 +7,8 @@ import time
 from pathlib import Path
 from typing import Any, TypedDict
 
-import psycopg2.extras
-
 from .. import config
-from .database import get_db_connection
+from .database import execute_query, get_db_connection
 from .table_rag import (
     build_schema_index,
     get_schema_texts,
@@ -78,17 +76,45 @@ def _extract_table_names(schema_context: str) -> list[str]:
     return deduped
 
 
-def _load_pg_schema_dict() -> dict[str, list[str]]:
-    """Read PostgreSQL schema into {table: [columns...]} for TableRAG indexing.
+def _load_schema_dict() -> dict[str, list[str]]:
+    """Read the database schema into {table: [columns...]} for TableRAG indexing.
 
-    Queries information_schema.tables / information_schema.columns so the
-    result is always in sync with the live database.
+    Works with both SQLite and PostgreSQL backends.
     """
+    if config.SQLITE_PATH:
+        return _load_sqlite_schema_dict()
+    return _load_pg_schema_dict()
+
+
+def _load_sqlite_schema_dict() -> dict[str, list[str]]:
+    """Read SQLite schema via sqlite_master + PRAGMA table_info."""
+    import sqlite3
+
+    schema: dict[str, list[str]] = {}
+    conn = sqlite3.connect(config.SQLITE_PATH)
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;"
+        )
+        tables = [row[0] for row in cur.fetchall()]
+        for table in tables:
+            cur.execute(f"PRAGMA table_info({table});")
+            # PRAGMA row: (cid, name, type, notnull, dflt_value, pk)
+            schema[table] = [row[1] for row in cur.fetchall()]
+    finally:
+        conn.close()
+    return schema
+
+
+def _load_pg_schema_dict() -> dict[str, list[str]]:
+    """Read PostgreSQL schema via information_schema."""
+    import psycopg2.extras
+
     schema: dict[str, list[str]] = {}
     conn = get_db_connection()
     try:
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-
         cur.execute(
             """
             SELECT table_name
@@ -99,7 +125,6 @@ def _load_pg_schema_dict() -> dict[str, list[str]]:
             """
         )
         tables = [row["table_name"] for row in cur.fetchall()]
-
         for table_name in tables:
             cur.execute(
                 """
@@ -114,7 +139,6 @@ def _load_pg_schema_dict() -> dict[str, list[str]]:
             schema[table_name] = [row["column_name"] for row in cur.fetchall()]
     finally:
         conn.close()
-
     return schema
 
 
@@ -127,7 +151,7 @@ def _ensure_schema_index_exists() -> None:
     if index_path.exists() and texts_path.exists():
         return
 
-    schema_dict = _load_pg_schema_dict()
+    schema_dict = _load_schema_dict()
     if schema_dict:
         build_schema_index(schema_dict)
 
@@ -201,8 +225,9 @@ def _refine_sql_from_cache(
 
     few_shot_block = _build_refine_few_shot_block()
 
+    dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
     system_prompt = (
-        "You are a PostgreSQL SQL refinement assistant.\n"
+        f"You are a {dialect} SQL refinement assistant.\n"
         "You are given a cached SQL query that was written for a similar (but not identical) question.\n"
         "Your job is to make the SMALLEST possible edits to the cached SQL so that it correctly answers "
         "the new question.\n"
@@ -212,7 +237,7 @@ def _refine_sql_from_cache(
         "  - Return only the final SQL — no explanation, no markdown fences.\n"
         "  - Must remain a SELECT/WITH read-only query.\n"
         "  - Use only tables/columns available in the schema context provided.\n"
-        "  - Write standard PostgreSQL syntax.\n\n"
+        f"  - Write standard {dialect} syntax.\n\n"
         "Schema context (available tables and columns):\n"
         f"{schema_context}"
     )
@@ -252,14 +277,21 @@ def _generate_sql(query: str, schema_context: str) -> str | None:
     api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
     client = OpenAI(api_key=api_key)
 
+    dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
+    syntax_note = (
+        "Use SQLite syntax (e.g. LIKE, strftime, CAST, COALESCE). "
+        "Do NOT use ILIKE or PostgreSQL-specific functions."
+        if config.SQLITE_PATH
+        else "Write standard PostgreSQL syntax (e.g. ILIKE, EXTRACT, COALESCE)."
+    )
     system_prompt = (
-        "You are a PostgreSQL expert.\n"
+        f"You are a {dialect} expert.\n"
         "You ONLY have access to the tables listed in the schema context.\n"
         "Rules:\n"
         "  - Use only the tables/columns shown in the schema.\n"
         "  - Return SQL only, no explanation, no markdown fences.\n"
         "  - Must be a SELECT/WITH read query.\n"
-        "  - Write standard PostgreSQL syntax (e.g. ILIKE, EXTRACT, COALESCE).\n"
+        f"  - {syntax_note}\n"
     )
 
     user_prompt = (
@@ -290,16 +322,8 @@ def _generate_sql(query: str, schema_context: str) -> str | None:
 # ---------------------------------------------------------------------------
 
 def _execute_sql(sql: str) -> list[dict[str, Any]]:
-    """Run *sql* against the configured PostgreSQL DB and return rows as dicts."""
-    conn = get_db_connection()
-    try:
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(sql)
-        return [dict(row) for row in cur.fetchall()]
-    except psycopg2.Error as exc:
-        raise RuntimeError(f"SQL execution failed: {exc}\nQuery: {sql}") from exc
-    finally:
-        conn.close()
+    """Run *sql* against the configured DB and return rows as dicts."""
+    return execute_query(sql)
 
 
 # ---------------------------------------------------------------------------

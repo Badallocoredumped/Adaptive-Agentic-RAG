@@ -32,7 +32,7 @@ class FAISSVectorStore:
 
         try:
             self.store = FAISS.load_local(
-                folder_path=str(folder),
+                folder_path=config.win_short_path(folder),
                 embeddings=self.embeddings,
                 index_name=index_name,
                 allow_dangerous_deserialization=True,
@@ -48,7 +48,7 @@ class FAISSVectorStore:
             return
 
         self.index_path.parent.mkdir(parents=True, exist_ok=True)
-        self.store.save_local(folder_path=str(self.index_path.parent), index_name=self.index_path.stem)
+        self.store.save_local(folder_path=config.win_short_path(self.index_path.parent), index_name=self.index_path.stem)
 
     def add_documents(self, documents: list[LCDocument]) -> None:
         """Add LangChain documents to the vector store."""

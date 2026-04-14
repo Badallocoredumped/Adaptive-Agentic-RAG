@@ -76,7 +76,7 @@ class SQLCache:
             return False
 
         try:
-            self.index = faiss.read_index(str(self.index_path))
+            self.index = faiss.read_index(config.win_short_path(self.index_path))
             with self.metadata_path.open("r", encoding="utf-8") as f:
                 self.metadata = json.load(f)
             return True
@@ -90,7 +90,7 @@ class SQLCache:
             return
 
         self.index_path.parent.mkdir(parents=True, exist_ok=True)
-        faiss.write_index(self.index, str(self.index_path))
+        faiss.write_index(self.index, config.win_short_path(self.index_path))
 
         with self.metadata_path.open("w", encoding="utf-8") as f:
             json.dump(self.metadata, f, ensure_ascii=True, indent=2)

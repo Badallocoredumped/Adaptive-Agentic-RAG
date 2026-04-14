@@ -1,9 +1,37 @@
 """Central configuration for the Adaptive Agentic RAG MVP."""
 
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
+
+
+def win_short_path(path: Path) -> str:
+    """Return Windows 8.3 short path so FAISS C++ fopen handles non-ASCII dirs.
+
+    GetShortPathNameW only works on paths that already exist.  When the target
+    file does not exist yet (e.g. we are about to create it), we shorten the
+    parent directory instead and re-attach the filename — the parent must exist
+    (call mkdir before this function in write paths).
+
+    On non-Windows platforms returns str(path) unchanged.
+    """
+    if sys.platform != "win32":
+        return str(path)
+    try:
+        import ctypes
+        path = Path(path)
+        buf = ctypes.create_unicode_buffer(32768)
+        # Fast path: file already exists — shorten the whole path.
+        if ctypes.windll.kernel32.GetShortPathNameW(str(path), buf, len(buf)):
+            return buf.value
+        # File does not exist yet: shorten the parent (must already exist).
+        if ctypes.windll.kernel32.GetShortPathNameW(str(path.parent), buf, len(buf)):
+            return buf.value + "\\" + path.name
+    except Exception:
+        pass
+    return str(path)
 
 load_dotenv(override=True)  # loads .env, overriding any pre-existing system env vars
 
@@ -13,7 +41,13 @@ INDEX_DIR = DATA_DIR / "index"
 INDEX_PATH = INDEX_DIR / "faiss.index"
 METADATA_PATH = INDEX_DIR / "chunk_metadata.json"
 
-# ── PostgreSQL connection settings ────────────────────────────────────────────
+# ── Database backend ──────────────────────────────────────────────────────────
+# Set SQLITE_PATH to a .db file path to use SQLite instead of PostgreSQL.
+# Example: SQLITE_PATH=data/mydata.db
+SQLITE_PATH: str = os.getenv("SQLITE_PATH", "")
+DB_BACKEND: str = "sqlite" if SQLITE_PATH else "postgres"
+
+# ── PostgreSQL connection settings (ignored when SQLITE_PATH is set) ──────────
 # Set DATABASE_URL to override all individual vars (preferred in production).
 # Format: postgresql://user:password@host:port/dbname
 DATABASE_URL: str = os.getenv("DATABASE_URL", "")

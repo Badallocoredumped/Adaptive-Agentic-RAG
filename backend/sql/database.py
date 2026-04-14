@@ -1,9 +1,10 @@
-"""PostgreSQL database helpers for schema creation and seeding."""
+"""Database helpers supporting SQLite and PostgreSQL backends."""
 
 from __future__ import annotations
 
+import sqlite3
 from contextlib import contextmanager
-from typing import Generator
+from typing import Any, Generator
 
 import psycopg2
 import psycopg2.extras
@@ -15,12 +16,20 @@ from backend import config
 # Connection factory
 # ---------------------------------------------------------------------------
 
-def get_db_connection() -> psycopg2.extensions.connection:
-    """Return a new psycopg2 connection using config.DATABASE_URL or PG_* vars.
+def get_db_connection():
+    """Return a new DB connection — sqlite3 or psycopg2 depending on config.
 
-    Caller is responsible for closing the connection (use get_db_cursor() for
-    automatic cleanup, or the PostgresDatabase helper class).
+    When SQLITE_PATH is set in the environment, returns a sqlite3.Connection
+    with row_factory=sqlite3.Row so rows are dict-accessible.
+    Otherwise returns a psycopg2 connection using DATABASE_URL or PG_* vars.
+
+    Caller is responsible for closing the connection.
     """
+    if config.SQLITE_PATH:
+        conn = sqlite3.connect(config.SQLITE_PATH)
+        conn.row_factory = sqlite3.Row
+        return conn
+
     if config.DATABASE_URL:
         return psycopg2.connect(config.DATABASE_URL)
 
@@ -33,27 +42,58 @@ def get_db_connection() -> psycopg2.extensions.connection:
     )
 
 
-@contextmanager
-def get_db_cursor(
-    commit: bool = False,
-) -> Generator[psycopg2.extras.RealDictCursor, None, None]:
-    """Context manager that yields a RealDictCursor and handles cleanup.
+def execute_query(sql: str) -> list[dict[str, Any]]:
+    """Execute a SELECT query and return rows as a list of dicts.
 
-    Usage:
-        with get_db_cursor(commit=True) as cur:
-            cur.execute("INSERT INTO ...", (...,))
+    Works with both SQLite and PostgreSQL backends.
+    Raises RuntimeError on any DB error.
+    """
+    if config.SQLITE_PATH:
+        conn = sqlite3.connect(config.SQLITE_PATH)
+        conn.row_factory = sqlite3.Row
+        try:
+            cur = conn.cursor()
+            cur.execute(sql)
+            return [dict(row) for row in cur.fetchall()]
+        except sqlite3.Error as exc:
+            raise RuntimeError(f"SQL execution failed: {exc}\nQuery: {sql}") from exc
+        finally:
+            conn.close()
+
+    conn = get_db_connection()
+    try:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        return [dict(row) for row in cur.fetchall()]
+    except psycopg2.Error as exc:
+        raise RuntimeError(f"SQL execution failed: {exc}\nQuery: {sql}") from exc
+    finally:
+        conn.close()
+
+
+@contextmanager
+def get_db_cursor(commit: bool = False) -> Generator[Any, None, None]:
+    """Context manager that yields a cursor and handles cleanup.
+
+    For PostgreSQL yields a RealDictCursor; for SQLite yields a standard
+    cursor whose connection already has row_factory=sqlite3.Row.
 
     Args:
         commit: If True, commit the transaction on clean exit.
-                Use True for DDL/DML, False (default) for SELECT queries.
     """
     conn = get_db_connection()
     try:
-        with conn:  # rolls back on exception, commits on clean exit when commit=True
-            cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        if config.SQLITE_PATH:
+            cur = conn.cursor()
             yield cur
             if commit:
                 conn.commit()
+        else:
+            with conn:
+                cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+                yield cur
+                if commit:
+                    conn.commit()
     finally:
         conn.close()
 

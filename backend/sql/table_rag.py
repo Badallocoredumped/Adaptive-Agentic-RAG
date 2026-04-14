@@ -77,7 +77,7 @@ def build_schema_index(schema_dict: dict[str, list[str]]) -> None:
     index.add(vectors)
 
     _SCHEMA_INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
-    faiss.write_index(index, str(_SCHEMA_INDEX_PATH))
+    faiss.write_index(index, config.win_short_path(_SCHEMA_INDEX_PATH))
 
     with _SCHEMA_TEXTS_PATH.open("w", encoding="utf-8") as f:
         json.dump(schema_texts, f, ensure_ascii=True, indent=2)
@@ -90,7 +90,7 @@ def retrieve_relevant_schema(query: str, top_k: int = 3) -> list[str]:
             "Schema index not found. Run build_schema_index(schema_dict) first."
         )
 
-    index = faiss.read_index(str(_SCHEMA_INDEX_PATH))
+    index = faiss.read_index(config.win_short_path(_SCHEMA_INDEX_PATH))
     with _SCHEMA_TEXTS_PATH.open("r", encoding="utf-8") as f:
         schema_texts: list[str] = json.load(f)
 

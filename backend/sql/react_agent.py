@@ -31,8 +31,6 @@ import os
 import re
 from typing import Any
 
-import psycopg2.extras
-
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
@@ -40,7 +38,7 @@ from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import create_react_agent
 
 from backend import config
-from backend.sql.database import get_db_connection
+from backend.sql.database import execute_query
 from backend.sql.table_rag import retrieve_relevant_schema
 
 logger = logging.getLogger(__name__)
@@ -66,8 +64,14 @@ _SQL_EXTRACT_RE = re.compile(
 
 def _build_system_prompt(schema_context: str, max_iter: int) -> str:
     """Return a system message string with schema context and reasoning rules."""
+    dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
+    syntax_note = (
+        "Use SQLite syntax (LIKE not ILIKE, strftime not EXTRACT, etc.)."
+        if config.SQLITE_PATH
+        else "Use standard PostgreSQL syntax."
+    )
     return (
-        "You are an expert SQL analyst working with a PostgreSQL database.\n\n"
+        f"You are an expert SQL analyst working with a {dialect} database.\n\n"
         "TableRAG has already retrieved the following schema context relevant to this query.\n"
         "This is the AUTHORITATIVE list of tables and columns you may use:\n\n"
         f"{schema_context}\n\n"
@@ -75,10 +79,11 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
         "  1. Only reference tables and columns that appear in the schema context above.\n"
         "  2. Do NOT invent, assume, or guess tables or columns that are not listed.\n"
         "  3. Write only SELECT or WITH (read-only) queries — never INSERT, UPDATE, DELETE.\n"
-        "  4. If you think more tables might be needed, call schema_lookup FIRST to verify.\n"
-        "  5. WRITE COMPLETE QUERIES. Use JOINs to connect tables. Do NOT write exploratory step-by-step queries just to look up intermediate IDs.\n"
-        "  6. Always call execute_sql to test your SQL before reporting the final answer.\n"
-        "  7. If execute_sql returns an error, read the error message, fix the SQL, and retry.\n"
+        f"  4. {syntax_note}\n"
+        "  5. If you think more tables might be needed, call schema_lookup FIRST to verify.\n"
+        "  6. WRITE COMPLETE QUERIES. Use JOINs to connect tables. Do NOT write exploratory step-by-step queries just to look up intermediate IDs.\n"
+        "  7. Always call execute_sql to test your SQL before reporting the final answer.\n"
+        "  8. If execute_sql returns an error, read the error message, fix the SQL, and retry.\n"
         f"     You have up to {max_iter} tool-calling rounds — use them wisely.\n"
     )
 
@@ -88,19 +93,8 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
 # ---------------------------------------------------------------------------
 
 def _raw_execute_sql(sql: str) -> list[dict[str, Any]]:
-    """Execute a SQL query directly against the configured PostgreSQL DB.
-
-    Raises RuntimeError on any psycopg2 error so callers get a clean message.
-    """
-    conn = get_db_connection()
-    try:
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(sql)
-        return [dict(row) for row in cur.fetchall()]
-    except psycopg2.Error as exc:
-        raise RuntimeError(f"SQL execution failed: {exc}\nQuery: {sql}") from exc
-    finally:
-        conn.close()
+    """Execute a SQL query against the configured DB (SQLite or PostgreSQL)."""
+    return execute_query(sql)
 
 
 def _extract_and_normalise_sql(text: str) -> str | None:
@@ -165,11 +159,12 @@ def _make_execute_sql_tool() -> Tool:
         )
         return f"SUCCESS: {len(rows)} row(s) returned.\n{result_json}{suffix}"
 
+    dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
     return Tool(
         name="execute_sql",
         func=execute_sql,
         description=(
-            "Execute a SQL SELECT or WITH query against the PostgreSQL database. "
+            f"Execute a SQL SELECT or WITH query against the {dialect} database. "
             "Input: a valid SQL query string (may include markdown fences — they are stripped). "
             "Output: JSON rows on success, or an error message to guide your next attempt. "
             "Always call this tool to verify your SQL before reporting the final answer."
