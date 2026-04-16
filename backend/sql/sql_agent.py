@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 import time
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import TYPE_CHECKING, Any, TypedDict
 
 from .. import config
 from .database import execute_query, get_db_connection
@@ -14,6 +14,9 @@ from .table_rag import (
     get_schema_texts,
     retrieve_relevant_schema,
 )
+
+if TYPE_CHECKING:
+    from .sql_cache import SQLCache
 
 # ---------------------------------------------------------------------------
 # Types
@@ -30,6 +33,11 @@ _SQL_PATTERN = re.compile(
     r"\b(SELECT|WITH)\b[^;]*(?:;|$)",
     re.IGNORECASE | re.DOTALL,
 )
+
+
+def _debug(message: str) -> None:
+    if getattr(config, "DEBUG_LOGGING", False):
+        print(message)
 
 
 def _extract_sql_from_text(text: str) -> str | None:
@@ -265,7 +273,7 @@ def _refine_sql_from_cache(
         raw = response.choices[0].message.content or ""
         return _normalize_sql(raw)
     except Exception as exc:
-        print(f"[SQL AGENT] Cache-hit refiner failed: {exc}. Falling back to cached SQL.")
+        _debug(f"[SQL AGENT] Cache-hit refiner failed: {exc}. Falling back to cached SQL.")
         return None
 
 
@@ -313,7 +321,7 @@ def _generate_sql(query: str, schema_context: str) -> str | None:
         raw = response.choices[0].message.content or ""
         return _normalize_sql(raw)
     except Exception as exc:
-        print(f"[SQL AGENT] OpenAI SQL generation failed: {exc}")
+        _debug(f"[SQL AGENT] OpenAI SQL generation failed: {exc}")
         return None
 
 
@@ -341,7 +349,7 @@ def run_sql_agent(
     """
     resolved_schema_context = _resolve_schema_context(query, schema_context, top_k)
     tables = _extract_table_names(resolved_schema_context)
-    print(f"[SQL AGENT] schema tables passed: {tables if tables else 'none parsed'}")
+    _debug(f"[SQL AGENT] schema tables passed: {tables if tables else 'none parsed'}")
 
     if not resolved_schema_context.strip():
         return AgentResult(
@@ -416,19 +424,19 @@ def run_table_rag_pipeline(
     
     # 1. Check Semantic Cache
     cache = _get_sql_cache()
-    print(f"\n[TableRAG Pipeline] Analyzing query: {query!r}")
+    _debug(f"\n[TableRAG Pipeline] Analyzing query: {query!r}")
     cache_result = cache.check_cache_hit(query, threshold=0.85)
 
     if cache_result["hit"]:
         cached_sql = cache_result["sql"]
         original_question = cache_result.get("question", query)
         cached_schema = cache_result.get("schema", "")
-        print(f"[TableRAG Pipeline] ⚡ CACHE HIT: Cached SQL → {cached_sql}")
+        _debug(f"[TableRAG Pipeline] ⚡ CACHE HIT: Cached SQL -> {cached_sql}")
 
         # Ensure we always have schema context for the refiner.
         # If the cache entry has no schema, retrieve it fresh now.
         if not cached_schema.strip():
-            print("[TableRAG Pipeline] 🔍 No schema in cache entry — retrieving fresh schema for refiner...")
+            _debug("[TableRAG Pipeline] No schema in cache entry - retrieving fresh schema for refiner...")
             _ensure_schema_index_exists()
             cached_schema = "\n".join(retrieve_relevant_schema(query, top_k=top_k))
 
@@ -437,10 +445,10 @@ def run_table_rag_pipeline(
         # cached SQL is correct as-is and calling OpenAI would only add latency.
         cache_score = cache_result.get("score", 0.0)
         if cache_score >= 0.93:
-            print(f"[TableRAG Pipeline] ⚡ Score {cache_score:.4f} ≥ 0.93 — skipping refiner, using cached SQL directly.")
+            _debug(f"[TableRAG Pipeline] Score {cache_score:.4f} >= 0.93 - skipping refiner, using cached SQL directly.")
             refined_sql = cached_sql
         else:
-            print("[TableRAG Pipeline] 🔧 Running LLM SQL refiner for cache hit...")
+            _debug("[TableRAG Pipeline] Running LLM SQL refiner for cache hit...")
             refined_sql = _refine_sql_from_cache(
                 new_question=query,
                 original_question=original_question,
@@ -449,21 +457,21 @@ def run_table_rag_pipeline(
             )
 
         if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
-            print(f"[TableRAG Pipeline] ✏️  Refiner adjusted SQL → {refined_sql}")
+            _debug(f"[TableRAG Pipeline] Refiner adjusted SQL -> {refined_sql}")
             sql_to_execute = refined_sql
         elif refined_sql:
-            print("[TableRAG Pipeline] ✅ Refiner kept cached SQL unchanged.")
+            _debug("[TableRAG Pipeline] Refiner kept cached SQL unchanged.")
             sql_to_execute = cached_sql
         else:
             # Refiner failed — generate fresh SQL instead of blindly using
             # the cached SQL which may be wrong for this new query.
-            print("[TableRAG Pipeline] ⚠️  Refiner failed — generating fresh SQL from schema...")
+            _debug("[TableRAG Pipeline] Refiner failed - generating fresh SQL from schema...")
             fresh_sql = _generate_sql(query, cached_schema)
             if fresh_sql:
-                print(f"[TableRAG Pipeline] 🆕 Fresh SQL generated → {fresh_sql}")
+                _debug(f"[TableRAG Pipeline] Fresh SQL generated -> {fresh_sql}")
                 sql_to_execute = fresh_sql
             else:
-                print("[TableRAG Pipeline] ⚠️  Fresh generation also failed — using cached SQL as-is.")
+                _debug("[TableRAG Pipeline] Fresh generation also failed - using cached SQL as-is.")
                 sql_to_execute = cached_sql
 
         try:
@@ -472,22 +480,22 @@ def run_table_rag_pipeline(
         except Exception as e:
             rows = []
             error = str(e)
-            print(f"[TableRAG Pipeline] ❌ SQL execution failed: {error}")
+            _debug(f"[TableRAG Pipeline] SQL execution failed: {error}")
 
             # ── ReAct fallback: only reached when execution fails ──────────
             # LLM refinement already ran above; this is a true last resort.
             if getattr(config, "SQL_REACT_ENABLED", True):
-                print("[TableRAG Pipeline] 🔄 Execution failed — escalating to ReAct agent as last resort...")
+                _debug("[TableRAG Pipeline] Execution failed - escalating to ReAct agent as last resort...")
                 react_fn = _get_react_sql_agent()
                 react_result = react_fn(query, cached_schema)
                 if react_result["sql"] or react_result["result"]:
                     sql_to_execute = react_result["sql"] or sql_to_execute
                     rows = react_result["result"]
                     error = react_result["error"]
-                    print(f"[TableRAG Pipeline] ✅ ReAct agent recovered: sql={sql_to_execute!r}")
+                    _debug(f"[TableRAG Pipeline] ReAct agent recovered: sql={sql_to_execute!r}")
 
         latency = time.time() - start_time
-        print(f"[TableRAG Pipeline] ⏱️  Latency: {latency:.2f}s")
+        _debug(f"[TableRAG Pipeline] Latency: {latency:.2f}s")
         return {
             "schema_used": ["<from semantic cache>"],
             "sql": sql_to_execute,
@@ -498,17 +506,17 @@ def run_table_rag_pipeline(
         }
 
     # 2. RUN FULL PIPELINE (If Cache MISS)
-    print(f"[TableRAG Pipeline] 🤖 AGENT PATH: Routing to TableRAG + LLM")
+    _debug("[TableRAG Pipeline] AGENT PATH: Routing to TableRAG + LLM")
     
     _ensure_schema_index_exists()
     schema_rows: list[str] = retrieve_relevant_schema(query, top_k=top_k)
 
     # Logging: which tables were selected
     table_names = _extract_table_names("\n".join(schema_rows))
-    print(f"[TableRAG Pipeline] Retrieved schema rows ({len(schema_rows)}):")
+    _debug(f"[TableRAG Pipeline] Retrieved schema rows ({len(schema_rows)}):")
     for row in schema_rows:
-        print(f"  → {row}")
-    print(f"[TableRAG Pipeline] Selected tables: {table_names}")
+        _debug(f"  -> {row}")
+    _debug(f"[TableRAG Pipeline] Selected tables: {table_names}")
 
     # Format into a single context string
     schema_context = "\n".join(schema_rows)
@@ -519,13 +527,13 @@ def run_table_rag_pipeline(
     # generate and verify its SQL.  The single-pass run_sql_agent() is kept
     # as a fallback in case the ReAct layer produces nothing at all.
     if getattr(config, "SQL_REACT_ENABLED", True):
-        print(f"[TableRAG Pipeline] 🤔 Running ReAct agent with schema context...")
+        _debug("[TableRAG Pipeline] Running ReAct agent with schema context...")
         react_fn = _get_react_sql_agent()
         agent_result = react_fn(query, schema_context)
 
         # Fallback: ReAct returned neither SQL nor rows → use single-pass agent
         if not agent_result["sql"] and not agent_result["result"]:
-            print(
+            _debug(
                 "[TableRAG Pipeline] ⚠️  ReAct agent produced no output — "
                 "falling back to single-pass agent..."
             )
@@ -535,20 +543,20 @@ def run_table_rag_pipeline(
         agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
 
     # Logging: generated SQL
-    print(f"[TableRAG Pipeline] Generated SQL: {agent_result['sql']}")
+    _debug(f"[TableRAG Pipeline] Generated SQL: {agent_result['sql']}")
     if agent_result["error"]:
-        print(f"[TableRAG Pipeline] Error: {agent_result['error']}")
+        _debug(f"[TableRAG Pipeline] Error: {agent_result['error']}")
     else:
-        print(f"[TableRAG Pipeline] Rows returned: {len(agent_result['result'])}")
+        _debug(f"[TableRAG Pipeline] Rows returned: {len(agent_result['result'])}")
 
         # 3. Add successful run to Cache
         if agent_result["sql"] and not agent_result["error"]:
-            print(f"[TableRAG Pipeline] 💾 Saving successful query to cache...")
+            _debug("[TableRAG Pipeline] Saving successful query to cache...")
             cache.add_to_cache(query, agent_result["sql"], schema_context)
             cache.save_cache()
 
     latency = time.time() - start_time
-    print(f"[TableRAG Pipeline] ⏱️  Latency: {latency:.2f}s")
+    _debug(f"[TableRAG Pipeline] Latency: {latency:.2f}s")
 
     # path label: "react" when the ReAct agent ran, "agent" for single-pass fallback
     path_label = (

@@ -51,7 +51,7 @@ class AdaptiveAgenticRAGSystem:
 
     @staticmethod
     def _debug(message: str) -> None:
-        if getattr(config, "ROUTER_DEBUG", False):
+        if getattr(config, "DEBUG_LOGGING", False):
             print(f"[MAIN DEBUG] {message}")
 
     def ingest_documents(self, paths: list[str]) -> int:
@@ -179,12 +179,15 @@ if __name__ == "__main__":
         # Check for clarification request (whether it is a JSON string or dict/object)
         is_clarification = False
         if isinstance(result, str):
-            try:
-                parsed = json.loads(result)
-                if isinstance(parsed, dict) and "needs_clarification" in parsed:
-                    is_clarification = parsed.get("needs_clarification", False)
-            except json.JSONDecodeError:
-                pass
+            if "Clarification required." in result:
+                is_clarification = True
+            else:
+                try:
+                    parsed = json.loads(result)
+                    if isinstance(parsed, dict) and "needs_clarification" in parsed:
+                        is_clarification = parsed.get("needs_clarification", False)
+                except json.JSONDecodeError:
+                    pass
         elif isinstance(result, dict) and "needs_clarification" in result:
             is_clarification = result.get("needs_clarification", False)
         elif hasattr(result, "needs_clarification"):

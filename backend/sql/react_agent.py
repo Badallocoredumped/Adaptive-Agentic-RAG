@@ -43,6 +43,11 @@ from backend.sql.table_rag import retrieve_relevant_schema
 
 logger = logging.getLogger(__name__)
 
+
+def _debug(message: str) -> None:
+    if getattr(config, "DEBUG_LOGGING", False):
+        print(message)
+
 # ---------------------------------------------------------------------------
 # Regex helpers (kept local to avoid circular imports with sql_agent.py)
 # ---------------------------------------------------------------------------
@@ -281,7 +286,7 @@ def run_react_sql_agent(
           "error"          – error message if the agent could not produce SQL
           "schema_context" – the schema context passed to the agent
     """
-    print(f"\n[ReAct Agent] ▶ Starting for query: {query!r}")
+    _debug(f"\n[ReAct Agent] Starting for query: {query!r}")
     logger.info("[ReAct Agent] query=%r", query)
 
     max_iter: int = getattr(config, "SQL_REACT_MAX_ITERATIONS", 6)
@@ -296,7 +301,7 @@ def run_react_sql_agent(
         )
     except Exception as exc:
         logger.error("[ReAct Agent] graph.invoke() failed: %s", exc)
-        print(f"[ReAct Agent] ❌ Graph error: {exc}")
+        _debug(f"[ReAct Agent] Graph error: {exc}")
         return {
             "sql": None,
             "result": [],
@@ -368,10 +373,10 @@ def run_react_sql_agent(
             f"Agent output: {output_text}"
         )
 
-    print(f"[ReAct Agent] ✅ Final SQL : {final_sql}")
-    print(f"[ReAct Agent]    Rows     : {len(final_rows)}")
+    _debug(f"[ReAct Agent] Final SQL : {final_sql}")
+    _debug(f"[ReAct Agent] Rows      : {len(final_rows)}")
     if final_error:
-        print(f"[ReAct Agent]    Error    : {final_error}")
+        _debug(f"[ReAct Agent] Error     : {final_error}")
 
     return {
         "sql": final_sql,
