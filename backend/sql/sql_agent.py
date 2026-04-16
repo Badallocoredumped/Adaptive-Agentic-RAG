@@ -154,11 +154,16 @@ def _load_pg_schema_dict() -> dict[str, list[str]]:
 
 
 def _ensure_schema_index_exists() -> None:
-    """Build TableRAG schema index if it does not already exist."""
+    """Build TableRAG schema index if it does not already exist or is stale."""
     index_path = config.INDEX_DIR / "schema.faiss"
     texts_path = config.INDEX_DIR / "schema_texts.json"
     if index_path.exists() and texts_path.exists():
-        return
+        import json
+        with open(texts_path, "r", encoding="utf-8") as f:
+            stored = json.load(f)
+        live_schema = _load_schema_dict()
+        if len(stored) == len(live_schema):
+            return  # schema hasn't changed (based on table count)
 
     schema_dict = _load_schema_dict()
     if schema_dict:
@@ -213,6 +218,21 @@ def _build_refine_few_shot_block() -> str:
     return "\n".join(lines).strip()
 
 
+_openai_client_lock = threading.Lock()
+_openai_client: Any = None
+
+
+def _get_openai_client() -> Any:
+    global _openai_client
+    with _openai_client_lock:
+        if _openai_client is None:
+            import os
+            from openai import OpenAI
+            api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
+            _openai_client = OpenAI(api_key=api_key)
+    return _openai_client
+
+
 def _refine_sql_from_cache(
     new_question: str,
     original_question: str,
@@ -226,11 +246,7 @@ def _refine_sql_from_cache(
     (e.g., a filter value, a LIMIT, or an aggregate function); it should NOT
     rewrite the query from scratch.
     """
-    import os
-    from openai import OpenAI
-
-    api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-    client = OpenAI(api_key=api_key)
+    client = _get_openai_client()
 
     few_shot_block = _build_refine_few_shot_block()
 
@@ -280,11 +296,7 @@ def _refine_sql_from_cache(
 
 def _generate_sql(query: str, schema_context: str) -> str | None:
     """Generate SQL in a single pass using OpenAI and pruned schema context."""
-    import os
-    from openai import OpenAI
-
-    api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-    client = OpenAI(api_key=api_key)
+    client = _get_openai_client()
 
     dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
     syntax_note = (

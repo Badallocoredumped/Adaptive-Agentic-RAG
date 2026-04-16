@@ -113,7 +113,7 @@ ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
 # ReAct agent settings
 # Set SQL_REACT_ENABLED=False to bypass the ReAct layer and use the single-pass agent directly.
 SQL_REACT_ENABLED = True
-SQL_REACT_MAX_ITERATIONS = 6  # max Thought/Action/Observation cycles per query
+SQL_REACT_MAX_ITERATIONS = 3  # max Thought/Action/Observation cycles per query
 
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"
 ROUTER_COMPLETION_ENDPOINT = "/completion"

@@ -40,6 +40,20 @@ class ResponseSynthesizer:
 
     def __init__(self) -> None:
         self.last_result: SynthesisResult | None = None
+        self._llm: Any = None
+
+    def _get_llm(self) -> Any:
+        if self._llm is None:
+            chat_openai_cls = self._resolve_chat_openai_class()
+            if chat_openai_cls is None:
+                raise RuntimeError("ChatOpenAI class unavailable for synthesis")
+            self._llm = chat_openai_cls(
+                model=config.SQL_OPENAI_MODEL,
+                temperature=config.SYNTHESIS_TEMPERATURE,
+                api_key=config.OPENAI_API_KEY,
+                timeout=config.ROUTER_TIMEOUT_SECONDS,
+            )
+        return self._llm
 
     def synthesize(
         self,
@@ -87,9 +101,7 @@ class ResponseSynthesizer:
         rag_result: list[dict],
         subtask_results: list[dict] | None,
     ) -> SynthesisResult:
-        chat_openai_cls = self._resolve_chat_openai_class()
-        if chat_openai_cls is None:
-            raise RuntimeError("ChatOpenAI class unavailable for synthesis")
+        llm = self._get_llm()
 
         has_sql = sql_result is not None
         has_rag = bool(rag_result)
@@ -101,13 +113,6 @@ class ResponseSynthesizer:
                 ("system", self._build_system_prompt(source_mode)),
                 ("human", "{payload}"),
             ]
-        )
-
-        llm = chat_openai_cls(
-            model=config.SQL_OPENAI_MODEL,
-            temperature=config.SYNTHESIS_TEMPERATURE,
-            api_key=config.OPENAI_API_KEY,
-            timeout=config.ROUTER_TIMEOUT_SECONDS,
         )
 
         payload = self._build_user_payload(

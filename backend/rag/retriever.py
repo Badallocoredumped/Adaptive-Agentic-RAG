@@ -52,6 +52,9 @@ class RagRetriever:
         # Embed query once for potential reuse in fallback search
         query_vector = self.vector_store.embeddings.embed_query(query)
 
+        _debug(f"\n[RAG Pipeline] Query: {query!r}")
+        _debug(f"[RAG Pipeline] Fetching top {fetch_k} documents from FAISS...")
+
         if query_domain:
             results = self.vector_store.search_by_vector(
                 query_vector,

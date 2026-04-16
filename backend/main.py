@@ -118,10 +118,9 @@ class AdaptiveAgenticRAGSystem:
 
         if route == "hybrid":
             self._debug(f"run_query() executing BOTH pipelines concurrently for query={user_query!r}")
-            future_sql = self._executor.submit(self._run_sql_pipeline, user_query)
-            future_rag = self._executor.submit(self.retriever.retrieve, user_query, top_k=config.RAG_TOP_K)
-            sql_result = future_sql.result()
-            rag_result = future_rag.result()
+            # Run sequentially to avoid nested pool starvation
+            sql_result = self._run_sql_pipeline(user_query)
+            rag_result = self.retriever.retrieve(user_query, top_k=config.RAG_TOP_K)
         else:
             if route == "sql":
                 self._debug(f"run_query() executing TableRAG SQL pipeline for query={user_query!r}")
@@ -149,10 +148,9 @@ class AdaptiveAgenticRAGSystem:
 
             if task.route == "hybrid":
                 self._debug("_execute_subtasks() -> Executing TableRAG and RAG pipeline concurrently")
-                future_sql = self._executor.submit(self._run_sql_pipeline, task.sub_query)
-                future_rag = self._executor.submit(self.retriever.retrieve, task.sub_query, top_k=config.RAG_TOP_K)
-                sql_res = future_sql.result()
-                rag_res = future_rag.result()
+                # Run sequentially to avoid nested pool starvation
+                sql_res = self._run_sql_pipeline(task.sub_query)
+                rag_res = self.retriever.retrieve(task.sub_query, top_k=config.RAG_TOP_K)
             else:
                 if task.route in {"sql"}:
                     self._debug("_execute_subtasks() -> TableRAG SQL pipeline")
@@ -221,26 +219,49 @@ if __name__ == "__main__":
         elif isinstance(result, dict) and "latency" in result:
             print(f"Synthesis latency: {result['latency']:.3f}s")
 
-    # SQL Pipeline Tests
+    # ── Full Pipeline Performance Test ─────────────────────────────────────────
     print("\n" + "=" * 80)
-    print("TESTING SQL PIPELINE EXTENSIVELY (Decompose Mode)")
+    print("TESTING ALL PIPELINES: SQL, RAG, and HYBRID (Decompose Mode)")
     print("=" * 80)
     config.ROUTER_MODE = "decompose"
 
-    sql_queries = [
-        "what is the average amount of orders for customers living in Giza?",
-        "Count the total number of orders in the database.",
-        "What is the total amount of all orders combined?",
-        "How many support tickets are currently open or unresolved?",
-        "What is the total budget for all departments?",
-        "Find the total quantity of products in inventory across all warehouses."
+    test_queries = [
+        # SQL-focused queries
+        ("SQL 1 (Basic)", "Count the total number of orders in the database."),
+        ("SQL 2 (Complex)", "What is the average transaction amount for customers located in Giza?"),
+        
+        # RAG-focused queries
+        ("RAG 1 (Policy)", "What is the company policy on remote work and vacation days?"),
+        ("RAG 2 (Support)", "How do I request a hardware upgrade or new laptop?"),
+
+        # Hybrid-focused queries (requires both DB data and text-based policy)
+        ("Hybrid 1", "How many support tickets are currently open, and what is the SLA for resolving them?"),
+        ("Hybrid 2", "What is the average order amount for customers in Cairo, and what are the shipping terms for those orders?")
     ]
 
-    for i, query in enumerate(sql_queries, 1):
-        print(f"\n--- SQL Test {i} ---")
-        res = system.run_query(query)
-        print_result(res)
+    import time
+    total_latency = 0.0
 
+    for i, (label, query) in enumerate(test_queries, 1):
+        print(f"\n--- Test {i}: {label} ---")
+        print(f"Query: {query!r}")
+        
+        start_time = time.perf_counter()
+        try:
+            res = system.run_query(query)
+            end_time = time.perf_counter()
+            duration = end_time - start_time
+            total_latency += duration
+            
+            print_result(res)
+            print(f"End-to-End Latency: {duration:.3f}s")
+        except Exception as e:
+            print(f"Error during execution: {e}")
+
+    print("\n" + "=" * 80)
+    print(f"TOTAL TEST SUITE LATENCY: {total_latency:.3f}s")
+    print("=" * 80)
+    
     print("\nRestoring standard decompose mode...")
     config.ROUTER_MODE = "decompose"
 
