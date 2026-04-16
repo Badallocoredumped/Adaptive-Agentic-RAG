@@ -46,7 +46,7 @@ class RagRetriever:
     def retrieve(self, query: str, top_k: int = 5) -> list[dict]:
         """Return top-k relevant chunks for a query using FAISS retrieval + CrossEncoder Reranking."""
         # Dynamically scale the initial fetch size based on the final target output
-        fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, 20)
+        fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, 10)  # Ensure a reasonable minimum fetch size
         query_domain = self._infer_query_domain(query)
 
         # Embed query once for potential reuse in fallback search
