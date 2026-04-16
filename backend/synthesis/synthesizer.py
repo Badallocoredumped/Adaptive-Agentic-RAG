@@ -90,9 +90,14 @@ class ResponseSynthesizer:
         if chat_openai_cls is None:
             raise RuntimeError("ChatOpenAI class unavailable for synthesis")
 
+        has_sql = sql_result is not None
+        has_rag = bool(rag_result)
+        is_decompose = subtask_results is not None
+        source_mode = self._detect_source_mode(has_sql, has_rag, is_decompose)
+
         prompt = ChatPromptTemplate.from_messages(
             [
-                ("system", self._build_system_prompt()),
+                ("system", self._build_system_prompt(source_mode)),
                 ("human", "{payload}"),
             ]
         )
@@ -107,6 +112,7 @@ class ResponseSynthesizer:
         payload = self._build_user_payload(
             original_query=original_query,
             route=route,
+            source_mode=source_mode,
             sql_result=sql_result,
             rag_result=rag_result,
             subtask_results=subtask_results,
@@ -144,27 +150,94 @@ class ResponseSynthesizer:
         )
 
     @staticmethod
-    def _build_system_prompt() -> str:
+    def _detect_source_mode(has_sql: bool, has_rag: bool, is_decompose: bool) -> str:
+        """Return a label describing which evidence sources are present."""
+        if is_decompose:
+            return "decompose"
+        if has_sql and has_rag:
+            return "hybrid"
+        if has_sql:
+            return "sql_only"
+        if has_rag:
+            return "text_only"
+        return "empty"
+
+    @staticmethod
+    def _build_system_prompt(source_mode: str) -> str:
+        """Return a system prompt tailored to the evidence sources actually available."""
+        clarification_rule = (
+            'If evidence is insufficient to answer confidently, output ONLY this exact JSON '
+            '(nothing else): '
+            '{"needs_clarification": true, "reason": "<why>", "question": "<what to ask the user>"}.'
+        )
+        no_fences_rule = "Do not output markdown code fences."
+
+        if source_mode == "sql_only":
+            return (
+                "You are the final synthesis agent for an Adaptive Agentic RAG system.\n"
+                "The user's query was answered exclusively through a SQL database query. "
+                "No text document chunks were retrieved.\n\n"
+                "Rules:\n"
+                "1. Express the SQL results in clear, natural language. "
+                "Present numbers, counts, and row values directly from the provided rows.\n"
+                "2. Ground every claim strictly in the provided SQL rows. Never invent values.\n"
+                "3. Cite the database table(s) used inline: [source: <table_name>].\n"
+                "4. If the SQL result contains an error or returned zero rows: explain what happened "
+                "concisely, then ask for clarification using the JSON format in rule 5. "
+                "Do NOT try to answer from general knowledge.\n"
+                f"5. {clarification_rule}\n"
+                f"6. {no_fences_rule}"
+            )
+
+        if source_mode == "text_only":
+            return (
+                "You are the final synthesis agent for an Adaptive Agentic RAG system.\n"
+                "The user's query was answered exclusively through retrieved text document chunks. "
+                "No database query was executed.\n\n"
+                "Rules:\n"
+                "1. Answer in clear, concise natural language based only on the provided text chunks.\n"
+                "2. Ground every claim strictly in the text evidence. Never invent facts.\n"
+                "3. Cite document sources inline: [source: <filename>].\n"
+                "4. If the retrieved chunks are empty or do not contain enough information to answer, "
+                "do NOT speculate. Use the JSON format in rule 5 instead.\n"
+                f"5. {clarification_rule}\n"
+                f"6. {no_fences_rule}"
+            )
+
+        if source_mode == "empty":
+            return (
+                "You are the final synthesis agent for an Adaptive Agentic RAG system.\n"
+                "No evidence was retrieved from any source for this query.\n\n"
+                "Rules:\n"
+                "1. Do not attempt to answer from general knowledge.\n"
+                f"2. {clarification_rule}\n"
+                f"3. {no_fences_rule}"
+            )
+
+        # "hybrid" and "decompose" — both sources may be present
         return (
             "You are the final synthesis agent for an Adaptive Agentic RAG system.\n"
-            "Your job is to answer the original query using only the provided SQL evidence and/or text chunks.\n\n"
+            "Your job is to answer the original query by combining SQL database results "
+            "with retrieved text document chunks.\n\n"
             "Rules:\n"
             "1. Answer in clear, concise natural language.\n"
             "2. Ground every claim strictly in the provided evidence. Never invent facts.\n"
-            "3. Cite sources inline whenever you reference evidence using this exact format: "
-            "[source: <filename_or_table>].\n"
-            "4. If SQL evidence and text chunk evidence contradict each other on the same fact, "
-            "explicitly flag the conflict in your answer.\n"
-            "5. If evidence is insufficient to answer confidently, output only this exact JSON shape "
-            "(and nothing else): "
-            "{{\"needs_clarification\": true, \"reason\": \"<why>\", \"question\": \"<what to ask the user>\"}}.\n"
-            "6. Do not output markdown code fences."
+            "3. Cite sources inline whenever you reference evidence: [source: <filename_or_table>].\n"
+            "4. When SQL and text evidence contradict each other on the same fact: "
+            "prefer SQL for numerical/quantitative facts (counts, sums, averages, dates); "
+            "prefer text chunks for qualitative context (descriptions, policies, sentiment). "
+            "Always note the discrepancy explicitly.\n"
+            "5. If a SQL result contains an error, note it and rely on text evidence for that sub-query "
+            "if available, or ask for clarification.\n"
+            f"6. {clarification_rule}\n"
+            f"7. {no_fences_rule}"
         )
 
     def _build_user_payload(
         self,
         original_query: str,
         route: str,
+        source_mode: str,
         sql_result: dict | None,
         rag_result: list[dict],
         subtask_results: list[dict] | None,
@@ -172,25 +245,36 @@ class ResponseSynthesizer:
         payload: dict[str, Any] = {
             "original_query": original_query,
             "route": route,
-            "sql_result": self._to_sql_payload(sql_result),
-            "rag_chunks": self._to_chunk_payload(self._top_chunks(rag_result, _MAX_CHUNKS_FOR_PROMPT)),
-            "subtask_results": [],
+            "source_mode": source_mode,
         }
 
+        # Only include evidence fields that actually carry data so the LLM
+        # is not distracted by null/empty placeholders.
+        sql_payload = self._to_sql_payload(sql_result)
+        if sql_payload is not None:
+            payload["sql_result"] = sql_payload
+
+        chunk_payload = self._to_chunk_payload(self._top_chunks(rag_result, _MAX_CHUNKS_FOR_PROMPT))
+        if chunk_payload:
+            payload["rag_chunks"] = chunk_payload
+
         if subtask_results:
+            serialized: list[dict[str, Any]] = []
             for item in subtask_results:
                 sub_sql = item.get("sql_result")
                 sub_rag = self._normalize_rag_result(item.get("rag_result"))
-                payload["subtask_results"].append(
-                    {
-                        "sub_query": item.get("sub_query", ""),
-                        "route": item.get("route", "unknown"),
-                        "sql_result": self._to_sql_payload(sub_sql if isinstance(sub_sql, dict) else None),
-                        "rag_chunks": self._to_chunk_payload(
-                            self._top_chunks(sub_rag, _MAX_CHUNKS_FOR_PROMPT)
-                        ),
-                    }
-                )
+                sub_entry: dict[str, Any] = {
+                    "sub_query": item.get("sub_query", ""),
+                    "route": item.get("route", "unknown"),
+                }
+                sub_sql_payload = self._to_sql_payload(sub_sql if isinstance(sub_sql, dict) else None)
+                if sub_sql_payload is not None:
+                    sub_entry["sql_result"] = sub_sql_payload
+                sub_chunks = self._to_chunk_payload(self._top_chunks(sub_rag, _MAX_CHUNKS_FOR_PROMPT))
+                if sub_chunks:
+                    sub_entry["rag_chunks"] = sub_chunks
+                serialized.append(sub_entry)
+            payload["subtask_results"] = serialized
 
         return payload
 

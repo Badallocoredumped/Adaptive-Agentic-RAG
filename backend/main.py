@@ -203,48 +203,6 @@ if __name__ == "__main__":
         elif isinstance(result, dict) and "latency" in result:
             print(f"Synthesis latency: {result['latency']:.3f}s")
 
-    # TEST 1 — SQL-only path
-    print("\n" + "=" * 80)
-    print("TEST 1 — SQL-only path (single route, keyword mode)")
-    print("=" * 80)
-    config.ROUTER_MODE = "keyword"
-    res1 = system.run_query("what is the average amount of orders for customers living in Giza?")
-    print_result(res1)
-
-    # TEST 2 — Text-only path
-    print("\n" + "=" * 80)
-    print("TEST 2 — Text-only path (single route, keyword mode)")
-    print("=" * 80)
-    config.ROUTER_MODE = "keyword"
-    res2 = system.run_query("Summarize the Cairo sales report")
-    print_result(res2)
-
-    # TEST 3 — Hybrid path with potential conflict
-    print("\n" + "=" * 80)
-    print("TEST 3 — Hybrid path with potential conflict (single route, keyword mode)")
-    print("=" * 80)
-    config.ROUTER_MODE = "keyword"
-    res3 = system.run_query("What is the total revenue and what does the sales report say about it?")
-    print_result(res3)
-
-    # TEST 4 — Clarification request path
-    print("\n" + "=" * 80)
-    print("TEST 4 — Clarification request path")
-    print("=" * 80)
-    config.ROUTER_MODE = "keyword"
-    sql_res_empty = {
-        "ok": True, "query": "n/a", "rows": [], "row_count": 0,
-        "schema_used": [], "path": "fast", "latency": 0.0
-    }
-    res4 = system.synthesizer.synthesize(
-        user_query="What is the market share of our product in Southeast Asia?",
-        route="hybrid",
-        sql_result=sql_res_empty,
-        rag_result=[]
-    )
-    print_result(res4)
-
-    # TEST 5 — Decompose mode end-to-end
     print("\n" + "=" * 80)
     print("TEST 5 — Decompose mode end-to-end")
     print("=" * 80)
