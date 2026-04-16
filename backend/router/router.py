@@ -30,7 +30,7 @@ class QueryRouter:
 
     @staticmethod
     def _debug(message: str) -> None:
-        if getattr(config, "ROUTER_DEBUG", False):
+        if getattr(config, "DEBUG_LOGGING", False):
             print(f"[ROUTER DEBUG] {message}")
 
     def route(self, query: str) -> str:

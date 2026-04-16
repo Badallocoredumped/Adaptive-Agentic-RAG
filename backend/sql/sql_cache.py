@@ -13,6 +13,11 @@ from sentence_transformers import SentenceTransformer
 from backend import config
 
 
+def _debug(message: str) -> None:
+    if getattr(config, "DEBUG_LOGGING", False):
+        print(message)
+
+
 class SQLCache:
     """Golden SQL Cache using semantic similarity on the user's question."""
 
@@ -81,7 +86,7 @@ class SQLCache:
                 self.metadata = json.load(f)
             return True
         except Exception as e:
-            print(f"[SQLCache] Failed to load cache: {e}")
+            _debug(f"[SQLCache] Failed to load cache: {e}")
             return False
 
     def save_cache(self) -> None:
@@ -139,14 +144,14 @@ class SQLCache:
         results = self.search_cache(query, top_k=1)
         
         if not results:
-            print(f"[SQLCache] Decision: MISS | No results found for query: '{query}'")
+            _debug(f"[SQLCache] Decision: MISS | No results found for query: '{query}'")
             return {"hit": False}
         
         best_match = results[0]
         score = best_match["score"]
         
         if score >= threshold:
-            print(f"[SQLCache] Decision: HIT  | Score: {score:.4f} | Query: '{query}'")
+            _debug(f"[SQLCache] Decision: HIT  | Score: {score:.4f} | Query: '{query}'")
             return {
                 "hit": True,
                 "sql": best_match["sql"],
@@ -155,7 +160,7 @@ class SQLCache:
                 "schema": best_match.get("schema", ""),
             }
         else:
-            print(f"[SQLCache] Decision: MISS | Score: {score:.4f} (Below threshold {threshold:.4f}) | Query: '{query}'")
+            _debug(f"[SQLCache] Decision: MISS | Score: {score:.4f} (Below threshold {threshold:.4f}) | Query: '{query}'")
             return {"hit": False}
 
 

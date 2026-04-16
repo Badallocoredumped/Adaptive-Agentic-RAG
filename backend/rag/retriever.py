@@ -11,6 +11,11 @@ from backend.rag.vector_store import FAISSVectorStore
 from langchain_core.documents import Document as LCDocument
 
 
+def _debug(message: str) -> None:
+    if getattr(config, "DEBUG_LOGGING", False):
+        print(message)
+
+
 class RagRetriever:
     """Coordinates LangChain document indexing and FAISS retrieval."""
 
@@ -44,8 +49,8 @@ class RagRetriever:
         fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, 20)
         query_domain = self._infer_query_domain(query)
 
-        print(f"\n[RAG Pipeline] Query: {query!r}")
-        print(f"[RAG Pipeline] Fetching top {fetch_k} documents from FAISS...")
+        _debug(f"\n[RAG Pipeline] Query: {query!r}")
+        _debug(f"[RAG Pipeline] Fetching top {fetch_k} documents from FAISS...")
 
         if query_domain:
             results = self.vector_store.search(
@@ -67,7 +72,7 @@ class RagRetriever:
                 doc_map[normalized_text] = doc
 
         documents_text = list(doc_map.keys())
-        print(f"[RAG Pipeline] FAISS returned {len(documents_text)} unique chunks.")
+        _debug(f"[RAG Pipeline] FAISS returned {len(documents_text)} unique chunks.")
         
         # CrossEncoder Reranking Toggle
         if config.RAG_ENABLE_SEMANTIC_RERANK:
@@ -75,16 +80,16 @@ class RagRetriever:
                 from backend.rag.reranker import Reranker
                 self._reranker = Reranker()
                 
-            print(f"[RAG Pipeline] Reranking {len(documents_text)} documents using {self._reranker.model_name} CrossEncoder...")
+            _debug(f"[RAG Pipeline] Reranking {len(documents_text)} documents using {self._reranker.model_name} CrossEncoder...")
             reranked = self._reranker.rerank(query, documents_text, top_k=top_k)
         else:
-            print(f"[RAG Pipeline] Semantic Reranking is DISABLED. Returning top {top_k} directly from FAISS.")
+            _debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Returning top {top_k} directly from FAISS.")
             reranked = []
             for i, text in enumerate(documents_text[:top_k]):
                 fallback_score = 1.0 / (1.0 + float(results[i][1])) if i < len(results) else 0.0
                 reranked.append({"text": text, "score": fallback_score})
         
-        print(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
+        _debug(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
         payload: list[dict] = []
         for i, res in enumerate(reranked, 1):
             text = res["text"]
@@ -94,7 +99,7 @@ class RagRetriever:
             chunk_id = metadata.pop("chunk_id", None)
             source = metadata.get("source", "unknown")
             
-            print(f"  → Rank {i} | CrossEncoder Score: {score:.4f} | Source: {source}")
+            _debug(f"  -> Rank {i} | CrossEncoder Score: {score:.4f} | Source: {source}")
             
             payload.append(
                 {

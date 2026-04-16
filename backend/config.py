@@ -89,13 +89,21 @@ ROUTER_LLM_TEMPERATURE = 0.0
 ROUTER_MODEL = "qwen2.5-coder-7b-instruct"
 ROUTER_BASE_URL = "http://localhost:8080"
 ROUTER_API_KEY = "local"
+SYNTHESIS_MODEL = ROUTER_MODEL
+SYNTHESIS_TEMPERATURE = 0.0
 
 # OpenAI settings for SQL generation & refinement
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # set in .env
 SQL_OPENAI_MODEL = "gpt-4o-mini"
 SQL_GENERATE_TEMPERATURE = 0.0
 SQL_REFINE_TEMPERATURE = 0.0
-ROUTER_DEBUG = True
+
+# Global runtime debug logging toggle for Router/RAG/TableRAG/ReAct internals.
+# Set False to keep terminal output concise (final answers/errors only).
+DEBUG_LOGGING = False
+
+# Legacy alias kept for compatibility with existing references.
+ROUTER_DEBUG = DEBUG_LOGGING
 
 # maximum number of subtasks for initial query
 ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
