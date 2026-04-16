@@ -168,7 +168,7 @@ class ResponseSynthesizer:
         clarification_rule = (
             'If evidence is insufficient to answer confidently, output ONLY this exact JSON '
             '(nothing else): '
-            '{"needs_clarification": true, "reason": "<why>", "question": "<what to ask the user>"}.'
+            '{{"needs_clarification": true, "reason": "<why>", "question": "<what to ask the user>"}}.'
         )
         no_fences_rule = "Do not output markdown code fences."
 

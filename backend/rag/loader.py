@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from backend import config
 
@@ -24,33 +25,42 @@ class DocumentLoader:
     SUPPORTED_TEXT_EXTENSIONS = {".txt", ".md"}
 
     def load_documents(self, paths: list[str]) -> list[Document]:
-        """Load multiple files into a list of Document instances."""
+        """Load multiple files into a list of Document instances concurrently."""
         documents: list[Document] = []
-        for raw_path in paths:
+
+        def _load_single(raw_path: str) -> Document | None:
             path = Path(raw_path)
             if not path.exists() or not path.is_file():
-                continue
+                return None
 
             if path.suffix.lower() == ".pdf":
                 text = self._read_pdf(path)
             elif path.suffix.lower() in self.SUPPORTED_TEXT_EXTENSIONS:
                 text = self._read_text(path)
             else:
-                continue
+                return None
 
             if text.strip():
                 domain = self._infer_domain(path)
-                documents.append(
-                    Document(
-                        text=text,
-                        source=str(path),
-                        metadata={
-                            "filename": path.name,
-                            "extension": path.suffix.lower(),
-                            "domain": domain,
-                        },
-                    )
+                return Document(
+                    text=text,
+                    source=str(path),
+                    metadata={
+                        "filename": path.name,
+                        "extension": path.suffix.lower(),
+                        "domain": domain,
+                    },
                 )
+            return None
+
+        # Load concurrently using standard ThreadPoolExecutor limits
+        with ThreadPoolExecutor() as executor:
+            futures = [executor.submit(_load_single, str(p)) for p in paths]
+            for future in as_completed(futures):
+                doc = future.result()
+                if doc is not None:
+                    documents.append(doc)
+
         return documents
 
     @staticmethod

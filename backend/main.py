@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 
 if __package__ is None or __package__ == "":
     project_root = Path(__file__).resolve().parent.parent
@@ -114,13 +115,21 @@ class AdaptiveAgenticRAGSystem:
         sql_result: dict | None = None
         rag_result: list[dict] | None = None
 
-        if route in {"sql", "hybrid"}:
-            self._debug(f"run_query() executing TableRAG SQL pipeline for query={user_query!r}")
-            sql_result = self._run_sql_pipeline(user_query)
+        if route == "hybrid":
+            self._debug(f"run_query() executing BOTH pipelines concurrently for query={user_query!r}")
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                future_sql = executor.submit(self._run_sql_pipeline, user_query)
+                future_rag = executor.submit(self.retriever.retrieve, user_query, top_k=config.RAG_TOP_K)
+                sql_result = future_sql.result()
+                rag_result = future_rag.result()
+        else:
+            if route == "sql":
+                self._debug(f"run_query() executing TableRAG SQL pipeline for query={user_query!r}")
+                sql_result = self._run_sql_pipeline(user_query)
 
-        if route in {"text", "hybrid"}:
-            self._debug(f"run_query() executing RAG pipeline for query={user_query!r}")
-            rag_result = self.retriever.retrieve(user_query, top_k=config.RAG_TOP_K)
+            if route == "text":
+                self._debug(f"run_query() executing RAG pipeline for query={user_query!r}")
+                rag_result = self.retriever.retrieve(user_query, top_k=config.RAG_TOP_K)
 
         return self.synthesizer.synthesize(
             user_query=user_query,
@@ -130,29 +139,41 @@ class AdaptiveAgenticRAGSystem:
         )
 
     def _execute_subtasks(self, sub_tasks: list[SubTask]) -> list[dict]:
-        """Run each decomposed sub-task on its assigned pipeline(s)."""
+        """Run each decomposed sub-task on its assigned pipeline(s) concurrently."""
         outputs: list[dict] = []
-        for task in sub_tasks:
-            sql_result: dict | None = None
-            rag_result: list[dict] | None = None
+
+        def run_task(task: SubTask) -> dict:
+            sql_res: dict | None = None
+            rag_res: list[dict] | None = None
             self._debug(f"_execute_subtasks() dispatch route={task.route}, sub_query={task.sub_query!r}")
 
-            if task.route in {"sql", "hybrid"}:
-                self._debug("_execute_subtasks() -> TableRAG SQL pipeline")
-                sql_result = self._run_sql_pipeline(task.sub_query)
+            if task.route == "hybrid":
+                self._debug("_execute_subtasks() -> Executing TableRAG and RAG pipeline concurrently")
+                with ThreadPoolExecutor(max_workers=2) as inner_executor:
+                    future_sql = inner_executor.submit(self._run_sql_pipeline, task.sub_query)
+                    future_rag = inner_executor.submit(self.retriever.retrieve, task.sub_query, top_k=config.RAG_TOP_K)
+                    sql_res = future_sql.result()
+                    rag_res = future_rag.result()
+            else:
+                if task.route in {"sql"}:
+                    self._debug("_execute_subtasks() -> TableRAG SQL pipeline")
+                    sql_res = self._run_sql_pipeline(task.sub_query)
 
-            if task.route in {"text", "hybrid"}:
-                self._debug("_execute_subtasks() -> RAG pipeline")
-                rag_result = self.retriever.retrieve(task.sub_query, top_k=config.RAG_TOP_K)
+                if task.route in {"text"}:
+                    self._debug("_execute_subtasks() -> RAG pipeline")
+                    rag_res = self.retriever.retrieve(task.sub_query, top_k=config.RAG_TOP_K)
 
-            outputs.append(
-                {
-                    "sub_query": task.sub_query,
-                    "route": task.route,
-                    "sql_result": sql_result,
-                    "rag_result": rag_result,
-                }
-            )
+            return {
+                "sub_query": task.sub_query,
+                "route": task.route,
+                "sql_result": sql_res,
+                "rag_result": rag_res,
+            }
+
+        with ThreadPoolExecutor(max_workers=len(sub_tasks) or 1) as executor:
+            # Using map preserves the original order of subtasks
+            results = executor.map(run_task, sub_tasks)
+            outputs = list(results)
 
         return outputs
 
@@ -203,12 +224,25 @@ if __name__ == "__main__":
         elif isinstance(result, dict) and "latency" in result:
             print(f"Synthesis latency: {result['latency']:.3f}s")
 
+    # SQL Pipeline Tests
     print("\n" + "=" * 80)
-    print("TEST 5 — Decompose mode end-to-end")
+    print("TESTING SQL PIPELINE EXTENSIVELY (Decompose Mode)")
     print("=" * 80)
     config.ROUTER_MODE = "decompose"
-    res5 = system.run_query("What is the total number of orders and summarize the latest sales report?")
-    print_result(res5)
+
+    sql_queries = [
+        "what is the average amount of orders for customers living in Giza?",
+        "Count the total number of orders in the database.",
+        "What is the total amount of all orders combined?",
+        "How many support tickets are currently open or unresolved?",
+        "What is the total budget for all departments?",
+        "Find the total quantity of products in inventory across all warehouses."
+    ]
+
+    for i, query in enumerate(sql_queries, 1):
+        print(f"\n--- SQL Test {i} ---")
+        res = system.run_query(query)
+        print_result(res)
 
     print("\nRestoring standard decompose mode...")
     config.ROUTER_MODE = "decompose"
