@@ -2,9 +2,14 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from backend import config
+from backend.models import get_shared_hf_embeddings
 from langchain_core.embeddings import Embeddings
-from langchain_huggingface import HuggingFaceEmbeddings
+
+if TYPE_CHECKING:
+    from langchain_huggingface import HuggingFaceEmbeddings
 
 
 class PrefixAwareEmbeddings(Embeddings):
@@ -43,13 +48,11 @@ class SentenceTransformerEmbedder:
 
     def __init__(self, model_name: str) -> None:
         self.model_name = model_name
-        self._model: HuggingFaceEmbeddings | None = None
 
     @property
     def model(self) -> HuggingFaceEmbeddings:
-        if self._model is None:
-            self._model = HuggingFaceEmbeddings(model_name=self.model_name)
-        return self._model
+        """Return the shared HuggingFaceEmbeddings singleton."""
+        return get_shared_hf_embeddings()
 
     def get_langchain_embeddings(self) -> PrefixAwareEmbeddings:
         """Return prefix-aware embeddings used by vector index/retrieval."""

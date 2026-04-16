@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sqlite3
+import threading
 from contextlib import contextmanager
 from typing import Any, Generator
 
@@ -13,7 +14,7 @@ from backend import config
 
 
 # ---------------------------------------------------------------------------
-# Connection factory
+# Connection factory (used by startup / schema init code)
 # ---------------------------------------------------------------------------
 
 def get_db_connection():
@@ -42,33 +43,78 @@ def get_db_connection():
     )
 
 
+# ---------------------------------------------------------------------------
+# Hot-path connection reuse (SQLite thread-local + PostgreSQL pool)
+# ---------------------------------------------------------------------------
+
+_sqlite_local = threading.local()
+
+
+def _get_sqlite_conn():
+    """Return a thread-local reusable SQLite connection."""
+    conn = getattr(_sqlite_local, "conn", None)
+    if conn is None:
+        conn = sqlite3.connect(config.SQLITE_PATH)
+        conn.row_factory = sqlite3.Row
+        _sqlite_local.conn = conn
+    return conn
+
+
+_pg_pool = None
+_pg_pool_lock = threading.Lock()
+
+
+def _get_pg_pool():
+    """Lazy-init a simple connection pool for PostgreSQL (thread-safe)."""
+    global _pg_pool
+    with _pg_pool_lock:
+        if _pg_pool is None:
+            from psycopg2.pool import SimpleConnectionPool
+
+            if config.DATABASE_URL:
+                _pg_pool = SimpleConnectionPool(1, 4, dsn=config.DATABASE_URL)
+            else:
+                _pg_pool = SimpleConnectionPool(
+                    1, 4,
+                    host=config.PG_HOST,
+                    port=config.PG_PORT,
+                    dbname=config.PG_DB,
+                    user=config.PG_USER,
+                    password=config.PG_PASSWORD,
+                )
+    return _pg_pool
+
+
 def execute_query(sql: str) -> list[dict[str, Any]]:
     """Execute a SELECT query and return rows as a list of dicts.
 
     Works with both SQLite and PostgreSQL backends.
+    Uses thread-local connections (SQLite) or a connection pool (PostgreSQL)
+    to avoid per-query connection setup overhead.
     Raises RuntimeError on any DB error.
     """
     if config.SQLITE_PATH:
-        conn = sqlite3.connect(config.SQLITE_PATH)
-        conn.row_factory = sqlite3.Row
+        conn = _get_sqlite_conn()
         try:
             cur = conn.cursor()
             cur.execute(sql)
             return [dict(row) for row in cur.fetchall()]
         except sqlite3.Error as exc:
             raise RuntimeError(f"SQL execution failed: {exc}\nQuery: {sql}") from exc
-        finally:
-            conn.close()
 
-    conn = get_db_connection()
+    pool = _get_pg_pool()
+    conn = pool.getconn()
     try:
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cur.execute(sql)
-        return [dict(row) for row in cur.fetchall()]
+        rows = [dict(row) for row in cur.fetchall()]
+        conn.commit()  # close the implicit transaction
+        return rows
     except psycopg2.Error as exc:
+        conn.rollback()
         raise RuntimeError(f"SQL execution failed: {exc}\nQuery: {sql}") from exc
     finally:
-        conn.close()
+        pool.putconn(conn)
 
 
 @contextmanager

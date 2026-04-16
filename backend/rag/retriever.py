@@ -49,20 +49,23 @@ class RagRetriever:
         fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, 20)
         query_domain = self._infer_query_domain(query)
 
+        # Embed query once for potential reuse in fallback search
+        query_vector = self.vector_store.embeddings.embed_query(query)
+
         _debug(f"\n[RAG Pipeline] Query: {query!r}")
         _debug(f"[RAG Pipeline] Fetching top {fetch_k} documents from FAISS...")
 
         if query_domain:
-            results = self.vector_store.search(
-                query,
+            results = self.vector_store.search_by_vector(
+                query_vector,
                 fetch_k,
                 metadata_filter={"domain": query_domain},
             )
             # Fallback if domain filter is too restrictive
             if len(results) < fetch_k:
-                results = self.vector_store.search(query, fetch_k)
+                results = self.vector_store.search_by_vector(query_vector, fetch_k)
         else:
-            results = self.vector_store.search(query, fetch_k)
+            results = self.vector_store.search_by_vector(query_vector, fetch_k)
 
         # Deduplicate and map text -> metadata
         doc_map = {}

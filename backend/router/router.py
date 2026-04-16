@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import importlib
+from functools import lru_cache
 import json
 import re
 from typing import Any
@@ -168,6 +169,7 @@ class QueryRouter:
         return self.default_route
 
     @staticmethod
+    @lru_cache(maxsize=1)
     def _resolve_chat_openai_class():
         try:
             module = importlib.import_module("langchain_openai")

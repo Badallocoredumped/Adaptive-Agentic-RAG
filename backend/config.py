@@ -66,7 +66,7 @@ RAG_TOP_K = 6        # number of text chunks to retrieve
 SQL_TOP_K = 4        # number of schema tables to retrieve
 
 
-RAG_FETCH_MULTIPLIER = 6
+RAG_FETCH_MULTIPLIER = 3
 RAG_ENABLE_SEMANTIC_RERANK = True
 RAG_PREVIEW_CHARS = 400
 
@@ -113,7 +113,7 @@ ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
 # ReAct agent settings
 # Set SQL_REACT_ENABLED=False to bypass the ReAct layer and use the single-pass agent directly.
 SQL_REACT_ENABLED = True
-SQL_REACT_MAX_ITERATIONS = 6  # max Thought/Action/Observation cycles per query
+SQL_REACT_MAX_ITERATIONS = 3  # max Thought/Action/Observation cycles per query
 
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"
 ROUTER_COMPLETION_ENDPOINT = "/completion"

@@ -87,3 +87,20 @@ class FAISSVectorStore:
 
         return self.store.similarity_search_with_score(query=query, k=top_k)
 
+    def search_by_vector(
+        self, embedding: list[float], top_k: int,
+        metadata_filter: dict[str, Any] | None = None,
+    ) -> list[tuple[LCDocument, float]]:
+        """Search using a pre-computed embedding vector (avoids re-embedding)."""
+        if self.store is None:
+            return []
+
+        if metadata_filter:
+            return self.store.similarity_search_with_score_by_vector(
+                embedding=embedding, k=top_k, filter=metadata_filter,
+            )
+
+        return self.store.similarity_search_with_score_by_vector(
+            embedding=embedding, k=top_k,
+        )
+

@@ -8,22 +8,14 @@ from typing import Any
 
 import faiss
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 from backend import config
+from backend.models import get_shared_st_model
 
 _SCHEMA_INDEX_PATH = config.INDEX_DIR / "schema.faiss"
 _SCHEMA_TEXTS_PATH = config.INDEX_DIR / "schema_texts.json"
 
-_MODEL: SentenceTransformer | None = None
 
-
-def _get_model() -> SentenceTransformer:
-    """Load embedding model once and reuse it across calls."""
-    global _MODEL
-    if _MODEL is None:
-        _MODEL = SentenceTransformer(config.EMBEDDING_MODEL_NAME)
-    return _MODEL
 
 
 def _apply_e5_prefix(text: str, is_query: bool) -> str:
@@ -40,7 +32,7 @@ def _apply_e5_prefix(text: str, is_query: bool) -> str:
 
 def _embed_texts(texts: list[str], is_query: bool) -> np.ndarray:
     """Embed texts and return a float32 matrix."""
-    model = _get_model()
+    model = get_shared_st_model()
     payload = [_apply_e5_prefix(text, is_query=is_query) for text in texts]
     vectors = model.encode(payload, convert_to_numpy=True, normalize_embeddings=False)
     vectors = np.asarray(vectors, dtype=np.float32)

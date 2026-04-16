@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import importlib
 import json
+from functools import lru_cache
 import logging
 from pathlib import Path
 import re
@@ -39,6 +40,20 @@ class ResponseSynthesizer:
 
     def __init__(self) -> None:
         self.last_result: SynthesisResult | None = None
+        self._llm: Any = None
+
+    def _get_llm(self) -> Any:
+        if self._llm is None:
+            chat_openai_cls = self._resolve_chat_openai_class()
+            if chat_openai_cls is None:
+                raise RuntimeError("ChatOpenAI class unavailable for synthesis")
+            self._llm = chat_openai_cls(
+                model=config.SQL_OPENAI_MODEL,
+                temperature=config.SYNTHESIS_TEMPERATURE,
+                api_key=config.OPENAI_API_KEY,
+                timeout=config.ROUTER_TIMEOUT_SECONDS,
+            )
+        return self._llm
 
     def synthesize(
         self,
@@ -86,9 +101,7 @@ class ResponseSynthesizer:
         rag_result: list[dict],
         subtask_results: list[dict] | None,
     ) -> SynthesisResult:
-        chat_openai_cls = self._resolve_chat_openai_class()
-        if chat_openai_cls is None:
-            raise RuntimeError("ChatOpenAI class unavailable for synthesis")
+        llm = self._get_llm()
 
         has_sql = sql_result is not None
         has_rag = bool(rag_result)
@@ -102,13 +115,6 @@ class ResponseSynthesizer:
             ]
         )
 
-        llm = chat_openai_cls(
-            model=config.SQL_OPENAI_MODEL,
-            temperature=config.SYNTHESIS_TEMPERATURE,
-            api_key=config.OPENAI_API_KEY,
-            timeout=config.ROUTER_TIMEOUT_SECONDS,
-        )
-
         payload = self._build_user_payload(
             original_query=original_query,
             route=route,
@@ -120,7 +126,7 @@ class ResponseSynthesizer:
 
         chain = prompt | llm
         start = time.perf_counter()
-        response = chain.invoke({"payload": json.dumps(payload, ensure_ascii=True, indent=2)})
+        response = chain.invoke({"payload": json.dumps(payload, ensure_ascii=True, separators=(",", ":"))})
         latency = time.perf_counter() - start
 
         raw_content = str(getattr(response, "content", "")).strip()
@@ -279,6 +285,7 @@ class ResponseSynthesizer:
         return payload
 
     @staticmethod
+    @lru_cache(maxsize=1)
     def _resolve_chat_openai_class():
         try:
             module = importlib.import_module("langchain_openai")

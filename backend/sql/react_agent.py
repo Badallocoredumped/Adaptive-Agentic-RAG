@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import json
 import logging
+import threading
 import os
 import re
 from typing import Any
@@ -219,14 +220,22 @@ def _make_schema_lookup_tool() -> Tool:
 # LLM factory (reuses project config — gpt-4o-mini, temperature 0)
 # ---------------------------------------------------------------------------
 
+_react_llm_lock = threading.Lock()
+_react_llm_instance: ChatOpenAI | None = None
+
+
 def _get_react_llm() -> ChatOpenAI:
-    """Return a deterministic ChatOpenAI instance for ReAct reasoning."""
-    api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-    return ChatOpenAI(
-        model=config.SQL_OPENAI_MODEL,
-        temperature=0.0,
-        api_key=api_key,
-    )
+    """Return a cached, deterministic ChatOpenAI instance (thread-safe)."""
+    global _react_llm_instance
+    with _react_llm_lock:
+        if _react_llm_instance is None:
+            api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
+            _react_llm_instance = ChatOpenAI(
+                model=config.SQL_OPENAI_MODEL,
+                temperature=0.0,
+                api_key=api_key,
+            )
+    return _react_llm_instance
 
 
 # ---------------------------------------------------------------------------
