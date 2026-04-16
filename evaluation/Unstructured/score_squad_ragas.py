@@ -15,20 +15,26 @@ RESULTS_DIR  = SCRIPT_DIR / "results"
 
 # Silence TensorFlow oneDNN warnings
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 from datasets import Dataset
 from ragas import evaluate
 
-# FIX 1: Import metrics from the main module, NOT collections
 from ragas.metrics import (
-    AnswerRelevancy, Faithfulness, ContextPrecision, ContextRecall,
+    answer_relevancy,
+    faithfulness,
+    context_precision,
+    context_recall,
 )
 
 from openai import OpenAI as OpenAIClient
 from ragas.llms import llm_factory
-from ragas.embeddings import HuggingFaceEmbeddings as RagasHFEmbeddings
+
+# FIX: Use LangChain's HuggingFaceEmbeddings (has embed_query), then wrap for RAGAS
+from langchain_huggingface import HuggingFaceEmbeddings as LCHuggingFaceEmbeddings
+from ragas.embeddings import LangchainEmbeddingsWrapper
+
 import backend.config as config
 
 # ── Load results ──────────────────────────────────────────────────────────
@@ -48,30 +54,32 @@ ragas_data = Dataset.from_dict({
 })
 
 # ── Configure LLM + Embeddings for RAGAS ─────────────────────────────────
-# ragas 0.4.x metrics require ragas-native wrappers
 openai_client = OpenAIClient(api_key=config.OPENAI_API_KEY)
 llm = llm_factory(model=config.SQL_OPENAI_MODEL, client=openai_client)
-embeddings = RagasHFEmbeddings(model=config.EMBEDDING_MODEL_NAME)
 
-# Metrics must be instantiated after llm/embeddings in ragas 0.4.x
+# FIX: LangChain embeddings -> wrapped for RAGAS (exposes embed_query correctly)
+lc_embeddings = LCHuggingFaceEmbeddings(model_name=config.EMBEDDING_MODEL_NAME)
+embeddings    = LangchainEmbeddingsWrapper(lc_embeddings)
+
 METRICS = [
-    AnswerRelevancy(llm=llm, embeddings=embeddings),
-    Faithfulness(llm=llm),
-    ContextPrecision(llm=llm),
-    ContextRecall(llm=llm),
+    answer_relevancy,
+    faithfulness,
+    context_precision,
+    context_recall,
 ]
 
 # ── Run RAGAS ─────────────────────────────────────────────────────────────
 print("Running RAGAS evaluation (this takes a few minutes)...")
+
 ragas_result = evaluate(
-    dataset=ragas_data,  # FIX 2: Explicitly define dataset keyword argument
+    dataset=ragas_data,
     metrics=METRICS,
+    llm=llm,
+    embeddings=embeddings,
     raise_exceptions=False,
 )
 scores_df = ragas_result.to_pandas()
 
-# Metric column names in ragas 0.4.x match the metric class .name attribute
-# (snake_case): answer_relevancy, faithfulness, context_precision, context_recall
 METRIC_COLS = {
     "answer_relevancy":  "answer_relevancy",
     "faithfulness":      "faithfulness",
@@ -80,7 +88,7 @@ METRIC_COLS = {
 }
 
 # ── Also compute retrieval hit rate (our bonus metric) ────────────────────
-hit_rate  = sum(r["answer_in_retrieved"] for r in results) / len(results)
+hit_rate = sum(r["answer_in_retrieved"] for r in results) / len(results)
 
 # ── Print report ──────────────────────────────────────────────────────────
 def bar(v): return "█" * int(v * 20) + "░" * (20 - int(v * 20))
