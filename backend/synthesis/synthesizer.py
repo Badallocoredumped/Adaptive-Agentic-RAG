@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import importlib
 import json
+from functools import lru_cache
 import logging
 from pathlib import Path
 import re
@@ -120,7 +121,7 @@ class ResponseSynthesizer:
 
         chain = prompt | llm
         start = time.perf_counter()
-        response = chain.invoke({"payload": json.dumps(payload, ensure_ascii=True, indent=2)})
+        response = chain.invoke({"payload": json.dumps(payload, ensure_ascii=True, separators=(",", ":"))})
         latency = time.perf_counter() - start
 
         raw_content = str(getattr(response, "content", "")).strip()
@@ -279,6 +280,7 @@ class ResponseSynthesizer:
         return payload
 
     @staticmethod
+    @lru_cache(maxsize=1)
     def _resolve_chat_openai_class():
         try:
             module = importlib.import_module("langchain_openai")

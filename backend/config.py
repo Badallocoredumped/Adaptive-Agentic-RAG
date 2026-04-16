@@ -66,7 +66,7 @@ RAG_TOP_K = 6        # number of text chunks to retrieve
 SQL_TOP_K = 4        # number of schema tables to retrieve
 
 
-RAG_FETCH_MULTIPLIER = 6
+RAG_FETCH_MULTIPLIER = 3
 RAG_ENABLE_SEMANTIC_RERANK = True
 RAG_PREVIEW_CHARS = 400
 

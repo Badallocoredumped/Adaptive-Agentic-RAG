@@ -449,8 +449,8 @@ def run_table_rag_pipeline(
         # Skip refinement if the match is near-identical (score >= 0.97); the
         # cached SQL is correct as-is and calling OpenAI would only add latency.
         cache_score = cache_result.get("score", 0.0)
-        if cache_score >= 0.93:
-            _debug(f"[TableRAG Pipeline] Score {cache_score:.4f} >= 0.93 - skipping refiner, using cached SQL directly.")
+        if cache_score >= 0.90:
+            _debug(f"[TableRAG Pipeline] Score {cache_score:.4f} >= 0.90 - skipping refiner, using cached SQL directly.")
             refined_sql = cached_sql
         else:
             _debug("[TableRAG Pipeline] Running LLM SQL refiner for cache hit...")

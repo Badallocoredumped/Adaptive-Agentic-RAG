@@ -28,6 +28,7 @@ class AdaptiveAgenticRAGSystem:
     """Coordinates router, TableRAG SQL pipeline, RAG pipeline, and final synthesis."""
 
     def __init__(self) -> None:
+        self._executor = ThreadPoolExecutor(max_workers=3)
         self.router = QueryRouter()
         self.loader = DocumentLoader()
         self.chunker = TextChunker(
@@ -117,11 +118,10 @@ class AdaptiveAgenticRAGSystem:
 
         if route == "hybrid":
             self._debug(f"run_query() executing BOTH pipelines concurrently for query={user_query!r}")
-            with ThreadPoolExecutor(max_workers=2) as executor:
-                future_sql = executor.submit(self._run_sql_pipeline, user_query)
-                future_rag = executor.submit(self.retriever.retrieve, user_query, top_k=config.RAG_TOP_K)
-                sql_result = future_sql.result()
-                rag_result = future_rag.result()
+            future_sql = self._executor.submit(self._run_sql_pipeline, user_query)
+            future_rag = self._executor.submit(self.retriever.retrieve, user_query, top_k=config.RAG_TOP_K)
+            sql_result = future_sql.result()
+            rag_result = future_rag.result()
         else:
             if route == "sql":
                 self._debug(f"run_query() executing TableRAG SQL pipeline for query={user_query!r}")
@@ -149,11 +149,10 @@ class AdaptiveAgenticRAGSystem:
 
             if task.route == "hybrid":
                 self._debug("_execute_subtasks() -> Executing TableRAG and RAG pipeline concurrently")
-                with ThreadPoolExecutor(max_workers=2) as inner_executor:
-                    future_sql = inner_executor.submit(self._run_sql_pipeline, task.sub_query)
-                    future_rag = inner_executor.submit(self.retriever.retrieve, task.sub_query, top_k=config.RAG_TOP_K)
-                    sql_res = future_sql.result()
-                    rag_res = future_rag.result()
+                future_sql = self._executor.submit(self._run_sql_pipeline, task.sub_query)
+                future_rag = self._executor.submit(self.retriever.retrieve, task.sub_query, top_k=config.RAG_TOP_K)
+                sql_res = future_sql.result()
+                rag_res = future_rag.result()
             else:
                 if task.route in {"sql"}:
                     self._debug("_execute_subtasks() -> TableRAG SQL pipeline")
@@ -170,10 +169,8 @@ class AdaptiveAgenticRAGSystem:
                 "rag_result": rag_res,
             }
 
-        with ThreadPoolExecutor(max_workers=len(sub_tasks) or 1) as executor:
-            # Using map preserves the original order of subtasks
-            results = executor.map(run_task, sub_tasks)
-            outputs = list(results)
+        futures = [self._executor.submit(run_task, t) for t in sub_tasks]
+        outputs = [f.result() for f in futures]
 
         return outputs
 
