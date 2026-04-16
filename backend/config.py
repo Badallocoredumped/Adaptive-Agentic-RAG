@@ -89,6 +89,8 @@ ROUTER_LLM_TEMPERATURE = 0.0
 ROUTER_MODEL = "qwen2.5-coder-7b-instruct"
 ROUTER_BASE_URL = "http://localhost:8080"
 ROUTER_API_KEY = "local"
+SYNTHESIS_MODEL = ROUTER_MODEL
+SYNTHESIS_TEMPERATURE = 0.0
 
 # OpenAI settings for SQL generation & refinement
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # set in .env
