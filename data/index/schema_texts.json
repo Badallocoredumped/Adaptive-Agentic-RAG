@@ -1,6 +1,0 @@
-[
-  "Table: Customers | Columns: CustomerID, Country",
-  "Table: OrderDetails | Columns: InvoiceNo, StockCode, Quantity, UnitPrice",
-  "Table: Orders | Columns: InvoiceNo, CustomerID, InvoiceDate, ShipCountry",
-  "Table: Products | Columns: StockCode, Description, UnitPrice"
-]
