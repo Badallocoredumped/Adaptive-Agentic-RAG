@@ -85,22 +85,24 @@ DEFAULT_ROUTE = "text"
 # keyword   -> rule-based keyword matching into a single route (fallback)
 ROUTER_MODE = "decompose"
 
+# OpenAI settings for SQL generation & refinement
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # set in .env
+
 ROUTER_LLM_TEMPERATURE = 0.0
-ROUTER_MODEL = "qwen2.5-coder-7b-instruct"
-ROUTER_BASE_URL = "http://localhost:8080"
-ROUTER_API_KEY = "local"
+ROUTER_MODEL = os.getenv("ROUTER_MODEL", "gpt-4o-mini")
+ROUTER_BASE_URL = os.getenv("ROUTER_BASE_URL", "") # Empty uses default OpenAI endpoints
+ROUTER_API_KEY = os.getenv("ROUTER_API_KEY", OPENAI_API_KEY)
+
 SYNTHESIS_MODEL = ROUTER_MODEL
 SYNTHESIS_TEMPERATURE = 0.0
 
-# OpenAI settings for SQL generation & refinement
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # set in .env
 SQL_OPENAI_MODEL = "gpt-4o-mini"
 SQL_GENERATE_TEMPERATURE = 0.0
 SQL_REFINE_TEMPERATURE = 0.0
 
 # Global runtime debug logging toggle for Router/RAG/TableRAG/ReAct internals.
 # Set False to keep terminal output concise (final answers/errors only).
-DEBUG_LOGGING = False
+DEBUG_LOGGING = True
 
 # Legacy alias kept for compatibility with existing references.
 ROUTER_DEBUG = DEBUG_LOGGING

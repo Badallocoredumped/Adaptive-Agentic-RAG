@@ -114,13 +114,16 @@ class QueryRouter:
                 ]
             )
 
-            llm = chat_openai_cls(
-                model=config.ROUTER_MODEL,
-                temperature=config.ROUTER_LLM_TEMPERATURE,
-                base_url=f"{config.ROUTER_BASE_URL.rstrip('/')}/v1",
-                api_key=config.ROUTER_API_KEY,
-                timeout=config.ROUTER_TIMEOUT_SECONDS,
-            )
+            llm_kwargs = {
+                "model": getattr(config, "ROUTER_MODEL", "gpt-4o-mini"),
+                "temperature": getattr(config, "ROUTER_LLM_TEMPERATURE", 0.0),
+                "api_key": getattr(config, "ROUTER_API_KEY", "") or "not_set",
+                "timeout": getattr(config, "ROUTER_TIMEOUT_SECONDS", 30),
+            }
+            if getattr(config, "ROUTER_BASE_URL", ""):
+                llm_kwargs["base_url"] = f"{config.ROUTER_BASE_URL.rstrip('/')}/v1"
+
+            llm = chat_openai_cls(**llm_kwargs)
 
             chain = prompt | llm
             response = chain.invoke(
