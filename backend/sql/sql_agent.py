@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import threading
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypedDict
@@ -402,13 +403,17 @@ def _get_react_sql_agent():
 # Cache Management
 # ---------------------------------------------------------------------------
 
+_sql_cache_lock = threading.Lock()
+
+
 def _get_sql_cache() -> "SQLCache":
-    """Lazy initialization of the FAISS SQL cache."""
-    if not hasattr(_get_sql_cache, "instance"):
-        from .sql_cache import SQLCache
-        cache = SQLCache()
-        cache.load_cache()
-        _get_sql_cache.instance = cache
+    """Lazy initialization of the FAISS SQL cache (thread-safe)."""
+    with _sql_cache_lock:
+        if not hasattr(_get_sql_cache, "instance"):
+            from .sql_cache import SQLCache
+            cache = SQLCache()
+            cache.load_cache()
+            _get_sql_cache.instance = cache
     return _get_sql_cache.instance
 
 # ---------------------------------------------------------------------------

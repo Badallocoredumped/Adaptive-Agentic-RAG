@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from sentence_transformers import CrossEncoder
+from backend.models import get_shared_cross_encoder
 
 
 class Reranker:
@@ -12,13 +12,6 @@ class Reranker:
 
     def __init__(self, model_name: str = "BAAI/bge-reranker-base") -> None:
         self.model_name = model_name
-        self._model: CrossEncoder | None = None
-
-    def _get_model(self) -> CrossEncoder:
-        """Lazy load the CrossEncoder model."""
-        if self._model is None:
-            self._model = CrossEncoder(self.model_name)
-        return self._model
 
     def rerank(self, query: str, documents: list[str], top_k: int = 5) -> list[dict[str, Any]]:
         """
@@ -27,7 +20,7 @@ class Reranker:
         if not documents:
             return []
 
-        model = self._get_model()
+        model = get_shared_cross_encoder()
 
         pairs = [[query, doc] for doc in documents]
         scores = model.predict(pairs)

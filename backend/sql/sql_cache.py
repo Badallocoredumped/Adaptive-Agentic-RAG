@@ -8,9 +8,9 @@ from typing import Any
 
 import faiss
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 from backend import config
+from backend.models import get_shared_st_model
 
 
 def _debug(message: str) -> None:
@@ -33,13 +33,9 @@ class SQLCache:
 
         self.index: faiss.Index | None = None
         self.metadata: list[dict[str, Any]] = []
-        self._model: SentenceTransformer | None = None
 
-    def _get_model(self) -> SentenceTransformer:
-        """Lazy load the embedding model."""
-        if self._model is None:
-            self._model = SentenceTransformer(config.EMBEDDING_MODEL_NAME)
-        return self._model
+
+
 
     def _apply_e5_prefix(self, text: str, is_query: bool) -> str:
         """Apply E5 prefix formatting if configured."""
@@ -54,7 +50,7 @@ class SQLCache:
 
     def _embed_texts(self, texts: list[str], is_query: bool) -> np.ndarray:
         """Embed texts and normalize for cosine similarity."""
-        model = self._get_model()
+        model = get_shared_st_model()
         payload = [self._apply_e5_prefix(text, is_query=is_query) for text in texts]
         vectors = model.encode(payload, convert_to_numpy=True, normalize_embeddings=False)
         vectors = np.asarray(vectors, dtype=np.float32)
