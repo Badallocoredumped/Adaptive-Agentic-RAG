@@ -1,0 +1,250 @@
+{
+  "description": "Custom 30-query routing evaluation set for RQ1/RQ2/RQ3",
+  "categories": {
+    "sql": "Answerable purely from structured table data via SQL",
+    "text": "Answerable purely from unstructured Wikipedia passage text",
+    "hybrid": "Requires combining both SQL table data and text passages"
+  },
+  "queries": [
+    {
+      "id": "sql_01",
+      "question": "How many players in the NFL rushing yards leaders table have career yards over 13000?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "4",
+      "table_id": "List_of_National_Football_League_rushing_yards_leaders_0",
+      "rationale": "Requires COUNT with WHERE clause on Yards column. No text needed."
+    },
+    {
+      "id": "sql_02",
+      "question": "What is the average number of carries among players ranked 1 to 5 in the NFL rushing yards leaders list?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "3853.8",
+      "table_id": "List_of_National_Football_League_rushing_yards_leaders_0",
+      "rationale": "AVG aggregation over a filtered rank range. Pure SQL."
+    },
+    {
+      "id": "sql_03",
+      "question": "In the 2004 United States Grand Prix results, how many drivers finished with a gap greater than 1 minute?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "requires SQL COUNT on Gap column",
+      "table_id": "2004_United_States_Grand_Prix_0",
+      "rationale": "Filtering on Gap column. Pure table operation."
+    },
+    {
+      "id": "sql_04",
+      "question": "Which constructor had the most drivers finish in the top 5 of the 2004 United States Grand Prix?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "Ferrari",
+      "table_id": "2004_United_States_Grand_Prix_0",
+      "rationale": "GROUP BY constructor + COUNT where Pos <= 5. Pure SQL aggregation."
+    },
+    {
+      "id": "sql_05",
+      "question": "How many Ottoman sultan mothers in the list were of Slavic origin?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "requires SQL COUNT with WHERE Origin LIKE '%Slavic%'",
+      "table_id": "List_of_the_mothers_of_the_Ottoman_Sultans_0",
+      "rationale": "COUNT with string filter on Origin column. Pure table lookup."
+    },
+    {
+      "id": "sql_06",
+      "question": "What is the total number of fatalities across all listed disasters in the United States that occurred after the year 2000?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "requires SQL SUM with WHERE Year > 2000",
+      "table_id": "List_of_disasters_in_the_United_States_by_death_toll_1",
+      "rationale": "SUM aggregation with year filter. No external text needed."
+    },
+    {
+      "id": "sql_07",
+      "question": "How many doping violations in the athletics list occurred before 2005?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "requires SQL COUNT with date filter",
+      "table_id": "List_of_doping_cases_in_athletics_2",
+      "rationale": "COUNT with date range filter on Date_of_violation column. Pure SQL."
+    },
+    {
+      "id": "sql_08",
+      "question": "What is the most common type of sanction given in the athletics doping violations list?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "requires SQL GROUP BY Sanction ORDER BY COUNT DESC LIMIT 1",
+      "table_id": "List_of_doping_cases_in_athletics_2",
+      "rationale": "Mode aggregation over Sanction column. Pure SQL GROUP BY."
+    },
+    {
+      "id": "sql_09",
+      "question": "Among colleges in Vermont, how many are private institutions?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "requires SQL COUNT WHERE Control = 'Private'",
+      "table_id": "List_of_colleges_and_universities_in_Vermont_0",
+      "rationale": "COUNT with WHERE filter on Control column. No text needed."
+    },
+    {
+      "id": "sql_10",
+      "question": "What is the earliest founding year of any college in the Vermont colleges list?",
+      "ground_truth_route": "sql",
+      "ground_truth_answer": "requires SQL MIN(Founded)",
+      "table_id": "List_of_colleges_and_universities_in_Vermont_0",
+      "rationale": "MIN aggregation on Founded column. Pure SQL."
+    },
+    {
+      "id": "text_01",
+      "question": "What team did Emmitt Smith primarily play for during his NFL career?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "Dallas Cowboys",
+      "table_id": "List_of_National_Football_League_rushing_yards_leaders_0",
+      "rationale": "Answer is in the Wikipedia article about Emmitt Smith, not derivable from the table alone."
+    },
+    {
+      "id": "text_02",
+      "question": "In what city did Emmitt Smith grow up?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "Pensacola, Florida",
+      "table_id": "List_of_National_Football_League_rushing_yards_leaders_0",
+      "rationale": "Biographical detail from Wikipedia passage. Not in table."
+    },
+    {
+      "id": "text_03",
+      "question": "What type of car did Rubens Barrichello drive at the 2004 United States Grand Prix?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "Ferrari",
+      "table_id": "2004_United_States_Grand_Prix_0",
+      "rationale": "The Constructor is in the table, but the car type/model requires passage text."
+    },
+    {
+      "id": "text_04",
+      "question": "What nationality is Rubens Barrichello?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "Brazilian",
+      "table_id": "2004_United_States_Grand_Prix_0",
+      "rationale": "Nationality is not a table column. Answer comes from the Wikipedia passage for Barrichello."
+    },
+    {
+      "id": "text_05",
+      "question": "What was Suleiman I known as in Western Europe?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "Suleiman the Magnificent",
+      "table_id": "List_of_the_mothers_of_the_Ottoman_Sultans_0",
+      "rationale": "Historical epithet from Wikipedia article. Not in the mothers table."
+    },
+    {
+      "id": "text_06",
+      "question": "How long did Suleiman I reign as Ottoman sultan?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "46 years (1520-1566)",
+      "table_id": "List_of_the_mothers_of_the_Ottoman_Sultans_0",
+      "rationale": "Reign duration requires Wikipedia passage text, not present in the table."
+    },
+    {
+      "id": "text_07",
+      "question": "What is the state motto of Michigan?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "Si quaeris peninsulam amoenam circumspice",
+      "table_id": "List_of_disasters_in_the_United_States_by_death_toll_1",
+      "rationale": "State motto is in Wikipedia passage for Michigan. The table only lists disasters."
+    },
+    {
+      "id": "text_08",
+      "question": "What banned substance is stanozolol derived from?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "DHT (dihydrotestosterone)",
+      "table_id": "List_of_doping_cases_in_athletics_2",
+      "rationale": "Chemical derivation is in the Wikipedia passage for stanozolol. Not in the doping table."
+    },
+    {
+      "id": "text_09",
+      "question": "What is Middlebury College best known for academically?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "Language programs and liberal arts",
+      "table_id": "List_of_colleges_and_universities_in_Vermont_0",
+      "rationale": "Academic reputation details are in the Wikipedia passage, not in the table rows."
+    },
+    {
+      "id": "text_10",
+      "question": "In what year was the University of Vermont founded, and who founded it?",
+      "ground_truth_route": "text",
+      "ground_truth_answer": "1791, Ira Allen",
+      "table_id": "List_of_colleges_and_universities_in_Vermont_0",
+      "rationale": "While the table has the year, the founder name requires the Wikipedia passage."
+    },
+    {
+      "id": "hybrid_01",
+      "question": "What is the nationality of the player ranked 2nd in NFL career rushing yards?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "American",
+      "table_id": "List_of_National_Football_League_rushing_yards_leaders_0",
+      "rationale": "SQL finds rank-2 player (Walter Payton). Passage provides his nationality."
+    },
+    {
+      "id": "hybrid_02",
+      "question": "How many Super Bowls did the player with the most NFL career rushing yards win?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "3",
+      "table_id": "List_of_National_Football_League_rushing_yards_leaders_0",
+      "rationale": "SQL finds rank-1 player (Emmitt Smith). Wikipedia passage has Super Bowl count."
+    },
+    {
+      "id": "hybrid_03",
+      "question": "What is the birth country of the driver who won the 2004 United States Grand Prix?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "Brazil",
+      "table_id": "2004_United_States_Grand_Prix_0",
+      "rationale": "SQL finds Pos=1 driver (Barrichello). Passage gives birth country."
+    },
+    {
+      "id": "hybrid_04",
+      "question": "In what year was the constructor that won the 2004 United States Grand Prix founded?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "1929",
+      "table_id": "2004_United_States_Grand_Prix_0",
+      "rationale": "SQL identifies winning constructor (Ferrari). Wikipedia passage has founding year."
+    },
+    {
+      "id": "hybrid_05",
+      "question": "Which Ottoman sultan's mother was from the same ethnic origin as the mother of Suleiman I, and when did that sultan reign?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "requires SQL to find matching Origin + passage for reign dates",
+      "table_id": "List_of_the_mothers_of_the_Ottoman_Sultans_0",
+      "rationale": "SQL finds mothers with same Origin. Wikipedia passages give reign information."
+    },
+    {
+      "id": "hybrid_06",
+      "question": "What was the deadliest disaster type in Michigan, and what is Michigan's state capital?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "requires SQL GROUP BY on Michigan disasters + passage for capital",
+      "table_id": "List_of_disasters_in_the_United_States_by_death_toll_1",
+      "rationale": "SQL aggregates Michigan disasters by type. Passage gives state capital (Lansing)."
+    },
+    {
+      "id": "hybrid_07",
+      "question": "How many athletes from the country that hosted the 2004 Summer Olympics appear in the athletics doping list?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "requires passage to identify host country (Greece) + SQL COUNT",
+      "table_id": "List_of_doping_cases_in_athletics_2",
+      "rationale": "Passage identifies Greece as 2004 host. SQL counts Greek athletes in doping table."
+    },
+    {
+      "id": "hybrid_08",
+      "question": "What is the enrollment of the oldest private college in Vermont?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "requires SQL MIN(Founded) WHERE Control=Private + Enrollment_2016 lookup",
+      "table_id": "List_of_colleges_and_universities_in_Vermont_0",
+      "rationale": "SQL finds oldest private college. Enrollment_2016 is in the table. But verifying 'private' status may need passage context."
+    },
+    {
+      "id": "hybrid_09",
+      "question": "What conference does the college with the largest enrollment in Vermont belong to?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "requires SQL MAX(Enrollment) + passage for conference membership",
+      "table_id": "List_of_colleges_and_universities_in_Vermont_0",
+      "rationale": "SQL finds largest enrollment college. Conference membership is in Wikipedia passage."
+    },
+    {
+      "id": "hybrid_10",
+      "question": "What is the home country of the athlete who received the longest ban in the doping violations list?",
+      "ground_truth_route": "hybrid",
+      "ground_truth_answer": "requires SQL to find max sanction + Country column lookup + passage verification",
+      "table_id": "List_of_doping_cases_in_athletics_2",
+      "rationale": "SQL finds longest sanction. Country is in table, but passage confirms country details."
+    }
+  ]
+}
