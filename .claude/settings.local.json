@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(python -c \"import ragas; print\\('ragas', ragas.__version__\\)\")",
+      "Bash(python -c ' *)"
+    ]
+  }
+}

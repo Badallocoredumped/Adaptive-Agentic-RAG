@@ -1,0 +1,1341 @@
+[
+  {
+    "id": "573786b51c4567190057448d",
+    "question": "How might gravity effects be observed differently according to Newton?",
+    "ground_truth": "at larger distances.",
+    "all_answers": [
+      "at larger distances.",
+      "at larger distances",
+      "at larger distances",
+      "at larger distances"
+    ],
+    "reference_context": "Newton came to realize that the effects of gravity might be observed in different ways at larger distances. In particular, Newton determined that the acceleration of the Moon around the Earth could be ascribed to the same force of gravity if the acceleration due to gravity decreased as an inverse square law. Further, Newton realized that the acceleration due to gravity is proportional to the mass of the attracting body. Combining these ideas gives a formula that relates the mass () and the radius () of the Earth to the gravitational acceleration:",
+    "context_id": "ctx_2047",
+    "title": "Force"
+  },
+  {
+    "id": "56e1ddfce3433e14004231d8",
+    "question": "What is the prize offered for finding a solution to P=NP?",
+    "ground_truth": "$1,000,000",
+    "all_answers": [
+      "$1,000,000",
+      "US$1,000,000",
+      "US$1,000,000"
+    ],
+    "reference_context": "The question of whether P equals NP is one of the most important open questions in theoretical computer science because of the wide implications of a solution. If the answer is yes, many important problems can be shown to have more efficient solutions. These include various types of integer programming problems in operations research, many problems in logistics, protein structure prediction in biology, and the ability to find formal proofs of pure mathematics theorems. The P versus NP problem is one of the Millennium Prize Problems proposed by the Clay Mathematics Institute. There is a US$1,000,000 prize for resolving the problem.",
+    "context_id": "ctx_0274",
+    "title": "Computational_complexity_theory"
+  },
+  {
+    "id": "56bf48cc3aeaaa14008c95af",
+    "question": "What color were the Bronco's uniforms in Super Bowl 50?",
+    "ground_truth": "white",
+    "all_answers": [
+      "white",
+      "matching white jerseys",
+      "white"
+    ],
+    "reference_context": "As the designated home team in the annual rotation between AFC and NFC teams, the Broncos elected to wear their road white jerseys with matching white pants. Elway stated, \"We've had Super Bowl success in our white uniforms.\" The Broncos last wore matching white jerseys and pants in the Super Bowl in Super Bowl XXXIII, Elway's last game as Denver QB, when they defeated the Atlanta Falcons 34\u201319. In their only other Super Bowl win in Super Bowl XXXII, Denver wore blue jerseys, which was their primary color at the time. They also lost Super Bowl XXI when they wore white jerseys, but they are 0-4 in Super Bowls when wearing orange jerseys, losing in Super Bowl XII, XXII, XXIV, and XLVIII. The only other AFC champion team to have worn white as the designated home team in the Super Bowl was the Pittsburgh Steelers; they defeated the Seattle Seahawks 21\u201310 in Super Bowl XL 10 seasons prior. The Broncos' decision to wear white meant the Panthers would wear their standard home uniform: black jerseys with silver pants.",
+    "context_id": "ctx_0022",
+    "title": "Super_Bowl_50"
+  },
+  {
+    "id": "5725c337271a42140099d164",
+    "question": "What are the little tentacles that cydippids have called?",
+    "ground_truth": "tentilla",
+    "all_answers": [
+      "tentilla",
+      "tentilla",
+      "tentilla"
+    ],
+    "reference_context": "Almost all ctenophores are predators, taking prey ranging from microscopic larvae and rotifers to the adults of small crustaceans; the exceptions are juveniles of two species, which live as parasites on the salps on which adults of their species feed. In favorable circumstances, ctenophores can eat ten times their own weight in a day. Only 100\u2013150 species have been validated, and possibly another 25 have not been fully described and named. The textbook examples are cydippids with egg-shaped bodies and a pair of retractable tentacles fringed with tentilla (\"little tentacles\") that are covered with colloblasts, sticky cells that capture prey. The phylum has a wide range of body forms, including the flattened, deep-sea platyctenids, in which the adults of most species lack combs, and the coastal beroids, which lack tentacles and prey on other ctenophores by using huge mouths armed with groups of large, stiffened cilia that act as teeth. These variations enable different species to build huge populations in the same area, because they specialize in different types of prey, which they capture by as wide a range of methods as spiders use.",
+    "context_id": "ctx_0807",
+    "title": "Ctenophora"
+  },
+  {
+    "id": "5725e44238643c19005ace36",
+    "question": "Which lunar probe was near the Apollo 12 crew's landing site?",
+    "ground_truth": "Surveyor 3",
+    "all_answers": [
+      "Surveyor 3",
+      "Surveyor 3",
+      "Surveyor 3",
+      "Surveyor 3",
+      "Surveyor 3"
+    ],
+    "reference_context": "In November 1969, Gemini veteran Charles \"Pete\" Conrad and rookie Alan L. Bean made a precision landing on Apollo 12 within walking distance of the Surveyor 3 unmanned lunar probe, which had landed in April 1967 on the Ocean of Storms. The Command Module Pilot was Gemini veteran Richard F. Gordon, Jr. Conrad and Bean carried the first lunar surface color television camera, but it was damaged when accidentally pointed into the Sun. They made two EVAs totaling 7 hours and 45 minutes. On one, they walked to the Surveyor, photographed it, and removed some parts which they returned to Earth.",
+    "context_id": "ctx_0731",
+    "title": "Apollo_program"
+  },
+  {
+    "id": "571ccfbadd7acb1400e4c164",
+    "question": "Electrolysis of what can be used to produce oxygen and hydrogen?",
+    "ground_truth": "water",
+    "all_answers": [
+      "water",
+      "water",
+      "water",
+      "water"
+    ],
+    "reference_context": "Oxygen gas can also be produced through electrolysis of water into molecular oxygen and hydrogen. DC electricity must be used: if AC is used, the gases in each limb consist of hydrogen and oxygen in the explosive ratio 2:1. Contrary to popular belief, the 2:1 ratio observed in the DC electrolysis of acidified water does not prove that the empirical formula of water is H2O unless certain assumptions are made about the molecular formulae of hydrogen and oxygen themselves. A similar method is the electrocatalytic O\n2 evolution from oxides and oxoacids. Chemical catalysts can be used as well, such as in chemical oxygen generators or oxygen candles that are used as part of the life-support equipment on submarines, and are still part of standard equipment on commercial airliners in case of depressurization emergencies. Another air separation technology involves forcing air to dissolve through ceramic membranes based on zirconium dioxide by either high pressure or an electric current, to produce nearly pure O\n2 gas.",
+    "context_id": "ctx_0651",
+    "title": "Oxygen"
+  },
+  {
+    "id": "56f827caa6d7ea1400e1743a",
+    "question": "When was the Edict of Worms presented?",
+    "ground_truth": "25 May 1521",
+    "all_answers": [
+      "25 May 1521",
+      "25 May 1521",
+      "25 May 1521"
+    ],
+    "reference_context": "Over the next five days, private conferences were held to determine Luther's fate. The Emperor presented the final draft of the Edict of Worms on 25 May 1521, declaring Luther an outlaw, banning his literature, and requiring his arrest: \"We want him to be apprehended and punished as a notorious heretic.\" It also made it a crime for anyone in Germany to give Luther food or shelter. It permitted anyone to kill Luther without legal consequence.",
+    "context_id": "ctx_0375",
+    "title": "Martin_Luther"
+  },
+  {
+    "id": "56e127bccd28a01900c6765f",
+    "question": "How many other important people sent letters?",
+    "ground_truth": "more than 70",
+    "all_answers": [
+      "more than 70",
+      "more than 70",
+      "more than 70"
+    ],
+    "reference_context": "On Tesla's 75th birthday in 1931, Time magazine put him on its cover. The cover caption \"All the world's his power house\" noted his contribution to electrical power generation. He received congratulatory letters from more than 70 pioneers in science and engineering, including Albert Einstein.",
+    "context_id": "ctx_0239",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "572976183f37b31900478431",
+    "question": "What is an alternate way to make starch?",
+    "ground_truth": "glucose monomers in the chloroplast can be linked together",
+    "all_answers": [
+      "glucose monomers in the chloroplast can be linked together",
+      "glucose monomers",
+      "glucose monomers in the chloroplast"
+    ],
+    "reference_context": "Alternatively, glucose monomers in the chloroplast can be linked together to make starch, which accumulates into the starch grains found in the chloroplast. Under conditions such as high atmospheric CO2 concentrations, these starch grains may grow very large, distorting the grana and thylakoids. The starch granules displace the thylakoids, but leave them intact. Waterlogged roots can also cause starch buildup in the chloroplasts, possibly due to less sucrose being exported out of the chloroplast (or more accurately, the plant cell). This depletes a plant's free phosphate supply, which indirectly stimulates chloroplast starch synthesis. While linked to low photosynthesis rates, the starch grains themselves may not necessarily interfere significantly with the efficiency of photosynthesis, and might simply be a side effect of another photosynthesis-depressing factor.",
+    "context_id": "ctx_1723",
+    "title": "Chloroplast"
+  },
+  {
+    "id": "56e0f32d231d4119001ac4cb",
+    "question": "What type of image was Tesla thought to have accidentally taken a week prior to the announcement of its discovery?",
+    "ground_truth": "X-ray image",
+    "all_answers": [
+      "X-ray image",
+      "X-ray",
+      "X-ray image"
+    ],
+    "reference_context": "Starting in 1894, Tesla began investigating what he referred to as radiant energy of \"invisible\" kinds after he had noticed damaged film in his laboratory in previous experiments (later identified as \"Roentgen rays\" or \"X-Rays\"). His early experiments were with Crookes tubes, a cold cathode electrical discharge tube. Soon after, much of Tesla's early research\u2014hundreds of invention models, plans, notes, laboratory data, tools, photographs, valued at $50,000\u2014was lost in the 5th Avenue laboratory fire of March 1895. Tesla is quoted by The New York Times as saying, \"I am in too much grief to talk. What can I say?\" Tesla may have inadvertently captured an X-ray image\u2014predating, by a few weeks, Wilhelm R\u00f6ntgen's December 1895 announcement of the discovery of x-rays\u2014when he tried to photograph Mark Twain illuminated by a Geissler tube, an earlier type of gas discharge tube. The only thing captured in the image was the metal locking screw on the camera lens.:134",
+    "context_id": "ctx_0177",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "5730005db2c2fd1400568707",
+    "question": "Where did Maududi's books place Islam?",
+    "ground_truth": "in a modern context",
+    "all_answers": [
+      "in a modern context",
+      "a modern context",
+      "modern context"
+    ],
+    "reference_context": "Sayyid Abul Ala Maududi was an important early twentieth-century figure in the Islamic revival in India, and then after independence from Britain, in Pakistan. Trained as a lawyer he chose the profession of journalism, and wrote about contemporary issues and most importantly about Islam and Islamic law. Maududi founded the Jamaat-e-Islami party in 1941 and remained its leader until 1972. However, Maududi had much more impact through his writing than through his political organising. His extremely influential books (translated into many languages) placed Islam in a modern context, and influenced not only conservative ulema but liberal modernizer Islamists such as al-Faruqi, whose \"Islamization of Knowledge\" carried forward some of Maududi's key principles.",
+    "context_id": "ctx_1858",
+    "title": "Islamism"
+  },
+  {
+    "id": "57273a465951b619008f86ff",
+    "question": "What is the process of constructing a building or infrastructure?",
+    "ground_truth": "Construction",
+    "all_answers": [
+      "Construction",
+      "Construction",
+      "Construction"
+    ],
+    "reference_context": "Construction is the process of constructing a building or infrastructure. Construction differs from manufacturing in that manufacturing typically involves mass production of similar items without a designated purchaser, while construction typically takes place on location for a known client. Construction as an industry comprises six to nine percent of the gross domestic product of developed countries. Construction starts with planning,[citation needed] design, and financing and continues until the project is built and ready for use.",
+    "context_id": "ctx_1301",
+    "title": "Construction"
+  },
+  {
+    "id": "56d71d150d65d2140019836f",
+    "question": "How many will the host committee dedicate to local charities?",
+    "ground_truth": "25 percent",
+    "all_answers": [
+      "25 percent",
+      "25 percent of all money",
+      "25"
+    ],
+    "reference_context": "The Super Bowl 50 Host Committee has vowed to be \"the most giving Super Bowl ever\", and will dedicate 25 percent of all money it raises for philanthropic causes in the Bay Area. The committee created the 50 fund as its philanthropic initiative and focuses on providing grants to aid with youth development, community investment and sustainable environments.",
+    "context_id": "ctx_0030",
+    "title": "Super_Bowl_50"
+  },
+  {
+    "id": "56bebde53aeaaa14008c9338",
+    "question": "In what city is SAP Center located?",
+    "ground_truth": "San Jose",
+    "all_answers": [
+      "San Jose",
+      "San Jose",
+      "San Jose."
+    ],
+    "reference_context": "The game's media day, which was typically held on the Tuesday afternoon prior to the game, was moved to the Monday evening and re-branded as Super Bowl Opening Night. The event was held on February 1, 2016 at SAP Center in San Jose. Alongside the traditional media availabilities, the event featured an opening ceremony with player introductions on a replica of the Golden Gate Bridge.",
+    "context_id": "ctx_0028",
+    "title": "Super_Bowl_50"
+  },
+  {
+    "id": "56e10b6ee3433e1400422b25",
+    "question": "For what invention was U.S. Patent 1,655,114 granted?",
+    "ground_truth": "VTOL aircraft",
+    "all_answers": [
+      "VTOL aircraft",
+      "VTOL aircraft",
+      "a biplane capable of taking off vertically"
+    ],
+    "reference_context": "In 1928, Tesla received his last patent, U.S. Patent 1,655,114, for a biplane capable of taking off vertically (VTOL aircraft) and then be \"gradually tilted through manipulation of the elevator devices\" in flight until it was flying like a conventional plane. Tesla thought the plane would sell for less than $1,000.:251 Although the aircraft was probably impractical, it may be the earliest known design for what became the tiltrotor/tilt-wing concept as well as the earliest proposal for the use of turbine engines in rotor aircraft.[improper synthesis?]",
+    "context_id": "ctx_0204",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "571c91c8dd7acb1400e4c10e",
+    "question": "For what purpose is oxygen used by animal life?",
+    "ground_truth": "cellular respiration",
+    "all_answers": [
+      "cellular respiration",
+      "cellular respiration",
+      "cellular respiration",
+      "in cellular respiration",
+      "cellular respiration"
+    ],
+    "reference_context": "The common allotrope of elemental oxygen on Earth is called dioxygen, O\n2. It is the form that is a major part of the Earth's atmosphere (see Occurrence). O2 has a bond length of 121 pm and a bond energy of 498 kJ\u00b7mol\u22121, which is smaller than the energy of other double bonds or pairs of single bonds in the biosphere and responsible for the exothermic reaction of O2 with any organic molecule. Due to its energy content, O2 is used by complex forms of life, such as animals, in cellular respiration (see Biological role). Other aspects of O\n2 are covered in the remainder of this article.",
+    "context_id": "ctx_0635",
+    "title": "Oxygen"
+  },
+  {
+    "id": "57265bdfdd62a815002e82a0",
+    "question": "By which year did the American cars mpg start to improve?",
+    "ground_truth": "1985",
+    "all_answers": [
+      "1985",
+      "1985",
+      "1985",
+      "1985",
+      "1985"
+    ],
+    "reference_context": "An increase in imported cars into North America forced General Motors, Ford and Chrysler to introduce smaller and fuel-efficient models for domestic sales. The Dodge Omni / Plymouth Horizon from Chrysler, the Ford Fiesta and the Chevrolet Chevette all had four-cylinder engines and room for at least four passengers by the late 1970s. By 1985, the average American vehicle moved 17.4 miles per gallon, compared to 13.5 in 1970. The improvements stayed even though the price of a barrel of oil remained constant at $12 from 1974 to 1979. Sales of large sedans for most makes (except Chrysler products) recovered within two model years of the 1973 crisis. The Cadillac DeVille and Fleetwood, Buick Electra, Oldsmobile 98, Lincoln Continental, Mercury Marquis, and various other luxury oriented sedans became popular again in the mid-1970s. The only full-size models that did not recover were lower price models such as the Chevrolet Bel Air, and Ford Galaxie 500. Slightly smaller, mid-size models such as the Oldsmobile Cutlass, Chevrolet Monte Carlo, Ford Thunderbird and various other models sold well.",
+    "context_id": "ctx_0684",
+    "title": "1973_oil_crisis"
+  },
+  {
+    "id": "57287fec4b864d1900164a3d",
+    "question": "Which religion did Kublai prefer?",
+    "ground_truth": "Buddhism, especially the Tibetan variants",
+    "all_answers": [
+      "Buddhism, especially the Tibetan variants",
+      "Buddhism",
+      "Buddhism"
+    ],
+    "reference_context": "There were many religions practiced during the Yuan dynasty, such as Buddhism, Islam, and Christianity. The establishment of the Yuan dynasty had dramatically increased the number of Muslims in China. However, unlike the western khanates, the Yuan dynasty never converted to Islam. Instead, Kublai Khan, the founder of the Yuan dynasty, favored Buddhism, especially the Tibetan variants. As a result, Tibetan Buddhism was established as the de facto state religion. The top-level department and government agency known as the Bureau of Buddhist and Tibetan Affairs (Xuanzheng Yuan) was set up in Khanbaliq (modern Beijing) to supervise Buddhist monks throughout the empire. Since Kublai Khan only esteemed the Sakya sect of Tibetan Buddhism, other religions became less important. He and his successors kept a Sakya Imperial Preceptor (Dishi) at court. Before the end of the Yuan dynasty, 14 leaders of the Sakya sect had held the post of Imperial Preceptor, thereby enjoying special power. Furthermore, Mongol patronage of Buddhism resulted in a number of monuments of Buddhist art. Mongolian Buddhist translations, almost all from Tibetan originals, began on a large scale after 1300. Many Mongols of the upper class such as the Jalayir and the Oronar nobles as well as the emperors also patronized Confucian scholars and institutions. A considerable number of Confucian and Chinese historical works were translated into the Mongolian language.",
+    "context_id": "ctx_1577",
+    "title": "Yuan_dynasty"
+  },
+  {
+    "id": "57308f6b8ab72b1400f9c581",
+    "question": "Early Western texts referencing the East describe the people as being what?",
+    "ground_truth": "irrational and backward",
+    "all_answers": [
+      "irrational and backward",
+      "them",
+      "as irrational and backward",
+      "irrational and backward",
+      "irrational and backward"
+    ],
+    "reference_context": "Orientalism, as theorized by Edward Said, refers to how the West developed an imaginative geography of the East. This imaginative geography relies on an essentializing discourse that represents neither the diversity nor the social reality of the East. Rather, by essentializing the East, this discourse uses the idea of place-based identities to create difference and distance between \"we\" the West and \"them\" the East, or \"here\" in the West and \"there\" in the East. This difference was particularly apparent in textual and visual works of early European studies of the Orient that positioned the East as irrational and backward in opposition to the rational and progressive West. Defining the East as a negative vision of itself, as its inferior, not only increased the West\u2019s sense of self, but also was a way of ordering the East and making it known to the West so that it could be dominated and controlled. The discourse of Orientalism therefore served as an ideological justification of early Western imperialism, as it formed a body of knowledge and ideas that rationalized social, cultural, political, and economic control of other territories.",
+    "context_id": "ctx_1896",
+    "title": "Imperialism"
+  },
+  {
+    "id": "56bebbbf3aeaaa14008c9317",
+    "question": "Who is the NFL's vice president of brand and creative?",
+    "ground_truth": "Jaime Weston",
+    "all_answers": [
+      "Jaime Weston",
+      "Jaime Weston",
+      "Weston"
+    ],
+    "reference_context": "On June 4, 2014, the NFL announced that the practice of branding Super Bowl games with Roman numerals, a practice established at Super Bowl V, would be temporarily suspended, and that the game would be named using Arabic numerals as Super Bowl 50 as opposed to Super Bowl L. The use of Roman numerals will be reinstated for Super Bowl LI. Jaime Weston, the league's vice president of brand and creative, explained that a primary reason for the change was the difficulty of designing an aesthetically pleasing logo with the letter \"L\" using the standardized logo template introduced at Super Bowl XLV. The logo also deviates from the template by featuring large numerals, colored in gold, behind the Vince Lombardi Trophy, instead of underneath and in silver as in the standard logo.",
+    "context_id": "ctx_0024",
+    "title": "Super_Bowl_50"
+  },
+  {
+    "id": "572f58d9a23a5019007fc57f",
+    "question": "What does Obersee mean?",
+    "ground_truth": "upper lake",
+    "all_answers": [
+      "upper lake",
+      "upper lake",
+      "(\"upper lake\"",
+      "upper lake"
+    ],
+    "reference_context": "Lake Constance consists of three bodies of water: the Obersee (\"upper lake\"), the Untersee (\"lower lake\"), and a connecting stretch of the Rhine, called the Seerhein (\"Lake Rhine\"). The lake is situated in Germany, Switzerland and Austria near the Alps. Specifically, its shorelines lie in the German states of Bavaria and Baden-W\u00fcrttemberg, the Austrian state of Vorarlberg, and the Swiss cantons of Thurgau and St. Gallen. The Rhine flows into it from the south following the Swiss-Austrian border. It is located at approximately 47\u00b039\u2032N 9\u00b019\u2032E\ufeff / \ufeff47.650\u00b0N 9.317\u00b0E\ufeff / 47.650; 9.317.",
+    "context_id": "ctx_1770",
+    "title": "Rhine"
+  },
+  {
+    "id": "57112686b654c5140001fbd7",
+    "question": "What types of engines are steam engines?",
+    "ground_truth": "external combustion",
+    "all_answers": [
+      "external combustion",
+      "external combustion",
+      "external combustion engines",
+      "external combustion"
+    ],
+    "reference_context": "Steam engines are external combustion engines, where the working fluid is separate from the combustion products. Non-combustion heat sources such as solar power, nuclear power or geothermal energy may be used. The ideal thermodynamic cycle used to analyze this process is called the Rankine cycle. In the cycle, water is heated and transforms into steam within a boiler operating at a high pressure. When expanded through pistons or turbines, mechanical work is done. The reduced-pressure steam is then condensed and pumped back into the boiler.",
+    "context_id": "ctx_0574",
+    "title": "Steam_engine"
+  },
+  {
+    "id": "572975511d046914007794a8",
+    "question": "In what process are electrons recycled?",
+    "ground_truth": "cyclic photophosphorylation",
+    "all_answers": [
+      "cyclic photophosphorylation",
+      "cyclic photophosphorylation",
+      "cyclic photophosphorylation"
+    ],
+    "reference_context": "While photosystem II photolyzes water to obtain and energize new electrons, photosystem I simply reenergizes depleted electrons at the end of an electron transport chain. Normally, the reenergized electrons are taken by NADP+, though sometimes they can flow back down more H+-pumping electron transport chains to transport more hydrogen ions into the thylakoid space to generate more ATP. This is termed cyclic photophosphorylation because the electrons are recycled. Cyclic photophosphorylation is common in C4 plants, which need more ATP than NADPH.",
+    "context_id": "ctx_1721",
+    "title": "Chloroplast"
+  },
+  {
+    "id": "5728ebcb3acd2414000e01dd",
+    "question": "What third type of plea uses creative words?",
+    "ground_truth": "creative plea",
+    "all_answers": [
+      "creative plea",
+      "no contest",
+      "creative plea",
+      "creative plea",
+      "creative plea",
+      "creative plea"
+    ],
+    "reference_context": "An important decision for civil disobedients is whether or not to plead guilty. There is much debate on this point, as some believe that it is a civil disobedient's duty to submit to the punishment prescribed by law, while others believe that defending oneself in court will increase the possibility of changing the unjust law. It has also been argued that either choice is compatible with the spirit of civil disobedience. ACT-UP's Civil Disobedience Training handbook states that a civil disobedient who pleads guilty is essentially stating, \"Yes, I committed the act of which you accuse me. I don't deny it; in fact, I am proud of it. I feel I did the right thing by violating this particular law; I am guilty as charged,\" but that pleading not guilty sends a message of, \"Guilt implies wrong-doing. I feel I have done no wrong. I may have violated some specific laws, but I am guilty of doing no wrong. I therefore plead not guilty.\" A plea of no contest is sometimes regarded as a compromise between the two. One defendant accused of illegally protesting nuclear power, when asked to enter his plea, stated, \"I plead for the beauty that surrounds us\"; this is known as a \"creative plea,\" and will usually be interpreted as a plea of not guilty.",
+    "context_id": "ctx_1292",
+    "title": "Civil_disobedience"
+  },
+  {
+    "id": "571cb010dd7acb1400e4c12c",
+    "question": "What objects in organisms absorb singlet oxygen to prevent harm?",
+    "ground_truth": "Carotenoids",
+    "all_answers": [
+      "Carotenoids",
+      "Carotenoids",
+      "Carotenoids",
+      "Carotenoids",
+      "Carotenoids"
+    ],
+    "reference_context": "Singlet oxygen is a name given to several higher-energy species of molecular O\n2 in which all the electron spins are paired. It is much more reactive towards common organic molecules than is molecular oxygen per se. In nature, singlet oxygen is commonly formed from water during photosynthesis, using the energy of sunlight. It is also produced in the troposphere by the photolysis of ozone by light of short wavelength, and by the immune system as a source of active oxygen. Carotenoids in photosynthetic organisms (and possibly also in animals) play a major role in absorbing energy from singlet oxygen and converting it to the unexcited ground state before it can cause harm to tissues.",
+    "context_id": "ctx_0641",
+    "title": "Oxygen"
+  },
+  {
+    "id": "5729d51d3f37b31900478593",
+    "question": "In a market economy, what is inequality a reflection of?",
+    "ground_truth": "productivity gap between highly-paid professions and lower-paid professions",
+    "all_answers": [
+      "productivity gap between highly-paid professions and lower-paid professions",
+      "productivity gap",
+      "productivity gap"
+    ],
+    "reference_context": "Neoclassical economics views inequalities in the distribution of income as arising from differences in value added by labor, capital and land. Within labor income distribution is due to differences in value added by different classifications of workers. In this perspective, wages and profits are determined by the marginal value added of each economic actor (worker, capitalist/business owner, landlord). Thus, in a market economy, inequality is a reflection of the productivity gap between highly-paid professions and lower-paid professions.",
+    "context_id": "ctx_1402",
+    "title": "Economic_inequality"
+  },
+  {
+    "id": "572ffd9e04bcaa1900d76fcb",
+    "question": "What interpretation of Islam is, for many of the adherents, the \"gold standard\" of their religion?",
+    "ground_truth": "Saudi",
+    "all_answers": [
+      "Saudi",
+      "the Saudi-interpretation",
+      "Saudi"
+    ],
+    "reference_context": "The interpretation of Islam promoted by this funding was the strict, conservative Saudi-based Wahhabism or Salafism. In its harshest form it preached that Muslims should not only \"always oppose\" infidels \"in every way,\" but \"hate them for their religion ... for Allah's sake,\" that democracy \"is responsible for all the horrible wars of the 20th century,\" that Shia and other non-Wahhabi Muslims were infidels, etc. While this effort has by no means converted all, or even most Muslims to the Wahhabist interpretation of Islam, it has done much to overwhelm more moderate local interpretations, and has set the Saudi-interpretation of Islam as the \"gold standard\" of religion in minds of some or many Muslims.",
+    "context_id": "ctx_1854",
+    "title": "Islamism"
+  },
+  {
+    "id": "572646655951b619008f6ec3",
+    "question": "Ctenophores are less complex than what other group?",
+    "ground_truth": "bilaterians",
+    "all_answers": [
+      "bilaterians",
+      "bilaterians",
+      "bilaterians"
+    ],
+    "reference_context": "Ctenophores form an animal phylum that is more complex than sponges, about as complex as cnidarians (jellyfish, sea anemones, etc.), and less complex than bilaterians (which include almost all other animals). Unlike sponges, both ctenophores and cnidarians have: cells bound by inter-cell connections and carpet-like basement membranes; muscles; nervous systems; and some have sensory organs. Ctenophores are distinguished from all other animals by having colloblasts, which are sticky and adhere to prey, although a few ctenophore species lack them.",
+    "context_id": "ctx_0811",
+    "title": "Ctenophora"
+  },
+  {
+    "id": "56be53b8acb8001400a50314",
+    "question": "Who was the NFL Commissioner in early 2012?",
+    "ground_truth": "Roger Goodell",
+    "all_answers": [
+      "Roger Goodell",
+      "Roger Goodell",
+      "Goodell"
+    ],
+    "reference_context": "In early 2012, NFL Commissioner Roger Goodell stated that the league planned to make the 50th Super Bowl \"spectacular\" and that it would be \"an important game for us as a league\".",
+    "context_id": "ctx_0004",
+    "title": "Super_Bowl_50"
+  },
+  {
+    "id": "56f8cc399e9bad19000a0515",
+    "question": "In contrast how were Catholic saints portrayed?",
+    "ground_truth": "frail Catholic saints",
+    "all_answers": [
+      "frail Catholic saints",
+      "frail",
+      "frail"
+    ],
+    "reference_context": "In the 1530s and 1540s, printed images of Luther that emphasized his monumental size were crucial to the spread of Protestantism. In contrast to images of frail Catholic saints, Luther was presented as a stout man with a \"double chin, strong mouth, piercing deep-set eyes, fleshy face, and squat neck.\" He was shown to be physically imposing, an equal in stature to the secular German princes with whom he would join forces to spread Lutheranism. His large body also let the viewer know that he did not shun earthly pleasures like drinking\u2014behavior that was a stark contrast to the ascetic life of the medieval religious orders. Famous images from this period include the woodcuts by Hans Brosamer (1530) and Lucas Cranach the Elder and Lucas Cranach the Younger (1546).",
+    "context_id": "ctx_0442",
+    "title": "Martin_Luther"
+  },
+  {
+    "id": "57273d8bf1498d1400e8f500",
+    "question": "Infrastructure is often called what?",
+    "ground_truth": "heavy/highway, heavy civil or heavy engineering",
+    "all_answers": [
+      "heavy/highway, heavy civil or heavy engineering",
+      "heavy/highway, heavy civil or heavy engineering",
+      "heavy/highway, heavy civil or heavy engineering"
+    ],
+    "reference_context": "In general, there are three sectors of construction: buildings, infrastructure and industrial. Building construction is usually further divided into residential and non-residential (commercial/institutional). Infrastructure is often called heavy/highway, heavy civil or heavy engineering. It includes large public works, dams, bridges, highways, water/wastewater and utility distribution. Industrial includes refineries, process chemical, power generation, mills and manufacturing plants. There are other ways to break the industry into sectors or markets.",
+    "context_id": "ctx_1303",
+    "title": "Construction"
+  },
+  {
+    "id": "5726de7a5951b619008f80ab",
+    "question": "How many years does the V&A glass collection cover?",
+    "ground_truth": "4000",
+    "all_answers": [
+      "4000",
+      "4000 years",
+      "4000"
+    ],
+    "reference_context": "The glass collection covers 4000 years of glass making, and has over 6000 items from Africa, Britain, Europe, America and Asia. The earliest glassware on display comes from Ancient Egypt and continues through the Ancient Roman, Medieval, Renaissance covering areas such as Venetian glass and Bohemian glass and more recent periods, including Art Nouveau glass by Louis Comfort Tiffany and \u00c9mile Gall\u00e9, the Art Deco style is represented by several examples by Ren\u00e9 Lalique. There are many examples of crystal chandeliers both English, displayed in the British galleries and foreign for example Venetian (attributed to Giuseppe Briati) dated c1750 are in the collection. The stained glass collection is possibly the finest in the world, covering the medieval to modern periods, and covering Europe as well as Britain. Several examples of English 16th-century heraldic glass is displayed in the British Galleries. Many well-known designers of stained glass are represented in the collection including, from the 19th century: Dante Gabriel Rossetti, Edward Burne-Jones and William Morris. There is also an example of Frank Lloyd Wright's work in the collection. 20th-century designers include Harry Clarke, John Piper, Patrick Reyntiens, Veronica Whall and Brian Clarke.",
+    "context_id": "ctx_1023",
+    "title": "Victoria_and_Albert_Museum"
+  },
+  {
+    "id": "5725cb33271a42140099d1df",
+    "question": "What does ctenophore use to capture prey?",
+    "ground_truth": "colloblasts",
+    "all_answers": [
+      "colloblasts",
+      "colloblasts",
+      "colloblasts"
+    ],
+    "reference_context": "Ctenophores form an animal phylum that is more complex than sponges, about as complex as cnidarians (jellyfish, sea anemones, etc.), and less complex than bilaterians (which include almost all other animals). Unlike sponges, both ctenophores and cnidarians have: cells bound by inter-cell connections and carpet-like basement membranes; muscles; nervous systems; and some have sensory organs. Ctenophores are distinguished from all other animals by having colloblasts, which are sticky and adhere to prey, although a few ctenophore species lack them.",
+    "context_id": "ctx_0811",
+    "title": "Ctenophora"
+  },
+  {
+    "id": "56f8b2499b226e1400dd0e3b",
+    "question": "What did Luther speak out about in Saxony?",
+    "ground_truth": "the Jews",
+    "all_answers": [
+      "the Jews",
+      "Jews",
+      "Jews"
+    ],
+    "reference_context": "Luther spoke out against the Jews in Saxony, Brandenburg, and Silesia. Josel of Rosheim, the Jewish spokesman who tried to help the Jews of Saxony in 1537, later blamed their plight on \"that priest whose name was Martin Luther\u2014may his body and soul be bound up in hell!\u2014who wrote and issued many heretical books in which he said that whoever would help the Jews was doomed to perdition.\" Josel asked the city of Strasbourg to forbid the sale of Luther's anti-Jewish works: they refused initially, but did so when a Lutheran pastor in Hochfelden used a sermon to urge his parishioners to murder Jews. Luther's influence persisted after his death. Throughout the 1580s, riots led to the expulsion of Jews from several German Lutheran states.",
+    "context_id": "ctx_0428",
+    "title": "Martin_Luther"
+  },
+  {
+    "id": "571a52cb4faf5e1900b8a968",
+    "question": "What chemical element was the cause of the Apollo 1 disastrous outcome?",
+    "ground_truth": "pure O",
+    "all_answers": [
+      "pure O"
+    ],
+    "reference_context": "Concentrated O\n2 will allow combustion to proceed rapidly and energetically. Steel pipes and storage vessels used to store and transmit both gaseous and liquid oxygen will act as a fuel; and therefore the design and manufacture of O\n2 systems requires special training to ensure that ignition sources are minimized. The fire that killed the Apollo 1 crew in a launch pad test spread so rapidly because the capsule was pressurized with pure O\n2 but at slightly more than atmospheric pressure, instead of the 1\u20443 normal pressure that would be used in a mission.[k]",
+    "context_id": "ctx_0626",
+    "title": "Oxygen"
+  },
+  {
+    "id": "5726bf325951b619008f7cfd",
+    "question": "Approximately how many works of art are included in the Far Eastern collections?",
+    "ground_truth": "more than 70,000",
+    "all_answers": [
+      "more than 70,000",
+      "more than 70,000",
+      "70,000"
+    ],
+    "reference_context": "The Far Eastern collections include more than 70,000 works of art from the countries of East Asia: China, Japan and Korea. The T. T. Tsui Gallery of Chinese art opened in 1991, displaying a representative collection of the V&As approximately 16,000 objects from China, dating from the 4th millennium BC to the present day. Though the majority of art works on display date from the Ming and Qing dynasties, there are exquisite examples of objects dating from the Tang dynasty and earlier periods. Notably, a metre-high bronze head of the Buddha dated to c.750 AD and one of the oldest items a 2,000-year-old jade horse head from a burial, other sculptures include life-size tomb guardians. Classic examples of Chinese manufacturing are displayed that include lacquer, silk, porcelain, jade and cloisonn\u00e9 enamel. Two large ancestor portraits of a husband and wife painted in watercolour on silk date from the 18th century. There is a unique Chinese lacquerware table, made in the imperial workshops during the reign of the Xuande Emperor in the Ming dynasty. Examples of clothing are also displayed. One of the largest objects is a bed from the mid-17th century. The work of contemporary Chinese designers is also displayed.",
+    "context_id": "ctx_1011",
+    "title": "Victoria_and_Albert_Museum"
+  },
+  {
+    "id": "56e126dae3433e1400422c7e",
+    "question": "How many types of science fiction have been impacted by Tesla?",
+    "ground_truth": "several",
+    "all_answers": [
+      "several",
+      "several",
+      "several"
+    ],
+    "reference_context": "Tesla's legacy has endured in books, films, radio, TV, music, live theater, comics and video games. The impact of the technologies invented or envisioned by Tesla is a recurring theme in several types of science fiction.",
+    "context_id": "ctx_0238",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "56e1075ae3433e1400422afc",
+    "question": "What did he do with Wardenclyffe?",
+    "ground_truth": "sold",
+    "all_answers": [
+      "sold",
+      "sold",
+      "sold"
+    ],
+    "reference_context": "Before World War I, Tesla sought overseas investors. After the war started, Tesla lost the funding he was receiving from his patents in European countries. Eventually, he sold Wardenclyffe for $20,000 ($472,500 in today's dollars). In 1917, around the time that the Wardenclyffe Tower was demolished by Boldt to make the land a more viable real estate asset, Tesla received AIEE's highest honor, the Edison Medal.",
+    "context_id": "ctx_0199",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "5726c9b0dd62a815002e9047",
+    "question": "Whose plan called for the Mongolian army to split in two after the Khwarezmian conquest?",
+    "ground_truth": "Subutai",
+    "all_answers": [
+      "Subutai",
+      "Subutai",
+      "Subutai"
+    ],
+    "reference_context": "After the defeat of the Khwarezmian Empire in 1220, Genghis Khan gathered his forces in Persia and Armenia to return to the Mongolian steppes. Under the suggestion of Subutai, the Mongol army was split into two forces. Genghis Khan led the main army on a raid through Afghanistan and northern India towards Mongolia, while another 20,000 (two tumen) contingent marched through the Caucasus and into Russia under generals Jebe and Subutai. They pushed deep into Armenia and Azerbaijan. The Mongols destroyed the kingdom of Georgia, sacked the Genoese trade-fortress of Caffa in Crimea and overwintered near the Black Sea. Heading home, Subutai's forces attacked the allied forces of the Cuman\u2013Kipchaks and the poorly coordinated 80,000 Kievan Rus' troops led by Mstislav the Bold of Halych and Mstislav III of Kiev who went out to stop the Mongols' actions in the area. Subutai sent emissaries to the Slavic princes calling for a separate peace, but the emissaries were executed. At the Battle of Kalka River in 1223, Subutai's forces defeated the larger Kievan force. They also may have fought against the neighboring Volga Bulgars. There is no historical record except a short account by the Arab historian Ibn al-Athir, writing in Mosul some 1100 miles away from the event. Various historical secondary sources - Morgan, Chambers, Grousset - state that the Mongols actually defeated the Bulgars, Chambers even going so far as to say that the Bulgars had made up stories to tell the (recently crushed) Russians that they had beaten the Mongols and driven them from their territory. The Russian princes then sued for peace. Subutai agreed but was in no mood to pardon the princes. As was customary in Mongol society for nobility, the Russian princes were given a bloodless death. Subutai had a large wooden platform constructed on which he ate his meals along with his other generals. Six Russian princes, including Mstislav III of Kiev, were put under this platform and crushed to death.",
+    "context_id": "ctx_1172",
+    "title": "Genghis_Khan"
+  },
+  {
+    "id": "56e1127bcd28a01900c67549",
+    "question": "Where was Tesla's property sent?",
+    "ground_truth": "Belgrade",
+    "all_answers": [
+      "Belgrade",
+      "Belgrade",
+      "Belgrade"
+    ],
+    "reference_context": "In 1952, following pressure from Tesla's nephew, Sava Kosanovi\u0107, Tesla's entire estate was shipped to Belgrade in 80 trunks marked N.T. In 1957, Kosanovi\u0107's secretary Charlotte Muzar transported Tesla's ashes from the United States to Belgrade. The ashes are displayed in a gold-plated sphere on a marble pedestal in the Nikola Tesla Museum.",
+    "context_id": "ctx_0215",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "5727448b5951b619008f87a2",
+    "question": "When did Sunday Night Football premiere on NBC?",
+    "ground_truth": "2006",
+    "all_answers": [
+      "2006",
+      "2006",
+      "2006"
+    ],
+    "reference_context": "In 1970, ABC debuted Monday Night Football as part of its Monday prime time schedule; the program became a hit for the network and served as the National Football League (NFL)'s premier game of the week until 2006, when Sunday Night Football, which moved to NBC that year as part of a broadcast deal that in turn saw MNF move to ESPN, took over as the league's marquee game. According to Goldenson, Monday Night Football helped earn ABC regularly score an audience share of 15%\u201316%; ABC Sports managed the budget for the Monday night time slot to reallocate the weekly budget for ABC's prime time schedule to just six days, as opposed to seven on competing networks. 1970 also saw the premieres of several soap operas including the long-running All My Children, which ran on the network for 41 years.",
+    "context_id": "ctx_1092",
+    "title": "American_Broadcasting_Company"
+  },
+  {
+    "id": "5726f4a0708984140094d6ea",
+    "question": "How many paintings did John Sheeshanks give to the museum?",
+    "ground_truth": "233",
+    "all_answers": [
+      "233",
+      "233",
+      "233"
+    ],
+    "reference_context": "In 1857 John Sheepshanks donated 233 paintings, mainly by contemporary British artists, and a similar number of drawings to the museum with the intention of forming a 'A National Gallery of British Art', a role since taken on by Tate Britain; artists represented are William Blake, James Barry, Henry Fuseli, Sir Edwin Henry Landseer, Sir David Wilkie, William Mulready, William Powell Frith, Millais and Hippolyte Delaroche. Although some of Constable's works came to the museum with the Sheepshanks bequest, the majority of the artist's works were donated by his daughter Isabel in 1888, including the large number of sketches in oil, the most significant being the 1821 full size oil sketch for The Hay Wain. Other artists with works in the collection include: Bernardino Fungai, Marcus Gheeraerts the Younger, Domenico di Pace Beccafumi, Fioravante Ferramola, Jan Brueghel the Elder, Anthony van Dyck, Ludovico Carracci, Antonio Verrio, Giovanni Battista Tiepolo, Domenico Tiepolo, Canaletto, Francis Hayman, Pompeo Batoni, Benjamin West, Paul Sandby, Richard Wilson, William Etty, Henry Fuseli, Sir Thomas Lawrence, James Barry, Francis Danby, Richard Parkes Bonington and Alphonse Legros.",
+    "context_id": "ctx_1035",
+    "title": "Victoria_and_Albert_Museum"
+  },
+  {
+    "id": "57309564069b5314008321a9",
+    "question": "Who was made rich and prosperous prior to World War 1",
+    "ground_truth": "many imperial powers",
+    "all_answers": [
+      "many imperial powers",
+      "imperial powers",
+      "imperial powers",
+      "imperial powers"
+    ],
+    "reference_context": "During the 20th century, historians John Gallagher (1919\u20131980) and Ronald Robinson (1920\u20131999) constructed a framework for understanding European imperialism. They claim that European imperialism was influential, and Europeans rejected the notion that \"imperialism\" required formal, legal control by one government over another country. \"In their view, historians have been mesmerized by formal empire and maps of the world with regions colored red. The bulk of British emigration, trade, and capital went to areas outside the formal British Empire. Key to their thinking is the idea of empire 'informally if possible and formally if necessary.'\"[attribution needed] Because of the resources made available by imperialism, the world's economy grew significantly and became much more interconnected in the decades before World War I, making the many imperial powers rich and prosperous.",
+    "context_id": "ctx_1901",
+    "title": "Imperialism"
+  },
+  {
+    "id": "5729e500af94a219006aa6b7",
+    "question": "After the Oligocene period, under what period did the amazon rainforest begin to expand?",
+    "ground_truth": "Middle Miocene",
+    "all_answers": [
+      "Middle Miocene",
+      "Middle Miocene",
+      "Middle Miocene"
+    ],
+    "reference_context": "Following the Cretaceous\u2013Paleogene extinction event, the extinction of the dinosaurs and the wetter climate may have allowed the tropical rainforest to spread out across the continent. From 66\u201334 Mya, the rainforest extended as far south as 45\u00b0. Climate fluctuations during the last 34 million years have allowed savanna regions to expand into the tropics. During the Oligocene, for example, the rainforest spanned a relatively narrow band. It expanded again during the Middle Miocene, then retracted to a mostly inland formation at the last glacial maximum. However, the rainforest still managed to thrive during these glacial periods, allowing for the survival and evolution of a broad diversity of species.",
+    "context_id": "ctx_0786",
+    "title": "Amazon_rainforest"
+  },
+  {
+    "id": "56d9c660dc89441400fdb7e7",
+    "question": "Which retired ref disagreed with the outcome of the challenge of a incomplete pass?",
+    "ground_truth": "Mike Carey",
+    "all_answers": [
+      "Mike Carey",
+      "Mike Carey",
+      "Carey"
+    ],
+    "reference_context": "After each team punted, Panthers quarterback Cam Newton appeared to complete a 24-yard pass Jerricho Cotchery, but the call was ruled an incompletion and upheld after a replay challenge. CBS analyst and retired referee Mike Carey stated he disagreed with the call and felt the review clearly showed the pass was complete. A few plays later, on 3rd-and-10 from the 15-yard line, linebacker Von Miller knocked the ball out of Newton's hands while sacking him, and Malik Jackson recovered it in the end zone for a Broncos touchdown, giving the team a 10\u20130 lead. This was the first fumble return touchdown in a Super Bowl since Super Bowl XXVIII at the end of the 1993 season.",
+    "context_id": "ctx_0046",
+    "title": "Super_Bowl_50"
+  },
+  {
+    "id": "572a07a86aef0514001551d5",
+    "question": "Where are health and social problems most common?",
+    "ground_truth": "among states in the US with larger income inequalities",
+    "all_answers": [
+      "among states in the US with larger income inequalities",
+      "countries with bigger income inequalities",
+      "countries with bigger income inequalities"
+    ],
+    "reference_context": "In recent years the characteristic that has strongly correlated with health in developed countries is income inequality. Creating an index of \"Health and Social Problems\" from nine factors, authors Richard Wilkinson and Kate Pickett found health and social problems \"more common in countries with bigger income inequalities\", and more common among states in the US with larger income inequalities. Other studies have confirmed this relationship. The UNICEF index of \"child well-being in rich countries\", studying 40 indicators in 22 countries, correlates with greater equality but not per capita income.",
+    "context_id": "ctx_1423",
+    "title": "Economic_inequality"
+  },
+  {
+    "id": "572968cf1d046914007793cd",
+    "question": "When was the plastome discovered?",
+    "ground_truth": "1962",
+    "all_answers": [
+      "1962",
+      "1962",
+      "1962"
+    ],
+    "reference_context": "Chloroplasts have their own DNA, often abbreviated as ctDNA, or cpDNA. It is also known as the plastome. Its existence was first proved in 1962, and first sequenced in 1986\u2014when two Japanese research teams sequenced the chloroplast DNA of liverwort and tobacco. Since then, hundreds of chloroplast DNAs from various species have been sequenced, but they're mostly those of land plants and green algae\u2014glaucophytes, red algae, and other algal groups are extremely underrepresented, potentially introducing some bias in views of \"typical\" chloroplast DNA structure and content.",
+    "context_id": "ctx_1690",
+    "title": "Chloroplast"
+  },
+  {
+    "id": "56e76b8337bdd419002c3f82",
+    "question": "Which study showed double the rate of anxiety?",
+    "ground_truth": "2012",
+    "all_answers": [
+      "2012",
+      "2012",
+      "2012 study"
+    ],
+    "reference_context": "A 2000 study found that 42% of UK teachers experienced occupational stress, twice the figure for the average profession. A 2012 study found that teachers experienced double the rate of anxiety, depression, and stress than average workers.",
+    "context_id": "ctx_0324",
+    "title": "Teacher"
+  },
+  {
+    "id": "5726c0c5dd62a815002e8f7a",
+    "question": "What trading route joined Khwarezmia and the Mongol Empire?",
+    "ground_truth": "the Silk Road",
+    "all_answers": [
+      "the Silk Road",
+      "Silk Road",
+      "Silk Road"
+    ],
+    "reference_context": "In the early 13th century, the Khwarazmian dynasty was governed by Shah Ala ad-Din Muhammad. Genghis Khan saw the potential advantage in Khwarezmia as a commercial trading partner using the Silk Road, and he initially sent a 500-man caravan to establish official trade ties with the empire. However, Inalchuq, the governor of the Khwarezmian city of Otrar, attacked the caravan that came from Mongolia, claiming that the caravan contained spies and therefore was a conspiracy against Khwarezmia. The situation became further complicated because the governor later refused to make repayments for the looting of the caravans and handing over the perpetrators. Genghis Khan then sent again a second group of three ambassadors (two Mongols and a Muslim) to meet the Shah himself instead of the governor Inalchuq. The Shah had all the men shaved and the Muslim beheaded and sent his head back with the two remaining ambassadors. This was seen as an affront and insult to Genghis Khan. Outraged, Genghis Khan planned one of his largest invasion campaigns by organizing together around 100,000 soldiers (10 tumens), his most capable generals and some of his sons. He left a commander and number of troops in China, designated his successors to be his family members and likely appointed \u00d6gedei to be his immediate successor and then went out to Khwarezmia.",
+    "context_id": "ctx_1166",
+    "title": "Genghis_Khan"
+  },
+  {
+    "id": "56e0d402231d4119001ac3fd",
+    "question": "Where did Tesla work in Budapest?",
+    "ground_truth": "a telegraph company",
+    "all_answers": [
+      "a telegraph company",
+      "the Budapest Telephone Exchange",
+      "Budapest Telephone Exchange"
+    ],
+    "reference_context": "In 1881, Tesla moved to Budapest to work under Ferenc Pusk\u00e1s at a telegraph company, the Budapest Telephone Exchange. Upon arrival, Tesla realized that the company, then under construction, was not functional, so he worked as a draftsman in the Central Telegraph Office instead. Within a few months, the Budapest Telephone Exchange became functional and Tesla was allocated the chief electrician position. During his employment, Tesla made many improvements to the Central Station equipment and claimed to have perfected a telephone repeater or amplifier, which was never patented nor publicly described.",
+    "context_id": "ctx_0161",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "572980f9af94a219006aa4d4",
+    "question": "What is the name of one type of prime where p+1 or p-1 takes a certain shape?",
+    "ground_truth": "primorial primes",
+    "all_answers": [
+      "primorial primes",
+      "Fermat",
+      "Sophie Germain",
+      "Sophie Germain",
+      "Sophie Germain"
+    ],
+    "reference_context": "are prime. Prime numbers of this form are known as factorial primes. Other primes where either p + 1 or p \u2212 1 is of a particular shape include the Sophie Germain primes (primes of the form 2p + 1 with p prime), primorial primes, Fermat primes and Mersenne primes, that is, prime numbers that are of the form 2p \u2212 1, where p is an arbitrary prime. The Lucas\u2013Lehmer test is particularly fast for numbers of this form. This is why the largest known prime has almost always been a Mersenne prime since the dawn of electronic computers.",
+    "context_id": "ctx_1745",
+    "title": "Prime_number"
+  },
+  {
+    "id": "5725ff8238643c19005acf4a",
+    "question": "Where is the Santa Fe Railroad Depot located?",
+    "ground_truth": "Downtown Fresno",
+    "all_answers": [
+      "Downtown Fresno",
+      "Downtown Fresno",
+      "Downtown Fresno"
+    ],
+    "reference_context": "Passenger rail service is provided by Amtrak San Joaquins. The main passenger rail station is the recently renovated historic Santa Fe Railroad Depot in Downtown Fresno. The Bakersfield-Stockton mainlines of the Burlington Northern Santa Fe Railway and Union Pacific Railroad railroads cross in Fresno, and both railroads maintain railyards within the city; the San Joaquin Valley Railroad also operates former Southern Pacific branchlines heading west and south out of the city. The city of Fresno is planned to serve the future California High Speed Rail.",
+    "context_id": "ctx_0864",
+    "title": "Fresno,_California"
+  },
+  {
+    "id": "5733f8dc4776f419006615f9",
+    "question": "Who won the battle of Lake George?",
+    "ground_truth": "inconclusively, with both sides withdrawing from the field",
+    "all_answers": [
+      "inconclusively, with both sides withdrawing from the field",
+      "The battle ended inconclusively",
+      "ended inconclusively",
+      "both sides withdrawing from the field",
+      "The battle ended inconclusively"
+    ],
+    "reference_context": "Johnson's expedition was better organized than Shirley's, which was noticed by New France's governor, the Marquis de Vaudreuil. He had primarily been concerned about the extended supply line to the forts on the Ohio, and had sent Baron Dieskau to lead the defenses at Frontenac against Shirley's expected attack. When Johnson was seen as the larger threat, Vaudreuil sent Dieskau to Fort St. Fr\u00e9d\u00e9ric to meet that threat. Dieskau planned to attack the British encampment at Fort Edward at the upper end of navigation on the Hudson River, but Johnson had strongly fortified it, and Dieskau's Indian support was reluctant to attack. The two forces finally met in the bloody Battle of Lake George between Fort Edward and Fort William Henry. The battle ended inconclusively, with both sides withdrawing from the field. Johnson's advance stopped at Fort William Henry, and the French withdrew to Ticonderoga Point, where they began the construction of Fort Carillon (later renamed Fort Ticonderoga after British capture in 1759).",
+    "context_id": "ctx_2005",
+    "title": "French_and_Indian_War"
+  },
+  {
+    "id": "5730cb0fb7151e1900c0154c",
+    "question": "Clergy are members of what group rather than of any local congregation?",
+    "ground_truth": "their Annual Conference",
+    "all_answers": [
+      "their Annual Conference",
+      "Annual Conference",
+      "their Annual Conference"
+    ],
+    "reference_context": "The Annual Conference, roughly the equivalent of a diocese in the Anglican Communion and the Roman Catholic Church or a synod in some Lutheran denominations such as the Evangelical Lutheran Church in America, is the basic unit of organization within the UMC. The term Annual Conference is often used to refer to the geographical area it covers as well as the frequency of meeting. Clergy are members of their Annual Conference rather than of any local congregation, and are appointed to a local church or other charge annually by the conference's resident Bishop at the meeting of the Annual Conference. In many ways, the United Methodist Church operates in a connectional organization of the Annual Conferences, and actions taken by one conference are not binding upon another.",
+    "context_id": "ctx_1960",
+    "title": "United_Methodist_Church"
+  },
+  {
+    "id": "57274e6a5951b619008f87f4",
+    "question": "On December 22nd 2009, ABC reached an agreement with Apple to make ABC shows available on what service?",
+    "ground_truth": "iTunes",
+    "all_answers": [
+      "iTunes",
+      "iTunes",
+      "iTunes"
+    ],
+    "reference_context": "In early 2009, Disney\u2013ABC Television Group merged ABC Entertainment and ABC Studios into a new division, ABC Entertainment Group, which would be responsible for both its production and broadcasting operations. During this reorganization, the group announced that it would lay off 5% of its workforce. On April 2, 2009, Citadel Communications announced that it would rebrand ABC Radio as Citadel Media; however, ABC News continued to provide news content for Citadel. On December 22, Disney\u2013ABC Television Group announced a partnership with Apple Inc. to make individual episodes of ABC and Disney Channel programs available for purchase on iTunes.",
+    "context_id": "ctx_1103",
+    "title": "American_Broadcasting_Company"
+  },
+  {
+    "id": "572fb059947a6a140053cb80",
+    "question": "Who did the Parliament rent additional buildings from?",
+    "ground_truth": "City of Edinburgh Council",
+    "all_answers": [
+      "City of Edinburgh Council",
+      "City of Edinburgh Council",
+      "the City of Edinburgh Council"
+    ],
+    "reference_context": "In addition to the General Assembly Hall, the Parliament also used buildings rented from the City of Edinburgh Council. The former administrative building of Lothian Regional Council on George IV Bridge was used for the MSP's offices. Following the move to Holyrood in 2004 this building was demolished. The former Midlothian County Buildings facing Parliament Square, High Street and George IV Bridge in Edinburgh (originally built as the headquarters of the pre-1975 Midlothian County Council) housed the Parliament's visitors' centre and shop, whilst the main hall was used as the Parliament's principal committee room.",
+    "context_id": "ctx_1815",
+    "title": "Scottish_Parliament"
+  },
+  {
+    "id": "571098f8a58dae1900cd6ab3",
+    "question": "What style of lace is erroneously believed by some to have Huguenot influence?",
+    "ground_truth": "'Bucks Point'",
+    "all_answers": [
+      "'Bucks Point'",
+      "Bucks Point",
+      "Bucks Point"
+    ],
+    "reference_context": "Some Huguenots settled in Bedfordshire, one of the main centres of the British lace industry at the time. Although 19th century sources have asserted that some of these refugees were lacemakers and contributed to the East Midlands lace industry, this is contentious. The only reference to immigrant lacemakers in this period is of twenty-five widows who settled in Dover, and there is no contemporary documentation to support there being Huguenot lacemakers in Bedfordshire. The implication that the style of lace known as 'Bucks Point' demonstrates a Huguenot influence, being a \"combination of Mechlin patterns on Lille ground\", is fallacious: what is now known as Mechlin lace did not develop until first half of the eighteenth century and lace with Mechlin patterns and Lille ground did not appear until the end of the 18th century, when it was widely copied throughout Europe.",
+    "context_id": "ctx_0553",
+    "title": "Huguenot"
+  },
+  {
+    "id": "56de40da4396321400ee270a",
+    "question": "Who led Richard's troops when Cyprus was conquered?",
+    "ground_truth": "Guy de Lusignan",
+    "all_answers": [
+      "Guy de Lusignan",
+      "Guy de Lusignan",
+      "Guy de Lusignan"
+    ],
+    "reference_context": "Various princes of the Holy Land arrived in Limassol at the same time, in particular Guy de Lusignan. All declared their support for Richard provided that he support Guy against his rival Conrad of Montferrat. The local barons abandoned Isaac, who considered making peace with Richard, joining him on the crusade, and offering his daughter in marriage to the person named by Richard. But Isaac changed his mind and tried to escape. Richard then proceeded to conquer the whole island, his troops being led by Guy de Lusignan. Isaac surrendered and was confined with silver chains, because Richard had promised that he would not place him in irons. By 1 June, Richard had conquered the whole island. His exploit was well publicized and contributed to his reputation; he also derived significant financial gains from the conquest of the island. Richard left for Acre on 5 June, with his allies. Before his departure, he named two of his Norman generals, Richard de Camville and Robert de Thornham, as governors of Cyprus.",
+    "context_id": "ctx_0134",
+    "title": "Normans"
+  },
+  {
+    "id": "56d9c92bdc89441400fdb80e",
+    "question": "Who did Newton get a pass to in the Panther starting plays of Super Bowl 50?",
+    "ground_truth": "Ted Ginn Jr.",
+    "all_answers": [
+      "Ted Ginn Jr.",
+      "Ted Ginn Jr"
+    ],
+    "reference_context": "The Panthers seemed primed to score on their opening drive of the second half when Newton completed a 45-yard pass to Ted Ginn Jr. on the Denver 35-yard line on their second offensive play. But the Broncos defense halted the drive on the 26-yard line, and it ended with no points when Graham Gano hit the uprights on a 44-yard field goal attempt. After the miss, Manning completed a pair of passes to Emmanuel Sanders for gains of 25 and 22 yards, setting up McManus' 33-yard field goal that gave the Broncos a 16\u20137 lead. Carolina got off to another strong start after the kickoff, with Newton completing a 42-yard pass to Corey Brown. But once again they came up empty, this time as a result of a Newton pass that bounced off the hands of Ginn and was intercepted by safety T. J. Ward. Ward fumbled the ball during the return, but Trevathan recovered it to enable Denver to keep possession.",
+    "context_id": "ctx_0049",
+    "title": "Super_Bowl_50"
+  },
+  {
+    "id": "5725bad5271a42140099d0bd",
+    "question": "When did Syria and Egypt launch a surprise attack on Israel?",
+    "ground_truth": "On October 6, 1973",
+    "all_answers": [
+      "On October 6, 1973",
+      "October 6, 1973",
+      "October 6, 1973",
+      "October 6, 1973",
+      "October 6, 1973"
+    ],
+    "reference_context": "On October 6, 1973, Syria and Egypt, with support from other Arab nations, launched a surprise attack on Israel, on Yom Kippur. This renewal of hostilities in the Arab\u2013Israeli conflict released the underlying economic pressure on oil prices. At the time, Iran was the world's second-largest oil exporter and a close US ally. Weeks later, the Shah of Iran said in an interview: \"Of course [the price of oil] is going to rise... Certainly! And how!... You've [Western nations] increased the price of the wheat you sell us by 300 percent, and the same for sugar and cement... You buy our crude oil and sell it back to us, refined as petrochemicals, at a hundred times the price you've paid us... It's only fair that, from now on, you should pay more for oil. Let's say ten times more.\"",
+    "context_id": "ctx_0667",
+    "title": "1973_oil_crisis"
+  },
+  {
+    "id": "5725edfe38643c19005acea1",
+    "question": "The west side of Fresno is the center of which ethnic community?",
+    "ground_truth": "African-American",
+    "all_answers": [
+      "African-American",
+      "African-American",
+      "African-American"
+    ],
+    "reference_context": "The \"West Side\" of Fresno, also often called \"Southwest Fresno\", is one of the oldest neighborhoods in the city. The neighborhood lies southwest of the 99 freeway (which divides it from Downtown Fresno), west of the 41 freeway and south of Nielsen Ave (or the newly constructed 180 Freeway), and extends to the city limits to the west and south. The neighborhood is traditionally considered to be the center of Fresno's African-American community. It is culturally diverse and also includes significant Mexican-American and Asian-American (principally Hmong or Laotian) populations.",
+    "context_id": "ctx_0851",
+    "title": "Fresno,_California"
+  },
+  {
+    "id": "56e0d6367aa994140058e773",
+    "question": "How much did Tesla say Edison offered him to redesign his motor and generators?",
+    "ground_truth": "fifty thousand dollars",
+    "all_answers": [
+      "fifty thousand dollars",
+      "fifty thousand dollars",
+      "fifty thousand dollars"
+    ],
+    "reference_context": "Tesla was offered the task of completely redesigning the Edison Company's direct current generators. In 1885, he said that he could redesign Edison's inefficient motor and generators, making an improvement in both service and economy. According to Tesla, Edison remarked, \"There's fifty thousand dollars in it for you\u2014if you can do it.\":54\u201357 :64 This has been noted as an odd statement from an Edison whose company was stingy with pay and who did not have that sort of cash on hand. After months of work, Tesla fulfilled the task and inquired about payment. Edison, saying that he was only joking, replied, \"Tesla, you don't understand our American humor.\":64  Instead, Edison offered a US$10 a week raise over Tesla's US$18 per week salary; Tesla refused the offer and immediately resigned.",
+    "context_id": "ctx_0163",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "57265ceddd62a815002e82b8",
+    "question": "By which year did full sized American cars shrink to be smaller?",
+    "ground_truth": "1979",
+    "all_answers": [
+      "1979",
+      "1979",
+      "1979",
+      "1979",
+      "1979"
+    ],
+    "reference_context": "Federal safety standards, such as NHTSA Federal Motor Vehicle Safety Standard 215 (pertaining to safety bumpers), and compacts like the 1974 Mustang I were a prelude to the DOT \"downsize\" revision of vehicle categories. By 1977, GM's full-sized cars reflected the crisis. By 1979, virtually all \"full-size\" American cars had shrunk, featuring smaller engines and smaller outside dimensions. Chrysler ended production of their full-sized luxury sedans at the end of the 1981 model year, moving instead to a full front-wheel drive lineup for 1982 (except for the M-body Dodge Diplomat/Plymouth Gran Fury and Chrysler New Yorker Fifth Avenue sedans).",
+    "context_id": "ctx_0685",
+    "title": "1973_oil_crisis"
+  },
+  {
+    "id": "56e1239acd28a01900c67642",
+    "question": "When did he talk about his thoughts on gender?",
+    "ground_truth": "1926",
+    "all_answers": [
+      "1926",
+      "1926",
+      "1926"
+    ],
+    "reference_context": "In 1926, Tesla commented on the ills of the social subservience of women and the struggle of women toward gender equality, and indicated that humanity's future would be run by \"Queen Bees.\" He believed that women would become the dominant sex in the future.",
+    "context_id": "ctx_0232",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "5726c9b0dd62a815002e904a",
+    "question": "Who led the Kievian Rus' troops against Subutai's Mongol army?",
+    "ground_truth": "Mstislav the Bold of Halych and Mstislav III of Kiev",
+    "all_answers": [
+      "Mstislav the Bold of Halych and Mstislav III of Kiev",
+      "Mstislav the Bold of Halych and Mstislav III of Kiev",
+      "Mstislav the Bold of Halych and Mstislav III of Kiev"
+    ],
+    "reference_context": "After the defeat of the Khwarezmian Empire in 1220, Genghis Khan gathered his forces in Persia and Armenia to return to the Mongolian steppes. Under the suggestion of Subutai, the Mongol army was split into two forces. Genghis Khan led the main army on a raid through Afghanistan and northern India towards Mongolia, while another 20,000 (two tumen) contingent marched through the Caucasus and into Russia under generals Jebe and Subutai. They pushed deep into Armenia and Azerbaijan. The Mongols destroyed the kingdom of Georgia, sacked the Genoese trade-fortress of Caffa in Crimea and overwintered near the Black Sea. Heading home, Subutai's forces attacked the allied forces of the Cuman\u2013Kipchaks and the poorly coordinated 80,000 Kievan Rus' troops led by Mstislav the Bold of Halych and Mstislav III of Kiev who went out to stop the Mongols' actions in the area. Subutai sent emissaries to the Slavic princes calling for a separate peace, but the emissaries were executed. At the Battle of Kalka River in 1223, Subutai's forces defeated the larger Kievan force. They also may have fought against the neighboring Volga Bulgars. There is no historical record except a short account by the Arab historian Ibn al-Athir, writing in Mosul some 1100 miles away from the event. Various historical secondary sources - Morgan, Chambers, Grousset - state that the Mongols actually defeated the Bulgars, Chambers even going so far as to say that the Bulgars had made up stories to tell the (recently crushed) Russians that they had beaten the Mongols and driven them from their territory. The Russian princes then sued for peace. Subutai agreed but was in no mood to pardon the princes. As was customary in Mongol society for nobility, the Russian princes were given a bloodless death. Subutai had a large wooden platform constructed on which he ate his meals along with his other generals. Six Russian princes, including Mstislav III of Kiev, were put under this platform and crushed to death.",
+    "context_id": "ctx_1172",
+    "title": "Genghis_Khan"
+  },
+  {
+    "id": "572646655951b619008f6ec0",
+    "question": "What do ctenophores have that no other animals have?",
+    "ground_truth": "colloblasts",
+    "all_answers": [
+      "colloblasts",
+      "colloblasts",
+      "colloblasts"
+    ],
+    "reference_context": "Ctenophores form an animal phylum that is more complex than sponges, about as complex as cnidarians (jellyfish, sea anemones, etc.), and less complex than bilaterians (which include almost all other animals). Unlike sponges, both ctenophores and cnidarians have: cells bound by inter-cell connections and carpet-like basement membranes; muscles; nervous systems; and some have sensory organs. Ctenophores are distinguished from all other animals by having colloblasts, which are sticky and adhere to prey, although a few ctenophore species lack them.",
+    "context_id": "ctx_0811",
+    "title": "Ctenophora"
+  },
+  {
+    "id": "5727f2714b864d1900164074",
+    "question": "What impact did the high school education movement have on the wages of skilled workers?",
+    "ground_truth": "decrease",
+    "all_answers": [
+      "decrease",
+      "decrease in the price of skilled labor",
+      "decrease"
+    ],
+    "reference_context": "During the mass high school education movement from 1910\u20131940, there was an increase in skilled workers, which led to a decrease in the price of skilled labor. High school education during the period was designed to equip students with necessary skill sets to be able to perform at work. In fact, it differs from the present high school education, which is regarded as a stepping-stone to acquire college and advanced degrees. This decrease in wages caused a period of compression and decreased inequality between skilled and unskilled workers. Education is very important for the growth of the economy, however educational inequality in gender also influence towards the economy. Lagerlof and Galor stated that gender inequality in education can result to low economic growth, and continued gender inequality in education, thus creating a poverty trap. It is suggested that a large gap in male and female education may indicate backwardness and so may be associated with lower economic growth, which can explain why there is economic inequality between countries.",
+    "context_id": "ctx_1410",
+    "title": "Economic_inequality"
+  },
+  {
+    "id": "57376828c3c5551400e51eba",
+    "question": "What physical quantities do not have direction?",
+    "ground_truth": "denoted scalar quantities",
+    "all_answers": [
+      "denoted scalar quantities",
+      "scalar quantities",
+      "denoted scalar quantities",
+      "scalar quantities",
+      "scalar quantities"
+    ],
+    "reference_context": "Forces act in a particular direction and have sizes dependent upon how strong the push or pull is. Because of these characteristics, forces are classified as \"vector quantities\". This means that forces follow a different set of mathematical rules than physical quantities that do not have direction (denoted scalar quantities). For example, when determining what happens when two forces act on the same object, it is necessary to know both the magnitude and the direction of both forces to calculate the result. If both of these pieces of information are not known for each force, the situation is ambiguous. For example, if you know that two people are pulling on the same rope with known magnitudes of force but you do not know which direction either person is pulling, it is impossible to determine what the acceleration of the rope will be. The two people could be pulling against each other as in tug of war or the two people could be pulling in the same direction. In this simple one-dimensional example, without knowing the direction of the forces it is impossible to decide whether the net force is the result of adding the two force magnitudes or subtracting one from the other. Associating forces with vectors avoids such problems.",
+    "context_id": "ctx_2034",
+    "title": "Force"
+  },
+  {
+    "id": "57275cb3f1498d1400e8f6dc",
+    "question": "What cable provider did ABC reach an agreement with in 1993 to carry it's owned-and-operated stations in ABC O&O markets?",
+    "ground_truth": "Time Warner Cable",
+    "all_answers": [
+      "Time Warner Cable",
+      "Time Warner Cable",
+      "Time Warner Cable"
+    ],
+    "reference_context": "In 1993, the FCC repealed the Financial Interest and Syndication Rules, once again allowing networks to hold interests in television production studios. That same year, Capital Cities/ABC purchased the French animation studio DIC Entertainment; it also signed an agreement with Time Warner Cable to carry its owned-and-operated television stations on the provider's systems in ABC O&O markets. By that year, ABC had a total viewership share of 23.63% of American households, just below the limit of 25% imposed by the FCC.",
+    "context_id": "ctx_1116",
+    "title": "American_Broadcasting_Company"
+  },
+  {
+    "id": "5705eccb52bb8914006896b9",
+    "question": "Other than the desert city why do many locals and tourists frequent southern California?",
+    "ground_truth": "beaches",
+    "all_answers": [
+      "beaches",
+      "for its popular beaches",
+      "beaches"
+    ],
+    "reference_context": "Many locals and tourists frequent the southern California coast for its popular beaches, and the desert city of Palm Springs is popular for its resort feel and nearby open spaces.",
+    "context_id": "ctx_0452",
+    "title": "Southern_California"
+  },
+  {
+    "id": "57277585708984140094de2d",
+    "question": "Which network regained the ratings lead in America in 1984?",
+    "ground_truth": "NBC",
+    "all_answers": [
+      "NBC",
+      "NBC",
+      "NBC"
+    ],
+    "reference_context": "As far as programming is concerned, four of ABC's marquee shows of the 1970s ended their runs during the mid-1980s: Laverne & Shirley ended its run in 1983, Happy Days and Three's Company ended in 1984 (with the latter producing a short-lived spinoff that year), while The Love Boat ended its run in 1986. After nearly a decade of ratings trouble, NBC had regained the ratings lead among the Big Three networks in 1984 on the success of series such as The Cosby Show, Cheers and Miami Vice. To counteract NBC, ABC decided to refocus itself on comedies and family-oriented series beginning in the mid-1980s including Mr. Belvedere, Roseanne, Who's the Boss?, Just the Ten of Us, The Wonder Years, Full House and Perfect Strangers.",
+    "context_id": "ctx_1137",
+    "title": "American_Broadcasting_Company"
+  },
+  {
+    "id": "57273799f1498d1400e8f4c1",
+    "question": "When did Paul Rand's iconic ABC logo first debut?",
+    "ground_truth": "1963\u201364 season",
+    "all_answers": [
+      "1963\u201364 season",
+      "1963\u201364 season",
+      "1962"
+    ],
+    "reference_context": "In 1962, graphic designer Paul Rand redesigned the ABC logo into its best-known (and current) form, with the lowercase letters \"abc\" enclosed in a single black circle. The new logo debuted on-air for ABC's promos at the start of the 1963\u201364 season. The letters are strongly reminiscent of the Bauhaus typeface designed by Herbert Bayer in the 1920s, but also share similarities with several other fonts, such as ITC Avant Garde and Horatio, and most closely resembling Chalet. The logo's simplicity made it easier to redesign and duplicate, which conferred a benefit for ABC (mostly before the advent of computer graphics).",
+    "context_id": "ctx_1075",
+    "title": "American_Broadcasting_Company"
+  },
+  {
+    "id": "5711623e50c2381900b54abc",
+    "question": "In an adjustable spring-loaded valve, what needs to be broken to allow an operator to tamper with it?",
+    "ground_truth": "seal",
+    "all_answers": [
+      "seal",
+      "seal",
+      "a seal"
+    ],
+    "reference_context": "Steam engines frequently possess two independent mechanisms for ensuring that the pressure in the boiler does not go too high; one may be adjusted by the user, the second is typically designed as an ultimate fail-safe. Such safety valves traditionally used a simple lever to restrain a plug valve in the top of a boiler. One end of the lever carried a weight or spring that restrained the valve against steam pressure. Early valves could be adjusted by engine drivers, leading to many accidents when a driver fastened the valve down to allow greater steam pressure and more power from the engine. The more recent type of safety valve uses an adjustable spring-loaded valve, which is locked such that operators may not tamper with its adjustment unless a seal illegally is broken. This arrangement is considerably safer.[citation needed]",
+    "context_id": "ctx_0612",
+    "title": "Steam_engine"
+  },
+  {
+    "id": "5728455bff5b5019007da07c",
+    "question": "How much Saharan dust is blown and falls upon the Caribbean Sea each year?",
+    "ground_truth": "43 million tons",
+    "all_answers": [
+      "43 million tons",
+      "43 million tons",
+      "43 million tons"
+    ],
+    "reference_context": "NASA's CALIPSO satellite has measured the amount of dust transported by wind from the Sahara to the Amazon: an average 182 million tons of dust are windblown out of the Sahara each year, at 15 degrees west longitude, across 1,600 miles (2,600 km) over the Atlantic Ocean (some dust falls into the Atlantic), then at 35 degrees West longitude at the eastern coast of South America, 27.7 million tons (15%) of dust fall over the Amazon basin, 132 million tons of dust remain in the air, 43 million tons of dust are windblown and falls on the Caribbean Sea, past 75 degrees west longitude.",
+    "context_id": "ctx_0789",
+    "title": "Amazon_rainforest"
+  },
+  {
+    "id": "56df9e2838dc4217001520f6",
+    "question": "In what year was Nikola Tesla born? ",
+    "ground_truth": "1856",
+    "all_answers": [
+      "1856",
+      "1856",
+      "1856"
+    ],
+    "reference_context": "Nikola Tesla (Serbian Cyrillic: \u041d\u0438\u043a\u043e\u043b\u0430 \u0422\u0435\u0441\u043b\u0430; 10 July 1856 \u2013 7 January 1943) was a Serbian American inventor, electrical engineer, mechanical engineer, physicist, and futurist best known for his contributions to the design of the modern alternating current (AC) electricity supply system.",
+    "context_id": "ctx_0148",
+    "title": "Nikola_Tesla"
+  },
+  {
+    "id": "5730b7ce069b5314008322c6",
+    "question": "What caused the US public to condemn the occupation of the philippines?",
+    "ground_truth": "a war erupted",
+    "all_answers": [
+      "a war erupted",
+      "a war erupted",
+      "war",
+      "war",
+      "war"
+    ],
+    "reference_context": "The early United States expressed its opposition to Imperialism, at least in a form distinct from its own Manifest Destiny, through policies such as the Monroe Doctrine. However, beginning in the late 19th and early 20th century, policies such as Theodore Roosevelt\u2019s interventionism in Central America and Woodrow Wilson\u2019s mission to \"make the world safe for democracy\" changed all this. They were often backed by military force, but were more often affected from behind the scenes. This is consistent with the general notion of hegemony and imperium of historical empires. In 1898, Americans who opposed imperialism created the Anti-Imperialist League to oppose the US annexation of the Philippines and Cuba. One year later, a war erupted in the Philippines causing business, labor and government leaders in the US to condemn America's occupation in the Philippines as they also denounced them for causing the deaths of many Filipinos. American foreign policy was denounced as a \"racket\" by Smedley Butler, an American general. He said, \"Looking back on it, I might have given Al Capone a few hints. The best he could do was to operate his racket in three districts. I operated on three continents\".",
+    "context_id": "ctx_1920",
+    "title": "Imperialism"
+  },
+  {
+    "id": "5737534ec3c5551400e51eab",
+    "question": "When forces are from the presence of differnet objects, what law gives symmetry?",
+    "ground_truth": "Newton's Third",
+    "all_answers": [
+      "Newton's Third",
+      "Newton's Third Law",
+      "Newton's Third Law",
+      "Newton's Third Law",
+      "Newton's Third Law"
+    ],
+    "reference_context": "Newton's Third Law is a result of applying symmetry to situations where forces can be attributed to the presence of different objects. The third law means that all forces are interactions between different bodies,[Note 3] and thus that there is no such thing as a unidirectional force or a force that acts on only one body. Whenever a first body exerts a force F on a second body, the second body exerts a force \u2212F on the first body. F and \u2212F are equal in magnitude and opposite in direction. This law is sometimes referred to as the action-reaction law, with F called the \"action\" and \u2212F the \"reaction\". The action and the reaction are simultaneous:",
+    "context_id": "ctx_2031",
+    "title": "Force"
+  },
+  {
+    "id": "5706155352bb891400689896",
+    "question": "What is rugby rapidly becoming with high schools?",
+    "ground_truth": "an official school sport",
+    "all_answers": [
+      "an official school sport",
+      "an official school",
+      "official school sport"
+    ],
+    "reference_context": "Rugby is also a growing sport in southern California, particularly at the high school level, with increasing numbers of schools adding rugby as an official school sport.",
+    "context_id": "ctx_0482",
+    "title": "Southern_California"
+  },
+  {
+    "id": "5729645b3f37b31900478321",
+    "question": "What do apicoplasts synthesize?",
+    "ground_truth": "fatty acids, isopentenyl pyrophosphate, iron-sulfur clusters",
+    "all_answers": [
+      "fatty acids, isopentenyl pyrophosphate, iron-sulfur clusters",
+      "fatty acids, isopentenyl pyrophosphate, iron-sulfur clusters",
+      "fatty acids, isopentenyl pyrophosphate, iron-sulfur clusters"
+    ],
+    "reference_context": "Apicoplasts have lost all photosynthetic function, and contain no photosynthetic pigments or true thylakoids. They are bounded by four membranes, but the membranes are not connected to the endoplasmic reticulum. The fact that apicomplexans still keep their nonphotosynthetic chloroplast around demonstrates how the chloroplast carries out important functions other than photosynthesis. Plant chloroplasts provide plant cells with many important things besides sugar, and apicoplasts are no different\u2014they synthesize fatty acids, isopentenyl pyrophosphate, iron-sulfur clusters, and carry out part of the heme pathway. This makes the apicoplast an attractive target for drugs to cure apicomplexan-related diseases. The most important apicoplast function is isopentenyl pyrophosphate synthesis\u2014in fact, apicomplexans die when something interferes with this apicoplast function, and when apicomplexans are grown in an isopentenyl pyrophosphate-rich medium, they dump the organelle.",
+    "context_id": "ctx_1683",
+    "title": "Chloroplast"
+  },
+  {
+    "id": "5725e36f89a1e219009ac03c",
+    "question": "What day did the Apollo 11 crew return to Earth?",
+    "ground_truth": "July 24",
+    "all_answers": [
+      "July 24",
+      "July 24.",
+      "July 24",
+      "July 24",
+      "July 24"
+    ],
+    "reference_context": "The G mission was achieved on Apollo 11 in July 1969 by an all-Gemini veteran crew consisting of Neil Armstrong, Michael Collins and Buzz Aldrin. Armstrong and Aldrin performed the first landing at the Sea of Tranquility at 20:17:40 UTC on July 20, 1969. They spent a total of 21 hours, 36 minutes on the surface, and spent 2 hours, 31 minutes outside the spacecraft, walking on the surface, taking photographs, collecting material samples, and deploying automated scientific instruments, while continuously sending black-and-white television back to Earth. The astronauts returned safely on July 24.",
+    "context_id": "ctx_0730",
+    "title": "Apollo_program"
+  },
+  {
+    "id": "5705f09e75f01819005e77a4",
+    "question": "Other than land laws, what else were the Californios dissatisfied with?",
+    "ground_truth": "inequitable taxes",
+    "all_answers": [
+      "inequitable taxes",
+      "inequitable taxes",
+      "inequitable taxes"
+    ],
+    "reference_context": "Subsequently, Californios (dissatisfied with inequitable taxes and land laws) and pro-slavery southerners in the lightly populated \"Cow Counties\" of southern California attempted three times in the 1850s to achieve a separate statehood or territorial status separate from Northern California. The last attempt, the Pico Act of 1859, was passed by the California State Legislature and signed by the State governor John B. Weller. It was approved overwhelmingly by nearly 75% of voters in the proposed Territory of Colorado. This territory was to include all the counties up to the then much larger Tulare County (that included what is now Kings, most of Kern, and part of Inyo counties) and San Luis Obispo County. The proposal was sent to Washington, D.C. with a strong advocate in Senator Milton Latham. However, the secession crisis following the election of Abraham Lincoln in 1860 led to the proposal never coming to a vote.",
+    "context_id": "ctx_0455",
+    "title": "Southern_California"
+  },
+  {
+    "id": "572a12381d0469140077972f",
+    "question": "When was a study conducted of Swedish counties?",
+    "ground_truth": "between 1960 and 2000",
+    "all_answers": [
+      "between 1960 and 2000",
+      "between 1960 and 2000",
+      "between 1960 and 2000"
+    ],
+    "reference_context": "Research by Harvard economist Robert Barro, found that there is \"little overall relation between income inequality and rates of growth and investment\". According to work by Barro in 1999 and 2000, high levels of inequality reduce growth in relatively poor countries but encourage growth in richer countries. A study of Swedish counties between 1960 and 2000 found a positive impact of inequality on growth with lead times of five years or less, but no correlation after ten years. Studies of larger data sets have found no correlations for any fixed lead time, and a negative impact on the duration of growth.",
+    "context_id": "ctx_1432",
+    "title": "Economic_inequality"
+  },
+  {
+    "id": "5726c61ff1498d1400e8eae3",
+    "question": "How did Genghis Khan observed the surrender terms after Samarkand fell?",
+    "ground_truth": "reneged",
+    "all_answers": [
+      "reneged",
+      "reneged",
+      "executed every soldier"
+    ],
+    "reference_context": "The Mongols attacked Samarkand using captured enemies as body shields. After several days only a few remaining soldiers, loyal supporters of the Shah, held out in the citadel. After the fortress fell, Genghis supposedly reneged on his surrender terms and executed every soldier that had taken arms against him at Samarkand. The people of Samarkand were ordered to evacuate and assemble in a plain outside the city, where they were killed and pyramids of severed heads raised as a symbol of victory. Ata-Malik Juvayni, a high official in the service of the Mongol empire, wrote that in Termez, on the Oxus, \"all the people, both men and women, were driven out onto the plain, and divided in accordance with their usual custom, then they were all slain\".",
+    "context_id": "ctx_1170",
+    "title": "Genghis_Khan"
+  },
+  {
+    "id": "5729f0db6aef051400155129",
+    "question": "How many reptiles have been discovered in the Amazon region?",
+    "ground_truth": "378",
+    "all_answers": [
+      "378",
+      "378",
+      "378"
+    ],
+    "reference_context": "The region is home to about 2.5 million insect species, tens of thousands of plants, and some 2,000 birds and mammals. To date, at least 40,000 plant species, 2,200 fishes, 1,294 birds, 427 mammals, 428 amphibians, and 378 reptiles have been scientifically classified in the region. One in five of all the bird species in the world live in the rainforests of the Amazon, and one in five of the fish species live in Amazonian rivers and streams. Scientists have described between 96,660 and 128,843 invertebrate species in Brazil alone.",
+    "context_id": "ctx_0793",
+    "title": "Amazon_rainforest"
+  },
+  {
+    "id": "5737898f1c45671900574496",
+    "question": "What planet did astrophysisist predict to explain the problems with Mercury?",
+    "ground_truth": "Vulcan",
+    "all_answers": [
+      "Vulcan",
+      "Vulcan",
+      "Vulcan",
+      "Vulcan"
+    ],
+    "reference_context": "It was only the orbit of the planet Mercury that Newton's Law of Gravitation seemed not to fully explain. Some astrophysicists predicted the existence of another planet (Vulcan) that would explain the discrepancies; however, despite some early indications, no such planet could be found. When Albert Einstein formulated his theory of general relativity (GR) he turned his attention to the problem of Mercury's orbit and found that his theory added a correction, which could account for the discrepancy. This was the first time that Newton's Theory of Gravity had been shown to be less correct than an alternative.",
+    "context_id": "ctx_2049",
+    "title": "Force"
+  },
+  {
+    "id": "5729a26d6aef05140015505a",
+    "question": "What happens to the norm when a number is multiplied by p?",
+    "ground_truth": "norm gets smaller",
+    "all_answers": [
+      "norm gets smaller",
+      "gets smaller",
+      "gets smaller",
+      "gets smaller"
+    ],
+    "reference_context": "In particular, this norm gets smaller when a number is multiplied by p, in sharp contrast to the usual absolute value (also referred to as the infinite prime). While completing Q (roughly, filling the gaps) with respect to the absolute value yields the field of real numbers, completing with respect to the p-adic norm |\u2212|p yields the field of p-adic numbers. These are essentially all possible ways to complete Q, by Ostrowski's theorem. Certain arithmetic questions related to Q or more general global fields may be transferred back and forth to the completed (or local) fields. This local-global principle again underlines the importance of primes to number theory.",
+    "context_id": "ctx_1762",
+    "title": "Prime_number"
+  },
+  {
+    "id": "571caac55efbb31900334dc7",
+    "question": "By what means were scientists able to liquefy air?",
+    "ground_truth": "compressing and cooling",
+    "all_answers": [
+      "compressing and cooling",
+      "compressing and cooling",
+      "cascade method",
+      "compressing and cooling it",
+      "compressing and cooling"
+    ],
+    "reference_context": "By the late 19th century scientists realized that air could be liquefied, and its components isolated, by compressing and cooling it. Using a cascade method, Swiss chemist and physicist Raoul Pierre Pictet evaporated liquid sulfur dioxide in order to liquefy carbon dioxide, which in turn was evaporated to cool oxygen gas enough to liquefy it. He sent a telegram on December 22, 1877 to the French Academy of Sciences in Paris announcing his discovery of liquid oxygen. Just two days later, French physicist Louis Paul Cailletet announced his own method of liquefying molecular oxygen. Only a few drops of the liquid were produced in either case so no meaningful analysis could be conducted. Oxygen was liquified in stable state for the first time on March 29, 1883 by Polish scientists from Jagiellonian University, Zygmunt Wr\u00f3blewski and Karol Olszewski.",
+    "context_id": "ctx_0639",
+    "title": "Oxygen"
+  },
+  {
+    "id": "572687e1dd62a815002e8854",
+    "question": "What's the name of Newcastle's speedway team?",
+    "ground_truth": "Newcastle Diamonds",
+    "all_answers": [
+      "Newcastle Diamonds",
+      "Newcastle Diamonds",
+      "Newcastle Diamonds"
+    ],
+    "reference_context": "Newcastle has a horse racing course at Gosforth Park. The city is also home to the Newcastle Eagles basketball team who play their home games at the new Sport Central complex at Northumbria University. The Eagles are the most successful team in the history of the British Basketball League (BBL). The city's speedway team Newcastle Diamonds are based at Brough Park in Byker, a venue that is also home to greyhound racing. Newcastle also hosts the start of the annual Great North Run, the world's largest half-marathon in which participants race over the Tyne Bridge into Gateshead and then towards the finish line 13.1 miles (21.1 km) away on the coast at South Shields. Another famous athletic event is the 5.9-mile (9.5 km) Blaydon Race (a road race from Newcastle to Blaydon), which has taken place on 9 June annually since 1981, to commemorate the celebrated Blaydon Races horse racing.",
+    "context_id": "ctx_0971",
+    "title": "Newcastle_upon_Tyne"
+  },
+  {
+    "id": "57332442d058e614000b5722",
+    "question": "Who was Warsz?",
+    "ground_truth": "12th/13th-century nobleman",
+    "all_answers": [
+      "12th/13th-century nobleman",
+      "shortened form of the masculine name of Slavic origin Warcis\u0142aw",
+      "nobleman"
+    ],
+    "reference_context": "Warsaw's name in the Polish language is Warszawa, approximately /v\u0251\u02d0r\u02c8\u0283\u0251\u02d0v\u0259/ (also formerly spelled Warszewa and Warszowa), meaning \"belonging to Warsz\", Warsz being a shortened form of the masculine name of Slavic origin Warcis\u0142aw; see also etymology of Wroc\u0142aw. Folk etymology attributes the city name to a fisherman, Wars, and his wife, Sawa. According to legend, Sawa was a mermaid living in the Vistula River with whom Wars fell in love. In actuality, Warsz was a 12th/13th-century nobleman who owned a village located at the modern-day site of Mariensztat neighbourhood. See also the Vr\u0161ovci family which had escaped to Poland. The official city name in full is miasto sto\u0142eczne Warszawa (English: \"The Capital City of Warsaw\"). A native or resident of Warsaw is known as a Varsovian \u2013 in Polish warszawiak (male), warszawianka (female), warszawiacy (plural).",
+    "context_id": "ctx_0075",
+    "title": "Warsaw"
+  },
+  {
+    "id": "5726241189a1e219009ac2de",
+    "question": "What has a negative influence over the US economy?",
+    "ground_truth": "The embargo",
+    "all_answers": [
+      "The embargo",
+      "The embargo",
+      "The embargo",
+      "The embargo",
+      "embargo"
+    ],
+    "reference_context": "The embargo had a negative influence on the US economy by causing immediate demands to address the threats to U.S. energy security. On an international level, the price increases changed competitive positions in many industries, such as automobiles. Macroeconomic problems consisted of both inflationary and deflationary impacts. The embargo left oil companies searching for new ways to increase oil supplies, even in rugged terrain such as the Arctic. Finding oil and developing new fields usually required five to ten years before significant production.",
+    "context_id": "ctx_0671",
+    "title": "1973_oil_crisis"
+  },
+  {
+    "id": "56bec0353aeaaa14008c934e",
+    "question": "The \"50\" given to the Super Bowl winner is plated with how many karats of gold?",
+    "ground_truth": "18",
+    "all_answers": [
+      "18",
+      "18",
+      "18"
+    ],
+    "reference_context": "In addition to the Vince Lombardi Trophy that all Super Bowl champions receive, the winner of Super Bowl 50 will also receive a large, 18-karat gold-plated \"50\". Each digit will weigh 33 lb (15 kg) for a total of 66 lb (30 kg). Like the Lombardi Trophy, the \"50\" will be designed by Tiffany & Co.",
+    "context_id": "ctx_0031",
+    "title": "Super_Bowl_50"
+  },
+  {
+    "id": "57266ab3dd62a815002e8435",
+    "question": "Who was Cromwell's allies?",
+    "ground_truth": "the Scots",
+    "all_answers": [
+      "the Scots",
+      "the Scots",
+      "the Scots"
+    ],
+    "reference_context": "During the English Civil War, the North declared for the King. In a bid to gain Newcastle and the Tyne, Cromwell's allies, the Scots, captured the town of Newburn. In 1644 the Scots then captured the reinforced fortification on the Lawe in South Shields following a siege. In 1644 the city was then besieged for many months and was eventually stormed ('with roaring drummes') and sacked by Cromwell's allies. The grateful King bestowed the motto \"Fortiter Defendit Triumphans\" (\"Triumphing by a brave defence\") upon the town. Charles I was imprisoned in Newcastle by the Scots in 1646\u20137.",
+    "context_id": "ctx_0942",
+    "title": "Newcastle_upon_Tyne"
+  },
+  {
+    "id": "5729f06f1d04691400779675",
+    "question": "Missing self desribes cells that only have small amounts of what cell-surface marker?",
+    "ground_truth": "MHC I (major histocompatibility complex)",
+    "all_answers": [
+      "MHC I (major histocompatibility complex)",
+      "MHC I",
+      "MHC I (major histocompatibility complex)"
+    ],
+    "reference_context": "Natural killer cells, or NK cells, are a component of the innate immune system which does not directly attack invading microbes. Rather, NK cells destroy compromised host cells, such as tumor cells or virus-infected cells, recognizing such cells by a condition known as \"missing self.\" This term describes cells with low levels of a cell-surface marker called MHC I (major histocompatibility complex) \u2013 a situation that can arise in viral infections of host cells. They were named \"natural killer\" because of the initial notion that they do not require activation in order to kill cells that are \"missing self.\" For many years it was unclear how NK cells recognize tumor cells and infected cells. It is now known that the MHC makeup on the surface of those cells is altered and the NK cells become activated through recognition of \"missing self\". Normal body cells are not recognized and attacked by NK cells because they express intact self MHC antigens. Those MHC antigens are recognized by killer cell immunoglobulin receptors (KIR) which essentially put the brakes on NK cells.",
+    "context_id": "ctx_1241",
+    "title": "Immune_system"
+  },
+  {
+    "id": "572847dd4b864d19001648bd",
+    "question": "What well-known archeologist believed the Amazon didn't have many inhabitants?",
+    "ground_truth": "Betty Meggers",
+    "all_answers": [
+      "Betty Meggers",
+      "Betty Meggers",
+      "Betty Meggers"
+    ],
+    "reference_context": "For a long time, it was thought that the Amazon rainforest was only ever sparsely populated, as it was impossible to sustain a large population through agriculture given the poor soil. Archeologist Betty Meggers was a prominent proponent of this idea, as described in her book Amazonia: Man and Culture in a Counterfeit Paradise. She claimed that a population density of 0.2 inhabitants per square kilometre (0.52/sq mi) is the maximum that can be sustained in the rainforest through hunting, with agriculture needed to host a larger population. However, recent anthropological findings have suggested that the region was actually densely populated. Some 5 million people may have lived in the Amazon region in AD 1500, divided between dense coastal settlements, such as that at Maraj\u00f3, and inland dwellers. By 1900 the population had fallen to 1 million and by the early 1980s it was less than 200,000.",
+    "context_id": "ctx_0790",
+    "title": "Amazon_rainforest"
+  },
+  {
+    "id": "56de0ed14396321400ee257b",
+    "question": "What kind of bureaucracy did the Normans institute?",
+    "ground_truth": "meritocratic",
+    "all_answers": [
+      "meritocratic",
+      "meritocratic",
+      "meritocratic"
+    ],
+    "reference_context": "Institutionally, the Normans combined the administrative machinery of the Byzantines, Arabs, and Lombards with their own conceptions of feudal law and order to forge a unique government. Under this state, there was great religious freedom, and alongside the Norman nobles existed a meritocratic bureaucracy of Jews, Muslims and Christians, both Catholic and Eastern Orthodox. The Kingdom of Sicily thus became characterized by Norman, Byzantine Greek, Arab, Lombard and \"native\" Sicilian populations living in harmony, and its Norman rulers fostered plans of establishing an Empire that would have encompassed Fatimid Egypt as well as the Crusader states in the Levant. One of the great geographical treatises of the Middle Ages, the \"Tabula Rogeriana\", was written by the Andalusian al-Idrisi for king Roger II of Sicily, and entitled \"Kitab Rudjdjar\" (\"The Book of Roger\").",
+    "context_id": "ctx_0113",
+    "title": "Normans"
+  },
+  {
+    "id": "5711658e50c2381900b54ad8",
+    "question": "Other than warships, what ships typically required high speeds?",
+    "ground_truth": "ocean liners",
+    "all_answers": [
+      "ocean liners",
+      "ocean liners",
+      "ocean liners"
+    ],
+    "reference_context": "Land-based steam engines could exhaust much of their steam, as feed water was usually readily available. Prior to and during World War I, the expansion engine dominated marine applications where high vessel speed was not essential. It was however superseded by the British invention steam turbine where speed was required, for instance in warships, such as the dreadnought battleships, and ocean liners. HMS Dreadnought of 1905 was the first major warship to replace the proven technology of the reciprocating engine with the then-novel steam turbine.[citation needed]",
+    "context_id": "ctx_0617",
+    "title": "Steam_engine"
+  },
+  {
+    "id": "572ff4ca04bcaa1900d76f25",
+    "question": "Where does two thirds of the Rhine flow outside of Germany?",
+    "ground_truth": "Waal",
+    "all_answers": [
+      "Waal",
+      "Waal",
+      "through the Waal"
+    ],
+    "reference_context": "From here, the situation becomes more complicated, as the Dutch name Rijn no longer coincides with the main flow of water. Two thirds of the water flow volume of the Rhine flows farther west, through the Waal and then, via the Merwede and Nieuwe Merwede (De Biesbosch), merging with the Meuse, through the Hollands Diep and Haringvliet estuaries, into the North Sea. The Beneden Merwede branches off, near Hardinxveld-Giessendam and continues as the Noord, to join the Lek, near the village of Kinderdijk, to form the Nieuwe Maas; then flows past Rotterdam and continues via Het Scheur and the Nieuwe Waterweg, to the North Sea. The Oude Maas branches off, near Dordrecht, farther down rejoining the Nieuwe Maas to form Het Scheur.",
+    "context_id": "ctx_1780",
+    "title": "Rhine"
+  },
+  {
+    "id": "572666d9dd62a815002e83b7",
+    "question": "What was the name of the King of the Scots?",
+    "ground_truth": "William the Lion",
+    "all_answers": [
+      "William the Lion",
+      "William the Lion",
+      "William the Lion"
+    ],
+    "reference_context": "Throughout the Middle Ages, Newcastle was England's northern fortress. Incorporated first by Henry II, the city had a new charter granted by Elizabeth in 1589. A 25-foot (7.6 m) high stone wall was built around the town in the 13th century, to defend it from invaders during the Border war against Scotland. The Scots king William the Lion was imprisoned in Newcastle in 1174, and Edward I brought the Stone of Scone and William Wallace south through the town. Newcastle was successfully defended against the Scots three times during the 14th century, and was created a county corporate with its own sheriff by Henry IV in 1400.",
+    "context_id": "ctx_0939",
+    "title": "Newcastle_upon_Tyne"
+  },
+  {
+    "id": "571a49de4faf5e1900b8a94a",
+    "question": "Oxygen is released in cellular respiration by?",
+    "ground_truth": "photosynthesis",
+    "all_answers": [
+      "photosynthesis",
+      "photosynthesis",
+      "photosynthesis",
+      "photosynthesis",
+      "photosynthesis"
+    ],
+    "reference_context": "Many major classes of organic molecules in living organisms, such as proteins, nucleic acids, carbohydrates, and fats, contain oxygen, as do the major inorganic compounds that are constituents of animal shells, teeth, and bone. Most of the mass of living organisms is oxygen as it is a part of water, the major constituent of lifeforms. Oxygen is used in cellular respiration and released by photosynthesis, which uses the energy of sunlight to produce oxygen from water. It is too chemically reactive to remain a free element in air without being continuously replenished by the photosynthetic action of living organisms. Another form (allotrope) of oxygen, ozone (O\n3), strongly absorbs UVB radiation and consequently the high-altitude ozone layer helps protect the biosphere from ultraviolet radiation, but is a pollutant near the surface where it is a by-product of smog. At even higher low earth orbit altitudes, sufficient atomic oxygen is present to cause erosion for spacecraft.",
+    "context_id": "ctx_0621",
+    "title": "Oxygen"
+  },
+  {
+    "id": "57286c8cff5b5019007da21a",
+    "question": "When did the Jin dynasty end?",
+    "ground_truth": "1234",
+    "all_answers": [
+      "1234",
+      "1234",
+      "1234"
+    ],
+    "reference_context": "During the Southern Song dynasty the descendant of Confucius at Qufu, the Duke Yansheng Kong Duanyou fled south with the Song Emperor to Quzhou, while the newly established Jin dynasty (1115\u20131234) in the north appointed Kong Duanyou's brother Kong Duancao who remained in Qufu as Duke Yansheng. From that time up until the Yuan dynasty, there were two Duke Yanshengs, once in the north in Qufu and the other in the south at Quzhou. During the Yuan dynasty, the Emperor Kublai Khan invited the southern Duke Yansheng Kong Zhu to return to Qufu. Kong Zhu refused, and gave up the title, so the northern branch of the family kept the title of Duke Yansheng. The southern branch still remained in Quzhou where they lived to this day. Confucius's descendants in Quzhou alone number 30,000. During the Yuan dynasty, one of Confucius' descendants moved from China to Goryeo era Korea and established a branch of the family there after marrying a Korean woman.",
+    "context_id": "ctx_1556",
+    "title": "Yuan_dynasty"
+  }
+]

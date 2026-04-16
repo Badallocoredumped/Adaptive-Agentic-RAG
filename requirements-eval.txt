@@ -1,0 +1,7 @@
+# Evaluation-only dependencies — not required to run the main system.
+# Install with: pip install -r requirements-eval.txt
+-r requirements.txt
+
+datasets>=2.19.0
+langchain-google-genai>=1.0.0
+ragas>=0.1.0
