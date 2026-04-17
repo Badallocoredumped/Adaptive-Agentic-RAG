@@ -1,0 +1,1518 @@
+[
+  {
+    "question": "How might gravity effects be observed differently according to Newton?",
+    "answer": "At larger distances.",
+    "ground_truth": "at larger distances.",
+    "all_answers": [
+      "at larger distances.",
+      "at larger distances",
+      "at larger distances",
+      "at larger distances"
+    ],
+    "retrieved_contexts": [
+      "Newton's Third Law is a result of applying symmetry to situations where forces can be attributed to the presence of different objects. The third law means that all forces are interactions between different bodies,[Note 3] and thus that there is no such thing as a unidirectional force or a force that acts on only one body. Whenever a first body exerts a force F on a second body, the second body exerts a force −F on the first body. F and −F are equal in magnitude and opposite in direction",
+      "It was only the orbit of the planet Mercury that Newton's Law of Gravitation seemed not to fully explain. Some astrophysicists predicted the existence of another planet (Vulcan) that would explain the discrepancies; however, despite some early indications, no such planet could be found",
+      "Newton came to realize that the effects of gravity might be observed in different ways at larger distances. In particular, Newton determined that the acceleration of the Moon around the Earth could be ascribed to the same force of gravity if the acceleration due to gravity decreased as an inverse square law. Further, Newton realized that the acceleration due to gravity is proportional to the mass of the attracting body",
+      "In this equation, a dimensional constant  is used to describe the relative strength of gravity. This constant has come to be known as Newton's Universal Gravitation Constant, though its value was unknown in Newton's lifetime. Not until 1798 was Henry Cavendish able to make the first measurement of  using a torsion balance; this was widely reported in the press as a measurement of the mass of the Earth since knowing  could allow one to solve for the Earth's mass given the above equation",
+      "Newton's First Law of Motion states that objects continue to move in a state of constant velocity unless acted upon by an external net force or resultant force. This law is an extension of Galileo's insight that constant velocity was associated with a lack of net force (see a more detailed description of this below)"
+    ],
+    "reference_contexts": [
+      "Newton came to realize that the effects of gravity might be observed in different ways at larger distances. In particular, Newton determined that the acceleration of the Moon around the Earth could be ascribed to the same force of gravity if the acceleration due to gravity decreased as an inverse square law. Further, Newton realized that the acceleration due to gravity is proportional to the mass of the attracting body. Combining these ideas gives a formula that relates the mass () and the radius () of the Earth to the gravitational acceleration:"
+    ],
+    "context_id": "ctx_2047",
+    "retrieved_sources": [
+      "ctx_2031",
+      "ctx_2049",
+      "ctx_2047",
+      "ctx_2048",
+      "ctx_2027"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Force"
+  },
+  {
+    "question": "What is the prize offered for finding a solution to P=NP?",
+    "answer": "US$1,000,000",
+    "ground_truth": "$1,000,000",
+    "all_answers": [
+      "$1,000,000",
+      "US$1,000,000",
+      "US$1,000,000"
+    ],
+    "retrieved_contexts": [
+      ". The P versus NP problem is one of the Millennium Prize Problems proposed by the Clay Mathematics Institute. There is a US$1,000,000 prize for resolving the problem.",
+      ". Because the problem P = NP is not solved, being able to reduce a known NP-complete problem, Π2, to another problem, Π1, would indicate that there is no known polynomial-time solution for Π1. This is because a polynomial-time solution to Π1 would yield a polynomial-time solution to Π2. Similarly, because all NP problems can be reduced to the set, finding an NP-complete problem that can be solved in polynomial time would mean that P = NP.",
+      "The question of whether P equals NP is one of the most important open questions in theoretical computer science because of the wide implications of a solution. If the answer is yes, many important problems can be shown to have more efficient solutions. These include various types of integer programming problems in operations research, many problems in logistics, protein structure prediction in biology, and the ability to find formal proofs of pure mathematics theorems",
+      "The following table gives the largest known primes of the mentioned types. Some of these primes have been found using distributed computing. In 2009, the Great Internet Mersenne Prime Search project was awarded a US$100,000 prize for first discovering a prime with at least 10 million digits. The Electronic Frontier Foundation also offers $150,000 and $250,000 for primes with at least 100 million digits and 1 billion digits, respectively",
+      ". For complexity classes larger than P, polynomial-time reductions are commonly used. In particular, the set of problems that are hard for NP is the set of NP-hard problems."
+    ],
+    "reference_contexts": [
+      "The question of whether P equals NP is one of the most important open questions in theoretical computer science because of the wide implications of a solution. If the answer is yes, many important problems can be shown to have more efficient solutions. These include various types of integer programming problems in operations research, many problems in logistics, protein structure prediction in biology, and the ability to find formal proofs of pure mathematics theorems. The P versus NP problem is one of the Millennium Prize Problems proposed by the Clay Mathematics Institute. There is a US$1,000,000 prize for resolving the problem."
+    ],
+    "context_id": "ctx_0274",
+    "retrieved_sources": [
+      "ctx_0274",
+      "ctx_0272",
+      "ctx_0274",
+      "ctx_1746",
+      "ctx_0271"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Computational_complexity_theory"
+  },
+  {
+    "question": "What color were the Bronco's uniforms in Super Bowl 50?",
+    "answer": "White",
+    "ground_truth": "white",
+    "all_answers": [
+      "white",
+      "matching white jerseys",
+      "white"
+    ],
+    "retrieved_contexts": [
+      ". The Broncos' decision to wear white meant the Panthers would wear their standard home uniform: black jerseys with silver pants.",
+      "Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California",
+      "As the designated home team in the annual rotation between AFC and NFC teams, the Broncos elected to wear their road white jerseys with matching white pants. Elway stated, \"We've had Super Bowl success in our white uniforms.\" The Broncos last wore matching white jerseys and pants in the Super Bowl in Super Bowl XXXIII, Elway's last game as Denver QB, when they defeated the Atlanta Falcons 34–19",
+      "Super Bowl 50 featured numerous records from individuals and teams. Denver won despite being massively outgained in total yards (315 to 194) and first downs (21 to 11). Their 194 yards and 11 first downs were both the lowest totals ever by a Super Bowl winning team. The previous record was 244 yards by the Baltimore Ravens in Super Bowl XXXV. Only seven other teams had ever gained less than 200 yards in a Super Bowl, and all of them had lost",
+      "The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 2½ sacks, and two forced fumbles."
+    ],
+    "reference_contexts": [
+      "As the designated home team in the annual rotation between AFC and NFC teams, the Broncos elected to wear their road white jerseys with matching white pants. Elway stated, \"We've had Super Bowl success in our white uniforms.\" The Broncos last wore matching white jerseys and pants in the Super Bowl in Super Bowl XXXIII, Elway's last game as Denver QB, when they defeated the Atlanta Falcons 34–19. In their only other Super Bowl win in Super Bowl XXXII, Denver wore blue jerseys, which was their primary color at the time. They also lost Super Bowl XXI when they wore white jerseys, but they are 0-4 in Super Bowls when wearing orange jerseys, losing in Super Bowl XII, XXII, XXIV, and XLVIII. The only other AFC champion team to have worn white as the designated home team in the Super Bowl was the Pittsburgh Steelers; they defeated the Seattle Seahawks 21–10 in Super Bowl XL 10 seasons prior. The Broncos' decision to wear white meant the Panthers would wear their standard home uniform: black jerseys with silver pants."
+    ],
+    "context_id": "ctx_0022",
+    "retrieved_sources": [
+      "ctx_0022",
+      "ctx_0000",
+      "ctx_0022",
+      "ctx_0053",
+      "ctx_0002"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Super_Bowl_50"
+  },
+  {
+    "question": "What are the little tentacles that cydippids have called?",
+    "answer": "Tentilla",
+    "ground_truth": "tentilla",
+    "all_answers": [
+      "tentilla",
+      "tentilla",
+      "tentilla"
+    ],
+    "retrieved_contexts": [
+      "The tentacles of cydippid ctenophores are typically fringed with tentilla (\"little tentacles\"), although a few genera have simple tentacles without these sidebranches. The tentacles and tentilla are densely covered with microscopic colloblasts that capture prey by sticking to it",
+      "Cydippid ctenophores have bodies that are more or less rounded, sometimes nearly spherical and other times more cylindrical or egg-shaped; the common coastal \"sea gooseberry,\" Pleurobrachia, sometimes has an egg-shaped body with the mouth at the narrow end, although some individuals are more uniformly round. From opposite sides of the body extends a pair of long, slender tentacles, each housed in a sheath into which it can be withdrawn",
+      "Since all modern ctenophores except the beroids have cydippid-like larvae, it has widely been assumed that their last common ancestor also resembled cydippids, having an egg-shaped body and a pair of retractable tentacles. Richard Harbison's purely morphological analysis in 1985 concluded that the cydippids are not monophyletic, in other words do not contain all and only the descendants of a single common ancestor that was itself a cydippid",
+      ". The textbook examples are cydippids with egg-shaped bodies and a pair of retractable tentacles fringed with tentilla (\"little tentacles\") that are covered with colloblasts, sticky cells that capture prey",
+      ". Some species of cydippids have bodies that are flattened to various extents, so that they are wider in the plane of the tentacles."
+    ],
+    "reference_contexts": [
+      "Almost all ctenophores are predators, taking prey ranging from microscopic larvae and rotifers to the adults of small crustaceans; the exceptions are juveniles of two species, which live as parasites on the salps on which adults of their species feed. In favorable circumstances, ctenophores can eat ten times their own weight in a day. Only 100–150 species have been validated, and possibly another 25 have not been fully described and named. The textbook examples are cydippids with egg-shaped bodies and a pair of retractable tentacles fringed with tentilla (\"little tentacles\") that are covered with colloblasts, sticky cells that capture prey. The phylum has a wide range of body forms, including the flattened, deep-sea platyctenids, in which the adults of most species lack combs, and the coastal beroids, which lack tentacles and prey on other ctenophores by using huge mouths armed with groups of large, stiffened cilia that act as teeth. These variations enable different species to build huge populations in the same area, because they specialize in different types of prey, which they capture by as wide a range of methods as spiders use."
+    ],
+    "context_id": "ctx_0807",
+    "retrieved_sources": [
+      "ctx_0820",
+      "ctx_0819",
+      "ctx_0836",
+      "ctx_0807",
+      "ctx_0819"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Ctenophora"
+  },
+  {
+    "question": "Which lunar probe was near the Apollo 12 crew's landing site?",
+    "answer": "Surveyor 3",
+    "ground_truth": "Surveyor 3",
+    "all_answers": [
+      "Surveyor 3",
+      "Surveyor 3",
+      "Surveyor 3",
+      "Surveyor 3",
+      "Surveyor 3"
+    ],
+    "retrieved_contexts": [
+      "In November 1969, Gemini veteran Charles \"Pete\" Conrad and rookie Alan L. Bean made a precision landing on Apollo 12 within walking distance of the Surveyor 3 unmanned lunar probe, which had landed in April 1967 on the Ocean of Storms. The Command Module Pilot was Gemini veteran Richard F. Gordon, Jr. Conrad and Bean carried the first lunar surface color television camera, but it was damaged when accidentally pointed into the Sun. They made two EVAs totaling 7 hours and 45 minutes",
+      "The Apollo astronauts were chosen from the Project Mercury and Gemini veterans, plus from two later astronaut groups. All missions were commanded by Gemini or Mercury veterans. Crews on all development flights (except the Earth orbit CSM development flights) through the first two landings on Apollo 11 and Apollo 12, included at least two (sometimes three) Gemini veterans. Dr",
+      "It also became clear that Apollo would outgrow the Canaveral launch facilities in Florida. The two newest launch complexes were already being built for the Saturn I and IB rockets at the northernmost end: LC-34 and LC-37. But an even bigger facility would be needed for the mammoth rocket required for the manned lunar mission, so land acquisition was started in July 1961 for a Launch Operations Center (LOC) immediately north of Canaveral at Merritt Island",
+      "In 2008, Japan Aerospace Exploration Agency's SELENE probe observed evidence of the halo surrounding the Apollo 15 Lunar Module blast crater while orbiting above the lunar surface. In 2009, NASA's robotic Lunar Reconnaissance Orbiter, while orbiting 50 kilometers (31 mi) above the Moon, began photographing the remnants of the Apollo program left on the lunar surface, and photographed each site where manned Apollo flights landed. All of the U. S",
+      "With a budget of $230,000, the surviving original lunar broadcast data from Apollo 11 was compiled by Nafzger and assigned to Lowry Digital for restoration. The video was processed to remove random noise and camera shake without destroying historical legitimacy. The images were from tapes in Australia, the CBS News archive, and kinescope recordings made at Johnson Space Center"
+    ],
+    "reference_contexts": [
+      "In November 1969, Gemini veteran Charles \"Pete\" Conrad and rookie Alan L. Bean made a precision landing on Apollo 12 within walking distance of the Surveyor 3 unmanned lunar probe, which had landed in April 1967 on the Ocean of Storms. The Command Module Pilot was Gemini veteran Richard F. Gordon, Jr. Conrad and Bean carried the first lunar surface color television camera, but it was damaged when accidentally pointed into the Sun. They made two EVAs totaling 7 hours and 45 minutes. On one, they walked to the Surveyor, photographed it, and removed some parts which they returned to Earth."
+    ],
+    "context_id": "ctx_0731",
+    "retrieved_sources": [
+      "ctx_0731",
+      "ctx_0715",
+      "ctx_0697",
+      "ctx_0740",
+      "ctx_0743"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Apollo_program"
+  },
+  {
+    "question": "Electrolysis of what can be used to produce oxygen and hydrogen?",
+    "answer": "Water",
+    "ground_truth": "water",
+    "all_answers": [
+      "water",
+      "water",
+      "water",
+      "water"
+    ],
+    "retrieved_contexts": [
+      "Oxygen gas can also be produced through electrolysis of water into molecular oxygen and hydrogen. DC electricity must be used: if AC is used, the gases in each limb consist of hydrogen and oxygen in the explosive ratio 2:1. Contrary to popular belief, the 2:1 ratio observed in the DC electrolysis of acidified water does not prove that the empirical formula of water is H2O unless certain assumptions are made about the molecular formulae of hydrogen and oxygen themselves",
+      "2 evolution from oxides and oxoacids. Chemical catalysts can be used as well, such as in chemical oxygen generators or oxygen candles that are used as part of the life-support equipment on submarines, and are still part of standard equipment on commercial airliners in case of depressurization emergencies. Another air separation technology involves forcing air to dissolve through ceramic membranes based on zirconium dioxide by either high pressure or an electric current, to produce nearly pure O",
+      ". Common uses of oxygen includes the production cycle of steel, plastics and textiles, brazing, welding and cutting of steels and other metals, rocket propellant, in oxygen therapy and life support systems in aircraft, submarines, spaceflight and diving.",
+      ". A similar method is the electrocatalytic O",
+      "One of the main functions of the chloroplast is its role in photosynthesis, the process by which light is transformed into chemical energy, to subsequently produce food in the form of sugars. Water (H2O) and carbon dioxide (CO2) are used in photosynthesis, and sugar and oxygen (O2) is made, using light energy"
+    ],
+    "reference_contexts": [
+      "Oxygen gas can also be produced through electrolysis of water into molecular oxygen and hydrogen. DC electricity must be used: if AC is used, the gases in each limb consist of hydrogen and oxygen in the explosive ratio 2:1. Contrary to popular belief, the 2:1 ratio observed in the DC electrolysis of acidified water does not prove that the empirical formula of water is H2O unless certain assumptions are made about the molecular formulae of hydrogen and oxygen themselves. A similar method is the electrocatalytic O\n2 evolution from oxides and oxoacids. Chemical catalysts can be used as well, such as in chemical oxygen generators or oxygen candles that are used as part of the life-support equipment on submarines, and are still part of standard equipment on commercial airliners in case of depressurization emergencies. Another air separation technology involves forcing air to dissolve through ceramic membranes based on zirconium dioxide by either high pressure or an electric current, to produce nearly pure O\n2 gas."
+    ],
+    "context_id": "ctx_0651",
+    "retrieved_sources": [
+      "ctx_0651",
+      "ctx_0651",
+      "ctx_0631",
+      "ctx_0651",
+      "ctx_1719"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Oxygen"
+  },
+  {
+    "question": "When was the Edict of Worms presented?",
+    "answer": "25 May 1521",
+    "ground_truth": "25 May 1521",
+    "all_answers": [
+      "25 May 1521",
+      "25 May 1521",
+      "25 May 1521"
+    ],
+    "retrieved_contexts": [
+      "On 31 October 1517, Luther wrote to his bishop, Albert of Mainz, protesting the sale of indulgences. He enclosed in his letter a copy of his \"Disputation of Martin Luther on the Power and Efficacy of Indulgences\", which came to be known as The Ninety-Five Theses",
+      "The enforcement of the ban on the 95 Theses fell to the secular authorities. On 18 April 1521, Luther appeared as ordered before the Diet of Worms. This was a general assembly of the estates of the Holy Roman Empire that took place in Worms, a town on the Rhine. It was conducted from 28 January to 25 May 1521, with Emperor Charles V presiding. Prince Frederick III, Elector of Saxony, obtained a safe conduct for Luther to and from the meeting.",
+      "Over the next five days, private conferences were held to determine Luther's fate. The Emperor presented the final draft of the Edict of Worms on 25 May 1521, declaring Luther an outlaw, banning his literature, and requiring his arrest: \"We want him to be apprehended and punished as a notorious heretic.\" It also made it a crime for anyone in Germany to give Luther food or shelter. It permitted anyone to kill Luther without legal consequence.",
+      "On 15 June 1520, the Pope warned Luther with the papal bull (edict) Exsurge Domine that he risked excommunication unless he recanted 41 sentences drawn from his writings, including the 95 Theses, within 60 days. That autumn, Johann Eck proclaimed the bull in Meissen and other towns",
+      ". In 1685, he issued the Edict of Fontainebleau, revoking the Edict of Nantes and declaring Protestantism illegal.[citation needed]"
+    ],
+    "reference_contexts": [
+      "Over the next five days, private conferences were held to determine Luther's fate. The Emperor presented the final draft of the Edict of Worms on 25 May 1521, declaring Luther an outlaw, banning his literature, and requiring his arrest: \"We want him to be apprehended and punished as a notorious heretic.\" It also made it a crime for anyone in Germany to give Luther food or shelter. It permitted anyone to kill Luther without legal consequence."
+    ],
+    "context_id": "ctx_0375",
+    "retrieved_sources": [
+      "ctx_0357",
+      "ctx_0371",
+      "ctx_0375",
+      "ctx_0370",
+      "ctx_0567"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Martin_Luther"
+  },
+  {
+    "question": "How many other important people sent letters?",
+    "answer": "More than 70.",
+    "ground_truth": "more than 70",
+    "all_answers": [
+      "more than 70",
+      "more than 70",
+      "more than 70"
+    ],
+    "retrieved_contexts": [
+      "In December 1901, Marconi successfully transmitted the letter S from England to Newfoundland, terminating Tesla's relationship with Morgan.[improper synthesis?] Over the next five years, Tesla wrote over 50 letters to Morgan, pleading for and demanding additional funding to complete the construction of Wardenclyffe. Tesla continued the project for another nine months. The tower was erected to its full 187 feet (57 m)",
+      "On 31 October 1517, Luther wrote to his bishop, Albert of Mainz, protesting the sale of indulgences. He enclosed in his letter a copy of his \"Disputation of Martin Luther on the Power and Efficacy of Indulgences\", which came to be known as The Ninety-Five Theses",
+      "During his time at his lab, Tesla observed unusual signals from his receiver which he concluded may be communications from another planet. He mentioned them in a letter to reporter Julian Hawthorne at the Philadelphia North American on 8 December 1899 and in a December 1900 letter about possible discoveries in the new century to the Red Cross Society where he referred to messages \"from another world\" that read \"1... 2... 3...\"",
+      "On Tesla's 75th birthday in 1931, Time magazine put him on its cover. The cover caption \"All the world's his power house\" noted his contribution to electrical power generation. He received congratulatory letters from more than 70 pioneers in science and engineering, including Albert Einstein.",
+      "It was not until January 1518 that friends of Luther translated the 95 Theses from Latin into German and printed and widely copied them, making the controversy one of the first in history to be aided by the printing press. Within two weeks, copies of the theses had spread throughout Germany; within two months, they had spread throughout Europe."
+    ],
+    "reference_contexts": [
+      "On Tesla's 75th birthday in 1931, Time magazine put him on its cover. The cover caption \"All the world's his power house\" noted his contribution to electrical power generation. He received congratulatory letters from more than 70 pioneers in science and engineering, including Albert Einstein."
+    ],
+    "context_id": "ctx_0239",
+    "retrieved_sources": [
+      "ctx_0195",
+      "ctx_0357",
+      "ctx_0190",
+      "ctx_0239",
+      "ctx_0362"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Nikola_Tesla"
+  },
+  {
+    "question": "What is an alternate way to make starch?",
+    "answer": "Not found.",
+    "ground_truth": "glucose monomers in the chloroplast can be linked together",
+    "all_answers": [
+      "glucose monomers in the chloroplast can be linked together",
+      "glucose monomers",
+      "glucose monomers in the chloroplast"
+    ],
+    "retrieved_contexts": [
+      "Plastid differentiation is not permanent, in fact many interconversions are possible. Chloroplasts may be converted to chromoplasts, which are pigment-filled plastids responsible for the bright colors seen in flowers and ripe fruit. Starch storing amyloplasts can also be converted to chromoplasts, and it is possible for proplastids to develop straight into chromoplasts. Chromoplasts and amyloplasts can also become chloroplasts, like what happens when a carrot or a potato is illuminated",
+      ". A similar method is the electrocatalytic O",
+      "Alternatively, glucose monomers in the chloroplast can be linked together to make starch, which accumulates into the starch grains found in the chloroplast. Under conditions such as high atmospheric CO2 concentrations, these starch grains may grow very large, distorting the grana and thylakoids. The starch granules displace the thylakoids, but leave them intact",
+      ". Rhodoplasts synthesize a form of starch called floridean, which collects into granules outside the rhodoplast, in the cytoplasm of the red alga.",
+      ". The starch granules displace the thylakoids, but leave them intact. Waterlogged roots can also cause starch buildup in the chloroplasts, possibly due to less sucrose being exported out of the chloroplast (or more accurately, the plant cell). This depletes a plant's free phosphate supply, which indirectly stimulates chloroplast starch synthesis"
+    ],
+    "reference_contexts": [
+      "Alternatively, glucose monomers in the chloroplast can be linked together to make starch, which accumulates into the starch grains found in the chloroplast. Under conditions such as high atmospheric CO2 concentrations, these starch grains may grow very large, distorting the grana and thylakoids. The starch granules displace the thylakoids, but leave them intact. Waterlogged roots can also cause starch buildup in the chloroplasts, possibly due to less sucrose being exported out of the chloroplast (or more accurately, the plant cell). This depletes a plant's free phosphate supply, which indirectly stimulates chloroplast starch synthesis. While linked to low photosynthesis rates, the starch grains themselves may not necessarily interfere significantly with the efficiency of photosynthesis, and might simply be a side effect of another photosynthesis-depressing factor."
+    ],
+    "context_id": "ctx_1723",
+    "retrieved_sources": [
+      "ctx_1728",
+      "ctx_0651",
+      "ctx_1723",
+      "ctx_1677",
+      "ctx_1723"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Chloroplast"
+  },
+  {
+    "question": "What type of image was Tesla thought to have accidentally taken a week prior to the announcement of its discovery?",
+    "answer": "X-ray image",
+    "ground_truth": "X-ray image",
+    "all_answers": [
+      "X-ray image",
+      "X-ray",
+      "X-ray image"
+    ],
+    "retrieved_contexts": [
+      ". Tesla is quoted by The New York Times as saying, \"I am in too much grief to talk. What can I say?\" Tesla may have inadvertently captured an X-ray image—predating, by a few weeks, Wilhelm Röntgen's December 1895 announcement of the discovery of x-rays—when he tried to photograph Mark Twain illuminated by a Geissler tube, an earlier type of gas discharge tube. The only thing captured in the image was the metal locking screw on the camera lens.:134",
+      "In March 1896, after hearing of Wilhelm Röntgen's discovery of X-ray and X-ray imaging (radiography), Tesla proceeded to do his own experiments in X-ray imaging, developing a high energy single terminal vacuum tube of his own design that had no target electrode and that worked from the output of the Tesla Coil (the modern term for the phenomenon produced by this device is bremsstrahlung or braking radiation). In his research, Tesla devised several experimental setups to produce X-rays",
+      "Starting in 1894, Tesla began investigating what he referred to as radiant energy of \"invisible\" kinds after he had noticed damaged film in his laboratory in previous experiments (later identified as \"Roentgen rays\" or \"X-Rays\"). His early experiments were with Crookes tubes, a cold cathode electrical discharge tube",
+      "In 1935, in an annual birthday celebration interview, Tesla announced a method of transmitting mechanical energy with minimal loss over any terrestrial distance, a related new means of communication, and a method of accurately determining the location of underground mineral deposits.",
+      ". Just by hearing the name of an item, he would be able to envision it in realistic detail.:33 Tesla would visualize an invention in his mind with extreme precision, including all dimensions, before moving to the construction stage, a technique sometimes known as picture thinking. He typically did not make drawings by hand but worked from memory. Beginning in his childhood, Tesla had frequent flashbacks to events that had happened previously in his life.:33"
+    ],
+    "reference_contexts": [
+      "Starting in 1894, Tesla began investigating what he referred to as radiant energy of \"invisible\" kinds after he had noticed damaged film in his laboratory in previous experiments (later identified as \"Roentgen rays\" or \"X-Rays\"). His early experiments were with Crookes tubes, a cold cathode electrical discharge tube. Soon after, much of Tesla's early research—hundreds of invention models, plans, notes, laboratory data, tools, photographs, valued at $50,000—was lost in the 5th Avenue laboratory fire of March 1895. Tesla is quoted by The New York Times as saying, \"I am in too much grief to talk. What can I say?\" Tesla may have inadvertently captured an X-ray image—predating, by a few weeks, Wilhelm Röntgen's December 1895 announcement of the discovery of x-rays—when he tried to photograph Mark Twain illuminated by a Geissler tube, an earlier type of gas discharge tube. The only thing captured in the image was the metal locking screw on the camera lens.:134"
+    ],
+    "context_id": "ctx_0177",
+    "retrieved_sources": [
+      "ctx_0177",
+      "ctx_0178",
+      "ctx_0177",
+      "ctx_0206",
+      "ctx_0222"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Nikola_Tesla"
+  },
+  {
+    "question": "Where did Maududi's books place Islam?",
+    "answer": "In a modern context.",
+    "ground_truth": "in a modern context",
+    "all_answers": [
+      "in a modern context",
+      "a modern context",
+      "modern context"
+    ],
+    "retrieved_contexts": [
+      "Sayyid Abul Ala Maududi was an important early twentieth-century figure in the Islamic revival in India, and then after independence from Britain, in Pakistan. Trained as a lawyer he chose the profession of journalism, and wrote about contemporary issues and most importantly about Islam and Islamic law. Maududi founded the Jamaat-e-Islami party in 1941 and remained its leader until 1972. However, Maududi had much more impact through his writing than through his political organising",
+      ". However, Maududi had much more impact through his writing than through his political organising. His extremely influential books (translated into many languages) placed Islam in a modern context, and influenced not only conservative ulema but liberal modernizer Islamists such as al-Faruqi, whose \"Islamization of Knowledge\" carried forward some of Maududi's key principles.",
+      "Roughly contemporaneous with Maududi was the founding of the Muslim Brotherhood in Ismailiyah, Egypt in 1928 by Hassan al Banna. His was arguably the first, largest and most influential modern Islamic political/religious organization. Under the motto \"the Qur'an is our constitution,\" it sought Islamic revival through preaching and also by providing basic community services including schools, mosques, and workshops",
+      "Maududi also believed that Muslim society could not be Islamic without Sharia, and Islam required the establishment of an Islamic state. This state should be a \"theo-democracy,\" based on the principles of: tawhid (unity of God), risala (prophethood) and khilafa (caliphate)",
+      ". Although Maududi talked about Islamic revolution, by \"revolution\" he meant not the violence or populist policies of the Iranian Revolution, but the gradual changing the hearts and minds of individuals from the top of society downward through an educational process or da'wah."
+    ],
+    "reference_contexts": [
+      "Sayyid Abul Ala Maududi was an important early twentieth-century figure in the Islamic revival in India, and then after independence from Britain, in Pakistan. Trained as a lawyer he chose the profession of journalism, and wrote about contemporary issues and most importantly about Islam and Islamic law. Maududi founded the Jamaat-e-Islami party in 1941 and remained its leader until 1972. However, Maududi had much more impact through his writing than through his political organising. His extremely influential books (translated into many languages) placed Islam in a modern context, and influenced not only conservative ulema but liberal modernizer Islamists such as al-Faruqi, whose \"Islamization of Knowledge\" carried forward some of Maududi's key principles."
+    ],
+    "context_id": "ctx_1858",
+    "retrieved_sources": [
+      "ctx_1858",
+      "ctx_1858",
+      "ctx_1860",
+      "ctx_1859",
+      "ctx_1859"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Islamism"
+  },
+  {
+    "question": "What is the process of constructing a building or infrastructure?",
+    "answer": "Construction",
+    "ground_truth": "Construction",
+    "all_answers": [
+      "Construction",
+      "Construction",
+      "Construction"
+    ],
+    "retrieved_contexts": [
+      "In the modern industrialized world, construction usually involves the translation of designs into reality. A formal design team may be assembled to plan the physical proceedings, and to integrate those proceedings with the other parts",
+      "A construction project is a complex net of contracts and other legal obligations, each of which all parties must carefully consider. A contract is the exchange of a set of obligations between two or more parties, but it is not so simple a matter as trying to get the other side to agree to as much as possible in exchange for as little as possible. The time element in construction means that a delay costs money, and in cases of bottlenecks, the delay can be extremely expensive",
+      "This is the most common method of construction procurement and is well established and recognized. In this arrangement, the architect or engineer acts as the project coordinator. His or her role is to design the works, prepare the specifications and produce construction drawings, administer the contract, tender the works, and manage the works from inception to completion. There are direct contractual links between the architect's client and the main contractor",
+      "Construction is the process of constructing a building or infrastructure. Construction differs from manufacturing in that manufacturing typically involves mass production of similar items without a designated purchaser, while construction typically takes place on location for a known client. Construction as an industry comprises six to nine percent of the gross domestic product of developed countries",
+      "In general, there are three sectors of construction: buildings, infrastructure and industrial. Building construction is usually further divided into residential and non-residential (commercial/institutional). Infrastructure is often called heavy/highway, heavy civil or heavy engineering. It includes large public works, dams, bridges, highways, water/wastewater and utility distribution. Industrial includes refineries, process chemical, power generation, mills and manufacturing plants"
+    ],
+    "reference_contexts": [
+      "Construction is the process of constructing a building or infrastructure. Construction differs from manufacturing in that manufacturing typically involves mass production of similar items without a designated purchaser, while construction typically takes place on location for a known client. Construction as an industry comprises six to nine percent of the gross domestic product of developed countries. Construction starts with planning,[citation needed] design, and financing and continues until the project is built and ready for use."
+    ],
+    "context_id": "ctx_1301",
+    "retrieved_sources": [
+      "ctx_1309",
+      "ctx_1315",
+      "ctx_1317",
+      "ctx_1301",
+      "ctx_1303"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Construction"
+  },
+  {
+    "question": "How many will the host committee dedicate to local charities?",
+    "answer": "25 percent",
+    "ground_truth": "25 percent",
+    "all_answers": [
+      "25 percent",
+      "25 percent of all money",
+      "25"
+    ],
+    "retrieved_contexts": [
+      "The Super Bowl 50 Host Committee has vowed to be \"the most giving Super Bowl ever\", and will dedicate 25 percent of all money it raises for philanthropic causes in the Bay Area. The committee created the 50 fund as its philanthropic initiative and focuses on providing grants to aid with youth development, community investment and sustainable environments.",
+      "For the first time, the Super Bowl 50 Host Committee and the NFL have openly sought disabled veteran and lesbian, gay, bisexual and transgender-owned businesses in Business Connect, the Super Bowl program that provides local companies with contracting opportunities in and around the Super Bowl. The host committee has already raised over $40 million through sponsors including Apple, Google, Yahoo!, Intel, Gap, Chevron, and Dignity Health.",
+      "In addition, there are $2 million worth of other ancillary events, including a week-long event at the Santa Clara Convention Center, a beer, wine and food festival at Bellomy Field at Santa Clara University, and a pep rally. A professional fundraiser will aid in finding business sponsors and individual donors, but still may need the city council to help fund the event. Additional funding will be provided by the city council, which has announced plans to set aside seed funding for the event.",
+      ". The current Subject Committees in the fourth Session are: Economy, Energy and Tourism; Education and Culture; Health and Sport; Justice; Local Government and Regeneration; Rural Affairs, Climate Change and Environment; Welfare Reform; and Infrastructure and Capital Investment.",
+      ". It is led by an Executive Committee, chaired by a President with the assistance of two Vice Presidents, one for Administration and the other for Student Life, elected together as a slate by the student body each spring. Its annual budget is greater than $2 million."
+    ],
+    "reference_contexts": [
+      "The Super Bowl 50 Host Committee has vowed to be \"the most giving Super Bowl ever\", and will dedicate 25 percent of all money it raises for philanthropic causes in the Bay Area. The committee created the 50 fund as its philanthropic initiative and focuses on providing grants to aid with youth development, community investment and sustainable environments."
+    ],
+    "context_id": "ctx_0030",
+    "retrieved_sources": [
+      "ctx_0030",
+      "ctx_0029",
+      "ctx_0027",
+      "ctx_1828",
+      "ctx_1532"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Super_Bowl_50"
+  },
+  {
+    "question": "In what city is SAP Center located?",
+    "answer": "San Jose",
+    "ground_truth": "San Jose",
+    "all_answers": [
+      "San Jose",
+      "San Jose",
+      "San Jose."
+    ],
+    "retrieved_contexts": [
+      "The game's media day, which was typically held on the Tuesday afternoon prior to the game, was moved to the Monday evening and re-branded as Super Bowl Opening Night. The event was held on February 1, 2016 at SAP Center in San Jose. Alongside the traditional media availabilities, the event featured an opening ceremony with player introductions on a replica of the Golden Gate Bridge.",
+      "It became clear that managing the Apollo program would exceed the capabilities of Robert R. Gilruth's Space Task Group, which had been directing the nation's manned space program from NASA's Langley Research Center. So Gilruth was given authority to grow his organization into a new NASA center, the Manned Spacecraft Center (MSC). A site was chosen in Houston, Texas, on land donated by Rice University, and Administrator Webb announced the conversion on September 19, 1961",
+      ". The most recent additions are a center in New Delhi, India, which opened in 2014, and a center in Hong Kong which opened in 2015.",
+      ". The following day, a second service was conducted by prominent priests in the Trinity Chapel (today's Serbian Orthodox Cathedral of Saint Sava) in New York City.",
+      "From 2005 to 2014, there were two Major League Soccer teams in Los Angeles — the LA Galaxy and Chivas USA — that both played at the StubHub Center and were local rivals. However, Chivas were suspended following the 2014 MLS season, with a second MLS team scheduled to return in 2018."
+    ],
+    "reference_contexts": [
+      "The game's media day, which was typically held on the Tuesday afternoon prior to the game, was moved to the Monday evening and re-branded as Super Bowl Opening Night. The event was held on February 1, 2016 at SAP Center in San Jose. Alongside the traditional media availabilities, the event featured an opening ceremony with player introductions on a replica of the Golden Gate Bridge."
+    ],
+    "context_id": "ctx_0028",
+    "retrieved_sources": [
+      "ctx_0028",
+      "ctx_0696",
+      "ctx_1519",
+      "ctx_0214",
+      "ctx_0480"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Super_Bowl_50"
+  },
+  {
+    "question": "For what invention was U.S. Patent 1,655,114 granted?",
+    "answer": "A biplane capable of taking off vertically (VTOL aircraft).",
+    "ground_truth": "VTOL aircraft",
+    "all_answers": [
+      "VTOL aircraft",
+      "VTOL aircraft",
+      "a biplane capable of taking off vertically"
+    ],
+    "retrieved_contexts": [
+      "In 1928, Tesla received his last patent, U.S. Patent 1,655,114, for a biplane capable of taking off vertically (VTOL aircraft) and then be \"gradually tilted through manipulation of the elevator devices\" in flight until it was flying like a conventional plane",
+      "Nikola Tesla (Serbian Cyrillic: Никола Тесла; 10 July 1856 – 7 January 1943) was a Serbian American inventor, electrical engineer, mechanical engineer, physicist, and futurist best known for his contributions to the design of the modern alternating current (AC) electricity supply system.",
+      "In 1900, Tesla was granted patents for a \"system of transmitting electrical energy\" and \"an electrical transmitter.\" When Guglielmo Marconi made his famous first-ever transatlantic radio transmission in 1901, Tesla quipped that it was done with 17 Tesla patents, though there is little to support this claim. This was the beginning of years of patent battles over radio with Tesla's patents being upheld in 1903, followed by a reverse decision in favor of Marconi in 1904",
+      ". Jerónimo de Ayanz y Beaumont received patents in 1606 for fifty steam powered inventions, including a water pump for draining inundated mines. Denis Papin, a Huguenot refugee, did some useful work on the steam digester in 1679, and first used a piston to raise weights in 1690.",
+      ". This innovative electric motor, patented in May 1888, was a simple self-starting design that did not need a commutator, thus avoiding sparking and the high maintenance of constantly servicing and replacing mechanical brushes."
+    ],
+    "reference_contexts": [
+      "In 1928, Tesla received his last patent, U.S. Patent 1,655,114, for a biplane capable of taking off vertically (VTOL aircraft) and then be \"gradually tilted through manipulation of the elevator devices\" in flight until it was flying like a conventional plane. Tesla thought the plane would sell for less than $1,000.:251 Although the aircraft was probably impractical, it may be the earliest known design for what became the tiltrotor/tilt-wing concept as well as the earliest proposal for the use of turbine engines in rotor aircraft.[improper synthesis?]"
+    ],
+    "context_id": "ctx_0204",
+    "retrieved_sources": [
+      "ctx_0204",
+      "ctx_0148",
+      "ctx_0185",
+      "ctx_0582",
+      "ctx_0167"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Nikola_Tesla"
+  },
+  {
+    "question": "For what purpose is oxygen used by animal life?",
+    "answer": "Cellular respiration.",
+    "ground_truth": "cellular respiration",
+    "all_answers": [
+      "cellular respiration",
+      "cellular respiration",
+      "cellular respiration",
+      "in cellular respiration",
+      "cellular respiration"
+    ],
+    "retrieved_contexts": [
+      "Many major classes of organic molecules in living organisms, such as proteins, nucleic acids, carbohydrates, and fats, contain oxygen, as do the major inorganic compounds that are constituents of animal shells, teeth, and bone. Most of the mass of living organisms is oxygen as it is a part of water, the major constituent of lifeforms. Oxygen is used in cellular respiration and released by photosynthesis, which uses the energy of sunlight to produce oxygen from water",
+      "2. It is the form that is a major part of the Earth's atmosphere (see Occurrence). O2 has a bond length of 121 pm and a bond energy of 498 kJ·mol−1, which is smaller than the energy of other double bonds or pairs of single bonds in the biosphere and responsible for the exothermic reaction of O2 with any organic molecule. Due to its energy content, O2 is used by complex forms of life, such as animals, in cellular respiration (see Biological role). Other aspects of O",
+      ". Common uses of oxygen includes the production cycle of steel, plastics and textiles, brazing, welding and cutting of steels and other metals, rocket propellant, in oxygen therapy and life support systems in aircraft, submarines, spaceflight and diving.",
+      "The unusually high concentration of oxygen gas on Earth is the result of the oxygen cycle. This biogeochemical cycle describes the movement of oxygen within and between its three main reservoirs on Earth: the atmosphere, the biosphere, and the lithosphere. The main driving factor of the oxygen cycle is photosynthesis, which is responsible for modern Earth's atmosphere. Photosynthesis releases oxygen into the atmosphere, while respiration and decay remove it from the atmosphere",
+      "Reactive oxygen species, such as superoxide ion (O−\n2) and hydrogen peroxide (H\n2O\n2), are dangerous by-products of oxygen use in organisms. Parts of the immune system of higher organisms create peroxide, superoxide, and singlet oxygen to destroy invading microbes. Reactive oxygen species also play an important role in the hypersensitive response of plants against pathogen attack. Oxygen is toxic to obligately anaerobic organisms, which were the dominant form of early life on Earth until O"
+    ],
+    "reference_contexts": [
+      "The common allotrope of elemental oxygen on Earth is called dioxygen, O\n2. It is the form that is a major part of the Earth's atmosphere (see Occurrence). O2 has a bond length of 121 pm and a bond energy of 498 kJ·mol−1, which is smaller than the energy of other double bonds or pairs of single bonds in the biosphere and responsible for the exothermic reaction of O2 with any organic molecule. Due to its energy content, O2 is used by complex forms of life, such as animals, in cellular respiration (see Biological role). Other aspects of O\n2 are covered in the remainder of this article."
+    ],
+    "context_id": "ctx_0635",
+    "retrieved_sources": [
+      "ctx_0621",
+      "ctx_0635",
+      "ctx_0631",
+      "ctx_0649",
+      "ctx_0645"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Oxygen"
+  },
+  {
+    "question": "By which year did the American cars mpg start to improve?",
+    "answer": "1970",
+    "ground_truth": "1985",
+    "all_answers": [
+      "1985",
+      "1985",
+      "1985",
+      "1985",
+      "1985"
+    ],
+    "retrieved_contexts": [
+      ". By 1985, the average American vehicle moved 17.4 miles per gallon, compared to 13.5 in 1970. The improvements stayed even though the price of a barrel of oil remained constant at $12 from 1974 to 1979. Sales of large sedans for most makes (except Chrysler products) recovered within two model years of the 1973 crisis",
+      "An increase in imported cars into North America forced General Motors, Ford and Chrysler to introduce smaller and fuel-efficient models for domestic sales. The Dodge Omni / Plymouth Horizon from Chrysler, the Ford Fiesta and the Chevrolet Chevette all had four-cylinder engines and room for at least four passengers by the late 1970s. By 1985, the average American vehicle moved 17.4 miles per gallon, compared to 13.5 in 1970",
+      "To help reduce consumption, in 1974 a national maximum speed limit of 55 mph (about 88 km/h) was imposed through the Emergency Highway Energy Conservation Act",
+      ". Development of the Strategic Petroleum Reserve began in 1975, and in 1977 the cabinet-level Department of Energy was created, followed by the National Energy Act of 1978.[citation needed] On November 28, 1995, Bill Clinton signed the National Highway Designation Act, ending the federal 55 mph (89 km/h) speed limit, allowing states to restore their prior maximum speed limit.",
+      "Federal safety standards, such as NHTSA Federal Motor Vehicle Safety Standard 215 (pertaining to safety bumpers), and compacts like the 1974 Mustang I were a prelude to the DOT \"downsize\" revision of vehicle categories. By 1977, GM's full-sized cars reflected the crisis. By 1979, virtually all \"full-size\" American cars had shrunk, featuring smaller engines and smaller outside dimensions"
+    ],
+    "reference_contexts": [
+      "An increase in imported cars into North America forced General Motors, Ford and Chrysler to introduce smaller and fuel-efficient models for domestic sales. The Dodge Omni / Plymouth Horizon from Chrysler, the Ford Fiesta and the Chevrolet Chevette all had four-cylinder engines and room for at least four passengers by the late 1970s. By 1985, the average American vehicle moved 17.4 miles per gallon, compared to 13.5 in 1970. The improvements stayed even though the price of a barrel of oil remained constant at $12 from 1974 to 1979. Sales of large sedans for most makes (except Chrysler products) recovered within two model years of the 1973 crisis. The Cadillac DeVille and Fleetwood, Buick Electra, Oldsmobile 98, Lincoln Continental, Mercury Marquis, and various other luxury oriented sedans became popular again in the mid-1970s. The only full-size models that did not recover were lower price models such as the Chevrolet Bel Air, and Ford Galaxie 500. Slightly smaller, mid-size models such as the Oldsmobile Cutlass, Chevrolet Monte Carlo, Ford Thunderbird and various other models sold well."
+    ],
+    "context_id": "ctx_0684",
+    "retrieved_sources": [
+      "ctx_0684",
+      "ctx_0684",
+      "ctx_0676",
+      "ctx_0676",
+      "ctx_0685"
+    ],
+    "answer_in_retrieved": true,
+    "title": "1973_oil_crisis"
+  },
+  {
+    "question": "Which religion did Kublai prefer?",
+    "answer": "Buddhism",
+    "ground_truth": "Buddhism, especially the Tibetan variants",
+    "all_answers": [
+      "Buddhism, especially the Tibetan variants",
+      "Buddhism",
+      "Buddhism"
+    ],
+    "retrieved_contexts": [
+      "There were many religions practiced during the Yuan dynasty, such as Buddhism, Islam, and Christianity. The establishment of the Yuan dynasty had dramatically increased the number of Muslims in China. However, unlike the western khanates, the Yuan dynasty never converted to Islam. Instead, Kublai Khan, the founder of the Yuan dynasty, favored Buddhism, especially the Tibetan variants. As a result, Tibetan Buddhism was established as the de facto state religion",
+      ". Kublai created the Imperial Academy of Medicine to manage medical treatises and the education of new doctors. Confucian scholars were attracted to the medical profession because it ensured a high income and medical ethics were compatible with Confucian virtues.",
+      ". Seeing this as damaging to the Mongol nation, Kublai in 1291 forbade the sale abroad of Mongols. Kublai wished to persuade the Chinese that he was becoming increasingly sinicized while maintaining his Mongolian credentials with his own people. He set up a civilian administration to rule, built a capital within China, supported Chinese religions and culture, and devised suitable economic and political institutions for the court. But at the same time he never abandoned his Mongolian heritage.",
+      "Kublai's government after 1262 was a compromise between preserving Mongol interests in China and satisfying the demands of his Chinese subjects. He instituted the reforms proposed by his Chinese advisers by centralizing the bureaucracy, expanding the circulation of paper money, and maintaining the traditional monopolies on salt and iron. He restored the Imperial Secretariat and left the local administrative structure of past Chinese dynasties unchanged",
+      "Kublai readied the move of the Mongol capital from Karakorum in Mongolia to Khanbaliq in 1264, constructing a new city near the former Jurchen capital Zhongdu, now modern Beijing, in 1266. In 1271, Kublai formally claimed the Mandate of Heaven and declared that 1272 was the first year of the Great Yuan (Chinese: 大元) in the style of a traditional Chinese dynasty. The name of the dynasty originated from the I Ching and describes the \"origin of the universe\" or a \"primal force\""
+    ],
+    "reference_contexts": [
+      "There were many religions practiced during the Yuan dynasty, such as Buddhism, Islam, and Christianity. The establishment of the Yuan dynasty had dramatically increased the number of Muslims in China. However, unlike the western khanates, the Yuan dynasty never converted to Islam. Instead, Kublai Khan, the founder of the Yuan dynasty, favored Buddhism, especially the Tibetan variants. As a result, Tibetan Buddhism was established as the de facto state religion. The top-level department and government agency known as the Bureau of Buddhist and Tibetan Affairs (Xuanzheng Yuan) was set up in Khanbaliq (modern Beijing) to supervise Buddhist monks throughout the empire. Since Kublai Khan only esteemed the Sakya sect of Tibetan Buddhism, other religions became less important. He and his successors kept a Sakya Imperial Preceptor (Dishi) at court. Before the end of the Yuan dynasty, 14 leaders of the Sakya sect had held the post of Imperial Preceptor, thereby enjoying special power. Furthermore, Mongol patronage of Buddhism resulted in a number of monuments of Buddhist art. Mongolian Buddhist translations, almost all from Tibetan originals, began on a large scale after 1300. Many Mongols of the upper class such as the Jalayir and the Oronar nobles as well as the emperors also patronized Confucian scholars and institutions. A considerable number of Confucian and Chinese historical works were translated into the Mongolian language."
+    ],
+    "context_id": "ctx_1577",
+    "retrieved_sources": [
+      "ctx_1577",
+      "ctx_1580",
+      "ctx_1575",
+      "ctx_1553",
+      "ctx_1554"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Yuan_dynasty"
+  },
+  {
+    "question": "Early Western texts referencing the East describe the people as being what?",
+    "answer": "irrational and backward",
+    "ground_truth": "irrational and backward",
+    "all_answers": [
+      "irrational and backward",
+      "them",
+      "as irrational and backward",
+      "irrational and backward",
+      "irrational and backward"
+    ],
+    "retrieved_contexts": [
+      ". This difference was particularly apparent in textual and visual works of early European studies of the Orient that positioned the East as irrational and backward in opposition to the rational and progressive West. Defining the East as a negative vision of itself, as its inferior, not only increased the West’s sense of self, but also was a way of ordering the East and making it known to the West so that it could be dominated and controlled",
+      "The Normans (Norman: Nourmands; French: Normands; Latin: Normanni) were the people who in the 10th and 11th centuries gave their name to Normandy, a region in France. They were descended from Norse (\"Norman\" comes from \"Norseman\") raiders and pirates from Denmark, Iceland and Norway who, under their leader Rollo, agreed to swear fealty to King Charles III of West Francia",
+      ". The people of these climates were believed to be in need of guidance and intervention from the European empire to aid in the governing of a more evolved social structure; they were seen as incapable of such a feat. Similarly, orientalism is a view of a people based on their geographical location.",
+      "Orientalism, as theorized by Edward Said, refers to how the West developed an imaginative geography of the East. This imaginative geography relies on an essentializing discourse that represents neither the diversity nor the social reality of the East. Rather, by essentializing the East, this discourse uses the idea of place-based identities to create difference and distance between \"we\" the West and \"them\" the East, or \"here\" in the West and \"there\" in the East",
+      "The reason for the order of the classes and the reason why people were placed in a certain class was the date they surrendered to the Mongols, and had nothing to do with their ethnicity. The earlier they surrendered to the Mongols, the higher they were placed, the more the held out, the lower they were ranked. The Northern Chinese were ranked higher and Southern Chinese were ranked lower because southern China withstood and fought to the last before caving in"
+    ],
+    "reference_contexts": [
+      "Orientalism, as theorized by Edward Said, refers to how the West developed an imaginative geography of the East. This imaginative geography relies on an essentializing discourse that represents neither the diversity nor the social reality of the East. Rather, by essentializing the East, this discourse uses the idea of place-based identities to create difference and distance between \"we\" the West and \"them\" the East, or \"here\" in the West and \"there\" in the East. This difference was particularly apparent in textual and visual works of early European studies of the Orient that positioned the East as irrational and backward in opposition to the rational and progressive West. Defining the East as a negative vision of itself, as its inferior, not only increased the West’s sense of self, but also was a way of ordering the East and making it known to the West so that it could be dominated and controlled. The discourse of Orientalism therefore served as an ideological justification of early Western imperialism, as it formed a body of knowledge and ideas that rationalized social, cultural, political, and economic control of other territories."
+    ],
+    "context_id": "ctx_1896",
+    "retrieved_sources": [
+      "ctx_1896",
+      "ctx_0103",
+      "ctx_1907",
+      "ctx_1896",
+      "ctx_1589"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Imperialism"
+  },
+  {
+    "question": "Who is the NFL's vice president of brand and creative?",
+    "answer": "Jaime Weston",
+    "ground_truth": "Jaime Weston",
+    "all_answers": [
+      "Jaime Weston",
+      "Jaime Weston",
+      "Weston"
+    ],
+    "retrieved_contexts": [
+      ". The use of Roman numerals will be reinstated for Super Bowl LI. Jaime Weston, the league's vice president of brand and creative, explained that a primary reason for the change was the difficulty of designing an aesthetically pleasing logo with the letter \"L\" using the standardized logo template introduced at Super Bowl XLV",
+      "As the designated home team in the annual rotation between AFC and NFC teams, the Broncos elected to wear their road white jerseys with matching white pants. Elway stated, \"We've had Super Bowl success in our white uniforms.\" The Broncos last wore matching white jerseys and pants in the Super Bowl in Super Bowl XXXIII, Elway's last game as Denver QB, when they defeated the Atlanta Falcons 34–19",
+      "Darren Aronofsky, Terrence Malick, Mira Nair, and Whit Stillman; architect Philip Johnson; musicians Rivers Cuomo, Tom Morello, and Gram Parsons; musician, producer and composer Ryan Leslie; serial killer Ted Kaczynski; programmer and activist Richard Stallman; NFL quarterback Ryan Fitzpatrick; NFL center Matt Birk; NBA player Jeremy Lin; US Ski Team skier Ryan Max Riley; physician Sachin H",
+      ". In their only other Super Bowl win in Super Bowl XXXII, Denver wore blue jerseys, which was their primary color at the time. They also lost Super Bowl XXI when they wore white jerseys, but they are 0-4 in Super Bowls when wearing orange jerseys, losing in Super Bowl XII, XXII, XXIV, and XLVIII. The only other AFC champion team to have worn white as the designated home team in the Super Bowl was the Pittsburgh Steelers; they defeated the Seattle Seahawks 21–10 in Super Bowl XL 10 seasons prior",
+      "In honor of the 50th Super Bowl, the pregame ceremony featured the on-field introduction of 39 of the 43 previous Super Bowl Most Valuable Players. Bart Starr (MVP of Super Bowls I and II) and Chuck Howley (MVP of Super Bowl V) appeared via video, while Peyton Manning (MVP of Super Bowl XLI and current Broncos quarterback) was shown in the locker room preparing for the game. No plans were announced regarding the recognition of Harvey Martin, co-MVP of Super Bowl XII, who died in 2001."
+    ],
+    "reference_contexts": [
+      "On June 4, 2014, the NFL announced that the practice of branding Super Bowl games with Roman numerals, a practice established at Super Bowl V, would be temporarily suspended, and that the game would be named using Arabic numerals as Super Bowl 50 as opposed to Super Bowl L. The use of Roman numerals will be reinstated for Super Bowl LI. Jaime Weston, the league's vice president of brand and creative, explained that a primary reason for the change was the difficulty of designing an aesthetically pleasing logo with the letter \"L\" using the standardized logo template introduced at Super Bowl XLV. The logo also deviates from the template by featuring large numerals, colored in gold, behind the Vince Lombardi Trophy, instead of underneath and in silver as in the standard logo."
+    ],
+    "context_id": "ctx_0024",
+    "retrieved_sources": [
+      "ctx_0024",
+      "ctx_0022",
+      "ctx_1377",
+      "ctx_0022",
+      "ctx_0042"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Super_Bowl_50"
+  },
+  {
+    "question": "What does Obersee mean?",
+    "answer": "\"upper lake\"",
+    "ground_truth": "upper lake",
+    "all_answers": [
+      "upper lake",
+      "upper lake",
+      "(\"upper lake\"",
+      "upper lake"
+    ],
+    "retrieved_contexts": [
+      "Lake Constance consists of three bodies of water: the Obersee (\"upper lake\"), the Untersee (\"lower lake\"), and a connecting stretch of the Rhine, called the Seerhein (\"Lake Rhine\"). The lake is situated in Germany, Switzerland and Austria near the Alps. Specifically, its shorelines lie in the German states of Bavaria and Baden-Württemberg, the Austrian state of Vorarlberg, and the Swiss cantons of Thurgau and St. Gallen. The Rhine flows into it from the south following the Swiss-Austrian border",
+      "Between Bingen and Bonn, the Middle Rhine flows through the Rhine Gorge, a formation which was created by erosion. The rate of erosion equaled the uplift in the region, such that the river was left at about its original level while the surrounding lands raised. The gorge is quite deep and is the stretch of the river which is known for its many castles and vineyards",
+      "Ersatzschulen are ordinary primary or secondary schools, which are run by private individuals, private organizations or religious groups. These schools offer the same types of diplomas as public schools. Ersatzschulen lack the freedom to operate completely outside of government regulation",
+      "The dominant economic sectors in the Middle Rhine area are viniculture and tourism. The Rhine Gorge between Rüdesheim am Rhein and Koblenz is listed as a UNESCO World Heritage Site. Near Sankt Goarshausen, the Rhine flows around the famous rock Lorelei",
+      "In Germany, teachers are mainly civil servants recruited in special university classes, called Lehramtstudien (Teaching Education Studies). There are many differences between the teachers for elementary schools (Grundschule), lower secondary schools (Hauptschule), middle level secondary schools (Realschule) and higher level secondary schools (Gymnasium). Salaries for teachers depend on the civil servants' salary index scale (Bundesbesoldungsordnung)."
+    ],
+    "reference_contexts": [
+      "Lake Constance consists of three bodies of water: the Obersee (\"upper lake\"), the Untersee (\"lower lake\"), and a connecting stretch of the Rhine, called the Seerhein (\"Lake Rhine\"). The lake is situated in Germany, Switzerland and Austria near the Alps. Specifically, its shorelines lie in the German states of Bavaria and Baden-Württemberg, the Austrian state of Vorarlberg, and the Swiss cantons of Thurgau and St. Gallen. The Rhine flows into it from the south following the Swiss-Austrian border. It is located at approximately 47°39′N 9°19′E﻿ / ﻿47.650°N 9.317°E﻿ / 47.650; 9.317."
+    ],
+    "context_id": "ctx_1770",
+    "retrieved_sources": [
+      "ctx_1770",
+      "ctx_1776",
+      "ctx_1330",
+      "ctx_1778",
+      "ctx_0329"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Rhine"
+  },
+  {
+    "question": "What types of engines are steam engines?",
+    "answer": "External combustion engines",
+    "ground_truth": "external combustion",
+    "all_answers": [
+      "external combustion",
+      "external combustion",
+      "external combustion engines",
+      "external combustion"
+    ],
+    "retrieved_contexts": [
+      "Steam engines are external combustion engines, where the working fluid is separate from the combustion products. Non-combustion heat sources such as solar power, nuclear power or geothermal energy may be used. The ideal thermodynamic cycle used to analyze this process is called the Rankine cycle. In the cycle, water is heated and transforms into steam within a boiler operating at a high pressure. When expanded through pistons or turbines, mechanical work is done",
+      "A steam turbine consists of one or more rotors (rotating discs) mounted on a drive shaft, alternating with a series of stators (static discs) fixed to the turbine casing. The rotors have a propeller-like arrangement of blades at the outer edge. Steam acts upon these blades, producing rotary motion. The stator consists of a similar, but fixed, series of blades that serve to redirect the steam flow onto the next rotor stage",
+      "The main use for steam turbines is in electricity generation (in the 1990s about 90% of the world's electric production was by use of steam turbines) however the recent widespread application of large gas turbine units and typical combined cycle power plants has resulted in reduction of this percentage to the 80% regime for steam turbines",
+      "Steam engines can be said to have been the moving force behind the Industrial Revolution and saw widespread commercial use driving machinery in factories, mills and mines; powering pumping stations; and propelling transport appliances such as railway locomotives, ships, steamboats and road vehicles. Their use in agriculture led to an increase in the land available for cultivation",
+      ". Steam engines remained the dominant source of power until the early 20th century, when advances in the design of electric motors and internal combustion engines gradually resulted in the replacement of reciprocating (piston) steam engines, with shipping in the 20th-century relying upon the steam turbine."
+    ],
+    "reference_contexts": [
+      "Steam engines are external combustion engines, where the working fluid is separate from the combustion products. Non-combustion heat sources such as solar power, nuclear power or geothermal energy may be used. The ideal thermodynamic cycle used to analyze this process is called the Rankine cycle. In the cycle, water is heated and transforms into steam within a boiler operating at a high pressure. When expanded through pistons or turbines, mechanical work is done. The reduced-pressure steam is then condensed and pumped back into the boiler."
+    ],
+    "context_id": "ctx_0574",
+    "retrieved_sources": [
+      "ctx_0574",
+      "ctx_0608",
+      "ctx_0596",
+      "ctx_0593",
+      "ctx_0583"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Steam_engine"
+  },
+  {
+    "question": "In what process are electrons recycled?",
+    "answer": "Cyclic photophosphorylation",
+    "ground_truth": "cyclic photophosphorylation",
+    "all_answers": [
+      "cyclic photophosphorylation",
+      "cyclic photophosphorylation",
+      "cyclic photophosphorylation"
+    ],
+    "retrieved_contexts": [
+      ". This is termed cyclic photophosphorylation because the electrons are recycled. Cyclic photophosphorylation is common in C4 plants, which need more ATP than NADPH.",
+      "While photosystem II photolyzes water to obtain and energize new electrons, photosystem I simply reenergizes depleted electrons at the end of an electron transport chain. Normally, the reenergized electrons are taken by NADP+, though sometimes they can flow back down more H+-pumping electron transport chains to transport more hydrogen ions into the thylakoid space to generate more ATP. This is termed cyclic photophosphorylation because the electrons are recycled",
+      "Chloroplasts' main role is to conduct photosynthesis, where the photosynthetic pigment chlorophyll captures the energy from sunlight and converts it and stores it in the energy-storage molecules ATP and NADPH while freeing oxygen from water. They then use the ATP and NADPH to make organic molecules from carbon dioxide in a process known as the Calvin cycle",
+      ". A similar method is the electrocatalytic O",
+      ". Most of the G3P molecules are recycled back into RuBP using energy from more ATP, but one out of every six produced leaves the cycle—the end product of the dark reactions."
+    ],
+    "reference_contexts": [
+      "While photosystem II photolyzes water to obtain and energize new electrons, photosystem I simply reenergizes depleted electrons at the end of an electron transport chain. Normally, the reenergized electrons are taken by NADP+, though sometimes they can flow back down more H+-pumping electron transport chains to transport more hydrogen ions into the thylakoid space to generate more ATP. This is termed cyclic photophosphorylation because the electrons are recycled. Cyclic photophosphorylation is common in C4 plants, which need more ATP than NADPH."
+    ],
+    "context_id": "ctx_1721",
+    "retrieved_sources": [
+      "ctx_1721",
+      "ctx_1721",
+      "ctx_1670",
+      "ctx_0651",
+      "ctx_1722"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Chloroplast"
+  },
+  {
+    "question": "What third type of plea uses creative words?",
+    "answer": "Creative plea",
+    "ground_truth": "creative plea",
+    "all_answers": [
+      "creative plea",
+      "no contest",
+      "creative plea",
+      "creative plea",
+      "creative plea",
+      "creative plea"
+    ],
+    "retrieved_contexts": [
+      ". I feel I have done no wrong. I may have violated some specific laws, but I am guilty of doing no wrong. I therefore plead not guilty.\" A plea of no contest is sometimes regarded as a compromise between the two. One defendant accused of illegally protesting nuclear power, when asked to enter his plea, stated, \"I plead for the beauty that surrounds us\"; this is known as a \"creative plea,\" and will usually be interpreted as a plea of not guilty.",
+      "Some civil disobedience defendants choose to make a defiant speech, or a speech explaining their actions, in allocution. In U.S. v. Burgos-Andujar, a defendant who was involved in a movement to stop military exercises by trespassing on U.S. Navy property argued to the court in allocution that \"the ones who are violating the greater law are the members of the Navy\". As a result, the judge increased her sentence from 40 to 60 days. This action was upheld because, according to the U.S",
+      ". This is typically done on moral issues.",
+      "In cases where the criminalized behavior is pure speech, civil disobedience can consist simply of engaging in the forbidden speech. An example would be WBAI's broadcasting the track \"Filthy Words\" from a George Carlin comedy album, which eventually led to the 1978 Supreme Court case of FCC v. Pacifica Foundation. Threatening government officials is another classic way of expressing defiance toward the government and unwillingness to stand for its policies",
+      ". It has also been argued that either choice is compatible with the spirit of civil disobedience. ACT-UP's Civil Disobedience Training handbook states that a civil disobedient who pleads guilty is essentially stating, \"Yes, I committed the act of which you accuse me. I don't deny it; in fact, I am proud of it. I feel I did the right thing by violating this particular law; I am guilty as charged,\" but that pleading not guilty sends a message of, \"Guilt implies wrong-doing"
+    ],
+    "reference_contexts": [
+      "An important decision for civil disobedients is whether or not to plead guilty. There is much debate on this point, as some believe that it is a civil disobedient's duty to submit to the punishment prescribed by law, while others believe that defending oneself in court will increase the possibility of changing the unjust law. It has also been argued that either choice is compatible with the spirit of civil disobedience. ACT-UP's Civil Disobedience Training handbook states that a civil disobedient who pleads guilty is essentially stating, \"Yes, I committed the act of which you accuse me. I don't deny it; in fact, I am proud of it. I feel I did the right thing by violating this particular law; I am guilty as charged,\" but that pleading not guilty sends a message of, \"Guilt implies wrong-doing. I feel I have done no wrong. I may have violated some specific laws, but I am guilty of doing no wrong. I therefore plead not guilty.\" A plea of no contest is sometimes regarded as a compromise between the two. One defendant accused of illegally protesting nuclear power, when asked to enter his plea, stated, \"I plead for the beauty that surrounds us\"; this is known as a \"creative plea,\" and will usually be interpreted as a plea of not guilty."
+    ],
+    "context_id": "ctx_1292",
+    "retrieved_sources": [
+      "ctx_1292",
+      "ctx_1296",
+      "ctx_1824",
+      "ctx_1288",
+      "ctx_1292"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Civil_disobedience"
+  },
+  {
+    "question": "What objects in organisms absorb singlet oxygen to prevent harm?",
+    "answer": "Carotenoids",
+    "ground_truth": "Carotenoids",
+    "all_answers": [
+      "Carotenoids",
+      "Carotenoids",
+      "Carotenoids",
+      "Carotenoids",
+      "Carotenoids"
+    ],
+    "retrieved_contexts": [
+      ". Carotenoids in photosynthetic organisms (and possibly also in animals) play a major role in absorbing energy from singlet oxygen and converting it to the unexcited ground state before it can cause harm to tissues.",
+      "Reactive oxygen species, such as superoxide ion (O−\n2) and hydrogen peroxide (H\n2O\n2), are dangerous by-products of oxygen use in organisms. Parts of the immune system of higher organisms create peroxide, superoxide, and singlet oxygen to destroy invading microbes. Reactive oxygen species also play an important role in the hypersensitive response of plants against pathogen attack. Oxygen is toxic to obligately anaerobic organisms, which were the dominant form of early life on Earth until O",
+      "2 in which all the electron spins are paired. It is much more reactive towards common organic molecules than is molecular oxygen per se. In nature, singlet oxygen is commonly formed from water during photosynthesis, using the energy of sunlight. It is also produced in the troposphere by the photolysis of ozone by light of short wavelength, and by the immune system as a source of active oxygen",
+      "Pathogens can rapidly evolve and adapt, and thereby avoid detection and neutralization by the immune system; however, multiple defense mechanisms have also evolved to recognize and neutralize pathogens. Even simple unicellular organisms such as bacteria possess a rudimentary immune system, in the form of enzymes that protect against bacteriophage infections. Other basic immune mechanisms evolved in ancient eukaryotes and remain in their modern descendants, such as plants and invertebrates",
+      "Singlet oxygen is a name given to several higher-energy species of molecular O"
+    ],
+    "reference_contexts": [
+      "Singlet oxygen is a name given to several higher-energy species of molecular O\n2 in which all the electron spins are paired. It is much more reactive towards common organic molecules than is molecular oxygen per se. In nature, singlet oxygen is commonly formed from water during photosynthesis, using the energy of sunlight. It is also produced in the troposphere by the photolysis of ozone by light of short wavelength, and by the immune system as a source of active oxygen. Carotenoids in photosynthetic organisms (and possibly also in animals) play a major role in absorbing energy from singlet oxygen and converting it to the unexcited ground state before it can cause harm to tissues."
+    ],
+    "context_id": "ctx_0641",
+    "retrieved_sources": [
+      "ctx_0641",
+      "ctx_0645",
+      "ctx_0641",
+      "ctx_1227",
+      "ctx_0641"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Oxygen"
+  },
+  {
+    "question": "In a market economy, what is inequality a reflection of?",
+    "answer": "The productivity gap between highly-paid professions and lower-paid professions.",
+    "ground_truth": "productivity gap between highly-paid professions and lower-paid professions",
+    "all_answers": [
+      "productivity gap between highly-paid professions and lower-paid professions",
+      "productivity gap",
+      "productivity gap"
+    ],
+    "retrieved_contexts": [
+      ". Thus, in a market economy, inequality is a reflection of the productivity gap between highly-paid professions and lower-paid professions.",
+      "In a purely capitalist mode of production (i.e. where professional and labor organizations cannot limit the number of workers) the workers wages will not be controlled by these organizations, or by the employer, but rather by the market. Wages work in the same way as prices for any other good. Thus, wages can be considered as a function of market price of skill. And therefore, inequality is driven by this price",
+      ". A 1996 study by Perotti examined the channels through which inequality may affect economic growth. He showed that, in accordance with the credit market imperfection approach, inequality is associated with lower level of human capital formation (education, experience, and apprenticeship) and higher level of fertility, and thereby lower levels of growth",
+      "Following the utilitarian principle of seeking the greatest good for the greatest number – economic inequality is problematic. A house that provides less utility to a millionaire as a summer home than it would to a homeless family of five, is an example of reduced \"distributive efficiency\" within society, that decreases marginal utility of wealth and thus the sum total of personal utility",
+      ". While the market will bid up compensation for rare and desired skills to reward wealth creation, greater productivity, etc., it will also prevent successful entrepreneurs from earning excess profits by fostering competition to cut prices, profits and large compensation. A better explainer of growing inequality, according to Stiglitz, is the use of political power generated by wealth by certain groups to shape government policies financially beneficial to them"
+    ],
+    "reference_contexts": [
+      "Neoclassical economics views inequalities in the distribution of income as arising from differences in value added by labor, capital and land. Within labor income distribution is due to differences in value added by different classifications of workers. In this perspective, wages and profits are determined by the marginal value added of each economic actor (worker, capitalist/business owner, landlord). Thus, in a market economy, inequality is a reflection of the productivity gap between highly-paid professions and lower-paid professions."
+    ],
+    "context_id": "ctx_1402",
+    "retrieved_sources": [
+      "ctx_1402",
+      "ctx_1404",
+      "ctx_1431",
+      "ctx_1425",
+      "ctx_1418"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Economic_inequality"
+  },
+  {
+    "question": "What interpretation of Islam is, for many of the adherents, the \"gold standard\" of their religion?",
+    "answer": "Wahhabism",
+    "ground_truth": "Saudi",
+    "all_answers": [
+      "Saudi",
+      "the Saudi-interpretation",
+      "Saudi"
+    ],
+    "retrieved_contexts": [
+      ". While this effort has by no means converted all, or even most Muslims to the Wahhabist interpretation of Islam, it has done much to overwhelm more moderate local interpretations, and has set the Saudi-interpretation of Islam as the \"gold standard\" of religion in minds of some or many Muslims.",
+      "Another major division within Islamism is between what Graham E. Fuller has described as the fundamentalist \"guardians of the tradition\" (Salafis, such as those in the Wahhabi movement) and the \"vanguard of change and Islamic reform\" centered around the Muslim Brotherhood",
+      "The interpretation of Islam promoted by this funding was the strict, conservative Saudi-based Wahhabism or Salafism. In its harshest form it preached that Muslims should not only \"always oppose\" infidels \"in every way,\" but \"hate them for their religion ... for Allah's sake,\" that democracy \"is responsible for all the horrible wars of the 20th century,\" that Shia and other non-Wahhabi Muslims were infidels, etc",
+      ". Its views were outlined in a pamphlet written by Muhammad Abd al-Salaam Farag, in which he states:",
+      "Islamists have asked the question, \"If Islam is a way of life, how can we say that those who want to live by its principles in legal, social, political, economic, and political spheres of life are not Muslims, but Islamists and believe in Islamism, not [just] Islam?\" Similarly, a writer for the International Crisis Group maintains that \"the conception of 'political Islam'\" is a creation of Americans to explain the Iranian Islamic Revolution and apolitical Islam was a historical fluke of the"
+    ],
+    "reference_contexts": [
+      "The interpretation of Islam promoted by this funding was the strict, conservative Saudi-based Wahhabism or Salafism. In its harshest form it preached that Muslims should not only \"always oppose\" infidels \"in every way,\" but \"hate them for their religion ... for Allah's sake,\" that democracy \"is responsible for all the horrible wars of the 20th century,\" that Shia and other non-Wahhabi Muslims were infidels, etc. While this effort has by no means converted all, or even most Muslims to the Wahhabist interpretation of Islam, it has done much to overwhelm more moderate local interpretations, and has set the Saudi-interpretation of Islam as the \"gold standard\" of religion in minds of some or many Muslims."
+    ],
+    "context_id": "ctx_1854",
+    "retrieved_sources": [
+      "ctx_1854",
+      "ctx_1849",
+      "ctx_1854",
+      "ctx_1870",
+      "ctx_1851"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Islamism"
+  },
+  {
+    "question": "Ctenophores are less complex than what other group?",
+    "answer": "Bilaterians",
+    "ground_truth": "bilaterians",
+    "all_answers": [
+      "bilaterians",
+      "bilaterians",
+      "bilaterians"
+    ],
+    "retrieved_contexts": [
+      "Ctenophores form an animal phylum that is more complex than sponges, about as complex as cnidarians (jellyfish, sea anemones, etc.), and less complex than bilaterians (which include almost all other animals). Unlike sponges, both ctenophores and cnidarians have: cells bound by inter-cell connections and carpet-like basement membranes; muscles; nervous systems; and some have sensory organs",
+      "Like sponges and cnidarians, ctenophores have two main layers of cells that sandwich a middle layer of jelly-like material, which is called the mesoglea in cnidarians and ctenophores; more complex animals have three main cell layers and no intermediate jelly-like layer. Hence ctenophores and cnidarians have traditionally been labelled diploblastic, along with sponges",
+      ". The position of the ctenophores in the evolutionary family tree of animals has long been debated, and the majority view at present, based on molecular phylogenetics, is that cnidarians and bilaterians are more closely related to each other than either is to ctenophores",
+      ". A series of studies that looked at the presence and absence of members of gene families and signalling pathways (e.g., homeoboxes, nuclear receptors, the Wnt signaling pathway, and sodium channels) showed evidence congruent with the latter two scenarios, that ctenophores are either sister to Cnidaria, Placozoa and Bilateria or sister to all other animal phyla",
+      "The relationship of ctenophores to the rest of Metazoa is very important to our understanding of the early evolution of animals and the origin of multicellularity. It has been the focus of debate for many years. Ctenophores have been purported to be the sister lineage to the Bilateria, sister to the Cnidaria, sister to Cnidaria, Placozoa and Bilateria, and sister to all other animal phyla"
+    ],
+    "reference_contexts": [
+      "Ctenophores form an animal phylum that is more complex than sponges, about as complex as cnidarians (jellyfish, sea anemones, etc.), and less complex than bilaterians (which include almost all other animals). Unlike sponges, both ctenophores and cnidarians have: cells bound by inter-cell connections and carpet-like basement membranes; muscles; nervous systems; and some have sensory organs. Ctenophores are distinguished from all other animals by having colloblasts, which are sticky and adhere to prey, although a few ctenophore species lack them."
+    ],
+    "context_id": "ctx_0811",
+    "retrieved_sources": [
+      "ctx_0811",
+      "ctx_0812",
+      "ctx_0810",
+      "ctx_0835",
+      "ctx_0835"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Ctenophora"
+  },
+  {
+    "question": "Who was the NFL Commissioner in early 2012?",
+    "answer": "Roger Goodell",
+    "ground_truth": "Roger Goodell",
+    "all_answers": [
+      "Roger Goodell",
+      "Roger Goodell",
+      "Goodell"
+    ],
+    "retrieved_contexts": [
+      "In early 2012, NFL Commissioner Roger Goodell stated that the league planned to make the 50th Super Bowl \"spectacular\" and that it would be \"an important game for us as a league\".",
+      "Darren Aronofsky, Terrence Malick, Mira Nair, and Whit Stillman; architect Philip Johnson; musicians Rivers Cuomo, Tom Morello, and Gram Parsons; musician, producer and composer Ryan Leslie; serial killer Ted Kaczynski; programmer and activist Richard Stallman; NFL quarterback Ryan Fitzpatrick; NFL center Matt Birk; NBA player Jeremy Lin; US Ski Team skier Ryan Max Riley; physician Sachin H",
+      ". In their only other Super Bowl win in Super Bowl XXXII, Denver wore blue jerseys, which was their primary color at the time. They also lost Super Bowl XXI when they wore white jerseys, but they are 0-4 in Super Bowls when wearing orange jerseys, losing in Super Bowl XII, XXII, XXIV, and XLVIII. The only other AFC champion team to have worn white as the designated home team in the Super Bowl was the Pittsburgh Steelers; they defeated the Seattle Seahawks 21–10 in Super Bowl XL 10 seasons prior",
+      "Manning finished the year with a career-low 67.9 passer rating, throwing for 2,249 yards and nine touchdowns, with 17 interceptions. In contrast, Osweiler threw for 1,967 yards, 10 touchdowns and six interceptions for a rating of 86.4. Veteran receiver Demaryius Thomas led the team with 105 receptions for 1,304 yards and six touchdowns, while Emmanuel Sanders caught 76 passes for 1,135 yards and six scores, while adding another 106 yards returning punts",
+      "In the United States, the game was televised by CBS, as part of a cycle between the three main broadcast television partners of the NFL. The network's lead broadcast team of Jim Nantz and Phil Simms called the contest, with Tracy Wolfson and Evan Washburn on the sidelines"
+    ],
+    "reference_contexts": [
+      "In early 2012, NFL Commissioner Roger Goodell stated that the league planned to make the 50th Super Bowl \"spectacular\" and that it would be \"an important game for us as a league\"."
+    ],
+    "context_id": "ctx_0004",
+    "retrieved_sources": [
+      "ctx_0004",
+      "ctx_1377",
+      "ctx_0022",
+      "ctx_0013",
+      "ctx_0032"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Super_Bowl_50"
+  },
+  {
+    "question": "In contrast how were Catholic saints portrayed?",
+    "answer": "As frail.",
+    "ground_truth": "frail Catholic saints",
+    "all_answers": [
+      "frail Catholic saints",
+      "frail",
+      "frail"
+    ],
+    "retrieved_contexts": [
+      "In the visual arts, the Normans did not have the rich and distinctive traditions of the cultures they conquered. However, in the early 11th century the dukes began a programme of church reform, encouraging the Cluniac reform of monasteries and patronising intellectual pursuits, especially the proliferation of scriptoria and the reconstitution of a compilation of lost illuminated manuscripts. The church was utilised by the dukes as a unifying force for their disparate duchy",
+      "Monastery, which had a long line of said starets); the Priest or Confessor in Roman Catholicism, who is often a man in Holy Orders but may be a monastic or other person respected for his spiritual accomplishments or acumen (even the Pope of Rome has a Confessor, who is not always a bishop, and, due to the hierarchical structure of the Roman Church, can not be his equal in authority), which is often a semi-official to official position, as opposed to the unofficial positions of spiritual guides",
+      "In response to demands for a German liturgy, Luther wrote a German Mass, which he published in early 1526. He did not intend it as a replacement for his 1523 adaptation of the Latin Mass but as an alternative for the \"simple people\", a \"public stimulation for people to believe and become Christians.\" Luther based his order on the Catholic service but omitted \"everything that smacks of sacrifice\"; and the Mass became a celebration where everyone received the wine as well as the bread",
+      "traditions, which boundaries can be blurred with the more typically Roman \"confessor\" position in some of the more historic and conservative Reformation Churches, such as some of the Lutheran and Anglican",
+      "In the 1530s and 1540s, printed images of Luther that emphasized his monumental size were crucial to the spread of Protestantism. In contrast to images of frail Catholic saints, Luther was presented as a stout man with a \"double chin, strong mouth, piercing deep-set eyes, fleshy face, and squat neck.\" He was shown to be physically imposing, an equal in stature to the secular German princes with whom he would join forces to spread Lutheranism"
+    ],
+    "reference_contexts": [
+      "In the 1530s and 1540s, printed images of Luther that emphasized his monumental size were crucial to the spread of Protestantism. In contrast to images of frail Catholic saints, Luther was presented as a stout man with a \"double chin, strong mouth, piercing deep-set eyes, fleshy face, and squat neck.\" He was shown to be physically imposing, an equal in stature to the secular German princes with whom he would join forces to spread Lutheranism. His large body also let the viewer know that he did not shun earthly pleasures like drinking—behavior that was a stark contrast to the ascetic life of the medieval religious orders. Famous images from this period include the woodcuts by Hans Brosamer (1530) and Lucas Cranach the Elder and Lucas Cranach the Younger (1546)."
+    ],
+    "context_id": "ctx_0442",
+    "retrieved_sources": [
+      "ctx_0142",
+      "ctx_0341",
+      "ctx_0394",
+      "ctx_0341",
+      "ctx_0442"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Martin_Luther"
+  },
+  {
+    "question": "Infrastructure is often called what?",
+    "answer": "Heavy/highway, heavy civil or heavy engineering.",
+    "ground_truth": "heavy/highway, heavy civil or heavy engineering",
+    "all_answers": [
+      "heavy/highway, heavy civil or heavy engineering",
+      "heavy/highway, heavy civil or heavy engineering",
+      "heavy/highway, heavy civil or heavy engineering"
+    ],
+    "retrieved_contexts": [
+      "In general, there are three sectors of construction: buildings, infrastructure and industrial. Building construction is usually further divided into residential and non-residential (commercial/institutional). Infrastructure is often called heavy/highway, heavy civil or heavy engineering. It includes large public works, dams, bridges, highways, water/wastewater and utility distribution. Industrial includes refineries, process chemical, power generation, mills and manufacturing plants",
+      "Construction is the process of constructing a building or infrastructure. Construction differs from manufacturing in that manufacturing typically involves mass production of similar items without a designated purchaser, while construction typically takes place on location for a known client. Construction as an industry comprises six to nine percent of the gross domestic product of developed countries",
+      "There is also a growing number of new forms of procurement that involve relationship contracting where the emphasis is on a co-operative relationship between the principal and contractor and other stakeholders within a construction project. New forms include partnering such as Public-Private Partnering (PPPs) aka private finance initiatives (PFIs) and alliances such as \"pure\" or \"project\" alliances and \"impure\" or \"strategic\" alliances",
+      ". The largest construction projects are referred to as megaprojects.",
+      ". If some of the units in the fold are facing downward, the structure is called an overturned anticline or syncline, and if all of the rock units are overturned or the correct up-direction is unknown, they are simply called by the most general terms, antiforms and synforms."
+    ],
+    "reference_contexts": [
+      "In general, there are three sectors of construction: buildings, infrastructure and industrial. Building construction is usually further divided into residential and non-residential (commercial/institutional). Infrastructure is often called heavy/highway, heavy civil or heavy engineering. It includes large public works, dams, bridges, highways, water/wastewater and utility distribution. Industrial includes refineries, process chemical, power generation, mills and manufacturing plants. There are other ways to break the industry into sectors or markets."
+    ],
+    "context_id": "ctx_1303",
+    "retrieved_sources": [
+      "ctx_1303",
+      "ctx_1301",
+      "ctx_1316",
+      "ctx_1302",
+      "ctx_0921"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Construction"
+  },
+  {
+    "question": "How many years does the V&A glass collection cover?",
+    "answer": "4000 years",
+    "ground_truth": "4000",
+    "all_answers": [
+      "4000",
+      "4000 years",
+      "4000"
+    ],
+    "retrieved_contexts": [
+      "The V&A covers 12.5 acres (51,000 m2) and 145 galleries. Its collection spans 5,000 years of art, from ancient times to the present day, from the cultures of Europe, North America, Asia and North Africa. The holdings of ceramics, glass, textiles, costumes, silver, ironwork, jewellery, furniture, medieval objects, sculpture, prints and printmaking, drawings and photographs are among the largest and most comprehensive in the world",
+      "The glass collection covers 4000 years of glass making, and has over 6000 items from Africa, Britain, Europe, America and Asia. The earliest glassware on display comes from Ancient Egypt and continues through the Ancient Roman, Medieval, Renaissance covering areas such as Venetian glass and Bohemian glass and more recent periods, including Art Nouveau glass by Louis Comfort Tiffany and Émile Gallé, the Art Deco style is represented by several examples by René Lalique",
+      "The Victoria and Albert Museum (often abbreviated as the V&A), London, is the world's largest museum of decorative arts and design, housing a permanent collection of over 4.5 million objects. It was founded in 1852 and named after Queen Victoria and Prince Albert",
+      "The sculpture collection at the V&A is the most comprehensive holding of post-classical European sculpture in the world. There are approximately 22,000 objects in the collection that cover the period from about 400 AD to 1914. This covers among other periods Byzantine and Anglo Saxon ivory sculptures, British, French and Spanish medieval statues and carvings, the Renaissance, Baroque, Neo-Classical, Victorian and Art Nouveau periods",
+      "The V&A has its origins in the Great Exhibition of 1851, with which Henry Cole, the museum's first director, was involved in planning; initially it was known as the Museum of Manufactures, first opening in May 1852 at Marlborough House, but by September had been transferred to Somerset House. At this stage the collections covered both applied art and science. Several of the exhibits from the Exhibition were purchased to form the nucleus of the collection"
+    ],
+    "reference_contexts": [
+      "The glass collection covers 4000 years of glass making, and has over 6000 items from Africa, Britain, Europe, America and Asia. The earliest glassware on display comes from Ancient Egypt and continues through the Ancient Roman, Medieval, Renaissance covering areas such as Venetian glass and Bohemian glass and more recent periods, including Art Nouveau glass by Louis Comfort Tiffany and Émile Gallé, the Art Deco style is represented by several examples by René Lalique. There are many examples of crystal chandeliers both English, displayed in the British galleries and foreign for example Venetian (attributed to Giuseppe Briati) dated c1750 are in the collection. The stained glass collection is possibly the finest in the world, covering the medieval to modern periods, and covering Europe as well as Britain. Several examples of English 16th-century heraldic glass is displayed in the British Galleries. Many well-known designers of stained glass are represented in the collection including, from the 19th century: Dante Gabriel Rossetti, Edward Burne-Jones and William Morris. There is also an example of Frank Lloyd Wright's work in the collection. 20th-century designers include Harry Clarke, John Piper, Patrick Reyntiens, Veronica Whall and Brian Clarke."
+    ],
+    "context_id": "ctx_1023",
+    "retrieved_sources": [
+      "ctx_0990",
+      "ctx_1023",
+      "ctx_0989",
+      "ctx_1038",
+      "ctx_0991"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Victoria_and_Albert_Museum"
+  },
+  {
+    "question": "What does ctenophore use to capture prey?",
+    "answer": "Colloblasts.",
+    "ground_truth": "colloblasts",
+    "all_answers": [
+      "colloblasts",
+      "colloblasts",
+      "colloblasts"
+    ],
+    "retrieved_contexts": [
+      "Almost all ctenophores are predators, taking prey ranging from microscopic larvae and rotifers to the adults of small crustaceans; the exceptions are juveniles of two species, which live as parasites on the salps on which adults of their species feed. In favorable circumstances, ctenophores can eat ten times their own weight in a day. Only 100–150 species have been validated, and possibly another 25 have not been fully described and named",
+      "Almost all ctenophores are predators – there are no vegetarians and only one genus that is partly parasitic. If food is plentiful, they can eat 10 times their own weight per day. While Beroe preys mainly on other ctenophores, other surface-water species prey on zooplankton (planktonic animals) ranging in size from the microscopic, including mollusc and fish larvae, to small adult crustaceans such as copepods, amphipods, and even krill",
+      ". A ctenophore does not automatically try to keep the statolith resting equally on all the balancers. Instead its response is determined by the animal's \"mood\", in other words the overall state of the nervous system. For example, if a ctenophore with trailing tentacles captures prey, it will often put some comb rows into reverse, spinning the mouth towards the prey.",
+      "Ctenophores may be abundant during the summer months in some coastal locations, but in other places they are uncommon and difficult to find. In bays where they occur in very high numbers, predation by ctenophores may control the populations of small zooplanktonic organisms such as copepods, which might otherwise wipe out the phytoplankton (planktonic plants), which are a vital part of marine food chains",
+      ". Ctenophores are distinguished from all other animals by having colloblasts, which are sticky and adhere to prey, although a few ctenophore species lack them."
+    ],
+    "reference_contexts": [
+      "Ctenophores form an animal phylum that is more complex than sponges, about as complex as cnidarians (jellyfish, sea anemones, etc.), and less complex than bilaterians (which include almost all other animals). Unlike sponges, both ctenophores and cnidarians have: cells bound by inter-cell connections and carpet-like basement membranes; muscles; nervous systems; and some have sensory organs. Ctenophores are distinguished from all other animals by having colloblasts, which are sticky and adhere to prey, although a few ctenophore species lack them."
+    ],
+    "context_id": "ctx_0811",
+    "retrieved_sources": [
+      "ctx_0807",
+      "ctx_0830",
+      "ctx_0818",
+      "ctx_0809",
+      "ctx_0811"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Ctenophora"
+  },
+  {
+    "question": "What did Luther speak out about in Saxony?",
+    "answer": "The Jews.",
+    "ground_truth": "the Jews",
+    "all_answers": [
+      "the Jews",
+      "Jews",
+      "Jews"
+    ],
+    "retrieved_contexts": [
+      "Luther spoke out against the Jews in Saxony, Brandenburg, and Silesia",
+      "Luther and his colleagues introduced the new order of worship during their visitation of the Electorate of Saxony, which began in 1527. They also assessed the standard of pastoral care and Christian education in the territory. \"Merciful God, what misery I have seen,\" Luther wrote, \"the common people knowing nothing at all of Christian doctrine ... and unfortunately many pastors are well-nigh unskilled and incapable of teaching.\"",
+      "His poor physical health made him short-tempered and even harsher in his writings and comments. His wife Katharina was overheard saying, \"Dear husband, you are too rude,\" and he responded, \"They are teaching me to be rude.\" In 1545 and 1546 Luther preached three times in the Market Church in Halle, staying with his friend Justus Jonas during Christmas.",
+      "To avoid confusing or upsetting the people, Luther avoided extreme change. He also did not wish to replace one controlling system with another. He concentrated on the church in the Electorate of Saxony, acting only as an adviser to churches in new territories, many of which followed his Saxon model. He worked closely with the new elector, John the Steadfast, to whom he turned for secular leadership and funds on behalf of a church largely shorn of its assets and income after the break with Rome",
+      ". At times, Luther's practical reforms fell short of his earlier radical pronouncements. For example, the Instructions for the Visitors of Parish Pastors in Electoral Saxony (1528), drafted by Melanchthon with Luther's approval, stressed the role of repentance in the forgiveness of sins, despite Luther's position that faith alone ensures justification. The Eisleben reformer Johannes Agricola challenged this compromise, and Luther condemned him for teaching that faith is separate from works"
+    ],
+    "reference_contexts": [
+      "Luther spoke out against the Jews in Saxony, Brandenburg, and Silesia. Josel of Rosheim, the Jewish spokesman who tried to help the Jews of Saxony in 1537, later blamed their plight on \"that priest whose name was Martin Luther—may his body and soul be bound up in hell!—who wrote and issued many heretical books in which he said that whoever would help the Jews was doomed to perdition.\" Josel asked the city of Strasbourg to forbid the sale of Luther's anti-Jewish works: they refused initially, but did so when a Lutheran pastor in Hochfelden used a sermon to urge his parishioners to murder Jews. Luther's influence persisted after his death. Throughout the 1580s, riots led to the expulsion of Jews from several German Lutheran states."
+    ],
+    "context_id": "ctx_0428",
+    "retrieved_sources": [
+      "ctx_0428",
+      "ctx_0395",
+      "ctx_0436",
+      "ctx_0393",
+      "ctx_0393"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Martin_Luther"
+  },
+  {
+    "question": "What chemical element was the cause of the Apollo 1 disastrous outcome?",
+    "answer": "Oxygen",
+    "ground_truth": "pure O",
+    "all_answers": [
+      "pure O"
+    ],
+    "retrieved_contexts": [
+      "Concentrated O\n2 will allow combustion to proceed rapidly and energetically. Steel pipes and storage vessels used to store and transmit both gaseous and liquid oxygen will act as a fuel; and therefore the design and manufacture of O\n2 systems requires special training to ensure that ignition sources are minimized. The fire that killed the Apollo 1 crew in a launch pad test spread so rapidly because the capsule was pressurized with pure O",
+      "The Apollo program succeeded in achieving its goal of manned lunar landing, despite the major setback of a 1967 Apollo 1 cabin fire that killed the entire crew during a prelaunch test. After the first landing, sufficient flight hardware remained for nine follow-on landings with a plan for extended lunar geological and astrophysical exploration. Budget cuts forced the cancellation of three of these",
+      "The success of the first two landings allowed the remaining missions to be crewed with a single veteran as Commander, with two rookies. Apollo 13 launched Lovell, Jack Swigert, and Fred Haise in April 1970, headed for the Fra Mauro formation. But two days out, a liquid oxygen tank exploded, disabling the Service Module and forcing the crew to use the LM as a \"life boat\" to return to Earth",
+      ". Another NASA review board was convened to determine the cause, which turned out to be a combination of damage of the tank in the factory, and a subcontractor not making a tank component according to updated design specifications. Apollo was grounded again, for the remainder of 1970 while the oxygen tank was redesigned and an extra one was added.",
+      ". One important rock found during the Apollo Program is dubbed the Genesis Rock, retrieved by astronauts David Scott and James Irwin during the Apollo 15 mission. This anorthosite rock is composed almost exclusively of the calcium-rich feldspar mineral anorthite, and is believed to be representative of the highland crust. A geochemical component called KREEP was discovered, which has no known terrestrial counterpart"
+    ],
+    "reference_contexts": [
+      "Concentrated O\n2 will allow combustion to proceed rapidly and energetically. Steel pipes and storage vessels used to store and transmit both gaseous and liquid oxygen will act as a fuel; and therefore the design and manufacture of O\n2 systems requires special training to ensure that ignition sources are minimized. The fire that killed the Apollo 1 crew in a launch pad test spread so rapidly because the capsule was pressurized with pure O\n2 but at slightly more than atmospheric pressure, instead of the 1⁄3 normal pressure that would be used in a mission.[k]"
+    ],
+    "context_id": "ctx_0626",
+    "retrieved_sources": [
+      "ctx_0626",
+      "ctx_0689",
+      "ctx_0733",
+      "ctx_0733",
+      "ctx_0735"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Oxygen"
+  },
+  {
+    "question": "Approximately how many works of art are included in the Far Eastern collections?",
+    "answer": "More than 70,000 works of art.",
+    "ground_truth": "more than 70,000",
+    "all_answers": [
+      "more than 70,000",
+      "more than 70,000",
+      "70,000"
+    ],
+    "retrieved_contexts": [
+      "The collection includes about 1130 British and 650 European oil paintings, 6800 British watercolours, pastels and 2000 miniatures, for which the museum holds the national collection. Also on loan to the museum, from Her Majesty the Queen Elizabeth II, are the Raphael Cartoons: the seven surviving (there were ten) full scale designs for tapestries in the Sistine Chapel, of the lives of Peter and Paul from the Gospels and the Acts of the Apostles",
+      "The V&A covers 12.5 acres (51,000 m2) and 145 galleries. Its collection spans 5,000 years of art, from ancient times to the present day, from the cultures of Europe, North America, Asia and North Africa. The holdings of ceramics, glass, textiles, costumes, silver, ironwork, jewellery, furniture, medieval objects, sculpture, prints and printmaking, drawings and photographs are among the largest and most comprehensive in the world",
+      "The Far Eastern collections include more than 70,000 works of art from the countries of East Asia: China, Japan and Korea. The T. T. Tsui Gallery of Chinese art opened in 1991, displaying a representative collection of the V&As approximately 16,000 objects from China, dating from the 4th millennium BC to the present day. Though the majority of art works on display date from the Ming and Qing dynasties, there are exquisite examples of objects dating from the Tang dynasty and earlier periods",
+      "The V&A holds over 19,000 items from the Islamic world, ranging from the early Islamic period (the 7th century) to the early 20th century. The Jameel Gallery of Islamic Art, opened in 2006, houses a representative display of 400 objects with the highlight being the Ardabil Carpet, the centrepiece of the gallery. The displays in this gallery cover objects from Spain, North Africa, the Middle East, Central Asia and Afghanistan. A masterpiece of Islamic art is a 10th-century Rock crystal ewer",
+      ". With over 600,000 drawings, over 750,000 papers and paraphernalia, and over 700,000 photographs from around the world, together they form the world's most comprehensive architectural resource."
+    ],
+    "reference_contexts": [
+      "The Far Eastern collections include more than 70,000 works of art from the countries of East Asia: China, Japan and Korea. The T. T. Tsui Gallery of Chinese art opened in 1991, displaying a representative collection of the V&As approximately 16,000 objects from China, dating from the 4th millennium BC to the present day. Though the majority of art works on display date from the Ming and Qing dynasties, there are exquisite examples of objects dating from the Tang dynasty and earlier periods. Notably, a metre-high bronze head of the Buddha dated to c.750 AD and one of the oldest items a 2,000-year-old jade horse head from a burial, other sculptures include life-size tomb guardians. Classic examples of Chinese manufacturing are displayed that include lacquer, silk, porcelain, jade and cloisonné enamel. Two large ancestor portraits of a husband and wife painted in watercolour on silk date from the 18th century. There is a unique Chinese lacquerware table, made in the imperial workshops during the reign of the Xuande Emperor in the Ming dynasty. Examples of clothing are also displayed. One of the largest objects is a bed from the mid-17th century. The work of contemporary Chinese designers is also displayed."
+    ],
+    "context_id": "ctx_1011",
+    "retrieved_sources": [
+      "ctx_1034",
+      "ctx_0990",
+      "ctx_1011",
+      "ctx_1009",
+      "ctx_1006"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Victoria_and_Albert_Museum"
+  },
+  {
+    "question": "How many types of science fiction have been impacted by Tesla?",
+    "answer": "Several types.",
+    "ground_truth": "several",
+    "all_answers": [
+      "several",
+      "several",
+      "several"
+    ],
+    "retrieved_contexts": [
+      "Tesla's legacy has endured in books, films, radio, TV, music, live theater, comics and video games. The impact of the technologies invented or envisioned by Tesla is a recurring theme in several types of science fiction.",
+      "Tesla was renowned for his achievements and showmanship, eventually earning him a reputation in popular culture as an archetypal \"mad scientist\". His patents earned him a considerable amount of money, much of which was used to finance his own projects with varying degrees of success.:121,154 He lived most of his life in a series of New York hotels, through his retirement. Tesla died on 7 January 1943",
+      "Tesla wrote a number of books and articles for magazines and journals. Among his books are My Inventions: The Autobiography of Nikola Tesla, compiled and edited by Ben Johnston; The Fantastic Inventions of Nikola Tesla, compiled and edited by David Hatcher Childress; and The Tesla Papers.",
+      "Tesla read many works, memorizing complete books, and supposedly possessed a photographic memory.:33 He was a polyglot, speaking eight languages: Serbo-Croatian, Czech, English, French, German, Hungarian, Italian, and Latin.:282 Tesla related in his autobiography that he experienced detailed moments of inspiration. During his early life, Tesla was repeatedly stricken with illness",
+      "Tesla was a good friend of Francis Marion Crawford, Robert Underwood Johnson, Stanford White, Fritz Lowenstein, George Scherff, and Kenneth Swezey. In middle age, Tesla became a close friend of Mark Twain; they spent a lot of time together in his lab and elsewhere. Twain notably described Tesla's induction motor invention as \"the most valuable patent since the telephone.\" In the late 1920s, Tesla also befriended George Sylvester Viereck, a poet, writer, mystic, and later, a Nazi propagandist"
+    ],
+    "reference_contexts": [
+      "Tesla's legacy has endured in books, films, radio, TV, music, live theater, comics and video games. The impact of the technologies invented or envisioned by Tesla is a recurring theme in several types of science fiction."
+    ],
+    "context_id": "ctx_0238",
+    "retrieved_sources": [
+      "ctx_0238",
+      "ctx_0151",
+      "ctx_0236",
+      "ctx_0222",
+      "ctx_0226"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Nikola_Tesla"
+  },
+  {
+    "question": "What did he do with Wardenclyffe?",
+    "answer": "Sold it for $20,000.",
+    "ground_truth": "sold",
+    "all_answers": [
+      "sold",
+      "sold",
+      "sold"
+    ],
+    "retrieved_contexts": [
+      "In December 1901, Marconi successfully transmitted the letter S from England to Newfoundland, terminating Tesla's relationship with Morgan.[improper synthesis?] Over the next five years, Tesla wrote over 50 letters to Morgan, pleading for and demanding additional funding to complete the construction of Wardenclyffe. Tesla continued the project for another nine months. The tower was erected to its full 187 feet (57 m)",
+      ". In his lab he also conducted a range of experiments with mechanical oscillators/generators, electrical discharge tubes, and early X-ray imaging. He also built a wireless controlled boat, one of the first ever exhibited.",
+      "Before World War I, Tesla sought overseas investors. After the war started, Tesla lost the funding he was receiving from his patents in European countries. Eventually, he sold Wardenclyffe for $20,000 ($472,500 in today's dollars). In 1917, around the time that the Wardenclyffe Tower was demolished by Boldt to make the land a more viable real estate asset, Tesla received AIEE's highest honor, the Edison Medal.",
+      "The Colorado experiments had prepared Tesla for the establishment of the trans-Atlantic wireless telecommunications facility known as Wardenclyffe near Shoreham, Long Island.",
+      ". The tower was erected to its full 187 feet (57 m). In July 1903, Tesla wrote to Morgan that in addition to wireless communication, Wardenclyffe would be capable of wireless transmission of electric power. On 14 October 1904, Morgan finally replied through his secretary, stating, \"It will be impossible for [me] to do anything in the matter,\" after Tesla had written to Morgan when the financier was meeting with the Archbishop of Canterbury in an attempt to appeal to his Christian spirit."
+    ],
+    "reference_contexts": [
+      "Before World War I, Tesla sought overseas investors. After the war started, Tesla lost the funding he was receiving from his patents in European countries. Eventually, he sold Wardenclyffe for $20,000 ($472,500 in today's dollars). In 1917, around the time that the Wardenclyffe Tower was demolished by Boldt to make the land a more viable real estate asset, Tesla received AIEE's highest honor, the Edison Medal."
+    ],
+    "context_id": "ctx_0199",
+    "retrieved_sources": [
+      "ctx_0195",
+      "ctx_0150",
+      "ctx_0199",
+      "ctx_0193",
+      "ctx_0195"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Nikola_Tesla"
+  },
+  {
+    "question": "Whose plan called for the Mongolian army to split in two after the Khwarezmian conquest?",
+    "answer": "Subutai",
+    "ground_truth": "Subutai",
+    "all_answers": [
+      "Subutai",
+      "Subutai",
+      "Subutai"
+    ],
+    "retrieved_contexts": [
+      "After the defeat of the Khwarezmian Empire in 1220, Genghis Khan gathered his forces in Persia and Armenia to return to the Mongolian steppes. Under the suggestion of Subutai, the Mongol army was split into two forces. Genghis Khan led the main army on a raid through Afghanistan and northern India towards Mongolia, while another 20,000 (two tumen) contingent marched through the Caucasus and into Russia under generals Jebe and Subutai. They pushed deep into Armenia and Azerbaijan",
+      "The Mongol army under Genghis Khan, generals and his sons crossed the Tien Shan mountains by entering the area controlled by the Khwarezmian Empire. After compiling intelligence from many sources Genghis Khan carefully prepared his army, which was divided into three groups. His son Jochi led the first division into the northeast of Khwarezmia. The second division under Jebe marched secretly to the southeast part of Khwarzemia to form, with the first division, a pincer attack on Samarkand",
+      "The Shah's army was split by diverse internecine feuds and by the Shah's decision to divide his army into small groups concentrated in various cities. This fragmentation was decisive in Khwarezmia's defeats, as it allowed the Mongols, although exhausted from the long journey, to immediately set about defeating small fractions of the Khwarzemi forces instead of facing a unified defense. The Mongol army quickly seized the town of Otrar, relying on superior strategy and tactics",
+      "The Mongols' conquest, even by their own standards, was brutal. After the capital Samarkand fell, the capital was moved to Bukhara by the remaining men, while Genghis Khan ordered two of his generals and their forces to completely destroy the remnants of the Khwarezmid Empire, including not only royal buildings, but entire towns, populations, and even vast swaths of farmland",
+      ". This was seen as an affront and insult to Genghis Khan. Outraged, Genghis Khan planned one of his largest invasion campaigns by organizing together around 100,000 soldiers (10 tumens), his most capable generals and some of his sons. He left a commander and number of troops in China, designated his successors to be his family members and likely appointed Ögedei to be his immediate successor and then went out to Khwarezmia."
+    ],
+    "reference_contexts": [
+      "After the defeat of the Khwarezmian Empire in 1220, Genghis Khan gathered his forces in Persia and Armenia to return to the Mongolian steppes. Under the suggestion of Subutai, the Mongol army was split into two forces. Genghis Khan led the main army on a raid through Afghanistan and northern India towards Mongolia, while another 20,000 (two tumen) contingent marched through the Caucasus and into Russia under generals Jebe and Subutai. They pushed deep into Armenia and Azerbaijan. The Mongols destroyed the kingdom of Georgia, sacked the Genoese trade-fortress of Caffa in Crimea and overwintered near the Black Sea. Heading home, Subutai's forces attacked the allied forces of the Cuman–Kipchaks and the poorly coordinated 80,000 Kievan Rus' troops led by Mstislav the Bold of Halych and Mstislav III of Kiev who went out to stop the Mongols' actions in the area. Subutai sent emissaries to the Slavic princes calling for a separate peace, but the emissaries were executed. At the Battle of Kalka River in 1223, Subutai's forces defeated the larger Kievan force. They also may have fought against the neighboring Volga Bulgars. There is no historical record except a short account by the Arab historian Ibn al-Athir, writing in Mosul some 1100 miles away from the event. Various historical secondary sources - Morgan, Chambers, Grousset - state that the Mongols actually defeated the Bulgars, Chambers even going so far as to say that the Bulgars had made up stories to tell the (recently crushed) Russians that they had beaten the Mongols and driven them from their territory. The Russian princes then sued for peace. Subutai agreed but was in no mood to pardon the princes. As was customary in Mongol society for nobility, the Russian princes were given a bloodless death. Subutai had a large wooden platform constructed on which he ate his meals along with his other generals. Six Russian princes, including Mstislav III of Kiev, were put under this platform and crushed to death."
+    ],
+    "context_id": "ctx_1172",
+    "retrieved_sources": [
+      "ctx_1172",
+      "ctx_1167",
+      "ctx_1168",
+      "ctx_1169",
+      "ctx_1166"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Genghis_Khan"
+  },
+  {
+    "question": "Where was Tesla's property sent?",
+    "answer": "Belgrade.",
+    "ground_truth": "Belgrade",
+    "all_answers": [
+      "Belgrade",
+      "Belgrade",
+      "Belgrade"
+    ],
+    "retrieved_contexts": [
+      "Two days later, the FBI ordered the Alien Property Custodian to seize Tesla's belongings, even though Tesla was an American citizen. Tesla's entire estate from the Hotel New Yorker and other New York City hotels was transported to the Manhattan Storage and Warehouse Company under the Office of Alien Property (OAP) seal. John G. Trump, a professor at M.I.T",
+      "In 1952, following pressure from Tesla's nephew, Sava Kosanović, Tesla's entire estate was shipped to Belgrade in 80 trunks marked N.T. In 1957, Kosanović's secretary Charlotte Muzar transported Tesla's ashes from the United States to Belgrade. The ashes are displayed in a gold-plated sphere on a marble pedestal in the Nikola Tesla Museum.",
+      "On 7 January 1900, Tesla left Colorado Springs.[citation needed] His lab was torn down in 1904, and its contents were sold two years later to satisfy a debt.",
+      "Before World War I, Tesla sought overseas investors. After the war started, Tesla lost the funding he was receiving from his patents in European countries. Eventually, he sold Wardenclyffe for $20,000 ($472,500 in today's dollars). In 1917, around the time that the Wardenclyffe Tower was demolished by Boldt to make the land a more viable real estate asset, Tesla received AIEE's highest honor, the Edison Medal.",
+      "In December 1901, Marconi successfully transmitted the letter S from England to Newfoundland, terminating Tesla's relationship with Morgan.[improper synthesis?] Over the next five years, Tesla wrote over 50 letters to Morgan, pleading for and demanding additional funding to complete the construction of Wardenclyffe. Tesla continued the project for another nine months. The tower was erected to its full 187 feet (57 m)"
+    ],
+    "reference_contexts": [
+      "In 1952, following pressure from Tesla's nephew, Sava Kosanović, Tesla's entire estate was shipped to Belgrade in 80 trunks marked N.T. In 1957, Kosanović's secretary Charlotte Muzar transported Tesla's ashes from the United States to Belgrade. The ashes are displayed in a gold-plated sphere on a marble pedestal in the Nikola Tesla Museum."
+    ],
+    "context_id": "ctx_0215",
+    "retrieved_sources": [
+      "ctx_0213",
+      "ctx_0215",
+      "ctx_0192",
+      "ctx_0199",
+      "ctx_0195"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Nikola_Tesla"
+  },
+  {
+    "question": "When did Sunday Night Football premiere on NBC?",
+    "answer": "Not found.",
+    "ground_truth": "2006",
+    "all_answers": [
+      "2006",
+      "2006",
+      "2006"
+    ],
+    "retrieved_contexts": [
+      "The game's media day, which was typically held on the Tuesday afternoon prior to the game, was moved to the Monday evening and re-branded as Super Bowl Opening Night. The event was held on February 1, 2016 at SAP Center in San Jose. Alongside the traditional media availabilities, the event featured an opening ceremony with player introductions on a replica of the Golden Gate Bridge.",
+      "In the United States, the game was televised by CBS, as part of a cycle between the three main broadcast television partners of the NFL. The network's lead broadcast team of Jim Nantz and Phil Simms called the contest, with Tracy Wolfson and Evan Washburn on the sidelines",
+      "In 1970, ABC debuted Monday Night Football as part of its Monday prime time schedule; the program became a hit for the network and served as the National Football League (NFL)'s premier game of the week until 2006, when Sunday Night Football, which moved to NBC that year as part of a broadcast deal that in turn saw MNF move to ESPN, took over as the league's marquee game",
+      "The 1970s were highlighted by several successful comedy, fantasy, action and superhero-themed series for the network including Kung Fu, The Six Million Dollar Man, Wonder Woman, Starsky & Hutch, Charlie's Angels, The Bionic Woman, Fantasy Island and Battlestar Galactica. Many of these series were greenlit by Silverman, who left ABC in 1978 to become president of NBC's entertainment division",
+      ". Discovering that their formats seemed to appeal to their viewers, the network became the first to adopt them for a new national morning show, Good Morning America, which debuted on November 3, 1975."
+    ],
+    "reference_contexts": [
+      "In 1970, ABC debuted Monday Night Football as part of its Monday prime time schedule; the program became a hit for the network and served as the National Football League (NFL)'s premier game of the week until 2006, when Sunday Night Football, which moved to NBC that year as part of a broadcast deal that in turn saw MNF move to ESPN, took over as the league's marquee game. According to Goldenson, Monday Night Football helped earn ABC regularly score an audience share of 15%–16%; ABC Sports managed the budget for the Monday night time slot to reallocate the weekly budget for ABC's prime time schedule to just six days, as opposed to seven on competing networks. 1970 also saw the premieres of several soap operas including the long-running All My Children, which ran on the network for 41 years."
+    ],
+    "context_id": "ctx_1092",
+    "retrieved_sources": [
+      "ctx_0028",
+      "ctx_0032",
+      "ctx_1092",
+      "ctx_1097",
+      "ctx_1096"
+    ],
+    "answer_in_retrieved": true,
+    "title": "American_Broadcasting_Company"
+  },
+  {
+    "question": "How many paintings did John Sheeshanks give to the museum?",
+    "answer": "233 paintings",
+    "ground_truth": "233",
+    "all_answers": [
+      "233",
+      "233",
+      "233"
+    ],
+    "retrieved_contexts": [
+      "In 1857 John Sheepshanks donated 233 paintings, mainly by contemporary British artists, and a similar number of drawings to the museum with the intention of forming a 'A National Gallery of British Art', a role since taken on by Tate Britain; artists represented are William Blake, James Barry, Henry Fuseli, Sir Edwin Henry Landseer, Sir David Wilkie, William Mulready, William Powell Frith, Millais and Hippolyte Delaroche",
+      "The Museum's collections of South and South-East Asian art are the most comprehensive and important in the West comprising nearly 60,000 objects, including about 10,000 textiles and 6000 paintings, the range of the collection is immense. The Jawaharlal Nehru gallery of Indian art, opened in 1991, contains art from about 500 BC to the 19th century. There is an extensive collection of sculpture, mainly of a religious nature, Hindu, Buddhist and Jain",
+      "The collection includes about 1130 British and 650 European oil paintings, 6800 British watercolours, pastels and 2000 miniatures, for which the museum holds the national collection. Also on loan to the museum, from Her Majesty the Queen Elizabeth II, are the Raphael Cartoons: the seven surviving (there were ten) full scale designs for tapestries in the Sistine Chapel, of the lives of Peter and Paul from the Gospels and the Acts of the Apostles",
+      ". Other artists with works in the collection include: Bernardino Fungai, Marcus Gheeraerts the Younger, Domenico di Pace Beccafumi, Fioravante Ferramola, Jan Brueghel the Elder, Anthony van Dyck, Ludovico Carracci, Antonio Verrio, Giovanni Battista Tiepolo, Domenico Tiepolo, Canaletto, Francis Hayman, Pompeo Batoni, Benjamin West, Paul Sandby, Richard Wilson, William Etty, Henry Fuseli, Sir Thomas Lawrence, James Barry, Francis Danby, Richard Parkes Bonington and Alphonse Legros.",
+      ". Although some of Constable's works came to the museum with the Sheepshanks bequest, the majority of the artist's works were donated by his daughter Isabel in 1888, including the large number of sketches in oil, the most significant being the 1821 full size oil sketch for The Hay Wain"
+    ],
+    "reference_contexts": [
+      "In 1857 John Sheepshanks donated 233 paintings, mainly by contemporary British artists, and a similar number of drawings to the museum with the intention of forming a 'A National Gallery of British Art', a role since taken on by Tate Britain; artists represented are William Blake, James Barry, Henry Fuseli, Sir Edwin Henry Landseer, Sir David Wilkie, William Mulready, William Powell Frith, Millais and Hippolyte Delaroche. Although some of Constable's works came to the museum with the Sheepshanks bequest, the majority of the artist's works were donated by his daughter Isabel in 1888, including the large number of sketches in oil, the most significant being the 1821 full size oil sketch for The Hay Wain. Other artists with works in the collection include: Bernardino Fungai, Marcus Gheeraerts the Younger, Domenico di Pace Beccafumi, Fioravante Ferramola, Jan Brueghel the Elder, Anthony van Dyck, Ludovico Carracci, Antonio Verrio, Giovanni Battista Tiepolo, Domenico Tiepolo, Canaletto, Francis Hayman, Pompeo Batoni, Benjamin West, Paul Sandby, Richard Wilson, William Etty, Henry Fuseli, Sir Thomas Lawrence, James Barry, Francis Danby, Richard Parkes Bonington and Alphonse Legros."
+    ],
+    "context_id": "ctx_1035",
+    "retrieved_sources": [
+      "ctx_1035",
+      "ctx_1010",
+      "ctx_1034",
+      "ctx_1035",
+      "ctx_1035"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Victoria_and_Albert_Museum"
+  },
+  {
+    "question": "Who was made rich and prosperous prior to World War 1",
+    "answer": "Imperial powers.",
+    "ground_truth": "many imperial powers",
+    "all_answers": [
+      "many imperial powers",
+      "imperial powers",
+      "imperial powers",
+      "imperial powers"
+    ],
+    "retrieved_contexts": [
+      "Some of the income was dispensed in the form of aid to other underdeveloped nations whose economies had been caught between higher oil prices and lower prices for their own export commodities, amid shrinking Western demand. Much went for arms purchases that exacerbated political tensions, particularly in the Middle East",
+      "For most of human history higher material living standards – full stomachs, access to clean water and warmth from fuel – led to better health and longer lives. This pattern of higher incomes-longer lives still holds among poorer countries, where life expectancy increases rapidly as per capita income increases, but in recent decades it has slowed down among middle income countries and plateaued among the richest thirty or so countries in the world",
+      "At the outbreak of World War I in August 1914, the governors of British East Africa (as the Protectorate was generally known) and German East Africa agreed a truce in an attempt to keep the young colonies out of direct hostilities. Lt Col Paul von Lettow-Vorbeck took command of the German military forces, determined to tie down as many British resources as possible",
+      ". The bulk of British emigration, trade, and capital went to areas outside the formal British Empire. Key to their thinking is the idea of empire 'informally if possible and formally if necessary.'\"[attribution needed] Because of the resources made available by imperialism, the world's economy grew significantly and became much more interconnected in the decades before World War I, making the many imperial powers rich and prosperous.",
+      "The correlation between capitalism, aristocracy, and imperialism has long been debated among historians and political theorists. Much of the debate was pioneered by such theorists as J. A. Hobson (1858–1940), Joseph Schumpeter (1883–1950), Thorstein Veblen (1857–1929), and Norman Angell (1872–1967). While these non-Marxist writers were at their most prolific before World War I, they remained active in the interwar years"
+    ],
+    "reference_contexts": [
+      "During the 20th century, historians John Gallagher (1919–1980) and Ronald Robinson (1920–1999) constructed a framework for understanding European imperialism. They claim that European imperialism was influential, and Europeans rejected the notion that \"imperialism\" required formal, legal control by one government over another country. \"In their view, historians have been mesmerized by formal empire and maps of the world with regions colored red. The bulk of British emigration, trade, and capital went to areas outside the formal British Empire. Key to their thinking is the idea of empire 'informally if possible and formally if necessary.'\"[attribution needed] Because of the resources made available by imperialism, the world's economy grew significantly and became much more interconnected in the decades before World War I, making the many imperial powers rich and prosperous."
+    ],
+    "context_id": "ctx_1901",
+    "retrieved_sources": [
+      "ctx_0669",
+      "ctx_1422",
+      "ctx_1601",
+      "ctx_1901",
+      "ctx_1905"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Imperialism"
+  },
+  {
+    "question": "After the Oligocene period, under what period did the amazon rainforest begin to expand?",
+    "answer": "Middle Miocene",
+    "ground_truth": "Middle Miocene",
+    "all_answers": [
+      "Middle Miocene",
+      "Middle Miocene",
+      "Middle Miocene"
+    ],
+    "retrieved_contexts": [
+      ". During the Oligocene, for example, the rainforest spanned a relatively narrow band. It expanded again during the Middle Miocene, then retracted to a mostly inland formation at the last glacial maximum. However, the rainforest still managed to thrive during these glacial periods, allowing for the survival and evolution of a broad diversity of species.",
+      "The Amazon rainforest (Portuguese: Floresta Amazônica or Amazônia; Spanish: Selva Amazónica, Amazonía or usually Amazonia; French: Forêt amazonienne; Dutch: Amazoneregenwoud), also known in English as Amazonia or the Amazon Jungle, is a moist broadleaf forest that covers most of the Amazon basin of South America. This basin encompasses 7,000,000 square kilometres (2,700,000 sq mi), of which 5,500,000 square kilometres (2,100,000 sq mi) are covered by the rainforest",
+      "During the mid-Eocene, it is believed that the drainage basin of the Amazon was split along the middle of the continent by the Purus Arch. Water on the eastern side flowed toward the Atlantic, while to the west water flowed toward the Pacific across the Amazonas Basin. As the Andes Mountains rose, however, a large basin was created that enclosed a lake; now known as the Solimões Basin",
+      "Following the Cretaceous–Paleogene extinction event, the extinction of the dinosaurs and the wetter climate may have allowed the tropical rainforest to spread out across the continent. From 66–34 Mya, the rainforest extended as far south as 45°. Climate fluctuations during the last 34 million years have allowed savanna regions to expand into the tropics. During the Oligocene, for example, the rainforest spanned a relatively narrow band",
+      ". Although deforestation has declined significantly in the Brazilian Amazon between 2004 and 2014, there has been an increase to the present day."
+    ],
+    "reference_contexts": [
+      "Following the Cretaceous–Paleogene extinction event, the extinction of the dinosaurs and the wetter climate may have allowed the tropical rainforest to spread out across the continent. From 66–34 Mya, the rainforest extended as far south as 45°. Climate fluctuations during the last 34 million years have allowed savanna regions to expand into the tropics. During the Oligocene, for example, the rainforest spanned a relatively narrow band. It expanded again during the Middle Miocene, then retracted to a mostly inland formation at the last glacial maximum. However, the rainforest still managed to thrive during these glacial periods, allowing for the survival and evolution of a broad diversity of species."
+    ],
+    "context_id": "ctx_0786",
+    "retrieved_sources": [
+      "ctx_0786",
+      "ctx_0785",
+      "ctx_0787",
+      "ctx_0786",
+      "ctx_0798"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Amazon_rainforest"
+  },
+  {
+    "question": "Which retired ref disagreed with the outcome of the challenge of a incomplete pass?",
+    "answer": "Mike Carey",
+    "ground_truth": "Mike Carey",
+    "all_answers": [
+      "Mike Carey",
+      "Mike Carey",
+      "Carey"
+    ],
+    "retrieved_contexts": [
+      "After each team punted, Panthers quarterback Cam Newton appeared to complete a 24-yard pass Jerricho Cotchery, but the call was ruled an incompletion and upheld after a replay challenge. CBS analyst and retired referee Mike Carey stated he disagreed with the call and felt the review clearly showed the pass was complete",
+      ". First, linebacker Shaq Thompson tackled Ronnie Hillman for a 3-yard loss. Then after an incompletion, Thomas Davis tackled Anderson for a 1-yard gain on third down, forcing Denver to settle for a 3–0 lead on a Brandon McManus 34-yard field goal. The score marked the first time in the entire postseason that Carolina was facing a deficit.",
+      ". Although several players dove into the pile to attempt to recover it, Newton did not and his lack of aggression later earned him heavy criticism. Meanwhile, Denver's offense was kept out of the end zone for three plays, but a holding penalty on cornerback Josh Norman gave the Broncos a new set of downs",
+      "The Panthers seemed primed to score on their opening drive of the second half when Newton completed a 45-yard pass to Ted Ginn Jr. on the Denver 35-yard line on their second offensive play. But the Broncos defense halted the drive on the 26-yard line, and it ended with no points when Graham Gano hit the uprights on a 44-yard field goal attempt",
+      ". Later on, Broncos receiver Jordan Norwood received Brad Nortman's short 28-yard punt surrounded by Panthers players, but none of them attempted to make a tackle, apparently thinking Norwood had called a fair catch. Norwood had not done so, and with no resistance around him, he took off for a Super Bowl record 61-yard return before Mario Addison dragged him down on the Panthers 14-yard line"
+    ],
+    "reference_contexts": [
+      "After each team punted, Panthers quarterback Cam Newton appeared to complete a 24-yard pass Jerricho Cotchery, but the call was ruled an incompletion and upheld after a replay challenge. CBS analyst and retired referee Mike Carey stated he disagreed with the call and felt the review clearly showed the pass was complete. A few plays later, on 3rd-and-10 from the 15-yard line, linebacker Von Miller knocked the ball out of Newton's hands while sacking him, and Malik Jackson recovered it in the end zone for a Broncos touchdown, giving the team a 10–0 lead. This was the first fumble return touchdown in a Super Bowl since Super Bowl XXVIII at the end of the 1993 season."
+    ],
+    "context_id": "ctx_0046",
+    "retrieved_sources": [
+      "ctx_0046",
+      "ctx_0045",
+      "ctx_0051",
+      "ctx_0049",
+      "ctx_0047"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Super_Bowl_50"
+  },
+  {
+    "question": "Where are health and social problems most common?",
+    "answer": "In countries with large differences in household income.",
+    "ground_truth": "among states in the US with larger income inequalities",
+    "all_answers": [
+      "among states in the US with larger income inequalities",
+      "countries with bigger income inequalities",
+      "countries with bigger income inequalities"
+    ],
+    "retrieved_contexts": [
+      "Diseases of poverty directly correlate with a country's economic performance and wealth distribution: Half of Kenyans live below the poverty level. Preventable diseases like malaria, HIV/AIDS, pneumonia, diarrhoea and malnutrition are the biggest burden, major child-killers, and responsible for much morbidity; weak policies, corruption, inadequate health workers, weak management and poor leadership in the public health sector are largely to blame",
+      "For most of human history higher material living standards – full stomachs, access to clean water and warmth from fuel – led to better health and longer lives. This pattern of higher incomes-longer lives still holds among poorer countries, where life expectancy increases rapidly as per capita income increases, but in recent decades it has slowed down among middle income countries and plateaued among the richest thirty or so countries in the world",
+      ". Using statistics from 23 developed countries and the 50 states of the US, they found social/health problems lower in countries like Japan and Finland and states like Utah and New Hampshire with high levels of equality, than in countries (US and UK) and states (Mississippi and New York) with large differences in household income.",
+      "Crime rate has also been shown to be correlated with inequality in society. Most studies looking into the relationship have concentrated on homicides – since homicides are almost identically defined across all nations and jurisdictions. There have been over fifty studies showing tendencies for violence to be more common in societies where income differences are larger. Research has been conducted comparing developed countries with undeveloped countries, as well as studying areas within countries",
+      "Firstly, certain costs are difficult to avoid and are shared by everyone, such as the costs of housing, pensions, education and health care. If the state does not provide these services, then for those on lower incomes, the costs must be borrowed and often those on lower incomes are those who are worse equipped to manage their finances"
+    ],
+    "reference_contexts": [
+      "In recent years the characteristic that has strongly correlated with health in developed countries is income inequality. Creating an index of \"Health and Social Problems\" from nine factors, authors Richard Wilkinson and Kate Pickett found health and social problems \"more common in countries with bigger income inequalities\", and more common among states in the US with larger income inequalities. Other studies have confirmed this relationship. The UNICEF index of \"child well-being in rich countries\", studying 40 indicators in 22 countries, correlates with greater equality but not per capita income."
+    ],
+    "context_id": "ctx_1423",
+    "retrieved_sources": [
+      "ctx_1634",
+      "ctx_1422",
+      "ctx_1421",
+      "ctx_1424",
+      "ctx_1438"
+    ],
+    "answer_in_retrieved": false,
+    "title": "Economic_inequality"
+  },
+  {
+    "question": "When was the plastome discovered?",
+    "answer": "1962",
+    "ground_truth": "1962",
+    "all_answers": [
+      "1962",
+      "1962",
+      "1962"
+    ],
+    "retrieved_contexts": [
+      "Somewhere around a billion years ago, a free-living cyanobacterium entered an early eukaryotic cell, either as food or as an internal parasite, but managed to escape the phagocytic vacuole it was contained in. The two innermost lipid-bilayer membranes that surround all chloroplasts correspond to the outer and inner membranes of the ancestral cyanobacterium's gram negative cell wall, and not the phagosomal membrane from the host, which was probably lost",
+      "Chloroplasts have their own DNA, often abbreviated as ctDNA, or cpDNA. It is also known as the plastome. Its existence was first proved in 1962, and first sequenced in 1986—when two Japanese research teams sequenced the chloroplast DNA of liverwort and tobacco",
+      "The mechanism for chloroplast DNA (cpDNA) replication has not been conclusively determined, but two main models have been proposed. Scientists have attempted to observe chloroplast replication via electron microscopy since the 1970s. The results of the microscopy experiments led to the idea that chloroplast DNA replicates using a double displacement loop (D-loop)",
+      ". This origin of chloroplasts was first suggested by the Russian biologist Konstantin Mereschkowski in 1905 after Andreas Schimper observed in 1883 that chloroplasts closely resemble cyanobacteria. Chloroplasts are only found in plants and algae.",
+      ". When they were first observed in 1962, some plant biologists dismissed the structures as artifactual, claiming that stromules were just oddly shaped chloroplasts with constricted regions or dividing chloroplasts. However, there is a growing body of evidence that stromules are functional, integral features of plant cell plastids, not merely artifacts."
+    ],
+    "reference_contexts": [
+      "Chloroplasts have their own DNA, often abbreviated as ctDNA, or cpDNA. It is also known as the plastome. Its existence was first proved in 1962, and first sequenced in 1986—when two Japanese research teams sequenced the chloroplast DNA of liverwort and tobacco. Since then, hundreds of chloroplast DNAs from various species have been sequenced, but they're mostly those of land plants and green algae—glaucophytes, red algae, and other algal groups are extremely underrepresented, potentially introducing some bias in views of \"typical\" chloroplast DNA structure and content."
+    ],
+    "context_id": "ctx_1690",
+    "retrieved_sources": [
+      "ctx_1674",
+      "ctx_1690",
+      "ctx_1692",
+      "ctx_1672",
+      "ctx_1701"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Chloroplast"
+  },
+  {
+    "question": "Which study showed double the rate of anxiety?",
+    "answer": "2012 study",
+    "ground_truth": "2012",
+    "all_answers": [
+      "2012",
+      "2012",
+      "2012 study"
+    ],
+    "retrieved_contexts": [
+      "A 2000 study found that 42% of UK teachers experienced occupational stress, twice the figure for the average profession. A 2012 study found that teachers experienced double the rate of anxiety, depression, and stress than average workers.",
+      "British researchers Richard G. Wilkinson and Kate Pickett have found higher rates of health and social problems (obesity, mental illness, homicides, teenage births, incarceration, child conflict, drug use), and lower rates of social goods (life expectancy by country, educational performance, trust among strangers, women's status, social mobility, even numbers of patents issued) in countries and states with higher inequality",
+      ". In a 2006 letter to Nature, Mann, Bradley, and Hughes pointed out that their original article had said that \"more widespread high-resolution data are needed before more confident conclusions can be reached\" and that the uncertainties were \"the point of the article\".",
+      ". Sherwood Boehlert, chairman of the House Science Committee, said this was a \"misguided and illegitimate investigation\" apparently aimed at intimidating scientists, and at his request the U.S. National Academy of Sciences arranged for its National Research Council to set up a special investigation. The National Research Council's report agreed that there were some statistical failings, but these had little effect on the graph, which was generally correct",
+      ". In an area of science where our scientific understanding is rapidly changing, this has been raised as a serious shortcoming in a body which is widely regarded as the ultimate authority on the science. However, there has generally been a steady evolution of key findings and levels of scientific confidence from one assessment report to the next.[citation needed]"
+    ],
+    "reference_contexts": [
+      "A 2000 study found that 42% of UK teachers experienced occupational stress, twice the figure for the average profession. A 2012 study found that teachers experienced double the rate of anxiety, depression, and stress than average workers."
+    ],
+    "context_id": "ctx_0324",
+    "retrieved_sources": [
+      "ctx_0324",
+      "ctx_1421",
+      "ctx_1661",
+      "ctx_1661",
+      "ctx_1668"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Teacher"
+  },
+  {
+    "question": "What trading route joined Khwarezmia and the Mongol Empire?",
+    "answer": "Silk Road",
+    "ground_truth": "the Silk Road",
+    "all_answers": [
+      "the Silk Road",
+      "Silk Road",
+      "Silk Road"
+    ],
+    "retrieved_contexts": [
+      "In the early 13th century, the Khwarazmian dynasty was governed by Shah Ala ad-Din Muhammad. Genghis Khan saw the potential advantage in Khwarezmia as a commercial trading partner using the Silk Road, and he initially sent a 500-man caravan to establish official trade ties with the empire. However, Inalchuq, the governor of the Khwarezmian city of Otrar, attacked the caravan that came from Mongolia, claiming that the caravan contained spies and therefore was a conspiracy against Khwarezmia",
+      "Kublai Khan promoted commercial, scientific, and cultural growth. He supported the merchants of the Silk Road trade network by protecting the Mongol postal system, constructing infrastructure, providing loans that financed trade caravans, and encouraging the circulation of paper banknotes (鈔, Chao). Pax Mongolica, Mongol peace, enabled the spread of technologies, commodities, and culture between China and the West. Kublai expanded the Grand Canal from southern China to Daidu in the north",
+      ". Kuchlug fled again, but was soon hunted down by Jebe's army and executed. By 1218, as a result of defeat of Qara Khitai, the Mongol Empire and its control extended as far west as Lake Balkhash, which bordered the Khwarezmia (Khwarezmid Empire), a Muslim state that reached the Caspian Sea to the west and Persian Gulf and the Arabian Sea to the south.",
+      "The Mongol army under Genghis Khan, generals and his sons crossed the Tien Shan mountains by entering the area controlled by the Khwarezmian Empire. After compiling intelligence from many sources Genghis Khan carefully prepared his army, which was divided into three groups. His son Jochi led the first division into the northeast of Khwarezmia. The second division under Jebe marched secretly to the southeast part of Khwarzemia to form, with the first division, a pincer attack on Samarkand",
+      "The city of Bukhara was not heavily fortified, with a moat and a single wall, and the citadel typical of Khwarezmi cities. The city leaders opened the gates to the Mongols, though a unit of Turkish defenders held the city's citadel for another twelve days. Survivors from the citadel were executed, artisans and craftsmen were sent back to Mongolia, young men who had not fought were drafted into the Mongolian army and the rest of the population was sent into slavery"
+    ],
+    "reference_contexts": [
+      "In the early 13th century, the Khwarazmian dynasty was governed by Shah Ala ad-Din Muhammad. Genghis Khan saw the potential advantage in Khwarezmia as a commercial trading partner using the Silk Road, and he initially sent a 500-man caravan to establish official trade ties with the empire. However, Inalchuq, the governor of the Khwarezmian city of Otrar, attacked the caravan that came from Mongolia, claiming that the caravan contained spies and therefore was a conspiracy against Khwarezmia. The situation became further complicated because the governor later refused to make repayments for the looting of the caravans and handing over the perpetrators. Genghis Khan then sent again a second group of three ambassadors (two Mongols and a Muslim) to meet the Shah himself instead of the governor Inalchuq. The Shah had all the men shaved and the Muslim beheaded and sent his head back with the two remaining ambassadors. This was seen as an affront and insult to Genghis Khan. Outraged, Genghis Khan planned one of his largest invasion campaigns by organizing together around 100,000 soldiers (10 tumens), his most capable generals and some of his sons. He left a commander and number of troops in China, designated his successors to be his family members and likely appointed Ögedei to be his immediate successor and then went out to Khwarezmia."
+    ],
+    "context_id": "ctx_1166",
+    "retrieved_sources": [
+      "ctx_1166",
+      "ctx_1555",
+      "ctx_1165",
+      "ctx_1167",
+      "ctx_1171"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Genghis_Khan"
+  },
+  {
+    "question": "Where did Tesla work in Budapest?",
+    "answer": "Budapest Telephone Exchange.",
+    "ground_truth": "a telegraph company",
+    "all_answers": [
+      "a telegraph company",
+      "the Budapest Telephone Exchange",
+      "Budapest Telephone Exchange"
+    ],
+    "retrieved_contexts": [
+      "In 1881, Tesla moved to Budapest to work under Ferenc Puskás at a telegraph company, the Budapest Telephone Exchange. Upon arrival, Tesla realized that the company, then under construction, was not functional, so he worked as a draftsman in the Central Telegraph Office instead. Within a few months, the Budapest Telephone Exchange became functional and Tesla was allocated the chief electrician position",
+      "In December 1878, Tesla left Graz and severed all relations with his family to hide the fact that he dropped out of school. His friends thought that he had drowned in the Mur River. Tesla went to Maribor (now in Slovenia), where he worked as a draftsman for 60 florins a month. He spent his spare time playing cards with local men on the streets. In March 1879, Milutin Tesla went to Maribor to beg his son to return home, but Nikola refused",
+      "Tesla gained experience in telephony and electrical engineering before emigrating to the United States in 1884 to work for Thomas Edison in New York City. He soon struck out on his own with financial backers, setting up laboratories and companies to develop a range of electrical devices. His patented AC induction motor and transformer were licensed by George Westinghouse, who also hired Tesla for a short time as a consultant",
+      "In 1875, Tesla enrolled at Austrian Polytechnic in Graz, Austria, on a Military Frontier scholarship. During his first year, Tesla never missed a lecture, earned the highest grades possible, passed nine exams (nearly twice as many required), started a Serbian culture club, and even received a letter of commendation from the dean of the technical faculty to his father, which stated, \"Your son is a star of first rank.\" Tesla claimed that he worked from 3 a.m",
+      "In 1882, Tesla began working for the Continental Edison Company in France, designing and making improvements to electrical equipment. In June 1884, he relocated to New York City:57–60 where he was hired by Thomas Edison to work at his Edison Machine Works on Manhattan's lower east side. Tesla's work for Edison began with simple electrical engineering and quickly progressed to solving more difficult problems."
+    ],
+    "reference_contexts": [
+      "In 1881, Tesla moved to Budapest to work under Ferenc Puskás at a telegraph company, the Budapest Telephone Exchange. Upon arrival, Tesla realized that the company, then under construction, was not functional, so he worked as a draftsman in the Central Telegraph Office instead. Within a few months, the Budapest Telephone Exchange became functional and Tesla was allocated the chief electrician position. During his employment, Tesla made many improvements to the Central Station equipment and claimed to have perfected a telephone repeater or amplifier, which was never patented nor publicly described."
+    ],
+    "context_id": "ctx_0161",
+    "retrieved_sources": [
+      "ctx_0161",
+      "ctx_0158",
+      "ctx_0149",
+      "ctx_0157",
+      "ctx_0162"
+    ],
+    "answer_in_retrieved": true,
+    "title": "Nikola_Tesla"
+  }
+]

@@ -66,9 +66,11 @@ RAG_TOP_K = 5        # number of text chunks to retrieve
 SQL_TOP_K = 3        # number of schema tables to retrieve
 
 
-RAG_FETCH_MULTIPLIER = 2
+RAG_FETCH_MULTIPLIER = 4
+RAG_FETCH_K = 0          # explicit fetch count; 0 = use top_k * RAG_FETCH_MULTIPLIER
+RAG_RERANK_POOL = 0      # chunks passed to reranker; 0 = all fetched chunks
 RAG_ENABLE_SEMANTIC_RERANK = True
-RAG_RERANKER_MODEL = "BAAI/bge-reranker-large"
+RAG_RERANKER_MODEL = "BAAI/bge-reranker-base"
 
 # Retrieval mode:
 #   "hybrid" -> BM25 + FAISS fused via Reciprocal Rank Fusion (higher recall)

@@ -76,7 +76,8 @@ class RagRetriever:
 
     def retrieve(self, query: str, top_k: int = 5) -> list[dict]:
         """Return top-k relevant chunks using FAISS + optional BM25 hybrid search, then CrossEncoder reranking."""
-        fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, 10)
+        explicit_fetch = getattr(config, "RAG_FETCH_K", 0)
+        fetch_k = explicit_fetch if explicit_fetch > 0 else max(top_k * config.RAG_FETCH_MULTIPLIER, 10)
         query_domain = self._infer_query_domain(query)
         query_vector = self.vector_store.embeddings.embed_query(query)
 
@@ -129,8 +130,10 @@ class RagRetriever:
                 reranker_model = getattr(config, "RAG_RERANKER_MODEL", "BAAI/bge-reranker-base")
                 self._reranker = Reranker(model_name=reranker_model)
 
-            _debug(f"[RAG Pipeline] Reranking {len(documents_text)} documents with {self._reranker.model_name}...")
-            reranked = self._reranker.rerank(query, documents_text, top_k=top_k)
+            rerank_pool = getattr(config, "RAG_RERANK_POOL", 0)
+            candidates = documents_text[:rerank_pool] if rerank_pool > 0 else documents_text
+            _debug(f"[RAG Pipeline] Reranking {len(candidates)} documents with {self._reranker.model_name}...")
+            reranked = self._reranker.rerank(query, candidates, top_k=top_k)
         else:
             _debug(f"[RAG Pipeline] Reranking DISABLED. Returning top {top_k} from {retrieval_mode} results.")
             reranked = [{"text": t, "score": 0.0} for t in documents_text[:top_k]]
