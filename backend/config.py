@@ -62,13 +62,20 @@ E5_PREFIX_ENABLED = True
 E5_QUERY_PREFIX = "query: "
 E5_PASSAGE_PREFIX = "passage: "
 
-RAG_TOP_K = 6        # number of text chunks to retrieve
-SQL_TOP_K = 4        # number of schema tables to retrieve
+RAG_TOP_K = 5        # number of text chunks to retrieve
+SQL_TOP_K = 3        # number of schema tables to retrieve
 
 
-RAG_FETCH_MULTIPLIER = 3
+RAG_FETCH_MULTIPLIER = 2
 RAG_ENABLE_SEMANTIC_RERANK = True
-RAG_PREVIEW_CHARS = 400
+RAG_RERANKER_MODEL = "BAAI/bge-reranker-large"
+
+# Retrieval mode:
+#   "hybrid" -> BM25 + FAISS fused via Reciprocal Rank Fusion (higher recall)
+#   "faiss"  -> dense-only FAISS cosine search (faster, lower memory)
+RAG_RETRIEVAL_MODE = "hybrid"
+RAG_RRF_K = 60             # RRF constant -- only used when RAG_RETRIEVAL_MODE="hybrid"
+RAG_PREVIEW_CHARS = 100
 
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 100
@@ -102,7 +109,7 @@ SQL_REFINE_TEMPERATURE = 0.0
 
 # Global runtime debug logging toggle for Router/RAG/TableRAG/ReAct internals.
 # Set False to keep terminal output concise (final answers/errors only).
-DEBUG_LOGGING = True
+DEBUG_LOGGING = False
 
 # Legacy alias kept for compatibility with existing references.
 ROUTER_DEBUG = DEBUG_LOGGING

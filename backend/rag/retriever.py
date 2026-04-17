@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import re
+from collections import defaultdict
 
 from backend import config
+from backend.rag.bm25_index import BM25Index
 from backend.rag.chunker import Chunk
 from backend.rag.embedder import SentenceTransformerEmbedder
 from backend.rag.vector_store import FAISSVectorStore
@@ -22,6 +24,8 @@ class RagRetriever:
     def __init__(self, embedder: SentenceTransformerEmbedder, vector_store: FAISSVectorStore) -> None:
         self.embedder = embedder
         self.vector_store = vector_store
+        self._reranker = None
+        self._bm25: BM25Index | None = None
 
     def index_chunks(self, chunks: list[Chunk]) -> None:
         """Convert chunks to LangChain documents and add them to the vector store."""
@@ -42,56 +46,95 @@ class RagRetriever:
 
         self.vector_store.add_documents(documents)
         self.vector_store.save()
+        self._bm25 = None  # invalidate BM25 index when new docs are added
+
+    def _get_bm25(self) -> BM25Index:
+        """Lazily build BM25 index from the FAISS docstore corpus."""
+        if self._bm25 is not None:
+            return self._bm25
+
+        store = self.vector_store.store
+        if store is None:
+            self._bm25 = BM25Index()
+            return self._bm25
+
+        all_docs = list(store.docstore._dict.values())
+        _debug(f"[RAG Hybrid] Building BM25 index over {len(all_docs)} corpus documents...")
+        bm25 = BM25Index()
+        bm25.build(all_docs)
+        self._bm25 = bm25
+        return self._bm25
+
+    @staticmethod
+    def _rrf(ranked_lists: list[list[str]], k: int = 60) -> list[str]:
+        """Reciprocal Rank Fusion over multiple ranked text lists."""
+        scores: dict[str, float] = defaultdict(float)
+        for ranked in ranked_lists:
+            for rank, text in enumerate(ranked):
+                scores[text] += 1.0 / (k + rank + 1)
+        return sorted(scores, key=lambda t: scores[t], reverse=True)
 
     def retrieve(self, query: str, top_k: int = 5) -> list[dict]:
-        """Return top-k relevant chunks for a query using FAISS retrieval + CrossEncoder Reranking."""
-        # Dynamically scale the initial fetch size based on the final target output
-        fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, 20)
+        """Return top-k relevant chunks using FAISS + optional BM25 hybrid search, then CrossEncoder reranking."""
+        fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, 10)
         query_domain = self._infer_query_domain(query)
-
-        # Embed query once for potential reuse in fallback search
         query_vector = self.vector_store.embeddings.embed_query(query)
 
         _debug(f"\n[RAG Pipeline] Query: {query!r}")
         _debug(f"[RAG Pipeline] Fetching top {fetch_k} documents from FAISS...")
 
+        # ── Dense FAISS retrieval ─────────────────────────────────────────
         if query_domain:
-            results = self.vector_store.search_by_vector(
-                query_vector,
-                fetch_k,
-                metadata_filter={"domain": query_domain},
+            faiss_results = self.vector_store.search_by_vector(
+                query_vector, fetch_k, metadata_filter={"domain": query_domain},
             )
-            # Fallback if domain filter is too restrictive
-            if len(results) < fetch_k:
-                results = self.vector_store.search_by_vector(query_vector, fetch_k)
+            if len(faiss_results) < fetch_k:
+                faiss_results = self.vector_store.search_by_vector(query_vector, fetch_k)
         else:
-            results = self.vector_store.search_by_vector(query_vector, fetch_k)
+            faiss_results = self.vector_store.search_by_vector(query_vector, fetch_k)
 
-        # Deduplicate and map text -> metadata
-        doc_map = {}
-        for doc, distance in results:
-            normalized_text = " ".join(doc.page_content.split())
-            if normalized_text not in doc_map:
-                doc_map[normalized_text] = doc
+        # Build doc_map from FAISS results (normalized text -> LCDocument)
+        doc_map: dict[str, LCDocument] = {}
+        faiss_ranked: list[str] = []
+        for doc, _ in faiss_results:
+            norm = " ".join(doc.page_content.split())
+            if norm not in doc_map:
+                doc_map[norm] = doc
+                faiss_ranked.append(norm)
 
-        documents_text = list(doc_map.keys())
-        _debug(f"[RAG Pipeline] FAISS returned {len(documents_text)} unique chunks.")
-        
-        # CrossEncoder Reranking Toggle
+        _debug(f"[RAG Pipeline] FAISS returned {len(faiss_ranked)} unique chunks.")
+
+        # ── Sparse BM25 retrieval + RRF fusion ───────────────────────────
+        retrieval_mode = getattr(config, "RAG_RETRIEVAL_MODE", "faiss")
+        if retrieval_mode == "hybrid":
+            bm25_raw = self._get_bm25().search(query, top_k=fetch_k)
+            bm25_ranked: list[str] = []
+            for text, doc, _ in bm25_raw:
+                norm = " ".join(text.split())
+                if norm not in doc_map:
+                    doc_map[norm] = doc  # add BM25-only hits to the map
+                bm25_ranked.append(norm)
+
+            _debug(f"[RAG Hybrid] BM25 returned {len(bm25_ranked)} candidates. Applying RRF...")
+            rrf_k = getattr(config, "RAG_RRF_K", 60)
+            fused = self._rrf([faiss_ranked, bm25_ranked], k=rrf_k)
+            documents_text = fused[:fetch_k]
+        else:
+            documents_text = faiss_ranked
+
+        # ── CrossEncoder reranking ────────────────────────────────────────
         if config.RAG_ENABLE_SEMANTIC_RERANK:
-            if not hasattr(self, "_reranker") or self._reranker is None:
+            if self._reranker is None:
                 from backend.rag.reranker import Reranker
-                self._reranker = Reranker()
-                
-            _debug(f"[RAG Pipeline] Reranking {len(documents_text)} documents using {self._reranker.model_name} CrossEncoder...")
+                reranker_model = getattr(config, "RAG_RERANKER_MODEL", "BAAI/bge-reranker-base")
+                self._reranker = Reranker(model_name=reranker_model)
+
+            _debug(f"[RAG Pipeline] Reranking {len(documents_text)} documents with {self._reranker.model_name}...")
             reranked = self._reranker.rerank(query, documents_text, top_k=top_k)
         else:
-            _debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Returning top {top_k} directly from FAISS.")
-            reranked = []
-            for i, text in enumerate(documents_text[:top_k]):
-                fallback_score = 1.0 / (1.0 + float(results[i][1])) if i < len(results) else 0.0
-                reranked.append({"text": text, "score": fallback_score})
-        
+            _debug(f"[RAG Pipeline] Reranking DISABLED. Returning top {top_k} from {retrieval_mode} results.")
+            reranked = [{"text": t, "score": 0.0} for t in documents_text[:top_k]]
+
         _debug(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
         payload: list[dict] = []
         for i, res in enumerate(reranked, 1):
@@ -101,18 +144,16 @@ class RagRetriever:
             metadata = dict(doc.metadata)
             chunk_id = metadata.pop("chunk_id", None)
             source = metadata.get("source", "unknown")
-            
+
             _debug(f"  -> Rank {i} | CrossEncoder Score: {score:.4f} | Source: {source}")
-            
-            payload.append(
-                {
-                    "chunk_id": chunk_id,
-                    "text": doc.page_content,
-                    "source": source,
-                    "score": round(score, 4),
-                    "metadata": metadata,
-                }
-            )
+
+            payload.append({
+                "chunk_id": chunk_id,
+                "text": doc.page_content,
+                "source": source,
+                "score": round(score, 4),
+                "metadata": metadata,
+            })
 
         return payload
 
