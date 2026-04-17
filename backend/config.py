@@ -77,6 +77,11 @@ RAG_RERANKER_MODEL = "BAAI/bge-reranker-base"
 #   "faiss"  -> dense-only FAISS cosine search (faster, lower memory)
 RAG_RETRIEVAL_MODE = "hybrid"
 RAG_RRF_K = 60             # RRF constant -- only used when RAG_RETRIEVAL_MODE="hybrid"
+
+RAG_FETCH_MULTIPLIER = 20
+RAG_ENABLE_SEMANTIC_RERANK = False
+RAG_SCORE_THRESHOLD = 0.5
+RAG_MAX_CHUNKS = 8
 RAG_PREVIEW_CHARS = 100
 
 CHUNK_SIZE = 500

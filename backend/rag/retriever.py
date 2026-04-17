@@ -94,14 +94,14 @@ class RagRetriever:
         else:
             faiss_results = self.vector_store.search_by_vector(query_vector, fetch_k)
 
-        # Build doc_map from FAISS results (normalized text -> LCDocument)
-        doc_map: dict[str, LCDocument] = {}
-        faiss_ranked: list[str] = []
-        for doc, _ in faiss_results:
-            norm = " ".join(doc.page_content.split())
-            if norm not in doc_map:
-                doc_map[norm] = doc
-                faiss_ranked.append(norm)
+        # Deduplicate and map text -> metadata
+        doc_map = {}
+        text_to_score = {}
+        for doc, distance in results:
+            normalized_text = " ".join(doc.page_content.split())
+            if normalized_text not in doc_map:
+                doc_map[normalized_text] = doc
+                text_to_score[normalized_text] = 1.0 / (1.0 + float(distance))
 
         _debug(f"[RAG Pipeline] FAISS returned {len(faiss_ranked)} unique chunks.")
 
@@ -135,9 +135,25 @@ class RagRetriever:
             _debug(f"[RAG Pipeline] Reranking {len(candidates)} documents with {self._reranker.model_name}...")
             reranked = self._reranker.rerank(query, candidates, top_k=top_k)
         else:
-            _debug(f"[RAG Pipeline] Reranking DISABLED. Returning top {top_k} from {retrieval_mode} results.")
-            reranked = [{"text": t, "score": 0.0} for t in documents_text[:top_k]]
-
+            max_chunks = getattr(config, "RAG_MAX_CHUNKS", 8)
+            score_threshold = getattr(config, "RAG_SCORE_THRESHOLD", 0.5)
+            _debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Applying dynamic sizing (Threshold: {score_threshold}, Max: {max_chunks}).")
+            reranked = []
+            
+            for text in documents_text:
+                score = text_to_score[text]
+                if score >= score_threshold:
+                    reranked.append({"text": text, "score": score})
+                    if len(reranked) >= max_chunks:
+                        break
+                        
+            # Fallback if nothing met threshold
+            if not reranked and documents_text:
+                fallback_k = min(top_k, max_chunks)
+                _debug(f"[RAG Pipeline] No chunks passed threshold, falling back to top {fallback_k}.")
+                for text in documents_text[:fallback_k]:
+                    reranked.append({"text": text, "score": text_to_score[text]})
+        
         _debug(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
         payload: list[dict] = []
         for i, res in enumerate(reranked, 1):
