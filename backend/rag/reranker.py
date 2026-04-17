@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
+from backend import config
 from backend.models import get_shared_cross_encoder
 
 
 class Reranker:
     """Reranks text chunks against a query using a CrossEncoder."""
 
-    def __init__(self, model_name: str = "BAAI/bge-reranker-base") -> None:
+    def __init__(self, model_name: str = config.RAG_RERANKER_MODEL) -> None:
         self.model_name = model_name
 
     def rerank(self, query: str, documents: list[str], top_k: int = 5) -> list[dict[str, Any]]:

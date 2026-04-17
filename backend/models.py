@@ -47,7 +47,6 @@ def get_shared_st_model() -> SentenceTransformer:
 
 _ce_lock = threading.Lock()
 _ce_instance: CrossEncoder | None = None
-_CE_MODEL_NAME = "BAAI/bge-reranker-base"
 
 
 def get_shared_cross_encoder() -> CrossEncoder:
@@ -57,5 +56,5 @@ def get_shared_cross_encoder() -> CrossEncoder:
         if _ce_instance is None:
             from sentence_transformers import CrossEncoder as _CE
 
-            _ce_instance = _CE(_CE_MODEL_NAME)
+            _ce_instance = _CE(config.RAG_RERANKER_MODEL)
     return _ce_instance
