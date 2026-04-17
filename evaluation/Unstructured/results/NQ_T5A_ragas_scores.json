@@ -1,0 +1,822 @@
+{
+  "config": "NQ_T5A",
+  "dataset": "natural_questions",
+  "parameters": {
+    "retrieval_mode": "hybrid",
+    "reranker": false,
+    "top_k": 5,
+    "chunk_size": 500,
+    "fetch_k": 100,
+    "rerank_pool": 0
+  },
+  "overall": {
+    "answer_relevancy": 0.49728748147144414,
+    "faithfulness": 0.585,
+    "context_precision": 0.7351111110418018,
+    "context_recall": 0.72,
+    "retrieval_hit_rate": 0.82
+  },
+  "n_evaluated": 50,
+  "per_question": [
+    {
+      "user_input": "when did the granite mountain hotshots get certified",
+      "retrieved_contexts": [
+        "The Granite Mountain Hotshots were a group within the department whose mission was to fight wildfires. Founded in 2002 as a fuels mitigation crew, it transitioned to a handcrew (Type 2 I/A) in 2004, and ultimately to a hotshot crew in 2008. The crew had their own fire station, station 7, where equipment, including two 10-person crew carriers, was housed. The 2017 film Only the Brave was based on the Granite Mountain Hotshots and the Yarnell Fire.",
+        "Glory Trip 77GM, a Minuteman III Operational Test in September 1980, became the longest Minuteman flight test when its payload impacted a broad ocean area target over 5,600 nautical miles (10,400Â km) downrange.",
+        ". I'm like a parent whose kid grows up to be president. I'm proud... but it's the kid who did the work. I didn't even think of it as a Christmas story when I first ran across it. I just liked the idea.\" In a 1946 interview, Capra described the film's theme as \"the individual's belief in himself\" and that he made it \"to combat a modern trend toward atheism\".",
+        ". After \"Summer Holiday\" had spent two weeks at number one, The Shadows' instrumental \"Foot Tapper\" - also from the same film - took over the top spot for one week, before \"Summer Holiday\" returned to the top spot for one further week. The track is one of Richard's best known titles and it remains a staple of his live shows. It was one of six hits Richard performed at his spontaneous gig at the 1996 Wimbledon Championships when rain stopped the tennis.",
+        "Filming began in July 2010 in Vancouver, British Columbia. Filming also happened in San Francisco, California (the primary setting of the film), and around Oahu, Hawaii, which doubled for the African jungle as the schedule and budget did not allow for location shooting in Africa."
+      ],
+      "response": "Not found.",
+      "reference": "2008",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who plays lady talisa in game of thrones",
+      "retrieved_contexts": [
+        "Oona Castilla Chaplin [ˈuna kasˈtija ˈt͡ʃaplin] (born 4 June 1986), known professionally as Oona Chaplin, is a Spanish actress. Her roles include Talisa Maegyr in the HBO TV series Game of Thrones, The Crimson Field and the series Taboo.",
+        "Liam Cunningham (born 2 June 1961) is an Irish stage and screen actor. He is known for playing Davos Seaworth in the HBO epic-fantasy series Game of Thrones. He has been nominated for the London Film Critics' Circle Award, the British Independent Film Award, has won two Irish Film & Television Awards, and shared a BAFTA with Michael Fassbender, for their crime-drama short film Pitch Black Heist.",
+        "In November 2012, Bravo announced the series green-light of Married to Medicine. The network detailed the series by stating, \"Married to Medicine follows a group of successful and educated women, including doctors and wives of doctors, who are connected to the world of medicine in Atlanta.\" By February 2013, the first-season cast was revealed with Toya Bush-Harris, Mariah Huq, Quad Webb-Lunceford, Jacqueline Walters, Kari Wells, and Simone Whitmore starring in the series",
+        "Jack Barry, who created the show and eventually used it to revive his partnership with longtime producer Dan Enright, hosted all versions of the show up until his death in May 1984.",
+        "Pia Toscano (born October 14, 1988) is from Howard Beach, New York and 22 years old at the time of the show. She had auditioned for Idol four times before and made it through Hollywood in the sixth season and did not continue further. She auditioned in Jersey City, New Jersey, and was a make-up artist. She sang the national anthem at a Mets game"
+      ],
+      "response": "Oona Chaplin plays Lady Talisa in Game of Thrones.",
+      "reference": "Oona Castilla Chaplin",
+      "answer_relevancy": 0.8002775235331383,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when did the log flume closed at alton towers",
+      "retrieved_contexts": [
+        "The Flume was a Log Flume at Alton Towers in Staffordshire. It opened in 1981 and was rethemed in 2004 coinciding with its sponsorship by Imperial Leather. The ride was a bath time themed log flume with three drops. It was the longest log flume attraction in the world at the time of opening. The attraction closed in 2015 and was removed a year later for the area's redevelopment into the SW8 rollercoaster.",
+        ". After \"Summer Holiday\" had spent two weeks at number one, The Shadows' instrumental \"Foot Tapper\" - also from the same film - took over the top spot for one week, before \"Summer Holiday\" returned to the top spot for one further week. The track is one of Richard's best known titles and it remains a staple of his live shows. It was one of six hits Richard performed at his spontaneous gig at the 1996 Wimbledon Championships when rain stopped the tennis.",
+        "The firing continued, and after 3:00 pm, the attackers were reinforced by mutinous gardes franÃ§aises, along with two cannons. A substantial force of Royal Army troops encamped on the Champ de Mars did not intervene. With the possibility of mutual carnage suddenly apparent, Governor de Launay ordered a cease-fire at 5:00 pm. A letter offering his terms was handed out to the besiegers through a gap in the inner gate",
+        "The Griqua Council do not mention the tokens at all before or during the council meeting in January 1875, so it is possible that they were issued after this date.",
+        ". This tradition has continued through the years, notably by actor and singer Jim Nabors from 1972 until 2014. Nabors announced in 2014, citing health-related reasons, that the 2014 Indy 500 would be the last at which he would sing the song. In 2015, the a cappella group Straight No Chaser sang the song before the race, and since Nabors' retirement (and before he became the regular singer), the singing of the song is done on a rotating basis."
+      ],
+      "response": "The Flume at Alton Towers closed in 2015.",
+      "reference": "10 October 2015",
+      "answer_relevancy": 0.9113363220897959,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "what was the first star trek enterprise ship",
+      "retrieved_contexts": [
+        "USS Enterprise (NCC-1701) is a fictional starship in the fictional Star Trek universe that serves as both the main setting of the original Star Trek television series, as well as the primary transportation method for the show's characters. The Enterprise has been depicted in four network television series, six feature films, many books, and much fan-created media. The original Star Trek series (1966â€“1969) features a voice-over by Enterprise captain, James T",
+        ". The original Star Trek series (1966â€“1969) features a voice-over by Enterprise captain, James T. Kirk (William Shatner), which describes the mission of the Enterprise as \"to explore strange new worlds; to seek out new life and new civilizations; to boldly go where no man has gone before\".",
+        "Star Trek: Discovery premiered on September 19, 2017, at ArcLight Hollywood, before debuting on CBS and CBS All Access on September 24. The rest of the 15-episode first season was streamed weekly on All Access. The series' release led to record subscriptions for All Access, and positive reviews from critics who highlighted Martin-Green's performance. A second season was ordered in October 2017.",
+        "Frakes appeared in dual roles in \"Second Chances\", a TNG episode in which it was established that Riker had a \"twin\" created years earlier by a transporter malfunction. Frakes appeared as the twin, Thomas Riker, in the Star Trek: Deep Space Nine episode \"Defiant\", in which he impersonates the other Riker to commandeer the starship Defiant as a member of the Maquis. The following year he guest-starred as Commander Riker along with Q in the Star Trek: Voyager episode \"Death Wish\"",
+        ". Frakes reprised his role of Commander Riker in the 2005 Enterprise series finale, \"These Are the Voyages...\". Frakes also played Riker in an advert for Boole & Babbage."
+      ],
+      "response": "Not found.",
+      "reference": "NCC-1701",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "what are the functions of the human skeleton",
+      "retrieved_contexts": [
+        "The human skeleton performs six major functions; support, movement, protection, production of blood cells, storage of minerals, and endocrine regulation.",
+        ". The human body has two sacroiliac joints, one on the left and one on the right, that often match each other but are highly variable from person to person.",
+        "The sacroiliac joint or SI joint (SIJ) is the joint between the sacrum and the ilium bones of the pelvis, which are connected by strong ligaments. In humans, the sacrum supports the spine and is supported in turn by an ilium on each side. The joint is a strong, weight transferral synovial plane joint with irregular elevations and depressions that produce interlocking of the two bones",
+        ". The Fifth Amendment and Fourteenth Amendment to the United States Constitution declare that governments cannot deprive any person of \"life, liberty, or property\" without due process of law. Also, Article 3 of the Universal Declaration of Human Rights reads, \"Everyone has the right to life, liberty, and security of person\".",
+        "When you realize the value of all life, you dwell less on what is past and concentrate more on the preservation of the future."
+      ],
+      "response": "The functions of the human skeleton are support, movement, protection, production of blood cells, storage of minerals, and endocrine regulation.",
+      "reference": "endocrine regulation",
+      "answer_relevancy": 0.9474256793047228,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "what is the largest ethnic group in mexico today",
+      "retrieved_contexts": [
+        "The Q'eqchi' live in lowland areas of Alta Vera Paz, Peten, and Western Belize. Over the course of the succeeding centuries a series of land displacements, re-settlements, persecutions and migrations resulted in a wider dispersal of Q'eqchi' communities, into other regions of Guatemala (Izabal, Petén, El Quiché). They are the 2nd largest ethnic Maya group in Guatemala (after the K'iche') and one of the largest and most widespread throughout Central America.",
+        "The U.S. Army fought and won the Mexican–American War (1846–1848), which was a defining event for both countries. The U.S. victory resulted in acquisition of territory that eventually became all or parts of the states of California, Nevada, Utah, Colorado, Arizona, Wyoming and New Mexico.",
+        ". The metropolitan area also comprises the largest petrochemical manufacturing area in the world, including for synthetic rubber, insecticides, and fertilizers. The area is also the world's leading center for building oilfield equipment. The region is also a major center of biomedical research, aeronautics, and high technology.",
+        ". We stress the need for the General Assembly to continue consideration of the responsibility to protect populations from genocide, war crimes, ethnic cleansing and crimes against humanity and its implications, bearing in mind the principles of the Charter and international law",
+        ". The project is the largest hydroelectric dam of the state of Punjab. The township where the site is located is called Shah pur Kandi Township. Feasibility studies for the project began in 1953 and geotechnical studies continued until 1980. Construction began in 1981, the generators were commissioned in 2000 and the project complete in March 2001."
+      ],
+      "response": "Not found.",
+      "reference": "K'iche'",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "where did german immigrants settled in the 1800s",
+      "retrieved_contexts": [
+        "None of the German states had American colonies. In the 1670s, the first significant groups of German immigrants arrived in the British colonies, settling primarily in Pennsylvania, New York, and Virginia. Immigration continued in very large numbers during the 19th century, with eight million arrivals from Germany. Between 1820 and 1870 over seven and a half million German immigrants came to the United Statesâ€”more than doubling the entire population of the country",
+        ". Frederick the Great immediately sent 57,475 German families to the newly conquered lands in order to solidify his new acquisitions, and abolished the use of the Polish language.",
+        ". The rich were allowed to redeem themselves, but the poor were condemned to slavery. Their masters would on occasion allow them to secure freedom by professing Islam. A long list might be given of people of good social position, not only Italians or Spaniards, but also German and English travelers in the south, who were captives for a time.",
+        "Territorial expansion of the Kingdom of Prussia, which in the 19th century would lead the future German reunification efforts, started with the annexation of territories belonging to the Polish–Lithuanian Commonwealth. Between 1772 and 1795, Prussia took 141,400 km2 (54,600 sq mi) of the Commonwealth's western territory—areas known as Greater Poland, Pomorze and Mazovia (renaming them as South Prussia, West Prussia and New East Prussia)—and with it nearly 1 million Polish speaking inhabitants",
+        ". By 2010, their population grew to 49.8 million immigrants, reflecting a jump of 6 million people since 2000."
+      ],
+      "response": "German immigrants settled primarily in Pennsylvania, New York, and Virginia in the 1800s.",
+      "reference": "German Americans",
+      "answer_relevancy": 0.9413373708726694,
+      "faithfulness": 1.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "who plays the dad in drake and josh",
+      "retrieved_contexts": [
+        "Walter (Jonathan Goldstein) is Josh's father and Drake and Megan's stepfather. He is a meteorologist for a local TV news program in San Diego, but he is often wrong about the weather. Walter is often clumsy, out of date, and seemingly empty-headed. As a result, he lacks the respect of his stepchildren, who refer to him by his first name",
+        ". At the same time, Victor's private investigation on the hit-and-run driver leads him to Adam. He agrees to not turn him in as long as he can take part in Connor's life; a role he had initially refused him. Adam agrees as he and Chelsea remarry. Days before their flight to Paris, Delia's father Billy Abbott (Billy Miller) puts the pieces together and realizes Adam is the one who killed his daughter",
+        "In Harry Potter and the Philosopher's Stone, Voldemort's manifestation is as a face on the back of Quirrell's head, an effect achieved by computer generated imagery. Ian Hart, the actor who played Quirrell in the same film, provided the voice and the facial source for this character. Voldemort also appears in a scene in the Forbidden Forest where he is seen drinking the blood of a unicorn",
+        "Jack Barry, who created the show and eventually used it to revive his partnership with longtime producer Dan Enright, hosted all versions of the show up until his death in May 1984.",
+        "Ed, Edd n Eddy is a Canadian-American animated comedy television series created by Danny Antonucci for Cartoon Network, and the sixth of the network's Cartoon Cartoons. The series revolves around three preteen boys named Ed, Edd (called \"Double D\" to avoid confusion with Ed), and Eddy—collectively known as \"the Eds\"—who live in a suburban cul-de-sac in the fictional town of Peach Creek"
+      ],
+      "response": "Not found.",
+      "reference": "Jonathan Goldstein",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who's winning the election in virginia for governor",
+      "retrieved_contexts": [
+        "In the general election on November 7, 2017, Democratic nominee Ralph Northam defeated Republican nominee Ed Gillespie, winning by the largest margin for a Democrat since 1985. Northam will become the 73rd governor of Virginia, and take office on January 13, 2018. The election had the highest voter turnout percentage in a Virginia gubernatorial election in twenty years with 47% of the state's constituency casting their ballot.",
+        ". Governor John Peter Altgeld of Illinois, a Democrat, denounced Cleveland and said he could handle all disturbances in his state without federal intervention.",
+        ". In 2014, Jay Sario competed in the fourth season, placing 6th out of 14. Anthony reappeared on Project Runway All Stars (season 6), winning the competition.",
+        "Although the series is largely set in Virginia, it was filmed entirely on location in Arkansas, except for the segment representing the Elmira, N. Y. Federal prison camp which was filmed in the stockade at nearby Fort Gibson State Park, Oklahoma.",
+        "Anthony Williams and Mila Hermanovski later appeared in Project Runway: All Stars in 2012, with Anthony placing 9th out of 13th, and Mila placing 6th. Emilio Sosa, in the same year, competed in the second season of the All Stars edition and again placed first runner-up, losing to Anthony Ryan Auid from Season Nine. In 2013, Seth Aaron Henderson competed in the third season of All Stars, winning the competition. In 2014, Jay Sario competed in the fourth season, placing 6th out of 14"
+      ],
+      "response": "Ralph Northam won the election for governor of Virginia.",
+      "reference": "Ralph Northam",
+      "answer_relevancy": 0.8824355330384782,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "how many counties does the state of georgia have",
+      "retrieved_contexts": [
+        "The U.S. State of Georgia is divided into 159 counties, more than any other state except for Texas, which has 254 counties. Under the Georgia State Constitution, all of its counties are granted home rule to deal with problems that are purely local in nature",
+        ". Also, eight consolidated city-counties have been established in Georgia: Athens–Clarke County, Augusta–Richmond County, Columbus–Muscogee County, Georgetown–Quitman County, Statenville–Echols County, Macon–Bibb County, Cusseta–Chattahoochee County, and Preston-Webster County.",
+        "In 1922, after the Irish War of Independence and the Anglo-Irish Treaty, most of Ireland seceded from the United Kingdom to become the independent Irish Free State, which after the 1937 constitution, began to call itself Ireland. The six northeastern counties, known as Northern Ireland, remained within the United Kingdom. The Irish Civil War followed soon after the War of Independence",
+        "Oklahoma City is the capital and largest city of the U.S. state of Oklahoma. The county seat of Oklahoma County, the city ranks 27th among United States cities in population. The population grew following the 2010 Census, with the population estimated to have increased to 631,346 as of July 2015",
+        "Overall, employment in Buffalo has shifted as its population has declined and manufacturing has diminished. Buffalo's 2005 unemployment rate was 6.6%, contrasted with New York State's 5.0% rate. And from the fourth quarter of 2005 to the fourth quarter of 2006, Erie County had no net job growth, ranking it 271st among the 326 largest counties in the country"
+      ],
+      "response": "The state of Georgia has 159 counties.",
+      "reference": "159",
+      "answer_relevancy": 0.9281271459595667,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "nodding your head no is an example of",
+      "retrieved_contexts": [
+        "A nod of the head is a gesture in which the head is tilted in alternating up and down arcs along the sagittal plane. In many cultures, it is most commonly, but not universally, used to indicate agreement, acceptance, or acknowledgment.",
+        ". They argue that since \"there is no indisputably authoritative sequence to them, we cannot make use of context as positive evidence for one kind of tone or another.\" Shakespeare does not attempt to come to any significant conclusion within this particular sonnet because no resolution is needed.",
+        "If you are unable to use these tools, you may set |needhelp=<your help request> on this template to request help from an experienced user. Please include details about your problem, to help other editors.",
+        "Most Japanese people employ politeness to indicate a lack of familiarity. That is, they use polite forms for new acquaintances, but if a relationship becomes more intimate, they no longer use them. This occurs regardless of age, social class, or gender.",
+        "The cervical spinal nerves emerge from above the cervical vertebrae. For example, the cervical spinal nerve 3 (C3) passes above C3."
+      ],
+      "response": "Not found.",
+      "reference": "a gesture",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "give the formula for the following substance carbonic acid",
+      "retrieved_contexts": [
+        "Carbonic acid is a chemical compound with the chemical formula H2CO3 (equivalently OC(OH)2). It is also a name sometimes given to solutions of carbon dioxide in water (carbonated water), because such solutions contain small amounts of H2CO3. In physiology, carbonic acid is described as volatile acid or respiratory acid, because it is the only acid excreted as a gas by the lungs. It plays an important role in the bicarbonate buffer system to maintain acid–base homeostasis.",
+        ". Portuguese and Spanish (as well as English) assign different grammatical cases to these arguments, as shown in the following table:",
+        "Equations of wave motion are called wave equations. The solutions to a wave equation give the time-evolution and spatial dependence of the amplitude. Boundary conditions determine if the solutions describe traveling waves or standing waves.",
+        ". It went into effect on July 1, 1923. The act banned Chinese immigrants from entering Canada except those under the following titles:",
+        ". Limehouse forces a reluctant Boyd to give him $100,000 for a clean slate for himself and new identities for he and Ava on the grounds that Boyd must never set foot in Harlan County again. In the series finale, Limehouse is one of the few people Raylan and the Marshals suspected helped smuggle Ava past roadblocks so that she could escape Harlan, but Limehouse had an alibi for that day because he had left Noble's the previous day."
+      ],
+      "response": "H2CO3",
+      "reference": "Carbonic acid",
+      "answer_relevancy": 0.922436755069526,
+      "faithfulness": 1.0,
+      "context_precision": 0.0,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "where was the rise of the planet of the apes filmed",
+      "retrieved_contexts": [
+        ". On 24 September 2013, scenes were filmed at St John's College, The Backs in Queen's Road, and Queen's Green. The New Court lawn and Kitchen Bridge were included features in the filming location of the piece. The May Ball scene was the last of the outside shoots, with filming in a lecture theatre the following day, and the remaining filming completed in the studio over the final five weeks of production.",
+        "Although the series is largely set in Virginia, it was filmed entirely on location in Arkansas, except for the segment representing the Elmira, N. Y. Federal prison camp which was filmed in the stockade at nearby Fort Gibson State Park, Oklahoma.",
+        "Most of the shooting took place in Argentina, in the city of La Plata (the railway station where Heinrich leaves for Unserberg is the Main Train Station of La Plata, for example), and in the Mendoza Province, in such places as the Andes mountains. Some time after the film's release, director Annaud confirmed that two crews secretly shot footage for the film in Tibet, amounting to approximately 20 minutes of footage in the final film. Other footage was shot in Nepal, Austria and Canada.",
+        ". Although Nigerian films have been produced since the 1960s, the country's film industry has been aided by the rise of affordable digital filming and editing technologies.",
+        "By 8 October 2013, principal photography had begun, with the shooting being done at Cambridge University, and at other locations in Cambridgeshire and across the United Kingdom. Prior to the start of principal photography, Working Title had begun shooting on the lawn in front of the New Court building from 23 September 2013 to 27 September 2013; they filmed the Cambridge May Ball scene, set in 1963"
+      ],
+      "response": "Not found.",
+      "reference": "Oahu, Hawaii",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "ranjit sagar dam has builded over which river",
+      "retrieved_contexts": [
+        "The Ranjit Sagar Dam, also known as the Thein Dam, is part of a hydroelectric project constructed by the Government of Punjab on the Ravi River on the Border of two states of India Jammu and Kashmir and Punjab. 60% of the lake is part of J&K. The project is situated near Pathankot city in Pathankot district of the state of Punjab and Kathua city and Basholi tehsil of Kathua district in J&K. The project is the largest hydroelectric dam of the state of Punjab",
+        "The Genesee River is a tributary of Lake Ontario flowing northward through the Twin Tiers of Pennsylvania and New York in the United States.",
+        ". The project is the largest hydroelectric dam of the state of Punjab. The township where the site is located is called Shah pur Kandi Township. Feasibility studies for the project began in 1953 and geotechnical studies continued until 1980. Construction began in 1981, the generators were commissioned in 2000 and the project complete in March 2001.",
+        "The Point Defiance Bypass was built from 2010 to 2017 as a replacement for the BNSF mainline that runs along the Puget Sound coast between the Nisqually River and Tacoma. The $181 million bypass, using an inland route that follows I-5, was built by the Washington State Department of Transportation (WSDOT) on right of way owned by Sound Transit, the regional transit authority",
+        "After the construction and ground testing of a stage was completed, it was then shipped to the Kennedy Space Center. The first two stages were so large that the only way to transport them was by barge. The S-IC, constructed in New Orleans, was transported down the Mississippi River to the Gulf of Mexico. After rounding Florida, it was then transported up the Intra-Coastal Waterway to the Vertical Assembly Building (now called the Vehicle Assembly Building)"
+      ],
+      "response": "The Ranjit Sagar Dam is built over the Ravi River.",
+      "reference": "Ravi River",
+      "answer_relevancy": 0.9296239304894285,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "how did the federalists and anti federalists compromise",
+      "retrieved_contexts": [
+        "When efforts to ratify the Constitution encountered serious opposition in Massachusetts, two noted anti-Federalists, John Hancock and Samuel Adams, helped negotiate a compromise. The anti-Federalists agreed to support ratification, with the understanding that they would put forth recommendations for amendments should the document go into effect. The Federalists agreed to support the proposed amendments, specifically a bill of rights.",
+        ". The Kiezers were elected, with the restrictive franchise based on property holdings and limited to the larger landowners of the colony. The Courts were dominated in the early centuries by the sugar planters and their representatives.",
+        ". Joe Brody admitted to hitting Owen on the head and taking the pictures, but denied killing him. Owen was obsessed with Carmen, and killed Geiger and took the blackmail photos to protect her. When Brody followed and ambushed him and stole the photos, it seems (at least to me) that when Owen came to and realized the photos were gone, in a fit of despair he drove into the harbor to kill himself. Before I do any editing, however, I would like to see if anyone has any feedback about this..",
+        "Federalism was a political solution for the problems with the Articles of Confederation which gave little practical authority to the federal government. For example, the Articles allowed the Continental Congress the power to sign treaties and declare war, but it could not raise taxes to pay for an army and all major decisions required a unanimous vote.",
+        ". In turn, Pershing exercised his prerogative carefully, not engaging in issues that might distract or diminish his command. While earlier a champion of the African-American soldier, he did not defend their full participation on the battlefield, bowing to widespread racial attitudes among white Americans, plus Wilson's reactionary racial views and the political debts he owed to southern \"separate but equal\" Democratic lawmakers."
+      ],
+      "response": "The Federalists and anti-Federalists compromised by the anti-Federalists agreeing to support ratification of the Constitution in exchange for the Federalists' promise to support proposed amendments, specifically a bill of rights.",
+      "reference": "Massachusetts Compromise",
+      "answer_relevancy": 0.9270959884452884,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "when was the immigration act passed in canada",
+      "retrieved_contexts": [
+        ". It went into effect on July 1, 1923. The act banned Chinese immigrants from entering Canada except those under the following titles:",
+        "Before 1923, Chinese immigration was heavily controlled by the Chinese Immigration Act of 1885, which imposed a hefty head tax on all immigrants from China. After various members of the federal and some provincial governments (especially British Columbia) put pressure on the federal government to discourage Chinese immigration, the Chinese Immigration Act was passed. It went into effect on July 1, 1923",
+        "The collection of tithes was resisted in the period 1831â€“36, known as the Tithe War. Thereafter, tithes were reduced and added to rents with the passing of the Tithe Commutation Act in 1836. With the disestablishment of the Church of Ireland by the Irish Church Act 1869, tithes were abolished.",
+        ". Canada of the late-1960s was a land where blue-collar workers could afford cottages easily, but only far more rarely could this happen in 2015 where standard of living has declined for new families (based upon measures of double-income families, increased household debt, and GINI Coefficient increases from .28 to .32 since 1988). In Canada, Exports have dropped 50%; and Imports have doubled - since year-2000, creating a new and pervasive Trade deficit",
+        ". Over time, this doctrine evolved into the modern concepts of fair use and fair dealing. Fair use was a common-law doctrine in the U.S. until it was incorporated into the Copyright Act of 1976, 17 U.S.C. § 107."
+      ],
+      "response": "The immigration act was passed in Canada on July 1, 1923.",
+      "reference": "1923",
+      "answer_relevancy": 0.9454590955361751,
+      "faithfulness": 1.0,
+      "context_precision": 0.99999999995,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when does star trek discovery air on tv",
+      "retrieved_contexts": [
+        "Star Trek: Discovery premiered on September 19, 2017, at ArcLight Hollywood, before debuting on CBS and CBS All Access on September 24. The rest of the 15-episode first season was streamed weekly on All Access. The series' release led to record subscriptions for All Access, and positive reviews from critics who highlighted Martin-Green's performance. A second season was ordered in October 2017.",
+        "USS Enterprise (NCC-1701) is a fictional starship in the fictional Star Trek universe that serves as both the main setting of the original Star Trek television series, as well as the primary transportation method for the show's characters. The Enterprise has been depicted in four network television series, six feature films, many books, and much fan-created media. The original Star Trek series (1966â€“1969) features a voice-over by Enterprise captain, James T",
+        "On April 9, 2017, the series premiered in Poland on Ale Kino+ under the title Wiem, kim jesteÅ› (I Know Who You Are). In the United Kingdom the BBC acquired the rights to air the series under the title I Know Who You Are. The series premiered on July 15, 2017 on BBC Four.",
+        ". The original Star Trek series (1966â€“1969) features a voice-over by Enterprise captain, James T. Kirk (William Shatner), which describes the mission of the Enterprise as \"to explore strange new worlds; to seek out new life and new civilizations; to boldly go where no man has gone before\".",
+        "Frakes appeared in dual roles in \"Second Chances\", a TNG episode in which it was established that Riker had a \"twin\" created years earlier by a transporter malfunction. Frakes appeared as the twin, Thomas Riker, in the Star Trek: Deep Space Nine episode \"Defiant\", in which he impersonates the other Riker to commandeer the starship Defiant as a member of the Maquis. The following year he guest-starred as Commander Riker along with Q in the Star Trek: Voyager episode \"Death Wish\""
+      ],
+      "response": "Star Trek: Discovery debuted on CBS and CBS All Access on September 24, 2017.",
+      "reference": "September 19, 2017",
+      "answer_relevancy": 0.8736124428196178,
+      "faithfulness": 0.6666666666666666,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "what the role of the protein encoded by the lacz gene",
+      "retrieved_contexts": [
+        ". The plasmid DNA carrying the two genes is then transfected into cells, and the cells are grown under selective conditions in thymidine-lacking medium. Surviving cell will have the exogenous DHFR gene along with the gene of interest integrated in its genome. The growth rate and the level of recombinant protein production of each cell line vary widely",
+        "Bacterial operons are polycistronic transcripts that are able to produce multiple proteins from one mRNA transcript. In this case, when lactose is required as a sugar source for the bacterium, the three genes of the lac operon can be expressed and their subsequent proteins translated: lacZ, lacY, and lacA. The gene product of lacZ is β-galactosidase which cleaves lactose, a disaccharide, into glucose and galactose",
+        "Much of the genetic manipulation done in CHO cells is done in cells lacking DHFR. This genetic selection scheme remains one of the standard methods to establish transfected CHO cell lines for the production of recombinant therapeutic proteins. The process begins with the molecular cloning of the gene of interest and the dhfr gene into a single mammalian expression system",
+        ". lacY encodes Beta-galactoside permease, a protein which becomes embedded in the cytoplasmic membrane to enable transport of lactose into the cell. Finally, lacA encodes β-galactoside transacetylase.",
+        "Peptides have recently been used in the study of protein structure and function. For example, synthetic peptides can be used as probes to see where protein-peptide interactions occur- see the page on Protein tags."
+      ],
+      "response": "The protein encoded by the lacZ gene is β-galactosidase, which cleaves lactose into glucose and galactose.",
+      "reference": "lac operon",
+      "answer_relevancy": 0.9244309392974983,
+      "faithfulness": 1.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "if i die before i wake feed jake original",
+      "retrieved_contexts": [
+        ". Before I do any editing, however, I would like to see if anyone has any feedback about this... Blackmyron 16:54, 14 July 2007 (UTC)",
+        "\"Feed Jake\" is a song written by Danny \"Bear\" Mayo, and recorded by the American country music band Pirates of the Mississippi. It was released in February 1991 as the third single from the band's self-titled debut album. The song is also the band's highest chart peak, having reached number 15 on the Billboard Hot Country Singles & Tracks (now Hot Country Songs) charts.",
+        ". I swear to observe all that the honor of my position demands of me.",
+        ". He has written several books, including I Was Wrong and Time Has Come: How to Prepare Now for Epic Events Ahead.",
+        ". Joe Brody admitted to hitting Owen on the head and taking the pictures, but denied killing him. Owen was obsessed with Carmen, and killed Geiger and took the blackmail photos to protect her. When Brody followed and ambushed him and stole the photos, it seems (at least to me) that when Owen came to and realized the photos were gone, in a fit of despair he drove into the harbor to kill himself. Before I do any editing, however, I would like to see if anyone has any feedback about this.."
+      ],
+      "response": "Not found.",
+      "reference": "Feed Jake",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.49999999995,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "resistance to airflow in respiratory passageways is influenced by",
+      "retrieved_contexts": [
+        "Airway resistance is not constant. As shown above airway resistance is markedly affected by changes in the diameter of the airways, therefore diseases affecting the respiratory tract can increase airway resistance. Airway resistance can change over time, for example, in asthma during an attack the airways constrict causing an increase in airway resistance",
+        ". Airway resistance can also vary between inspiration and expiration, for example, in emphysema there is destruction of the elastic tissue of the lungs which help hold the small airways open, therefore during expiration, particularly forced expiration, these airways may collapse causing increased airway resistance.",
+        ". When a neuron is stimulated by an excitatory impulse, neuronal dendrites are bound by neurotransmitters which cause the cell to become permeable to a specific type of ion; the type of neurotransmitter determines to which ion the neurotransmitter will become permeable. In excitatory postsynaptic potentials, an excitatory response is generated",
+        "Carbonic acid is a chemical compound with the chemical formula H2CO3 (equivalently OC(OH)2). It is also a name sometimes given to solutions of carbon dioxide in water (carbonated water), because such solutions contain small amounts of H2CO3. In physiology, carbonic acid is described as volatile acid or respiratory acid, because it is the only acid excreted as a gas by the lungs. It plays an important role in the bicarbonate buffer system to maintain acid–base homeostasis.",
+        ". In excitatory postsynaptic potentials, an excitatory response is generated. This is caused by an excitatory neurotransmitter, normally glutamate binding to a neuron's dendrites, causing an influx of sodium ions through channels located near the binding site."
+      ],
+      "response": "resistance to airflow in respiratory passageways is influenced by changes in the diameter of the airways and diseases affecting the respiratory tract.",
+      "reference": "Airway resistance",
+      "answer_relevancy": 0.9380928163048197,
+      "faithfulness": 1.0,
+      "context_precision": 0.99999999995,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when did the first immigrants come to hawaii",
+      "retrieved_contexts": [
+        "None of the German states had American colonies. In the 1670s, the first significant groups of German immigrants arrived in the British colonies, settling primarily in Pennsylvania, New York, and Virginia. Immigration continued in very large numbers during the 19th century, with eight million arrivals from Germany. Between 1820 and 1870 over seven and a half million German immigrants came to the United Statesâ€”more than doubling the entire population of the country",
+        "The history of Hawaii describes the era of human settlements in the Hawaiian Islands. That history begins sometime between 124 and 800 CE, with some theories dating the earliest Polynesian settlements to the 10th or even 13th century. Around 1200, Tahitian explorers found and began settling the area.[inconsistent] This began the rise of the Hawaiian civilization. It remained isolated from the rest of the world for another 500 years.",
+        ". It went into effect on July 1, 1923. The act banned Chinese immigrants from entering Canada except those under the following titles:",
+        ". By 2010, their population grew to 49.8 million immigrants, reflecting a jump of 6 million people since 2000.",
+        "Before 1923, Chinese immigration was heavily controlled by the Chinese Immigration Act of 1885, which imposed a hefty head tax on all immigrants from China. After various members of the federal and some provincial governments (especially British Columbia) put pressure on the federal government to discourage Chinese immigration, the Chinese Immigration Act was passed. It went into effect on July 1, 1923"
+      ],
+      "response": "Not found.",
+      "reference": "Around 1200",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.49999999995,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "where did this case of product tampering occur",
+      "retrieved_contexts": [
+        "The Chicago Tylenol murders were a series of poisoning deaths resulting from drug tampering in the Chicago metropolitan area in 1982. The victims had all taken Tylenol-branded acetaminophen capsules that had been laced with potassium cyanide. A total of seven people died in the original poisonings, with several more deaths in subsequent copycat crimes.",
+        "The 1709 Statute of Anne, an act of the Parliament of Great Britain, created copyright law to replace a system of private ordering enforced by the Stationers' Company. The Statute of Anne did not provide for legal unauthorized use of material protected by copyright. In Gyles v Wilcox, the Court of Chancery established the doctrine of \"fair abridgement,\" which permitted unauthorized abridgement of copyrighted works under certain circumstances",
+        ". Canada of the late-1960s was a land where blue-collar workers could afford cottages easily, but only far more rarely could this happen in 2015 where standard of living has declined for new families (based upon measures of double-income families, increased household debt, and GINI Coefficient increases from .28 to .32 since 1988). In Canada, Exports have dropped 50%; and Imports have doubled - since year-2000, creating a new and pervasive Trade deficit",
+        ". Over time, this doctrine evolved into the modern concepts of fair use and fair dealing. Fair use was a common-law doctrine in the U.S. until it was incorporated into the Copyright Act of 1976, 17 U.S.C. § 107.",
+        "A truck breaks down. Three fugitives from justice get out and find themselves in the city of Mahagonny: Fatty the Bookkeeper, Trinity Moses, and Leocadia Begbick. Because the federal agents pursuing them will not search this far north, and they are in a good location to attract ships coming south from the Alaskan gold fields, Begbick decides that they can profit by staying where they are and founding a pleasure city, where men can have fun, because there is nothing else in the world to rely on."
+      ],
+      "response": "The case of product tampering occurred in the Chicago metropolitan area.",
+      "reference": "the Chicago metropolitan area",
+      "answer_relevancy": 0.958500374213827,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who become ceo of wipro company in 2016",
+      "retrieved_contexts": [
+        "At the end of December 31, 2015, its employee strength was 170,664. Abid Ali Neemuchwala was appointed as Wipro's CEO after T. K. stepped down in early 2016.",
+        ". The Chinese calendar is lunisolar, so the date of the festival varies from year to year on the Gregorian calendar. In 2016, it occurred on June 9; and in 2017, on May 30.",
+        "Also reported to be in the race are David \"None of the Above\" Gatchell a ballot activist & frequent candidate and Emory \"Bo\" Heyward, a software company employee, conservative activist & 2006 candidate.",
+        ". The single is his 26th entry on the latter as a solo artist. It has also peaked at number 17 on the US Hot R&B/Hip-Hop Songs chart. As of May 2016, it has sold 609,085 copies in the United States.",
+        "In the general election on November 7, 2017, Democratic nominee Ralph Northam defeated Republican nominee Ed Gillespie, winning by the largest margin for a Democrat since 1985. Northam will become the 73rd governor of Virginia, and take office on January 13, 2018. The election had the highest voter turnout percentage in a Virginia gubernatorial election in twenty years with 47% of the state's constituency casting their ballot."
+      ],
+      "response": "Abid Ali Neemuchwala became the CEO of Wipro in 2016.",
+      "reference": "Abid Ali Neemuchwala",
+      "answer_relevancy": 0.8457024505620411,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "love is not love that alters when it alteration finds meaning",
+      "retrieved_contexts": [
+        ". They aren't about the action of love and the object of that love is removed in this sequence which consists of Sonnets 94, 116, and 129\". This group of three sonnets does not fit the mold of the rest of Shakespeare's sonnets, therefore, and they defy the typical concept and give a different perspective of what love is and how it is portrayed or experienced",
+        "Sonnet 116 is one of Shakespeare's most famous love sonnets, but some scholars have argued the theme has been misunderstood. Hilton Landry believes the appreciation of 116 as a celebration of true love is mistaken, in part because its context in the sequence of adjacent sonnets is not properly considered",
+        ". \"Though 116 resolves no issues, the poet in this part of the sequence acknowledges and accepts the fallibility of his love more fully than he could acknowledge that of the young man's earlier\". Other critics of Sonnet 116 have argued that one cannot rely on the context of the sonnet to understand its tone",
+        ". On the other hand, Dargis wrote that \"you may not buy his [Cameron's] happy endings, but it's a seductive ideal when all of God's creatures, great and small, buxom and blond, exist in such harmony.\"",
+        ". Landry acknowledges the sonnet \"has the grandeur of generality or a 'universal significance',\" but cautions that \"however timeless and universal its implications may be, we must never forget that Sonnet 116 has a restricted or particular range of meaning simply because it does not stand alone.\" Carol Thomas Neely writes that, \"Sonnet 116 is part of a sequence which is separate from all the other sonnets of Shakespeare because of their sense of detachment"
+      ],
+      "response": "Not found.",
+      "reference": "Sonnet 116",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.5888888888692593,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who sang the song should have been a cowboy",
+      "retrieved_contexts": [
+        "\"Should've Been a Cowboy\" is a song written and recorded by American country music artist Toby Keith. It was released on February 8, 1993 as his debut single, and was served as the first single released from Keith's self-titled debut studio album, Toby Keith. On June 5, 1993, it reached number one on the US Hot Country Songs chart and the Canadian RPM Country Tracks. It also peaked at number 93 on the Billboard Hot 100, making it a minor crossover hit.",
+        ". This tradition has continued through the years, notably by actor and singer Jim Nabors from 1972 until 2014. Nabors announced in 2014, citing health-related reasons, that the 2014 Indy 500 would be the last at which he would sing the song. In 2015, the a cappella group Straight No Chaser sang the song before the race, and since Nabors' retirement (and before he became the regular singer), the singing of the song is done on a rotating basis.",
+        "Hardin sang the National Anthem at the season opening hockey games of the Anaheim Ducks on October 13, 2010, and the Phoenix Coyotes on October 16, 2010. She sang the Star Spangled Banner at the Dover International Speedway for the AAA 400 on October 2, 2011. Hardin sang the song \"Tiers of Joy\" (composed by Austin Wintory) for the Leisure Suit Larry: Reloaded soundtrack.[citation needed]",
+        "The lyrics to the song were originally written by James Terlingo in 1932. The copyright by James Terlingo in 1932 took place on March 29th, 1932. Terlingo later sold the rights to the song.",
+        ". Despite not knowing \"The Bird's the Word\" was a Rivingtons song, the similarity to \"Papa-Oom-Mow-Mow\" was obvious and The Trashmen added the chorus to the end of their new track."
+      ],
+      "response": "Toby Keith sang the song \"Should've Been a Cowboy.\"",
+      "reference": "Toby Keith",
+      "answer_relevancy": 0.7412133203334174,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "where is the condenser located on a microscope",
+      "retrieved_contexts": [
+        "Condensers are located above the light source and under the sample in an upright microscope, and above the stage and below the light source in an inverted microscope. They act to gather light from the microscope's light source and concentrate it into a cone of light that illuminates the specimen. The aperture and angle of the light cone must be adjusted (via the size of the diaphragm) for each different objective lens with different numerical apertures.",
+        ". In excitatory postsynaptic potentials, an excitatory response is generated. This is caused by an excitatory neurotransmitter, normally glutamate binding to a neuron's dendrites, causing an influx of sodium ions through channels located near the binding site.",
+        ". The purse hung from the waist belt by the three hinges seen on top of it. The parts of the lid in other non-jewellery materials had decayed, but it probably had a plate behind the metalwork made of valuable whalebone \"ivory\"; the lid is now displayed with a plain replacement plate, although the original may well have had decorative carving.",
+        ". The project is the largest hydroelectric dam of the state of Punjab. The township where the site is located is called Shah pur Kandi Township. Feasibility studies for the project began in 1953 and geotechnical studies continued until 1980. Construction began in 1981, the generators were commissioned in 2000 and the project complete in March 2001.",
+        "Taos is located near the Rio Pueblo de Taos, a tributary of the Rio Grande. Just to the west of Taos is the Rio Grande Gorge, cutting through the basalt flows of the Taos Plateau volcanic field and crossed by the Rio Grande Gorge Bridge, now a part of U.S. Route 64."
+      ],
+      "response": "Condensers are located above the light source and under the sample in an upright microscope, and above the stage and below the light source in an inverted microscope.",
+      "reference": "Condenser (optics)",
+      "answer_relevancy": 0.9104416594479345,
+      "faithfulness": 0.75,
+      "context_precision": 0.9999999999,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "when is the running of the bulls held in spain",
+      "retrieved_contexts": [
+        "The Pamplona encierro is the most popular in Spain and has been broadcast live by RTVE, the public Spanish national television channel, for over 30 years. It is the highest profile event of the San Fermin festival, which is held every year from 6–14 July. The first bull running is on 7 July, followed by one on each of the following mornings of the festival, beginning every day at 8 am",
+        ". Among the rules to take part in the event are that participants must be at least 18 years old, run in the same direction as the bulls, not incite the bulls, and not be under the influence of alcohol.",
+        "The Cannes Festival (/kæn/; French: Festival de Cannes), named until 2002 as the International Film Festival (Festival international du film) and known in English as the Cannes Film Festival, is an annual film festival held in Cannes, France, which previews new films of all genres, including documentaries, from all around the world. Founded in 1946, the invitation-only festival is held annually (usually in May) at the Palais des Festivals et des Congrès.",
+        "Barry signed with the Bulls on January 25, 1999 and signed a 6-year $27 million contract. After sustaining an injury, he played only 37 of the 50 games played that season, starting 30 of those games, averaging 11.1 ppg. Failing to fill the void of a Jordan-less Bulls, the team traded Brent for Hersey Hawkins and James Cotton from Seattle on August 12, 1999.",
+        ". The Hindu religion held cows sacred, and for Muslims pork was considered haraam. In one camp, 85 out of 90 sepoys would not accept the cartridges from their garrison officer. The British harshly punished those who would not by jailing them. The Indian people were outraged, and on May 10, 1857, sepoys marched to Delhi, and, with the help of soldiers stationed there, captured it"
+      ],
+      "response": "The running of the bulls is held every year from 6–14 July, with the first bull running on 7 July.",
+      "reference": "6–14 July",
+      "answer_relevancy": 0.9024171928403187,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when do replays become available on nfl game pass",
+      "retrieved_contexts": [
+        "NFL Game Pass is a subscription based audio and video service which allows users to hear and watch live and archived National Football League (NFL) games via a Internet connection. For users in North America, only out-of-market preseason games can be viewed live; full replays of all the games become available on demand after their original live broadcasts end. Live preseason, regular season, and postseason games are available to international users.",
+        "In the computer game Warcraft III by Blizzard Entertainment, players may enter the cheat code \"WhosYourDaddy\" to cause their army to become invulnerable and instantly kill enemies.",
+        ". Before I do any editing, however, I would like to see if anyone has any feedback about this... Blackmyron 16:54, 14 July 2007 (UTC)",
+        ". 4 seed Tennessee, with a record of 13-3, hosted the Buffalo Bills in a wild card game. The Titans dramatically defeated the Bills 22-16 by means of the Music City Miracle play and traveled to Indianapolis the following weekend, where they defeated the Colts 19-16. Meanwhile, Jacksonville won its divisional round home game over the Miami Dolphins 62-7. On January 23, 2000, the Titans and Jaguars met for the third time in the 1999 season in Jacksonville for the AFC Championship Game",
+        ". Ohio State continued to execute on offense after the safety, scoring their third touchdown on a 19-yard pass from J.T. Barrett to Devin Smith."
+      ],
+      "response": "Full replays of all the games become available on demand after their original live broadcasts end.",
+      "reference": "NFL Game Pass",
+      "answer_relevancy": 0.8738649143153859,
+      "faithfulness": 1.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "known as the punk poet who used poetry in their music",
+      "retrieved_contexts": [
+        "John Cooper Clarke (born 25 January 1949) is an English performance poet who first became famous during the punk rock era of the late 1970s when he became known as a \"punk poet\". He released several albums in the late 1970s and early 1980s, and continues to perform regularly.",
+        ". Clarinetist Lucho Bermúdez helped bring cumbia into the country's interior. The early spread of cumbia internationally was helped by the number of record companies located on the coast. Originally a working-class populist music, cumbia was frowned upon by the elites, but as the music pervaded class association with the music subsided in Colombia and cumbia became a shared music in every sector of society.",
+        ". \"Though 116 resolves no issues, the poet in this part of the sequence acknowledges and accepts the fallibility of his love more fully than he could acknowledge that of the young man's earlier\". Other critics of Sonnet 116 have argued that one cannot rely on the context of the sonnet to understand its tone",
+        "\"Feed Jake\" is a song written by Danny \"Bear\" Mayo, and recorded by the American country music band Pirates of the Mississippi. It was released in February 1991 as the third single from the band's self-titled debut album. The song is also the band's highest chart peak, having reached number 15 on the Billboard Hot Country Singles & Tracks (now Hot Country Songs) charts.",
+        "Jack Barry, who created the show and eventually used it to revive his partnership with longtime producer Dan Enright, hosted all versions of the show up until his death in May 1984."
+      ],
+      "response": "John Cooper Clarke is known as the punk poet who used poetry in his music.",
+      "reference": "John Cooper Clarke",
+      "answer_relevancy": 0.7872597616679542,
+      "faithfulness": 0.5,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when did bird is the word come out",
+      "retrieved_contexts": [
+        ". Despite not knowing \"The Bird's the Word\" was a Rivingtons song, the similarity to \"Papa-Oom-Mow-Mow\" was obvious and The Trashmen added the chorus to the end of their new track.",
+        "The Rivingtons followed up their 1962 Billboard Hot 100 hit \"Papa-Oom-Mow-Mow\" with the similar \"The Bird's the Word\" in 1963. The Trashmen had not heard this version but saw a band called The Sorensen Brothers playing it. They decided to play the song that night at their own gig. During this first performance, drummer and vocalist Steve Wahrer stopped playing and ad-libbed the \"Surfin' Bird\" middle section",
+        "Hello may be derived from hullo, which the American Merriam-Webster dictionary describes as a \"chiefly British variant of hello,\" and which was originally used as an exclamation to call attention, an expression of surprise, or a greeting. Hullo is found in publications as early as 1803. The word hullo is still in use, with the meaning hello.",
+        ". I'm like a parent whose kid grows up to be president. I'm proud... but it's the kid who did the work. I didn't even think of it as a Christmas story when I first ran across it. I just liked the idea.\" In a 1946 interview, Capra described the film's theme as \"the individual's belief in himself\" and that he made it \"to combat a modern trend toward atheism\".",
+        ". After \"Summer Holiday\" had spent two weeks at number one, The Shadows' instrumental \"Foot Tapper\" - also from the same film - took over the top spot for one week, before \"Summer Holiday\" returned to the top spot for one further week. The track is one of Richard's best known titles and it remains a staple of his live shows. It was one of six hits Richard performed at his spontaneous gig at the 1996 Wimbledon Championships when rain stopped the tennis."
+      ],
+      "response": "Not found.",
+      "reference": "1963",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.49999999995,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "what is the meaning of the dragon boat festival",
+      "retrieved_contexts": [
+        "The Duanwu Festival, also often known, especially in the West, as the Dragon Boat Festival, is a traditional holiday originating in China, occurring near the summer solstice. It is also known as Zhongxiao Festival (Chinese: 忠孝節; pinyin: Zhōngxiàojié), commemorating fealty and filial piety. The festival now occurs on the 5th day of the 5th month of the traditional Chinese calendar, which is the source of the festival's alternative name, the Double Fifth Festival",
+        ". The Chinese calendar is lunisolar, so the date of the festival varies from year to year on the Gregorian calendar. In 2016, it occurred on June 9; and in 2017, on May 30.",
+        "It is the only Indian festival celebrated on a fixed day of the Gregorian calendar. Besides the usual rituals, people of Orissa, especially Western Orissa, reaffirm the strength of the bond of friendship with their best friends during this occasion. The practice is called ‘Makar Basma’",
+        "The Cannes Festival (/kæn/; French: Festival de Cannes), named until 2002 as the International Film Festival (Festival international du film) and known in English as the Cannes Film Festival, is an annual film festival held in Cannes, France, which previews new films of all genres, including documentaries, from all around the world. Founded in 1946, the invitation-only festival is held annually (usually in May) at the Palais des Festivals et des Congrès.",
+        "The Pamplona encierro is the most popular in Spain and has been broadcast live by RTVE, the public Spanish national television channel, for over 30 years. It is the highest profile event of the San Fermin festival, which is held every year from 6–14 July. The first bull running is on 7 July, followed by one on each of the following mornings of the festival, beginning every day at 8 am"
+      ],
+      "response": "The Dragon Boat Festival, also known as the Duanwu Festival, commemorates fealty and filial piety.",
+      "reference": "commemorating fealty and filial piety",
+      "answer_relevancy": 0.9189517697656259,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when does it's a wonderful life comes on",
+      "retrieved_contexts": [
+        "The film's elevation to the status of a beloved classic came decades after its initial release, when it became a television staple during Christmas season in the late 1970s. This came as a welcome surprise to Frank Capra and others involved with its production. \"It's the damnedest thing I've ever seen,\" Capra told The Wall Street Journal in 1984. \"The film has a life of its own now, and I can look at it like I had nothing to do with it. I'm like a parent whose kid grows up to be president",
+        ". It does not include Easter Sunday, which begins the season of Eastertide, although traditions observing the Easter Triduum may overlap or displace part of Holy Week or Easter itself within that additional liturgical period.",
+        ". I'm like a parent whose kid grows up to be president. I'm proud... but it's the kid who did the work. I didn't even think of it as a Christmas story when I first ran across it. I just liked the idea.\" In a 1946 interview, Capra described the film's theme as \"the individual's belief in himself\" and that he made it \"to combat a modern trend toward atheism\".",
+        ". On the other hand, Dargis wrote that \"you may not buy his [Cameron's] happy endings, but it's a seductive ideal when all of God's creatures, great and small, buxom and blond, exist in such harmony.\"",
+        ". Sheldon also does not take drugs, not even legal ones such as caffeine, due to a promise to his mother, and is hypersensitive when he accidentally consumes them"
+      ],
+      "response": "Not found.",
+      "reference": "Christmas season",
+      "answer_relevancy": 0.0,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "what was the religion in persia before islam",
+      "retrieved_contexts": [
+        "The Muslim conquest of Persia, also known as the Arab conquest of Iran,, led to the end of the Sasanian Empire in 651 and the eventual decline of the Zoroastrian religion in Persia.",
+        "Meanwhile, in 1835 Henry Rawlinson, a British East India Company army officer, visited the Behistun Inscriptions in Persia. Carved in the reign of King Darius of Persia (522â€“486 BC), they consisted of identical texts in the three official languages of the empire: Old Persian, Assyrian and Elamite. The Behistun inscription was to the decipherment of cuneiform what the Rosetta Stone was to the decipherment of Egyptian hieroglyphs.",
+        ". The Hindu religion held cows sacred, and for Muslims pork was considered haraam. In one camp, 85 out of 90 sepoys would not accept the cartridges from their garrison officer. The British harshly punished those who would not by jailing them. The Indian people were outraged, and on May 10, 1857, sepoys marched to Delhi, and, with the help of soldiers stationed there, captured it",
+        ". The rich were allowed to redeem themselves, but the poor were condemned to slavery. Their masters would on occasion allow them to secure freedom by professing Islam. A long list might be given of people of good social position, not only Italians or Spaniards, but also German and English travelers in the south, who were captives for a time.",
+        "In the revival of neo-Platonism Renaissance humanists did not reject Christianity; quite the contrary, many of the Renaissance's greatest works were devoted to it, and the Church patronized many works of Renaissance art. However, a subtle shift took place in the way that intellectuals approached religion that was reflected in many other areas of cultural life"
+      ],
+      "response": "Zoroastrian religion.",
+      "reference": "the Zoroastrian religion",
+      "answer_relevancy": 0.7992179847897848,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "ed edd n eddy double d boy or girl",
+      "retrieved_contexts": [
+        "Ed, Edd n Eddy is a Canadian-American animated comedy television series created by Danny Antonucci for Cartoon Network, and the sixth of the network's Cartoon Cartoons. The series revolves around three preteen boys named Ed, Edd (called \"Double D\" to avoid confusion with Ed), and Eddy—collectively known as \"the Eds\"—who live in a suburban cul-de-sac in the fictional town of Peach Creek",
+        ". Under the unofficial leadership of Eddy, the trio frequently invent schemes to make money from their peers to purchase their favorite confectionery, jawbreakers. Their plans usually fail, leaving them in various, often humiliating, predicaments.",
+        "After that, The New Day (Big E and Kofi Kingston) defended the WWE Tag Team Championship against The Dudley Boyz (Bubba Ray Dudley and D-Von Dudley). In the end, Big E hit Bubba Ray with Xavier Woods' trombone. Kingston pinned Bubba Ray after performing Trouble in Paradise to retain the titles.",
+        ". He has appeared in such major releases as Marked for Death (1990), Blood In Blood Out (1993), Desperado (1995), Heat (1995), From Dusk till Dawn (1996), Anaconda (1997), Con Air (1997), The Replacement Killers (1998), Point Blank (1998), Animal Factory (2000), Bubble Boy (2001), Spy Kids (2001), XXX (2002), Once Upon a Time in Mexico (2003), Anchorman: The Legend of Ron Burgundy (2004), The Devil's Rejects (2005), Snoop Dogg's Hood of Horror (2006), Delta Farce (2007), Grindhouse (2007), Rob",
+        ". It does not include Easter Sunday, which begins the season of Eastertide, although traditions observing the Easter Triduum may overlap or displace part of Holy Week or Easter itself within that additional liturgical period."
+      ],
+      "response": "Boy.",
+      "reference": "Ed, Edd n Eddy",
+      "answer_relevancy": 0.0,
+      "faithfulness": 1.0,
+      "context_precision": 0.0,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "what is the difference between airasia x and airasia",
+      "retrieved_contexts": [
+        "AirAsia X is the medium and long-haul operation of the brand AirAsia, which is Asia's largest low-cost carrier[better source needed]. The franchise is able to keep costs down by using a common ticketing system, aircraft livery, employee uniforms, and management style.[citation needed]",
+        ". This is probably because the greater surface area of ocean in the southern hemisphere means that there is more carbon exchanged between the ocean and the atmosphere than in the north. Since the surface ocean is depleted in 14C because of the marine effect, 14C is removed from the southern atmosphere more quickly than in the north.",
+        ". Airway resistance can also vary between inspiration and expiration, for example, in emphysema there is destruction of the elastic tissue of the lungs which help hold the small airways open, therefore during expiration, particularly forced expiration, these airways may collapse causing increased airway resistance.",
+        "Test match between Australia and South Africa at the Gabba in Nov 2012",
+        "The sacroiliac joint or SI joint (SIJ) is the joint between the sacrum and the ilium bones of the pelvis, which are connected by strong ligaments. In humans, the sacrum supports the spine and is supported in turn by an ilium on each side. The joint is a strong, weight transferral synovial plane joint with irregular elevations and depressions that produce interlocking of the two bones"
+      ],
+      "response": "Not found.",
+      "reference": "AirAsia X",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when did we decide to leave the eu",
+      "retrieved_contexts": [
+        "In a referendum on 23 June 2016, 51.9% of the participating UK electorate voted to leave the EU, out of a turnout of 72.2%. On 29 March 2017, the UK government invoked Article 50 of the Treaty on the European Union. The UK is thus due to leave the EU at midnight on 30 March 2019 Central European Time (11Â pm on 29 March 2019 GMT).",
+        ". We stress the need for the General Assembly to continue consideration of the responsibility to protect populations from genocide, war crimes, ethnic cleansing and crimes against humanity and its implications, bearing in mind the principles of the Charter and international law",
+        ". Canada; similar to the U.K., saw per-Capita GDP Exports drop to one-third those seen in Nordic states. A country's poorest citizens can seldom afford to participate in commerce, but in Nordic Model states - states with strong Welfare Social Programs, poorer citizens could participate and clearly - by the statistics - they did.",
+        ". In this context, we are prepared to take collective action, in a timely and decisive manner, through the Security Council, in accordance with the Charter, including Chapter VII, on a case-by-case basis and in cooperation with relevant regional organizations as appropriate, should peaceful means be inadequate and national authorities manifestly fail to protect their populations from genocide, war crimes, ethnic cleansing and crimes against humanity",
+        ". We also intend to commit ourselves, as necessary and appropriate, to helping States build capacity to protect their populations from genocide, war crimes, ethnic cleansing and crimes against humanity and to assisting those under stress before crises and conflicts break out."
+      ],
+      "response": "The UK decided to leave the EU in a referendum on 23 June 2016.",
+      "reference": "23 June 2016",
+      "answer_relevancy": 0.8931182299114088,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who plays ser davos in game of thrones",
+      "retrieved_contexts": [
+        "Liam Cunningham (born 2 June 1961) is an Irish stage and screen actor. He is known for playing Davos Seaworth in the HBO epic-fantasy series Game of Thrones. He has been nominated for the London Film Critics' Circle Award, the British Independent Film Award, has won two Irish Film & Television Awards, and shared a BAFTA with Michael Fassbender, for their crime-drama short film Pitch Black Heist.",
+        "Oona Castilla Chaplin [ˈuna kasˈtija ˈt͡ʃaplin] (born 4 June 1986), known professionally as Oona Chaplin, is a Spanish actress. Her roles include Talisa Maegyr in the HBO TV series Game of Thrones, The Crimson Field and the series Taboo.",
+        "In Harry Potter and the Philosopher's Stone, Voldemort's manifestation is as a face on the back of Quirrell's head, an effect achieved by computer generated imagery. Ian Hart, the actor who played Quirrell in the same film, provided the voice and the facial source for this character. Voldemort also appears in a scene in the Forbidden Forest where he is seen drinking the blood of a unicorn",
+        "In November 2012, Bravo announced the series green-light of Married to Medicine. The network detailed the series by stating, \"Married to Medicine follows a group of successful and educated women, including doctors and wives of doctors, who are connected to the world of medicine in Atlanta.\" By February 2013, the first-season cast was revealed with Toya Bush-Harris, Mariah Huq, Quad Webb-Lunceford, Jacqueline Walters, Kari Wells, and Simone Whitmore starring in the series",
+        "On April 9, 2017, the series premiered in Poland on Ale Kino+ under the title Wiem, kim jesteÅ› (I Know Who You Are). In the United Kingdom the BBC acquired the rights to air the series under the title I Know Who You Are. The series premiered on July 15, 2017 on BBC Four."
+      ],
+      "response": "Liam Cunningham plays Ser Davos in Game of Thrones.",
+      "reference": "Liam Cunningham",
+      "answer_relevancy": 0.9322233706468974,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when does the cannes film festival take place",
+      "retrieved_contexts": [
+        "The Cannes Festival (/kæn/; French: Festival de Cannes), named until 2002 as the International Film Festival (Festival international du film) and known in English as the Cannes Film Festival, is an annual film festival held in Cannes, France, which previews new films of all genres, including documentaries, from all around the world. Founded in 1946, the invitation-only festival is held annually (usually in May) at the Palais des Festivals et des Congrès.",
+        ". The Chinese calendar is lunisolar, so the date of the festival varies from year to year on the Gregorian calendar. In 2016, it occurred on June 9; and in 2017, on May 30.",
+        "The Duanwu Festival, also often known, especially in the West, as the Dragon Boat Festival, is a traditional holiday originating in China, occurring near the summer solstice. It is also known as Zhongxiao Festival (Chinese: 忠孝節; pinyin: Zhōngxiàojié), commemorating fealty and filial piety. The festival now occurs on the 5th day of the 5th month of the traditional Chinese calendar, which is the source of the festival's alternative name, the Double Fifth Festival",
+        "Most of the shooting took place in Argentina, in the city of La Plata (the railway station where Heinrich leaves for Unserberg is the Main Train Station of La Plata, for example), and in the Mendoza Province, in such places as the Andes mountains. Some time after the film's release, director Annaud confirmed that two crews secretly shot footage for the film in Tibet, amounting to approximately 20 minutes of footage in the final film. Other footage was shot in Nepal, Austria and Canada.",
+        "The Pamplona encierro is the most popular in Spain and has been broadcast live by RTVE, the public Spanish national television channel, for over 30 years. It is the highest profile event of the San Fermin festival, which is held every year from 6–14 July. The first bull running is on 7 July, followed by one on each of the following mornings of the festival, beginning every day at 8 am"
+      ],
+      "response": "The Cannes Film Festival is held annually, usually in May.",
+      "reference": "Cannes, France",
+      "answer_relevancy": 0.8587375499963621,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "who said sociology as queen of all sciences",
+      "retrieved_contexts": [
+        ". Observing the circular dependence of theory and observation in science, and classifying the sciences in this way, Comte may be regarded as the first philosopher of science in the modern sense of the term. Comte was also the first to distinguish natural philosophy from science explicitly. For him, the physical sciences had necessarily to arrive first, before humanity could adequately channel its efforts into the most challenging and complex \"Queen science\" of human society itself",
+        ". I swear to observe all that the honor of my position demands of me.",
+        "Comte first described the epistemological perspective of positivism in The Course in Positive Philosophy, a series of texts published between 1830 and 1842. These texts were followed by the 1848 work, A General View of Positivism (published in English in 1865). The first three volumes of the Course dealt chiefly with the physical sciences already in existence (mathematics, astronomy, physics, chemistry, biology), whereas the latter two emphasised the inevitable coming of social science",
+        ". Governor John Peter Altgeld of Illinois, a Democrat, denounced Cleveland and said he could handle all disturbances in his state without federal intervention.",
+        ". According to Robertson-Lorant, \"The handsome Hawthorne made quite an impression on the Melville women, especially Augusta, who was a great fan of his books.\" They spent the day mostly \"smoking and talking metaphysics.\""
+      ],
+      "response": "Not found.",
+      "reference": "Auguste Comte",
+      "answer_relevancy": 0.0,
+      "faithfulness": 1.0,
+      "context_precision": 0.8333333332916666,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who plays voldemort in harry potter and the philosopher's stone",
+      "retrieved_contexts": [
+        "In Harry Potter and the Philosopher's Stone, Voldemort's manifestation is as a face on the back of Quirrell's head, an effect achieved by computer generated imagery. Ian Hart, the actor who played Quirrell in the same film, provided the voice and the facial source for this character. Voldemort also appears in a scene in the Forbidden Forest where he is seen drinking the blood of a unicorn",
+        ". As Voldemort's face was altered enough by CG work, and Hart's voice was affected enough, there was no confusion by Hart's playing of the two roles. In that film, he was also shown in a flashback sequence when he arrived at the home of James and Lily Potter to kill them. In this scene Voldemort is played by Richard Bremmer, though his face is never seen",
+        ". In this scene Voldemort is played by Richard Bremmer, though his face is never seen. His next appearance would be in Harry Potter and the Chamber of Secrets as the 16-year-old Tom Marvolo Riddle (portrayed by Christian Coulson).",
+        ". At the same time, Victor's private investigation on the hit-and-run driver leads him to Adam. He agrees to not turn him in as long as he can take part in Connor's life; a role he had initially refused him. Adam agrees as he and Chelsea remarry. Days before their flight to Paris, Delia's father Billy Abbott (Billy Miller) puts the pieces together and realizes Adam is the one who killed his daughter",
+        "Walter (Jonathan Goldstein) is Josh's father and Drake and Megan's stepfather. He is a meteorologist for a local TV news program in San Diego, but he is often wrong about the weather. Walter is often clumsy, out of date, and seemingly empty-headed. As a result, he lacks the respect of his stepchildren, who refer to him by his first name"
+      ],
+      "response": "Voldemort is played by Richard Bremmer in Harry Potter and the Philosopher's Stone.",
+      "reference": "Richard Bremmer",
+      "answer_relevancy": 0.9250430184145394,
+      "faithfulness": 1.0,
+      "context_precision": 0.5833333333041666,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "where did they film the theory of everything",
+      "retrieved_contexts": [
+        "Most of the shooting took place in Argentina, in the city of La Plata (the railway station where Heinrich leaves for Unserberg is the Main Train Station of La Plata, for example), and in the Mendoza Province, in such places as the Andes mountains. Some time after the film's release, director Annaud confirmed that two crews secretly shot footage for the film in Tibet, amounting to approximately 20 minutes of footage in the final film. Other footage was shot in Nepal, Austria and Canada.",
+        "Filming began in July 2010 in Vancouver, British Columbia. Filming also happened in San Francisco, California (the primary setting of the film), and around Oahu, Hawaii, which doubled for the African jungle as the schedule and budget did not allow for location shooting in Africa.",
+        ". I'm like a parent whose kid grows up to be president. I'm proud... but it's the kid who did the work. I didn't even think of it as a Christmas story when I first ran across it. I just liked the idea.\" In a 1946 interview, Capra described the film's theme as \"the individual's belief in himself\" and that he made it \"to combat a modern trend toward atheism\".",
+        ". After he submitted an appeal and before Eiga Rinri Kanri Iinkai could rule on the appeal, members of the Diet of Japan said that the film harmed teenagers; the Diet members also criticised the film industry ratings, which were a part of self-regulation by the Japanese film industry. Fukasaku dropped the appeal to appease the Japanese Diet in hopes they would not pursue increasing film regulation further.",
+        ". At the end of the film, she and Austin marry, and are last seen while on their honeymoon (see Austin Powers: International Man of Mystery)."
+      ],
+      "response": "Not found.",
+      "reference": "The Theory of Everything (2014 film)",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.0,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "who owns the four seasons hotel in las vegas",
+      "retrieved_contexts": [
+        "Mandalay Bay is a 43-story luxury resort and casino on the Las Vegas Strip in Paradise, Nevada. It is owned and operated by MGM Resorts International. One of the property's towers operates as the Delano; the Four Seasons Hotel is independently operated within the Mandalay Bay tower, occupying 5 floors (35â€“39).",
+        "Mexican network Televisa produced an adaptation, El hotel de los secretos (\"The Hotel of Secrets\"), that premiered on Las Estrellas channel in January 2016. Egypt's CBC produced a popular Arabic market adaptation of Grand Hotel as a musalsal in 2016.2016 summer in Greece end all episodes in Alpha television.",
+        ". She sang the national anthem at a Mets game. Pia Toscano and Karen Rodriguez get together to duet The Beatles' \"Can't Buy Me Love\" on Las Vegas, they also went to New York's LaGuardia Arts School together. She also performed Bruno Mars's \"Grenade\" for the group round in Hollywood and Alicia Keys's \"Doesn't Mean Anything\" for her final solo. Toscano was eliminated on April 7, coming in 9th place",
+        "Jack Barry, who created the show and eventually used it to revive his partnership with longtime producer Dan Enright, hosted all versions of the show up until his death in May 1984.",
+        "As an alternative to \"tetralogy\", \"quartet\" is sometimes used, particularly for series of four books. The term \"quadrilogy\", using the Latin prefix quadri- instead of the Greek, and first recorded in 1865, has also been used for marketing cinematic series, such as the Alien movies."
+      ],
+      "response": "Not found.",
+      "reference": "MGM Resorts International",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.0,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "oldest recording of house of the rising sun",
+      "retrieved_contexts": [
+        "The oldest known recording of the song, under the title \"Rising Sun Blues\", is by Appalachian artists Clarence \"Tom\" Ashley and Gwen Foster, who recorded it for Vocalion Records on September 6, 1933. Ashley said he had learned it from his grandfather, Enoch Ashley. Roy Acuff, an \"early-day friend and apprentice\" of Ashley's, learned it from him and recorded it as \"Rising Sun\" on November 3, 1938",
+        ". Several older blues recordings of songs with similar titles are unrelated, for example, \"Rising Sun Blues\" by Ivy Smith (1927) and \"The Risin' Sun\" by Texas Alexander (1928).",
+        "\"Every Little Thing She Does Is Magic\" is a song by British rock group The Police from their fourth album, Ghost in the Machine. The song, notable for featuring a pianist (uncommon in Police songs), dates back to a demo recorded in the house of Mike Howlett in the fall of 1976. It was also a hit single that reached the top of the charts in the United Kingdom (topping its predecessor, \"Invisible Sun\") in November 1981 and hit number three on the US Billboard Hot 100 chart that same year.",
+        "When The Game arrived at the mansion on the day of recording, 50 Cent presented him with several already part-completed records, with variously placed verses and choruses. The Game wrote his final verse first and worked backward, to avoid tiredness affecting his later verses. After 50 Cent heard the final version of the song after the recording process had finished, he was excited by its potential and felt the song would have to be one of the album's singles",
+        "That winter, Melville on an impulse paid Hawthorne a visit, only to discover he was \"not in the mood for company\" as he was finishing The House of the Seven Gables. Hawthorne's wife Sophia entertained him while he waited for Hawthorne to come down for supper, and gave him copies of Twice-Told Tales and, for Malcolm, The Grandfather's Chair"
+      ],
+      "response": "Not found.",
+      "reference": "The House of the Rising Sun",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "the joint between a coxal bone of the pelvis and the sacrum",
+      "retrieved_contexts": [
+        "The sacroiliac joint or SI joint (SIJ) is the joint between the sacrum and the ilium bones of the pelvis, which are connected by strong ligaments. In humans, the sacrum supports the spine and is supported in turn by an ilium on each side. The joint is a strong, weight transferral synovial plane joint with irregular elevations and depressions that produce interlocking of the two bones",
+        "Through an interplay of hormones that includes follicle stimulating hormone that stimulates folliculogenesis and oogenesis creates a mature egg cell, the female gamete. Fertilization is the event where the egg cell fuses with the male gamete, spermatozoon. After the point of fertilization, the fused product of the female and male gamete is referred to as a zygote or fertilized egg. The fusion of male and female gametes usually occurs following the act of sexual intercourse",
+        "Pacific Parkinsonâ€™s Research Centre (PPRC) is a joint TRIUMF/UBC program studying central nervous system disorders. Approximately 80% of the studies are related to Parkinson's disease, and the remainder are related to mood disorders and Alzheimer's disease. The program has explored the origins, progression, and therapies of the disease as well as the complications arising from therapy using molecular imaging as the primary tool.",
+        ". The Amtrak Cascades service is a joint effort of WSDOT and Oregon Department of Transportation, with Amtrak as a contracting operator. In the wake of the December 18 derailment, the safety of the bypass was questioned by elected officials. The 2006 Cascades corridor plan recommended that the curve and overpass where the derailment occurred be replaced with a straighter alignment, costing $412 million",
+        ". Murtagh and Saphira stage a rescue, and Eragon escapes with the unconscious elf. During the escape, Eragon and Murtagh battle with Durza. Murtagh shoots Durza between the eyes with an arrow, and the Shade disappears in a cloud of mist. Having escaped, they run off. Eragon succeeds in communicating with the elf, whose name is revealed as Arya, and learns the location of the Varden. After some arguing, Murtagh decides to still travel with Eragon to the Varden but is still wary of them."
+      ],
+      "response": "Not found.",
+      "reference": "sacroiliac joint",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who wrote the song oh lord won't you buy me a mercedes benz",
+      "retrieved_contexts": [
+        "\"Mercedes Benz\" is an a cappella song written by singer Janis Joplin with the poets Michael McClure and Bob Neuwirth, and originally recorded by Joplin",
+        ". In the song, the singer asks the Lord to prove His love for her by buying her a Mercedes-Benz, a color TV, and a \"night on the town.\" There is also a reference to Dialing for Dollars, a franchised format local television program, which required one to be watching the show to win when the show called your phone number, hence the singer's need for a TV.",
+        ". She sang the national anthem at a Mets game. Pia Toscano and Karen Rodriguez get together to duet The Beatles' \"Can't Buy Me Love\" on Las Vegas, they also went to New York's LaGuardia Arts School together. She also performed Bruno Mars's \"Grenade\" for the group round in Hollywood and Alicia Keys's \"Doesn't Mean Anything\" for her final solo. Toscano was eliminated on April 7, coming in 9th place",
+        ". On the other hand, Dargis wrote that \"you may not buy his [Cameron's] happy endings, but it's a seductive ideal when all of God's creatures, great and small, buxom and blond, exist in such harmony.\"",
+        "\"Just Don't Want to Be Lonely\" is a song written by Bobby Eli, John Freeman and Vinnie Barrett, originally recorded in 1973 by Ronnie Dyson and popularized internationally by The Main Ingredient. Dyson's version reached No. 60 in the US Pop chart, No. 30 Adult Contemporary, and No. 29 in the US R&B chart. Its flipside was \"Point of No Return,\" a song written by Tom Bell & Linda Creed."
+      ],
+      "response": "The song \"Mercedes Benz\" was written by Janis Joplin, Michael McClure, and Bob Neuwirth.",
+      "reference": "Janis Joplin",
+      "answer_relevancy": 0.8634828547819864,
+      "faithfulness": 0.3333333333333333,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who sings i don't want to be lonely",
+      "retrieved_contexts": [
+        "\"Just Don't Want to Be Lonely\" is a song written by Bobby Eli, John Freeman and Vinnie Barrett, originally recorded in 1973 by Ronnie Dyson and popularized internationally by The Main Ingredient. Dyson's version reached No. 60 in the US Pop chart, No. 30 Adult Contemporary, and No. 29 in the US R&B chart. Its flipside was \"Point of No Return,\" a song written by Tom Bell & Linda Creed.",
+        ". She sang the national anthem at a Mets game. Pia Toscano and Karen Rodriguez get together to duet The Beatles' \"Can't Buy Me Love\" on Las Vegas, they also went to New York's LaGuardia Arts School together. She also performed Bruno Mars's \"Grenade\" for the group round in Hollywood and Alicia Keys's \"Doesn't Mean Anything\" for her final solo. Toscano was eliminated on April 7, coming in 9th place",
+        ". I'm like a parent whose kid grows up to be president. I'm proud... but it's the kid who did the work. I didn't even think of it as a Christmas story when I first ran across it. I just liked the idea.\" In a 1946 interview, Capra described the film's theme as \"the individual's belief in himself\" and that he made it \"to combat a modern trend toward atheism\".",
+        ". Before I do any editing, however, I would like to see if anyone has any feedback about this... Blackmyron 16:54, 14 July 2007 (UTC)",
+        ". The first section contains the overdub-heavy slide guitar solo, played by Allman. By placing his slide at points beyond the end of the fretboard, Allman was able to play notes at a higher pitch than could be played with standard technique. Dowd referred to this as \"notes that aren't on the instrument!\"[timeÂ needed]"
+      ],
+      "response": "Not found.",
+      "reference": "Ronnie Dyson",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "who was the grandfather on the cosby show",
+      "retrieved_contexts": [
+        "Earle Hyman (October 11, 1926 â€“ November 17, 2017) was an American stage, television, and film actor. Hyman is known for his role on ThunderCats as the voice of Panthro and various other characters. He also appeared on The Cosby Show as Cliff's father, Russell Huxtable.",
+        "Jack Barry, who created the show and eventually used it to revive his partnership with longtime producer Dan Enright, hosted all versions of the show up until his death in May 1984.",
+        "That winter, Melville on an impulse paid Hawthorne a visit, only to discover he was \"not in the mood for company\" as he was finishing The House of the Seven Gables. Hawthorne's wife Sophia entertained him while he waited for Hawthorne to come down for supper, and gave him copies of Twice-Told Tales and, for Malcolm, The Grandfather's Chair",
+        ". According to Robertson-Lorant, \"The handsome Hawthorne made quite an impression on the Melville women, especially Augusta, who was a great fan of his books.\" They spent the day mostly \"smoking and talking metaphysics.\"",
+        "The oldest known recording of the song, under the title \"Rising Sun Blues\", is by Appalachian artists Clarence \"Tom\" Ashley and Gwen Foster, who recorded it for Vocalion Records on September 6, 1933. Ashley said he had learned it from his grandfather, Enoch Ashley. Roy Acuff, an \"early-day friend and apprentice\" of Ashley's, learned it from him and recorded it as \"Rising Sun\" on November 3, 1938"
+      ],
+      "response": "Not found.",
+      "reference": "Earle Hyman",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "is the right to life liberty and the pursuit of happiness in the constitution",
+      "retrieved_contexts": [
+        ". The Fifth Amendment and Fourteenth Amendment to the United States Constitution declare that governments cannot deprive any person of \"life, liberty, or property\" without due process of law. Also, Article 3 of the Universal Declaration of Human Rights reads, \"Everyone has the right to life, liberty, and security of person\".",
+        "The phrase can also be found in Chapter III, Article 13 of the 1947 Constitution of Japan, and in President Ho Chi Minh's 1945 declaration of independence of the Democratic Republic of Vietnam. An alternative phrase \"life, liberty, and property\", is found in the Declaration of Colonial Rights, a resolution of the First Continental Congress",
+        ". We stress the need for the General Assembly to continue consideration of the responsibility to protect populations from genocide, war crimes, ethnic cleansing and crimes against humanity and its implications, bearing in mind the principles of the Charter and international law",
+        "When efforts to ratify the Constitution encountered serious opposition in Massachusetts, two noted anti-Federalists, John Hancock and Samuel Adams, helped negotiate a compromise. The anti-Federalists agreed to support ratification, with the understanding that they would put forth recommendations for amendments should the document go into effect. The Federalists agreed to support the proposed amendments, specifically a bill of rights.",
+        "When you realize the value of all life, you dwell less on what is past and concentrate more on the preservation of the future."
+      ],
+      "response": "Not found.",
+      "reference": "Life, Liberty and the pursuit of Happiness",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 0.0
+    },
+    {
+      "user_input": "who was the original host of jokers wild",
+      "retrieved_contexts": [
+        "The Thin Man was dramatized as a radio play on an hour-long broadcast of Lux Radio Theater on June 8, 1936. William Powell, Myrna Loy, Minna Gombell, Porter Hall, William Henry, and Thomas Jackson reprised their film roles, and W. S. Van Dyke was host.",
+        "For musical entertainment prior to the start of the race, the Purdue All-American Marching Band began performing on the track near the finish line in 1927 and has been the host band of the race ever since. In 1946, American operatic tenor and car enthusiast James Melton started the tradition of singing \"Back Home Again in Indiana\" with the Purdue Band before the race when asked to do so on the spur of the moment by Speedway president Tony Hulman",
+        "Jim Bakker (/ˈbeɪkər/ \"baker\"; born January 2, 1940) is an American televangelist, former Assemblies of God minister, convicted felon, and former host (with his former wife, Tammy Faye Bakker) of The PTL Club, an evangelical Christian television program. Bakker is also known for building Heritage USA in Fort Mill, South Carolina, a former Christian theme park which opened in 1978 and closed in 1989",
+        "Jack Barry, who created the show and eventually used it to revive his partnership with longtime producer Dan Enright, hosted all versions of the show up until his death in May 1984.",
+        ". According to Robertson-Lorant, \"The handsome Hawthorne made quite an impression on the Melville women, especially Augusta, who was a great fan of his books.\" They spent the day mostly \"smoking and talking metaphysics.\""
+      ],
+      "response": "Not found.",
+      "reference": "Jack Barry",
+      "answer_relevancy": 0.0,
+      "faithfulness": 0.0,
+      "context_precision": 0.249999999975,
+      "context_recall": 1.0
+    },
+    {
+      "user_input": "when did ireland gain its independence from england",
+      "retrieved_contexts": [
+        "In 1922, after the Irish War of Independence and the Anglo-Irish Treaty, most of Ireland seceded from the United Kingdom to become the independent Irish Free State, which after the 1937 constitution, began to call itself Ireland. The six northeastern counties, known as Northern Ireland, remained within the United Kingdom. The Irish Civil War followed soon after the War of Independence",
+        ". The Irish Civil War followed soon after the War of Independence. The history of Northern Ireland has since been dominated by sporadic sectarian conflict between (mainly Catholic) Irish nationalists and (mainly Protestant) unionists. This conflict erupted into the Troubles in the late 1960s, until peace was achieved with the Belfast Agreement thirty years later.",
+        "The collection of tithes was resisted in the period 1831â€“36, known as the Tithe War. Thereafter, tithes were reduced and added to rents with the passing of the Tithe Commutation Act in 1836. With the disestablishment of the Church of Ireland by the Irish Church Act 1869, tithes were abolished.",
+        ". Trained civil servants were recruited from graduates of British universities, and these men set out to rule India. Lord Canning (created earl in 1859), appointed Governor-General of India in 1856, became known as \"Clemency Canning\" as a term of derision for his efforts to restrain revenge against the Indians during the Indian Mutiny. When the Government of India was transferred from the Company to the Crown, Canning became the first viceroy of India.",
+        ". Fortunately for the British, many areas remained loyal and quiescent, allowing the revolt to be crushed after fierce fighting. One important consequence of the revolt was the final collapse of the Mughal dynasty. The mutiny also ended the system of dual control under which the British government and the British East India Company shared authority. The government relieved the company of its political responsibilities, and in 1858, after 258 years of existence, the company relinquished its role"
+      ],
+      "response": "In 1922, most of Ireland seceded from the United Kingdom to become the independent Irish Free State.",
+      "reference": "In 1922",
+      "answer_relevancy": 0.7825080791240016,
+      "faithfulness": 1.0,
+      "context_precision": 0.9999999999,
+      "context_recall": 1.0
+    }
+  ]
+}

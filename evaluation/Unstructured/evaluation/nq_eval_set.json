@@ -1,0 +1,520 @@
+[
+  {
+    "question": "when did the granite mountain hotshots get certified",
+    "ground_truth": "2008",
+    "all_answers": [
+      "2008"
+    ],
+    "reference_context": "The Granite Mountain Hotshots were a group within the department whose mission was to fight wildfires. Founded in 2002 as a fuels mitigation crew, it transitioned to a handcrew (Type 2 I/A) in 2004, and ultimately to a hotshot crew in 2008. The crew had their own fire station, station 7, where equipment, including two 10-person crew carriers, was housed. The 2017 film Only the Brave was based on the Granite Mountain Hotshots and the Yarnell Fire.",
+    "context_id": "nq_ctx_doc110851",
+    "title": "Prescott Fire Department"
+  },
+  {
+    "question": "who plays lady talisa in game of thrones",
+    "ground_truth": "Oona Castilla Chaplin",
+    "all_answers": [
+      "Oona Castilla Chaplin",
+      "Oona Chaplin"
+    ],
+    "reference_context": "Oona Castilla Chaplin [ˈuna kasˈtija ˈt͡ʃaplin] (born 4 June 1986), known professionally as Oona Chaplin, is a Spanish actress. Her roles include Talisa Maegyr in the HBO TV series Game of Thrones, The Crimson Field and the series Taboo.",
+    "context_id": "nq_ctx_doc21111",
+    "title": "Oona Chaplin"
+  },
+  {
+    "question": "when did the log flume closed at alton towers",
+    "ground_truth": "10 October 2015",
+    "all_answers": [
+      "10 October 2015",
+      "2015"
+    ],
+    "reference_context": "The Flume was a Log Flume at Alton Towers in Staffordshire. It opened in 1981 and was rethemed in 2004 coinciding with its sponsorship by Imperial Leather. The ride was a bath time themed log flume with three drops. It was the longest log flume attraction in the world at the time of opening. The attraction closed in 2015 and was removed a year later for the area's redevelopment into the SW8 rollercoaster.",
+    "context_id": "nq_ctx_doc4632",
+    "title": "The Flume (Alton Towers)"
+  },
+  {
+    "question": "what was the first star trek enterprise ship",
+    "ground_truth": "NCC-1701",
+    "all_answers": [
+      "NCC-1701"
+    ],
+    "reference_context": "USS Enterprise (NCC-1701) is a fictional starship in the fictional Star Trek universe that serves as both the main setting of the original Star Trek television series, as well as the primary transportation method for the show's characters. The Enterprise has been depicted in four network television series, six feature films, many books, and much fan-created media. The original Star Trek series (1966â€“1969) features a voice-over by Enterprise captain, James T. Kirk (William Shatner), which describes the mission of the Enterprise as \"to explore strange new worlds; to seek out new life and new civilizations; to boldly go where no man has gone before\".",
+    "context_id": "nq_ctx_doc49771",
+    "title": "USS Enterprise (NCC-1701)"
+  },
+  {
+    "question": "what are the functions of the human skeleton",
+    "ground_truth": "endocrine regulation",
+    "all_answers": [
+      "endocrine regulation",
+      "support",
+      "production of blood cells",
+      "protection",
+      "storage of minerals",
+      "movement"
+    ],
+    "reference_context": "The human skeleton performs six major functions; support, movement, protection, production of blood cells, storage of minerals, and endocrine regulation.",
+    "context_id": "nq_ctx_doc44028",
+    "title": "Human skeleton"
+  },
+  {
+    "question": "what is the largest ethnic group in mexico today",
+    "ground_truth": "K'iche'",
+    "all_answers": [
+      "K'iche'"
+    ],
+    "reference_context": "The Q'eqchi' live in lowland areas of Alta Vera Paz, Peten, and Western Belize. Over the course of the succeeding centuries a series of land displacements, re-settlements, persecutions and migrations resulted in a wider dispersal of Q'eqchi' communities, into other regions of Guatemala (Izabal, Petén, El Quiché). They are the 2nd largest ethnic Maya group in Guatemala (after the K'iche') and one of the largest and most widespread throughout Central America.",
+    "context_id": "nq_ctx_doc40343",
+    "title": "Maya peoples"
+  },
+  {
+    "question": "where did german immigrants settled in the 1800s",
+    "ground_truth": "German Americans",
+    "all_answers": [
+      "German Americans"
+    ],
+    "reference_context": "None of the German states had American colonies. In the 1670s, the first significant groups of German immigrants arrived in the British colonies, settling primarily in Pennsylvania, New York, and Virginia. Immigration continued in very large numbers during the 19th century, with eight million arrivals from Germany. Between 1820 and 1870 over seven and a half million German immigrants came to the United Statesâ€”more than doubling the entire population of the country. By 2010, their population grew to 49.8 million immigrants, reflecting a jump of 6 million people since 2000.",
+    "context_id": "nq_ctx_doc25897",
+    "title": "German Americans"
+  },
+  {
+    "question": "who plays the dad in drake and josh",
+    "ground_truth": "Jonathan Goldstein",
+    "all_answers": [
+      "Jonathan Goldstein"
+    ],
+    "reference_context": "Walter (Jonathan Goldstein) is Josh's father and Drake and Megan's stepfather. He is a meteorologist for a local TV news program in San Diego, but he is often wrong about the weather. Walter is often clumsy, out of date, and seemingly empty-headed. As a result, he lacks the respect of his stepchildren, who refer to him by his first name. When Megan calls him by his first name, he always asks \"When did she start calling me Walter?\" and Audrey replies \"I don't know.\" He is also clueless and skeptical in regards to Megan's pranks which have caused the boys a lot of punishments, although starting in the episode \"The Demonator\", Walter slowly begins to notice Megan's evil ways. A running gag involves a rivalry between him and Bruce Winchill, an unseen weatherman from another station. He hates that Winchill is so popular, as he is always right with his predictions, and even forbids the use of Winchill's name in the family home.",
+    "context_id": "nq_ctx_doc19431",
+    "title": "List of Drake & Josh characters"
+  },
+  {
+    "question": "who's winning the election in virginia for governor",
+    "ground_truth": "Ralph Northam",
+    "all_answers": [
+      "Ralph Northam",
+      "Democratic nominee Ralph Northam"
+    ],
+    "reference_context": "In the general election on November 7, 2017, Democratic nominee Ralph Northam defeated Republican nominee Ed Gillespie, winning by the largest margin for a Democrat since 1985. Northam will become the 73rd governor of Virginia, and take office on January 13, 2018. The election had the highest voter turnout percentage in a Virginia gubernatorial election in twenty years with 47% of the state's constituency casting their ballot.",
+    "context_id": "nq_ctx_doc116605",
+    "title": "Virginia gubernatorial election, 2017"
+  },
+  {
+    "question": "how many counties does the state of georgia have",
+    "ground_truth": "159",
+    "all_answers": [
+      "159",
+      "159 counties"
+    ],
+    "reference_context": "The U.S. State of Georgia is divided into 159 counties, more than any other state except for Texas, which has 254 counties. Under the Georgia State Constitution, all of its counties are granted home rule to deal with problems that are purely local in nature. Also, eight consolidated city-counties have been established in Georgia: Athens–Clarke County, Augusta–Richmond County, Columbus–Muscogee County, Georgetown–Quitman County, Statenville–Echols County, Macon–Bibb County, Cusseta–Chattahoochee County, and Preston-Webster County.",
+    "context_id": "nq_ctx_doc95006",
+    "title": "List of counties in Georgia (U.S. state)"
+  },
+  {
+    "question": "nodding your head no is an example of",
+    "ground_truth": "a gesture",
+    "all_answers": [
+      "a gesture"
+    ],
+    "reference_context": "A nod of the head is a gesture in which the head is tilted in alternating up and down arcs along the sagittal plane. In many cultures, it is most commonly, but not universally, used to indicate agreement, acceptance, or acknowledgment.",
+    "context_id": "nq_ctx_doc16837",
+    "title": "Nod (gesture)"
+  },
+  {
+    "question": "give the formula for the following substance carbonic acid",
+    "ground_truth": "Carbonic acid",
+    "all_answers": [
+      "Carbonic acid"
+    ],
+    "reference_context": "Carbonic acid is a chemical compound with the chemical formula H2CO3 (equivalently OC(OH)2). It is also a name sometimes given to solutions of carbon dioxide in water (carbonated water), because such solutions contain small amounts of H2CO3. In physiology, carbonic acid is described as volatile acid or respiratory acid, because it is the only acid excreted as a gas by the lungs. It plays an important role in the bicarbonate buffer system to maintain acid–base homeostasis.",
+    "context_id": "nq_ctx_doc102694",
+    "title": "Carbonic acid"
+  },
+  {
+    "question": "where was the rise of the planet of the apes filmed",
+    "ground_truth": "Oahu, Hawaii",
+    "all_answers": [
+      "Oahu, Hawaii",
+      "Vancouver, British Columbia",
+      "San Francisco, California"
+    ],
+    "reference_context": "Filming began in July 2010 in Vancouver, British Columbia. Filming also happened in San Francisco, California (the primary setting of the film), and around Oahu, Hawaii, which doubled for the African jungle as the schedule and budget did not allow for location shooting in Africa.",
+    "context_id": "nq_ctx_doc74463",
+    "title": "Rise of the Planet of the Apes"
+  },
+  {
+    "question": "ranjit sagar dam has builded over which river",
+    "ground_truth": "Ravi River",
+    "all_answers": [
+      "Ravi River",
+      "the Ravi River"
+    ],
+    "reference_context": "The Ranjit Sagar Dam, also known as the Thein Dam, is part of a hydroelectric project constructed by the Government of Punjab on the Ravi River on the Border of two states of India Jammu and Kashmir and Punjab. 60% of the lake is part of J&K. The project is situated near Pathankot city in Pathankot district of the state of Punjab and Kathua city and Basholi tehsil of Kathua district in J&K. The project is the largest hydroelectric dam of the state of Punjab. The township where the site is located is called Shah pur Kandi Township. Feasibility studies for the project began in 1953 and geotechnical studies continued until 1980. Construction began in 1981, the generators were commissioned in 2000 and the project complete in March 2001.",
+    "context_id": "nq_ctx_doc5819",
+    "title": "Ranjit Sagar Dam"
+  },
+  {
+    "question": "how did the federalists and anti federalists compromise",
+    "ground_truth": "Massachusetts Compromise",
+    "all_answers": [
+      "Massachusetts Compromise"
+    ],
+    "reference_context": "When efforts to ratify the Constitution encountered serious opposition in Massachusetts, two noted anti-Federalists, John Hancock and Samuel Adams, helped negotiate a compromise. The anti-Federalists agreed to support ratification, with the understanding that they would put forth recommendations for amendments should the document go into effect. The Federalists agreed to support the proposed amendments, specifically a bill of rights.",
+    "context_id": "nq_ctx_doc5419",
+    "title": "Massachusetts Compromise"
+  },
+  {
+    "question": "when was the immigration act passed in canada",
+    "ground_truth": "1923",
+    "all_answers": [
+      "1923"
+    ],
+    "reference_context": "Before 1923, Chinese immigration was heavily controlled by the Chinese Immigration Act of 1885, which imposed a hefty head tax on all immigrants from China. After various members of the federal and some provincial governments (especially British Columbia) put pressure on the federal government to discourage Chinese immigration, the Chinese Immigration Act was passed. It went into effect on July 1, 1923. The act banned Chinese immigrants from entering Canada except those under the following titles:",
+    "context_id": "nq_ctx_doc18225",
+    "title": "Chinese Immigration Act, 1923"
+  },
+  {
+    "question": "when does star trek discovery air on tv",
+    "ground_truth": "September 19, 2017",
+    "all_answers": [
+      "September 19, 2017"
+    ],
+    "reference_context": "Star Trek: Discovery premiered on September 19, 2017, at ArcLight Hollywood, before debuting on CBS and CBS All Access on September 24. The rest of the 15-episode first season was streamed weekly on All Access. The series' release led to record subscriptions for All Access, and positive reviews from critics who highlighted Martin-Green's performance. A second season was ordered in October 2017.",
+    "context_id": "nq_ctx_doc39126",
+    "title": "Star Trek: Discovery"
+  },
+  {
+    "question": "what the role of the protein encoded by the lacz gene",
+    "ground_truth": "lac operon",
+    "all_answers": [
+      "lac operon"
+    ],
+    "reference_context": "Bacterial operons are polycistronic transcripts that are able to produce multiple proteins from one mRNA transcript. In this case, when lactose is required as a sugar source for the bacterium, the three genes of the lac operon can be expressed and their subsequent proteins translated: lacZ, lacY, and lacA. The gene product of lacZ is β-galactosidase which cleaves lactose, a disaccharide, into glucose and galactose. lacY encodes Beta-galactoside permease, a protein which becomes embedded in the cytoplasmic membrane to enable transport of lactose into the cell. Finally, lacA encodes β-galactoside transacetylase.",
+    "context_id": "nq_ctx_doc42094",
+    "title": "lac operon"
+  },
+  {
+    "question": "if i die before i wake feed jake original",
+    "ground_truth": "Feed Jake",
+    "all_answers": [
+      "Feed Jake"
+    ],
+    "reference_context": "\"Feed Jake\" is a song written by Danny \"Bear\" Mayo, and recorded by the American country music band Pirates of the Mississippi. It was released in February 1991 as the third single from the band's self-titled debut album. The song is also the band's highest chart peak, having reached number 15 on the Billboard Hot Country Singles & Tracks (now Hot Country Songs) charts.",
+    "context_id": "nq_ctx_doc87874",
+    "title": "Feed Jake"
+  },
+  {
+    "question": "resistance to airflow in respiratory passageways is influenced by",
+    "ground_truth": "Airway resistance",
+    "all_answers": [
+      "Airway resistance"
+    ],
+    "reference_context": "Airway resistance is not constant. As shown above airway resistance is markedly affected by changes in the diameter of the airways, therefore diseases affecting the respiratory tract can increase airway resistance. Airway resistance can change over time, for example, in asthma during an attack the airways constrict causing an increase in airway resistance. Airway resistance can also vary between inspiration and expiration, for example, in emphysema there is destruction of the elastic tissue of the lungs which help hold the small airways open, therefore during expiration, particularly forced expiration, these airways may collapse causing increased airway resistance.",
+    "context_id": "nq_ctx_doc104578",
+    "title": "Airway resistance"
+  },
+  {
+    "question": "when did the first immigrants come to hawaii",
+    "ground_truth": "Around 1200",
+    "all_answers": [
+      "Around 1200"
+    ],
+    "reference_context": "The history of Hawaii describes the era of human settlements in the Hawaiian Islands. That history begins sometime between 124 and 800 CE, with some theories dating the earliest Polynesian settlements to the 10th or even 13th century. Around 1200, Tahitian explorers found and began settling the area.[inconsistent] This began the rise of the Hawaiian civilization. It remained isolated from the rest of the world for another 500 years.",
+    "context_id": "nq_ctx_doc4958",
+    "title": "History of Hawaii"
+  },
+  {
+    "question": "where did this case of product tampering occur",
+    "ground_truth": "the Chicago metropolitan area",
+    "all_answers": [
+      "the Chicago metropolitan area"
+    ],
+    "reference_context": "The Chicago Tylenol murders were a series of poisoning deaths resulting from drug tampering in the Chicago metropolitan area in 1982. The victims had all taken Tylenol-branded acetaminophen capsules that had been laced with potassium cyanide. A total of seven people died in the original poisonings, with several more deaths in subsequent copycat crimes.",
+    "context_id": "nq_ctx_doc97401",
+    "title": "Chicago Tylenol murders"
+  },
+  {
+    "question": "who become ceo of wipro company in 2016",
+    "ground_truth": "Abid Ali Neemuchwala",
+    "all_answers": [
+      "Abid Ali Neemuchwala"
+    ],
+    "reference_context": "At the end of December 31, 2015, its employee strength was 170,664. Abid Ali Neemuchwala was appointed as Wipro's CEO after T. K. stepped down in early 2016.",
+    "context_id": "nq_ctx_doc35963",
+    "title": "Wipro"
+  },
+  {
+    "question": "love is not love that alters when it alteration finds meaning",
+    "ground_truth": "Sonnet 116",
+    "all_answers": [
+      "Sonnet 116"
+    ],
+    "reference_context": "Sonnet 116 is one of Shakespeare's most famous love sonnets, but some scholars have argued the theme has been misunderstood. Hilton Landry believes the appreciation of 116 as a celebration of true love is mistaken, in part because its context in the sequence of adjacent sonnets is not properly considered. Landry acknowledges the sonnet \"has the grandeur of generality or a 'universal significance',\" but cautions that \"however timeless and universal its implications may be, we must never forget that Sonnet 116 has a restricted or particular range of meaning simply because it does not stand alone.\" Carol Thomas Neely writes that, \"Sonnet 116 is part of a sequence which is separate from all the other sonnets of Shakespeare because of their sense of detachment. They aren't about the action of love and the object of that love is removed in this sequence which consists of Sonnets 94, 116, and 129\". This group of three sonnets does not fit the mold of the rest of Shakespeare's sonnets, therefore, and they defy the typical concept and give a different perspective of what love is and how it is portrayed or experienced. \"Though 116 resolves no issues, the poet in this part of the sequence acknowledges and accepts the fallibility of his love more fully than he could acknowledge that of the young man's earlier\". Other critics of Sonnet 116 have argued that one cannot rely on the context of the sonnet to understand its tone. They argue that since \"there is no indisputably authoritative sequence to them, we cannot make use of context as positive evidence for one kind of tone or another.\" Shakespeare does not attempt to come to any significant conclusion within this particular sonnet because no resolution is needed.",
+    "context_id": "nq_ctx_doc112589",
+    "title": "Sonnet 116"
+  },
+  {
+    "question": "who sang the song should have been a cowboy",
+    "ground_truth": "Toby Keith",
+    "all_answers": [
+      "Toby Keith"
+    ],
+    "reference_context": "\"Should've Been a Cowboy\" is a song written and recorded by American country music artist Toby Keith. It was released on February 8, 1993 as his debut single, and was served as the first single released from Keith's self-titled debut studio album, Toby Keith. On June 5, 1993, it reached number one on the US Hot Country Songs chart and the Canadian RPM Country Tracks. It also peaked at number 93 on the Billboard Hot 100, making it a minor crossover hit.",
+    "context_id": "nq_ctx_doc94998",
+    "title": "Should've Been a Cowboy"
+  },
+  {
+    "question": "where is the condenser located on a microscope",
+    "ground_truth": "Condenser (optics)",
+    "all_answers": [
+      "Condenser (optics)"
+    ],
+    "reference_context": "Condensers are located above the light source and under the sample in an upright microscope, and above the stage and below the light source in an inverted microscope. They act to gather light from the microscope's light source and concentrate it into a cone of light that illuminates the specimen. The aperture and angle of the light cone must be adjusted (via the size of the diaphragm) for each different objective lens with different numerical apertures.",
+    "context_id": "nq_ctx_doc73848",
+    "title": "Condenser (optics)"
+  },
+  {
+    "question": "when is the running of the bulls held in spain",
+    "ground_truth": "6–14 July",
+    "all_answers": [
+      "6–14 July"
+    ],
+    "reference_context": "The Pamplona encierro is the most popular in Spain and has been broadcast live by RTVE, the public Spanish national television channel, for over 30 years. It is the highest profile event of the San Fermin festival, which is held every year from 6–14 July. The first bull running is on 7 July, followed by one on each of the following mornings of the festival, beginning every day at 8 am. Among the rules to take part in the event are that participants must be at least 18 years old, run in the same direction as the bulls, not incite the bulls, and not be under the influence of alcohol.",
+    "context_id": "nq_ctx_doc39565",
+    "title": "Running of the Bulls"
+  },
+  {
+    "question": "when do replays become available on nfl game pass",
+    "ground_truth": "NFL Game Pass",
+    "all_answers": [
+      "NFL Game Pass"
+    ],
+    "reference_context": "NFL Game Pass is a subscription based audio and video service which allows users to hear and watch live and archived National Football League (NFL) games via a Internet connection. For users in North America, only out-of-market preseason games can be viewed live; full replays of all the games become available on demand after their original live broadcasts end. Live preseason, regular season, and postseason games are available to international users.",
+    "context_id": "nq_ctx_doc78635",
+    "title": "NFL Game Pass"
+  },
+  {
+    "question": "known as the punk poet who used poetry in their music",
+    "ground_truth": "John Cooper Clarke",
+    "all_answers": [
+      "John Cooper Clarke"
+    ],
+    "reference_context": "John Cooper Clarke (born 25 January 1949) is an English performance poet who first became famous during the punk rock era of the late 1970s when he became known as a \"punk poet\". He released several albums in the late 1970s and early 1980s, and continues to perform regularly.",
+    "context_id": "nq_ctx_doc102476",
+    "title": "John Cooper Clarke"
+  },
+  {
+    "question": "when did bird is the word come out",
+    "ground_truth": "1963",
+    "all_answers": [
+      "1963"
+    ],
+    "reference_context": "The Rivingtons followed up their 1962 Billboard Hot 100 hit \"Papa-Oom-Mow-Mow\" with the similar \"The Bird's the Word\" in 1963. The Trashmen had not heard this version but saw a band called The Sorensen Brothers playing it. They decided to play the song that night at their own gig. During this first performance, drummer and vocalist Steve Wahrer stopped playing and ad-libbed the \"Surfin' Bird\" middle section. Despite not knowing \"The Bird's the Word\" was a Rivingtons song, the similarity to \"Papa-Oom-Mow-Mow\" was obvious and The Trashmen added the chorus to the end of their new track.",
+    "context_id": "nq_ctx_doc50441",
+    "title": "Surfin' Bird"
+  },
+  {
+    "question": "what is the meaning of the dragon boat festival",
+    "ground_truth": "commemorating fealty and filial piety",
+    "all_answers": [
+      "commemorating fealty and filial piety"
+    ],
+    "reference_context": "The Duanwu Festival, also often known, especially in the West, as the Dragon Boat Festival, is a traditional holiday originating in China, occurring near the summer solstice. It is also known as Zhongxiao Festival (Chinese: 忠孝節; pinyin: Zhōngxiàojié), commemorating fealty and filial piety. The festival now occurs on the 5th day of the 5th month of the traditional Chinese calendar, which is the source of the festival's alternative name, the Double Fifth Festival. The Chinese calendar is lunisolar, so the date of the festival varies from year to year on the Gregorian calendar. In 2016, it occurred on June 9; and in 2017, on May 30.",
+    "context_id": "nq_ctx_doc972",
+    "title": "Dragon Boat Festival"
+  },
+  {
+    "question": "when does it's a wonderful life comes on",
+    "ground_truth": "Christmas season",
+    "all_answers": [
+      "Christmas season"
+    ],
+    "reference_context": "The film's elevation to the status of a beloved classic came decades after its initial release, when it became a television staple during Christmas season in the late 1970s. This came as a welcome surprise to Frank Capra and others involved with its production. \"It's the damnedest thing I've ever seen,\" Capra told The Wall Street Journal in 1984. \"The film has a life of its own now, and I can look at it like I had nothing to do with it. I'm like a parent whose kid grows up to be president. I'm proud... but it's the kid who did the work. I didn't even think of it as a Christmas story when I first ran across it. I just liked the idea.\" In a 1946 interview, Capra described the film's theme as \"the individual's belief in himself\" and that he made it \"to combat a modern trend toward atheism\".",
+    "context_id": "nq_ctx_doc29811",
+    "title": "It's a Wonderful Life"
+  },
+  {
+    "question": "what was the religion in persia before islam",
+    "ground_truth": "the Zoroastrian religion",
+    "all_answers": [
+      "the Zoroastrian religion",
+      "Zoroastrian"
+    ],
+    "reference_context": "The Muslim conquest of Persia, also known as the Arab conquest of Iran,, led to the end of the Sasanian Empire in 651 and the eventual decline of the Zoroastrian religion in Persia.",
+    "context_id": "nq_ctx_doc74531",
+    "title": "Muslim conquest of Persia"
+  },
+  {
+    "question": "ed edd n eddy double d boy or girl",
+    "ground_truth": "Ed, Edd n Eddy",
+    "all_answers": [
+      "Ed, Edd n Eddy"
+    ],
+    "reference_context": "Ed, Edd n Eddy is a Canadian-American animated comedy television series created by Danny Antonucci for Cartoon Network, and the sixth of the network's Cartoon Cartoons. The series revolves around three preteen boys named Ed, Edd (called \"Double D\" to avoid confusion with Ed), and Eddy—collectively known as \"the Eds\"—who live in a suburban cul-de-sac in the fictional town of Peach Creek. Under the unofficial leadership of Eddy, the trio frequently invent schemes to make money from their peers to purchase their favorite confectionery, jawbreakers. Their plans usually fail, leaving them in various, often humiliating, predicaments.",
+    "context_id": "nq_ctx_doc61105",
+    "title": "Ed, Edd n Eddy"
+  },
+  {
+    "question": "what is the difference between airasia x and airasia",
+    "ground_truth": "AirAsia X",
+    "all_answers": [
+      "AirAsia X"
+    ],
+    "reference_context": "AirAsia X is the medium and long-haul operation of the brand AirAsia, which is Asia's largest low-cost carrier[better source needed]. The franchise is able to keep costs down by using a common ticketing system, aircraft livery, employee uniforms, and management style.[citation needed]",
+    "context_id": "nq_ctx_doc50409",
+    "title": "AirAsia X"
+  },
+  {
+    "question": "when did we decide to leave the eu",
+    "ground_truth": "23 June 2016",
+    "all_answers": [
+      "23 June 2016"
+    ],
+    "reference_context": "In a referendum on 23 June 2016, 51.9% of the participating UK electorate voted to leave the EU, out of a turnout of 72.2%. On 29 March 2017, the UK government invoked Article 50 of the Treaty on the European Union. The UK is thus due to leave the EU at midnight on 30 March 2019 Central European Time (11Â pm on 29 March 2019 GMT).",
+    "context_id": "nq_ctx_doc28754",
+    "title": "Brexit"
+  },
+  {
+    "question": "who plays ser davos in game of thrones",
+    "ground_truth": "Liam Cunningham",
+    "all_answers": [
+      "Liam Cunningham"
+    ],
+    "reference_context": "Liam Cunningham (born 2 June 1961) is an Irish stage and screen actor. He is known for playing Davos Seaworth in the HBO epic-fantasy series Game of Thrones. He has been nominated for the London Film Critics' Circle Award, the British Independent Film Award, has won two Irish Film & Television Awards, and shared a BAFTA with Michael Fassbender, for their crime-drama short film Pitch Black Heist.",
+    "context_id": "nq_ctx_doc38443",
+    "title": "Liam Cunningham"
+  },
+  {
+    "question": "when does the cannes film festival take place",
+    "ground_truth": "Cannes, France",
+    "all_answers": [
+      "Cannes, France",
+      "usually in May"
+    ],
+    "reference_context": "The Cannes Festival (/kæn/; French: Festival de Cannes), named until 2002 as the International Film Festival (Festival international du film) and known in English as the Cannes Film Festival, is an annual film festival held in Cannes, France, which previews new films of all genres, including documentaries, from all around the world. Founded in 1946, the invitation-only festival is held annually (usually in May) at the Palais des Festivals et des Congrès.",
+    "context_id": "nq_ctx_doc60556",
+    "title": "Cannes Film Festival"
+  },
+  {
+    "question": "who said sociology as queen of all sciences",
+    "ground_truth": "Auguste Comte",
+    "all_answers": [
+      "Auguste Comte"
+    ],
+    "reference_context": "Comte first described the epistemological perspective of positivism in The Course in Positive Philosophy, a series of texts published between 1830 and 1842. These texts were followed by the 1848 work, A General View of Positivism (published in English in 1865). The first three volumes of the Course dealt chiefly with the physical sciences already in existence (mathematics, astronomy, physics, chemistry, biology), whereas the latter two emphasised the inevitable coming of social science. Observing the circular dependence of theory and observation in science, and classifying the sciences in this way, Comte may be regarded as the first philosopher of science in the modern sense of the term. Comte was also the first to distinguish natural philosophy from science explicitly. For him, the physical sciences had necessarily to arrive first, before humanity could adequately channel its efforts into the most challenging and complex \"Queen science\" of human society itself. His work View of Positivism would therefore set out to define, in more detail, the empirical goals of sociological method.[citation needed]",
+    "context_id": "nq_ctx_doc19322",
+    "title": "Auguste Comte"
+  },
+  {
+    "question": "who plays voldemort in harry potter and the philosopher's stone",
+    "ground_truth": "Richard Bremmer",
+    "all_answers": [
+      "Richard Bremmer",
+      "Ian Hart"
+    ],
+    "reference_context": "In Harry Potter and the Philosopher's Stone, Voldemort's manifestation is as a face on the back of Quirrell's head, an effect achieved by computer generated imagery. Ian Hart, the actor who played Quirrell in the same film, provided the voice and the facial source for this character. Voldemort also appears in a scene in the Forbidden Forest where he is seen drinking the blood of a unicorn. As Voldemort's face was altered enough by CG work, and Hart's voice was affected enough, there was no confusion by Hart's playing of the two roles. In that film, he was also shown in a flashback sequence when he arrived at the home of James and Lily Potter to kill them. In this scene Voldemort is played by Richard Bremmer, though his face is never seen. His next appearance would be in Harry Potter and the Chamber of Secrets as the 16-year-old Tom Marvolo Riddle (portrayed by Christian Coulson).",
+    "context_id": "nq_ctx_doc17956",
+    "title": "Lord Voldemort"
+  },
+  {
+    "question": "where did they film the theory of everything",
+    "ground_truth": "The Theory of Everything (2014 film)",
+    "all_answers": [
+      "The Theory of Everything (2014 film)"
+    ],
+    "reference_context": "By 8 October 2013, principal photography had begun, with the shooting being done at Cambridge University, and at other locations in Cambridgeshire and across the United Kingdom. Prior to the start of principal photography, Working Title had begun shooting on the lawn in front of the New Court building from 23 September 2013 to 27 September 2013; they filmed the Cambridge May Ball scene, set in 1963. On 24 September 2013, scenes were filmed at St John's College, The Backs in Queen's Road, and Queen's Green. The New Court lawn and Kitchen Bridge were included features in the filming location of the piece. The May Ball scene was the last of the outside shoots, with filming in a lecture theatre the following day, and the remaining filming completed in the studio over the final five weeks of production.",
+    "context_id": "nq_ctx_doc67472",
+    "title": "The Theory of Everything (2014 film)"
+  },
+  {
+    "question": "who owns the four seasons hotel in las vegas",
+    "ground_truth": "MGM Resorts International",
+    "all_answers": [
+      "MGM Resorts International"
+    ],
+    "reference_context": "Mandalay Bay is a 43-story luxury resort and casino on the Las Vegas Strip in Paradise, Nevada. It is owned and operated by MGM Resorts International. One of the property's towers operates as the Delano; the Four Seasons Hotel is independently operated within the Mandalay Bay tower, occupying 5 floors (35â€“39).",
+    "context_id": "nq_ctx_doc18755",
+    "title": "Mandalay Bay"
+  },
+  {
+    "question": "oldest recording of house of the rising sun",
+    "ground_truth": "The House of the Rising Sun",
+    "all_answers": [
+      "The House of the Rising Sun"
+    ],
+    "reference_context": "The oldest known recording of the song, under the title \"Rising Sun Blues\", is by Appalachian artists Clarence \"Tom\" Ashley and Gwen Foster, who recorded it for Vocalion Records on September 6, 1933. Ashley said he had learned it from his grandfather, Enoch Ashley. Roy Acuff, an \"early-day friend and apprentice\" of Ashley's, learned it from him and recorded it as \"Rising Sun\" on November 3, 1938. Several older blues recordings of songs with similar titles are unrelated, for example, \"Rising Sun Blues\" by Ivy Smith (1927) and \"The Risin' Sun\" by Texas Alexander (1928).",
+    "context_id": "nq_ctx_doc63842",
+    "title": "The House of the Rising Sun"
+  },
+  {
+    "question": "the joint between a coxal bone of the pelvis and the sacrum",
+    "ground_truth": "sacroiliac joint",
+    "all_answers": [
+      "sacroiliac joint"
+    ],
+    "reference_context": "The sacroiliac joint or SI joint (SIJ) is the joint between the sacrum and the ilium bones of the pelvis, which are connected by strong ligaments. In humans, the sacrum supports the spine and is supported in turn by an ilium on each side. The joint is a strong, weight transferral synovial plane joint with irregular elevations and depressions that produce interlocking of the two bones. The human body has two sacroiliac joints, one on the left and one on the right, that often match each other but are highly variable from person to person.",
+    "context_id": "nq_ctx_doc61611",
+    "title": "Sacroiliac joint"
+  },
+  {
+    "question": "who wrote the song oh lord won't you buy me a mercedes benz",
+    "ground_truth": "Janis Joplin",
+    "all_answers": [
+      "Janis Joplin",
+      "Bob Neuwirth",
+      "Michael McClure"
+    ],
+    "reference_context": "\"Mercedes Benz\" is an a cappella song written by singer Janis Joplin with the poets Michael McClure and Bob Neuwirth, and originally recorded by Joplin. In the song, the singer asks the Lord to prove His love for her by buying her a Mercedes-Benz, a color TV, and a \"night on the town.\" There is also a reference to Dialing for Dollars, a franchised format local television program, which required one to be watching the show to win when the show called your phone number, hence the singer's need for a TV.",
+    "context_id": "nq_ctx_doc104805",
+    "title": "Mercedes Benz (song)"
+  },
+  {
+    "question": "who sings i don't want to be lonely",
+    "ground_truth": "Ronnie Dyson",
+    "all_answers": [
+      "Ronnie Dyson"
+    ],
+    "reference_context": "\"Just Don't Want to Be Lonely\" is a song written by Bobby Eli, John Freeman and Vinnie Barrett, originally recorded in 1973 by Ronnie Dyson and popularized internationally by The Main Ingredient. Dyson's version reached No. 60 in the US Pop chart, No. 30 Adult Contemporary, and No. 29 in the US R&B chart. Its flipside was \"Point of No Return,\" a song written by Tom Bell & Linda Creed.",
+    "context_id": "nq_ctx_doc47480",
+    "title": "Just Don't Want to Be Lonely"
+  },
+  {
+    "question": "who was the grandfather on the cosby show",
+    "ground_truth": "Earle Hyman",
+    "all_answers": [
+      "Earle Hyman"
+    ],
+    "reference_context": "Earle Hyman (October 11, 1926 â€“ November 17, 2017) was an American stage, television, and film actor. Hyman is known for his role on ThunderCats as the voice of Panthro and various other characters. He also appeared on The Cosby Show as Cliff's father, Russell Huxtable.",
+    "context_id": "nq_ctx_doc7950",
+    "title": "Earle Hyman"
+  },
+  {
+    "question": "is the right to life liberty and the pursuit of happiness in the constitution",
+    "ground_truth": "Life, Liberty and the pursuit of Happiness",
+    "all_answers": [
+      "Life, Liberty and the pursuit of Happiness"
+    ],
+    "reference_context": "The phrase can also be found in Chapter III, Article 13 of the 1947 Constitution of Japan, and in President Ho Chi Minh's 1945 declaration of independence of the Democratic Republic of Vietnam. An alternative phrase \"life, liberty, and property\", is found in the Declaration of Colonial Rights, a resolution of the First Continental Congress. The Fifth Amendment and Fourteenth Amendment to the United States Constitution declare that governments cannot deprive any person of \"life, liberty, or property\" without due process of law. Also, Article 3 of the Universal Declaration of Human Rights reads, \"Everyone has the right to life, liberty, and security of person\".",
+    "context_id": "nq_ctx_doc80282",
+    "title": "Life, Liberty and the pursuit of Happiness"
+  },
+  {
+    "question": "who was the original host of jokers wild",
+    "ground_truth": "Jack Barry",
+    "all_answers": [
+      "Jack Barry"
+    ],
+    "reference_context": "Jack Barry, who created the show and eventually used it to revive his partnership with longtime producer Dan Enright, hosted all versions of the show up until his death in May 1984.",
+    "context_id": "nq_ctx_doc93049",
+    "title": "The Joker's Wild"
+  },
+  {
+    "question": "when did ireland gain its independence from england",
+    "ground_truth": "In 1922",
+    "all_answers": [
+      "In 1922",
+      "1922"
+    ],
+    "reference_context": "In 1922, after the Irish War of Independence and the Anglo-Irish Treaty, most of Ireland seceded from the United Kingdom to become the independent Irish Free State, which after the 1937 constitution, began to call itself Ireland. The six northeastern counties, known as Northern Ireland, remained within the United Kingdom. The Irish Civil War followed soon after the War of Independence. The history of Northern Ireland has since been dominated by sporadic sectarian conflict between (mainly Catholic) Irish nationalists and (mainly Protestant) unionists. This conflict erupted into the Troubles in the late 1960s, until peace was achieved with the Belfast Agreement thirty years later.",
+    "context_id": "nq_ctx_doc23096",
+    "title": "History of Ireland"
+  }
+]
