@@ -10,3 +10,6 @@ __pycache__/
 .history/
 
 .claude/
+
+# Spider benchmark databases — kept locally only (too large for git)
+evaluation/Structured/database/

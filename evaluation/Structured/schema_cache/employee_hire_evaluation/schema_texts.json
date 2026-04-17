@@ -1,0 +1,6 @@
+[
+  "Table: employee | Columns: Employee_ID, Name, Age, City",
+  "Table: evaluation | Columns: Employee_ID, Year_awarded, Bonus",
+  "Table: hiring | Columns: Shop_ID, Employee_ID, Start_from, Is_full_time",
+  "Table: shop | Columns: Shop_ID, Name, Location, District, Number_products, Manager_name"
+]

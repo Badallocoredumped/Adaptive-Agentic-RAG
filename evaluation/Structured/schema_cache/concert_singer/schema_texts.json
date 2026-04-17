@@ -1,0 +1,6 @@
+[
+  "Table: concert | Columns: concert_ID, concert_Name, Theme, Stadium_ID, Year",
+  "Table: singer | Columns: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male",
+  "Table: singer_in_concert | Columns: concert_ID, Singer_ID",
+  "Table: stadium | Columns: Stadium_ID, Location, Name, Capacity, Highest, Lowest, Average"
+]

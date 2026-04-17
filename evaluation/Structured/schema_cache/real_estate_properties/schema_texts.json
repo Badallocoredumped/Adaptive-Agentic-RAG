@@ -1,0 +1,7 @@
+[
+  "Table: Other_Available_Features | Columns: feature_id, feature_type_code, feature_name, feature_description",
+  "Table: Other_Property_Features | Columns: property_id, feature_id, property_feature_description",
+  "Table: Properties | Columns: property_id, property_type_code, date_on_market, date_sold, property_name, property_address, room_count, vendor_requested_price, buyer_offered_price, agreed_selling_price, apt_feature_1, apt_feature_2, apt_feature_3, fld_feature_1, fld_feature_2, fld_feature_3, hse_feature_1, hse_feature_2, hse_feature_3, oth_feature_1, oth_feature_2, oth_feature_3, shp_feature_1, shp_feature_2, shp_feature_3, other_property_details",
+  "Table: Ref_Feature_Types | Columns: feature_type_code, feature_type_name",
+  "Table: Ref_Property_Types | Columns: property_type_code, property_type_description"
+]

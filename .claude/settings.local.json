@@ -3,7 +3,8 @@
     "allow": [
       "Bash(pip install *)",
       "Bash(python -c \"import ragas; print\\('ragas', ragas.__version__\\)\")",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(find \"c:/Users/ERK/Desktop/Classroom/8. Yarıyıl/FENS402 Enginneering Design ProJect II/Adaptive-Agentic-RAG/evaluation/Structured/database\" -type f -not -name \"*.sqlite\" -delete)"
     ]
   }
 }

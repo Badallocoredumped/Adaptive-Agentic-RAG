@@ -1,0 +1,8 @@
+[
+  "Table: car_makers | Columns: Id, Maker, FullName, Country",
+  "Table: car_names | Columns: MakeId, Model, Make",
+  "Table: cars_data | Columns: Id, MPG, Cylinders, Edispl, Horsepower, Weight, Accelerate, Year",
+  "Table: continents | Columns: ContId, Continent",
+  "Table: countries | Columns: CountryId, CountryName, Continent",
+  "Table: model_list | Columns: ModelId, Maker, Model"
+]

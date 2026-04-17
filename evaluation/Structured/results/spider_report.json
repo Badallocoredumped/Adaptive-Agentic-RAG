@@ -1,0 +1,201 @@
+{
+  "dataset": "Spider dev (stratified sample)",
+  "n_total": 8,
+  "per_tier": 2,
+  "tier_counts": {
+    "easy": 2,
+    "medium": 2,
+    "hard": 2,
+    "extra": 2
+  },
+  "configs": {
+    "S3": {
+      "label": "Full pipeline (TableRAG + ReAct + cache)",
+      "settings": {
+        "label": "Full pipeline (TableRAG + ReAct + cache)",
+        "use_tablerag": true,
+        "use_react": true,
+        "use_cache": true,
+        "sql_top_k": 3
+      },
+      "metrics": {
+        "n": 8,
+        "execution_accuracy": 0.625,
+        "valid_sql_rate": 0.875,
+        "error_rate": 0.125,
+        "avg_latency_s": 6.37,
+        "by_difficulty": {
+          "easy": 1.0,
+          "extra": 0.0,
+          "hard": 0.5,
+          "medium": 1.0
+        },
+        "by_database": {
+          "car_1": 0.0,
+          "concert_singer": 1.0,
+          "cre_Doc_Template_Mgt": 0.5,
+          "employee_hire_evaluation": 1.0,
+          "real_estate_properties": 1.0,
+          "wta_1": 1.0
+        },
+        "tablerag_prune_ratio": 0.7,
+        "cache_breakdown": {
+          "cache_hits": 0,
+          "react_calls": 8,
+          "single_pass_calls": 0,
+          "cache_hit_rate": 0.0,
+          "cache_hit_ex": 0.0,
+          "react_ex": 0.625,
+          "cache_avg_lat_s": 0.0,
+          "react_avg_lat_s": 6.37
+        }
+      }
+    }
+  },
+  "results": [
+    {
+      "idx": 0,
+      "question": "List the first name and birth date of all players from the country with code USA.",
+      "gold_sql": "SELECT first_name ,  birth_date FROM players WHERE country_code  =  'USA'",
+      "db_id": "wta_1",
+      "hardness": "medium",
+      "S3": {
+        "sql": "SELECT first_name, birth_date FROM players WHERE country_code = 'USA';",
+        "latency": 25.637,
+        "error": null,
+        "tables_selected": 3,
+        "total_tables": 3,
+        "path": "react",
+        "cache_hit": false,
+        "cache_score": 0.0,
+        "ex": true
+      }
+    },
+    {
+      "idx": 1,
+      "question": "What are the id and names of the countries which have more than 3 car makers or produce the 'fiat' model?",
+      "gold_sql": "SELECT T1.countryId ,  T1.CountryName FROM Countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.countryId HAVING count(*)  >  3 UNION SELECT T1.countryId ,  T1.CountryName FROM Countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country JOIN MODEL_LIST AS T3 ON T2.Id  =  T3.Maker WHERE T3.Model  =  'fiat';",
+      "db_id": "car_1",
+      "hardness": "extra",
+      "S3": {
+        "sql": null,
+        "latency": 5.142,
+        "error": "Query executed successfully. Result set is empty (0 rows).",
+        "tables_selected": 3,
+        "total_tables": 6,
+        "path": "react",
+        "cache_hit": false,
+        "cache_score": 0.0,
+        "ex": false
+      }
+    },
+    {
+      "idx": 2,
+      "question": "What are the names , themes , and number of singers for every concert ?",
+      "gold_sql": "select t2.concert_name ,  t2.theme ,  count(*) from singer_in_concert as t1 join concert as t2 on t1.concert_id  =  t2.concert_id group by t2.concert_id",
+      "db_id": "concert_singer",
+      "hardness": "medium",
+      "S3": {
+        "sql": "SELECT c.concert_Name, c.Theme, COUNT(sic.Singer_ID) AS number_of_singers \nFROM concert c \nLEFT JOIN singer_in_concert sic ON c.concert_ID = sic.concert_ID \nGROUP BY c.concert_ID;",
+        "latency": 4.481,
+        "error": null,
+        "tables_selected": 3,
+        "total_tables": 4,
+        "path": "react",
+        "cache_hit": false,
+        "cache_score": 0.0,
+        "ex": true
+      }
+    },
+    {
+      "idx": 3,
+      "question": "How many available features are there in total?",
+      "gold_sql": "SELECT count(*) FROM Other_Available_Features",
+      "db_id": "real_estate_properties",
+      "hardness": "easy",
+      "S3": {
+        "sql": "SELECT COUNT(*) AS total_features FROM Other_Available_Features;",
+        "latency": 1.636,
+        "error": null,
+        "tables_selected": 3,
+        "total_tables": 5,
+        "path": "react",
+        "cache_hit": false,
+        "cache_score": 0.0,
+        "ex": true
+      }
+    },
+    {
+      "idx": 4,
+      "question": "Return the type code of the template type that the most templates belong to.",
+      "gold_sql": "SELECT template_type_code FROM Templates GROUP BY template_type_code ORDER BY count(*) DESC LIMIT 1",
+      "db_id": "cre_Doc_Template_Mgt",
+      "hardness": "hard",
+      "S3": {
+        "sql": "SELECT Template_Type_Code\nFROM Templates\nGROUP BY Template_Type_Code\nORDER BY COUNT(*) DESC\nLIMIT 1;",
+        "latency": 2.308,
+        "error": null,
+        "tables_selected": 3,
+        "total_tables": 4,
+        "path": "react",
+        "cache_hit": false,
+        "cache_score": 0.0,
+        "ex": true
+      }
+    },
+    {
+      "idx": 5,
+      "question": "What are the ids and makers of all car makers that produce at least 2 models and make more than 3 cars?",
+      "gold_sql": "SELECT T1.Id ,  T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker GROUP BY T1.Id HAVING count(*)  >=  2 INTERSECT SELECT T1.Id ,  T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker JOIN CAR_NAMES AS T3 ON T2.model  =  T3.model GROUP BY T1.Id HAVING count(*)  >  3;",
+      "db_id": "car_1",
+      "hardness": "extra",
+      "S3": {
+        "sql": "SELECT Maker, COUNT(Model) AS CarCount\nFROM model_list\nGROUP BY Maker\nHAVING CarCount > 3;",
+        "latency": 6.937,
+        "error": null,
+        "tables_selected": 3,
+        "total_tables": 6,
+        "path": "react",
+        "cache_hit": false,
+        "cache_score": 0.0,
+        "ex": false
+      }
+    },
+    {
+      "idx": 6,
+      "question": "What is the id and type code for the template used by the most documents?",
+      "gold_sql": "SELECT T1.template_id ,  T2.Template_Type_Code FROM Documents AS T1 JOIN Templates AS T2 ON T1.template_id  =  T2.template_id GROUP BY T1.template_id ORDER BY count(*) DESC LIMIT 1",
+      "db_id": "cre_Doc_Template_Mgt",
+      "hardness": "hard",
+      "S3": {
+        "sql": "SELECT Templates.Template_ID, Templates.Template_Type_Code\nFROM Templates\nJOIN Documents ON Templates.Template_ID = Documents.Template_ID\nGROUP BY Templates.Template_ID, Templates.Template_Type_Code\nORDER BY COUNT(Documents.Document_ID) DESC\nLIMIT 1;",
+        "latency": 2.752,
+        "error": null,
+        "tables_selected": 3,
+        "total_tables": 4,
+        "path": "react",
+        "cache_hit": false,
+        "cache_score": 0.0,
+        "ex": false
+      }
+    },
+    {
+      "idx": 7,
+      "question": "How many different store locations are there?",
+      "gold_sql": "SELECT count(DISTINCT LOCATION) FROM shop",
+      "db_id": "employee_hire_evaluation",
+      "hardness": "easy",
+      "S3": {
+        "sql": "SELECT COUNT(DISTINCT Location) AS Different_Locations FROM shop;",
+        "latency": 2.069,
+        "error": null,
+        "tables_selected": 3,
+        "total_tables": 4,
+        "path": "react",
+        "cache_hit": false,
+        "cache_score": 0.0,
+        "ex": true
+      }
+    }
+  ]
+}
