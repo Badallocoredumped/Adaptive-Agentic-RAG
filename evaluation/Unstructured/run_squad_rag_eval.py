@@ -49,7 +49,9 @@ def call_openai(prompt: str) -> str:
     return response.choices[0].message.content.strip()
 
 ANSWER_PROMPT = """\
-Answer the question using ONLY the provided context. Be concise — one sentence max.
+Answer the question in one short phrase using ONLY the context below.
+Do not add any information not present in the context.
+If the answer cannot be found in the context, reply exactly: "Not found."
 
 Context:
 {context}
@@ -103,9 +105,9 @@ for i, item in enumerate(eval_set):
     time.sleep(0.8)
 
 out_path = RESULTS_DIR / "squad_rag_results.json"
-with open(out_path, "w") as f:
+with open(out_path, "w", encoding="utf-8") as f:
     json.dump(results, f, indent=2)
 
 hit_rate = sum(r["answer_in_retrieved"] for r in results) / len(results)
-print(f"\nSaved {len(results)} results → {out_path}")
+print(f"\nSaved {len(results)} results -> {out_path}")
 print(f"Quick retrieval hit rate: {hit_rate:.1%} (answer found in retrieved chunks)")

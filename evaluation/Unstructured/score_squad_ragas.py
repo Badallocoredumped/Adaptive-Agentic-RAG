@@ -37,7 +37,7 @@ from ragas.embeddings import LangchainEmbeddingsWrapper
 
 import backend.config as config
 
-# ── Load results ──────────────────────────────────────────────────────────
+# -- Load results ----------------------------------------------------------
 with open(RESULTS_DIR / "squad_rag_results.json") as f:
     results = json.load(f)
 
@@ -45,7 +45,7 @@ with open(RESULTS_DIR / "squad_rag_results.json") as f:
 results = [r for r in results if not r["answer"].startswith("[ERROR")]
 print(f"Scoring {len(results)} results...")
 
-# ── Build HuggingFace Dataset for RAGAS ───────────────────────────────────
+# -- Build HuggingFace Dataset for RAGAS ----------------------------------
 ragas_data = Dataset.from_dict({
     "user_input":         [r["question"]           for r in results],
     "response":           [r["answer"]             for r in results],
@@ -53,7 +53,7 @@ ragas_data = Dataset.from_dict({
     "reference":          [r["ground_truth"]       for r in results],
 })
 
-# ── Configure LLM + Embeddings for RAGAS ─────────────────────────────────
+# -- Configure LLM + Embeddings for RAGAS ---------------------------------
 openai_client = OpenAIClient(api_key=config.OPENAI_API_KEY)
 llm = llm_factory(model=config.SQL_OPENAI_MODEL, client=openai_client)
 
@@ -68,7 +68,7 @@ METRICS = [
     context_recall,
 ]
 
-# ── Run RAGAS ─────────────────────────────────────────────────────────────
+# -- Run RAGAS -------------------------------------------------------------
 print("Running RAGAS evaluation (this takes a few minutes)...")
 
 ragas_result = evaluate(
@@ -87,32 +87,33 @@ METRIC_COLS = {
     "context_recall":    "context_recall",
 }
 
-# ── Also compute retrieval hit rate (our bonus metric) ────────────────────
+# -- Also compute retrieval hit rate (bonus metric) -----------------------
 hit_rate = sum(r["answer_in_retrieved"] for r in results) / len(results)
 
-# ── Print report ──────────────────────────────────────────────────────────
-def bar(v): return "█" * int(v * 20) + "░" * (20 - int(v * 20))
-
-print("\n" + "="*60)
-print("  RAGAS REPORT — Unstructured Pipeline (SQuAD v1.1)")
-print("="*60)
 metrics = {
     label: scores_df[col].mean()
     for label, col in METRIC_COLS.items()
     if col in scores_df.columns
 }
-for name, val in metrics.items():
-    print(f"  {name:<22} {val:.4f}  {bar(val)}")
-print(f"  {'retrieval_hit_rate':<22} {hit_rate:.4f}  {bar(hit_rate)}")
-print("="*60)
 
-# ── Save ──────────────────────────────────────────────────────────────────
+# -- Save first so results are never lost ---------------------------------
 output = {
     "overall": {**metrics, "retrieval_hit_rate": hit_rate},
     "n_evaluated": len(results),
     "per_question": scores_df.to_dict(orient="records"),
 }
 out_path = RESULTS_DIR / "squad_ragas_scores.json"
-with open(out_path, "w") as f:
+with open(out_path, "w", encoding="utf-8") as f:
     json.dump(output, f, indent=2)
-print(f"\nFull scores → {out_path}")
+
+# -- Print report ----------------------------------------------------------
+def bar(v): return "#" * int(v * 20) + "-" * (20 - int(v * 20))
+
+print("\n" + "="*60)
+print("  RAGAS REPORT -- Unstructured Pipeline (SQuAD v1.1)")
+print("="*60)
+for name, val in metrics.items():
+    print(f"  {name:<22} {val:.4f}  {bar(val)}")
+print(f"  {'retrieval_hit_rate':<22} {hit_rate:.4f}  {bar(hit_rate)}")
+print("="*60)
+print(f"\nFull scores -> {out_path}")
