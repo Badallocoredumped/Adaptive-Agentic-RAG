@@ -68,6 +68,13 @@ SQL_TOP_K = 3        # number of schema tables to retrieve
 
 RAG_FETCH_MULTIPLIER = 2
 RAG_ENABLE_SEMANTIC_RERANK = True
+RAG_RERANKER_MODEL = "BAAI/bge-reranker-large"
+
+# Retrieval mode:
+#   "hybrid" -> BM25 + FAISS fused via Reciprocal Rank Fusion (higher recall)
+#   "faiss"  -> dense-only FAISS cosine search (faster, lower memory)
+RAG_RETRIEVAL_MODE = "hybrid"
+RAG_RRF_K = 60             # RRF constant -- only used when RAG_RETRIEVAL_MODE="hybrid"
 RAG_PREVIEW_CHARS = 100
 
 CHUNK_SIZE = 500
