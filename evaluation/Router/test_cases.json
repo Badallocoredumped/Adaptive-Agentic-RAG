@@ -1,0 +1,853 @@
+{
+  "description": "120-query router classification evaluation set -- 40 per class (sql / text / hybrid). Evaluated via decompose_with_zeroshot() + route_from_subtasks(). Difficulty reflects how semantically ambiguous the query is for an LLM classifier.",
+  "sql_keywords": [
+    "count", "sum", "average", "avg", "total", "order", "orders",
+    "customer", "customers", "table", "sql", "database", "revenue"
+  ],
+  "text_keywords": [
+    "document", "pdf", "text", "explain", "summary", "summarize",
+    "file", "context", "policy", "report"
+  ],
+  "test_cases": [
+    {
+      "id": "sql_01",
+      "query": "How many customer orders were placed in January?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "Straightforward COUNT with date filter. 'customers' and 'orders' both hit SQL_KEYWORDS."
+    },
+    {
+      "id": "sql_02",
+      "query": "What is the total revenue from all product lines?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "SUM aggregation over product lines. 'total' and 'revenue' both trigger SQL route."
+    },
+    {
+      "id": "sql_03",
+      "query": "Show me the average order value grouped by region.",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "AVG with GROUP BY. 'average' and 'order' are both SQL keywords."
+    },
+    {
+      "id": "sql_04",
+      "query": "Count the active customers in each country.",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'Count' as the first token and 'customers' both match SQL_KEYWORDS exactly."
+    },
+    {
+      "id": "sql_05",
+      "query": "What is the sum of all invoices for premium accounts this quarter?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "Aggregate SUM. 'sum' token matches SQL_KEYWORDS."
+    },
+    {
+      "id": "sql_06",
+      "query": "List all customers who placed orders worth over five hundred dollars.",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "Filtered SELECT. Both 'customers' and 'orders' hit SQL_KEYWORDS."
+    },
+    {
+      "id": "sql_07",
+      "query": "How much revenue did each product category generate last year?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "Revenue breakdown by category. 'revenue' triggers SQL route."
+    },
+    {
+      "id": "sql_08",
+      "query": "How many rows are in the transactions table right now?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "Row-count query. 'table' is an SQL keyword."
+    },
+    {
+      "id": "sql_09",
+      "query": "What is the average number of orders per customer in 2023?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "Multiple SQL keywords; classic aggregation query."
+    },
+    {
+      "id": "sql_10",
+      "query": "What is the avg transaction size across all database records?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'avg' (abbreviation) and 'database' both hit SQL_KEYWORDS."
+    },
+    {
+      "id": "sql_11",
+      "query": "Which customer accounts have the highest lifetime spending?",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "Only one SQL keyword ('customer'). Still classified sql, but weaker signal."
+    },
+    {
+      "id": "sql_12",
+      "query": "Show total sales broken down by sales representative for Q3.",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "Aggregation by rep. 'total' triggers sql; no text keywords present."
+    },
+    {
+      "id": "sql_13",
+      "query": "How much did revenue grow quarter over quarter in 2023?",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "Time-series comparison. 'revenue' is the only keyword trigger."
+    },
+    {
+      "id": "sql_14",
+      "query": "What SQL query would return all orders placed before noon today?",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "Explicitly mentions 'SQL' in the query. Easy for keyword router."
+    },
+    {
+      "id": "sql_15",
+      "query": "Which departments spent the most on vendor contracts last quarter?",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Aggregation + ranking over structured data, but no SQL keyword matches. Keyword router defaults to 'text' — WRONG."
+    },
+    {
+      "id": "sql_16",
+      "query": "Who are the top five best-performing sales representatives this year?",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Ranking query; no SQL keyword triggers. Keyword router defaults to 'text' — WRONG."
+    },
+    {
+      "id": "sql_17",
+      "query": "What percentage of projects were delivered on time last quarter?",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Percentage calculation over structured data. No keyword matches; defaults to 'text' — WRONG."
+    },
+    {
+      "id": "sql_18",
+      "query": "Which product categories are trending downward in units sold?",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Trend analysis over structured data. No SQL keywords; keyword router fails."
+    },
+    {
+      "id": "sql_19",
+      "query": "How do employee satisfaction scores vary across office locations?",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Aggregation without any keyword matches. Defaults to 'text' — WRONG."
+    },
+    {
+      "id": "sql_20",
+      "query": "Rank all store branches by net profit margin for the past fiscal year.",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "ORDER BY profit margin — pure SQL. No keyword triggers at all; keyword router fails."
+    },
+    {
+      "id": "sql_21",
+      "query": "Count the number of open invoices in the billing system.",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'count' triggers SQL route directly. Clear structured-data intent."
+    },
+    {
+      "id": "sql_22",
+      "query": "What is the total revenue generated by the enterprise segment this quarter?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'total' and 'revenue' both hit SQL_KEYWORDS. Unambiguous aggregation query."
+    },
+    {
+      "id": "sql_23",
+      "query": "How many customer records have a missing phone number?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'customer' triggers SQL; data-quality COUNT query over a structured table."
+    },
+    {
+      "id": "sql_24",
+      "query": "What is the average order fulfillment time in days?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'average' and 'order' both hit SQL_KEYWORDS. Classic AVG query."
+    },
+    {
+      "id": "sql_25",
+      "query": "Show the sum of all refunds processed in the last thirty days.",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'sum' is a direct SQL keyword. Clear aggregate over a transactions table."
+    },
+    {
+      "id": "sql_26",
+      "query": "How many database entries were inserted yesterday?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'database' hits SQL_KEYWORDS. Row insertion count query."
+    },
+    {
+      "id": "sql_27",
+      "query": "What is the avg number of items per customer order this month?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'avg', 'customer', and 'order' all match SQL_KEYWORDS. Strong multi-keyword signal."
+    },
+    {
+      "id": "sql_28",
+      "query": "List all orders placed by customers in the premium tier last week.",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'orders' and 'customers' both hit SQL_KEYWORDS."
+    },
+    {
+      "id": "sql_29",
+      "query": "What is the total count of transactions flagged for fraud review?",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'total' and 'count' both trigger SQL route."
+    },
+    {
+      "id": "sql_30",
+      "query": "Show the revenue contribution of each sales channel for Q1.",
+      "expected_route": "sql",
+      "difficulty": "easy",
+      "description": "'revenue' triggers SQL. Channel-level aggregation query."
+    },
+    {
+      "id": "sql_31",
+      "query": "Which distribution centers had the highest throughput last month?",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "No SQL keywords present. Keyword router fails; LLM must infer structured-data intent from 'throughput'."
+    },
+    {
+      "id": "sql_32",
+      "query": "How has the average contract renewal rate changed year over year?",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "'average' is the only keyword trigger. Weak signal but LLM classifies correctly."
+    },
+    {
+      "id": "sql_33",
+      "query": "Identify the sales agents who exceeded their quota in every quarter.",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "No keyword hits. Requires LLM to recognise quota tracking as structured-data analytics."
+    },
+    {
+      "id": "sql_34",
+      "query": "What fraction of enterprise accounts are currently on an annual plan?",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "Proportion query over structured account data. No SQL keyword present."
+    },
+    {
+      "id": "sql_35",
+      "query": "Show monthly active users broken down by device type.",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "No keyword match. 'monthly active users' implies a metrics/telemetry table query."
+    },
+    {
+      "id": "sql_36",
+      "query": "Which payment gateways have the highest transaction failure rate?",
+      "expected_route": "sql",
+      "difficulty": "medium",
+      "description": "No SQL keyword. Requires semantic understanding that failure rate is computed from a transactions table."
+    },
+    {
+      "id": "sql_37",
+      "query": "What is the cohort-based retention curve for users acquired in Q1?",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Advanced cohort analytics; no keyword triggers. Keyword router defaults to 'text' — WRONG."
+    },
+    {
+      "id": "sql_38",
+      "query": "Which departments are consistently over budget on headcount?",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Budget variance analysis over structured HR data. No keyword matches; LLM must infer intent."
+    },
+    {
+      "id": "sql_39",
+      "query": "Identify underperforming product lines based on gross margin trends.",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Trend analysis requiring financial tables. No keyword triggers; pure semantic routing."
+    },
+    {
+      "id": "sql_40",
+      "query": "Map the correlation between marketing spend and lead conversion velocity.",
+      "expected_route": "sql",
+      "difficulty": "hard",
+      "description": "Statistical correlation over two structured tables. No SQL keywords; keyword router fails completely."
+    },
+    {
+      "id": "text_01",
+      "query": "Summarize the key points in the annual report.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Explicit summarization of a document. Both text keywords match."
+    },
+    {
+      "id": "text_02",
+      "query": "What does the company policy say about overtime and remote work?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Policy lookup. 'policy' triggers text route."
+    },
+    {
+      "id": "text_03",
+      "query": "Explain the architecture described in the design document.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Explanation from a document. 'explain' and 'document' both trigger text."
+    },
+    {
+      "id": "text_04",
+      "query": "Give me the context around the regulatory changes announced last month.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'context' is an explicit text keyword."
+    },
+    {
+      "id": "text_05",
+      "query": "What does the PDF file contain about the new onboarding process?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "PDF retrieval. 'pdf' and 'file' both hit text keywords."
+    },
+    {
+      "id": "text_06",
+      "query": "Provide a summary of the strategic roadmap presented in the deck.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'summary' triggers text route."
+    },
+    {
+      "id": "text_07",
+      "query": "Explain what the text mentions about machine learning best practices.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'explain' and 'text' both match text keywords."
+    },
+    {
+      "id": "text_08",
+      "query": "What does the GDPR policy document state about data retention?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Compliance document lookup. Two text keywords trigger."
+    },
+    {
+      "id": "text_09",
+      "query": "What does the report say about the average employee tenure at the company?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "Text query with 'average' (SQL keyword) and 'report' (text keyword). Keyword router predicts hybrid — WRONG."
+    },
+    {
+      "id": "text_10",
+      "query": "Explain the total cost breakdown discussed in the proposal document.",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'total' is SQL keyword; 'explain' and 'document' are text keywords. Keyword router predicts hybrid — WRONG."
+    },
+    {
+      "id": "text_11",
+      "query": "What customer feedback is documented in the user research report?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'customer' hits SQL, 'document'+'report' hit text. Predicted hybrid — actually a pure text retrieval."
+    },
+    {
+      "id": "text_12",
+      "query": "Summarize the revenue trends discussed in the annual strategy document.",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'revenue' triggers SQL; 'summarize'+'document' trigger text. Answer lies in a document, not a DB table."
+    },
+    {
+      "id": "text_13",
+      "query": "What does the context file say about order processing workflows?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'order' is SQL; 'context'+'file' are text. The answer is from a document, not a DB."
+    },
+    {
+      "id": "text_14",
+      "query": "What does the summary document reveal about database performance bottlenecks?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'database' triggers SQL; 'summary'+'document' trigger text. Keyword router wrongly predicts hybrid."
+    },
+    {
+      "id": "text_15",
+      "query": "What innovations did the company introduce in 2023?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "No keywords present; defaults to 'text' which is correct."
+    },
+    {
+      "id": "text_16",
+      "query": "Describe the founding story and mission of the organization.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Pure narrative question. No keyword matches; defaults to 'text' correctly."
+    },
+    {
+      "id": "text_17",
+      "query": "What was discussed in the executive board meeting last quarter?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Meeting notes retrieval. No keywords; defaults to 'text'."
+    },
+    {
+      "id": "text_18",
+      "query": "Tell me about the company's approach to environmental sustainability.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Open-ended conceptual question. No keywords; correct default."
+    },
+    {
+      "id": "text_19",
+      "query": "What are the key themes in the company mission statement?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Document comprehension. No triggers; defaults to text correctly."
+    },
+    {
+      "id": "text_20",
+      "query": "Who were the key contributors to the product redesign initiative?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "Personnel/narrative lookup. No keywords; defaults to text."
+    },
+    {
+      "id": "text_21",
+      "query": "What does the HR policy document describe about vacation accrual?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'policy' and 'document' both trigger text route. Unambiguous document retrieval."
+    },
+    {
+      "id": "text_22",
+      "query": "Summarize the key findings in the market research report.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'summarize' and 'report' both hit text keywords."
+    },
+    {
+      "id": "text_23",
+      "query": "Explain the deployment process described in the technical runbook document.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'explain' and 'document' both hit text keywords."
+    },
+    {
+      "id": "text_24",
+      "query": "What does the context file reveal about the product vision?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'context' and 'file' both match text keywords."
+    },
+    {
+      "id": "text_25",
+      "query": "Provide a summary of the legal terms outlined in the master service agreement.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'summary' triggers text route. Document comprehension over a legal agreement."
+    },
+    {
+      "id": "text_26",
+      "query": "What does the PDF document say about the warranty and return conditions?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'pdf' and 'document' both hit text keywords."
+    },
+    {
+      "id": "text_27",
+      "query": "What does the policy manual state about data privacy obligations?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'policy' is a direct text keyword."
+    },
+    {
+      "id": "text_28",
+      "query": "Explain the incident response procedures documented in the security playbook.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'explain' hits text keyword. Procedure extraction from a document."
+    },
+    {
+      "id": "text_29",
+      "query": "What does the annual report text say about corporate governance?",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'report' and 'text' both hit text keywords."
+    },
+    {
+      "id": "text_30",
+      "query": "Give me context from the release notes about the new authentication feature.",
+      "expected_route": "text",
+      "difficulty": "easy",
+      "description": "'context' triggers text route. Document-grounded feature description."
+    },
+    {
+      "id": "text_31",
+      "query": "What does the report indicate about the average customer satisfaction score?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'report' (text) conflicts with 'average' and 'customer' (SQL). LLM may incorrectly route to sql — WRONG."
+    },
+    {
+      "id": "text_32",
+      "query": "Summarize the total investment thesis described in the fund strategy document.",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'summarize'+'document' (text) conflict with 'total' (SQL). Answer is in a document."
+    },
+    {
+      "id": "text_33",
+      "query": "What does the context file say about order processing delays?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'context'+'file' (text) conflict with 'order' (SQL). Document-grounded answer."
+    },
+    {
+      "id": "text_34",
+      "query": "Explain the revenue sharing model documented in the partnership agreement.",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'explain' (text) conflicts with 'revenue' (SQL). Answer lies in a legal document."
+    },
+    {
+      "id": "text_35",
+      "query": "What does the summary document say about database performance improvements?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'summary'+'document' (text) conflict with 'database' (SQL). Pure text retrieval."
+    },
+    {
+      "id": "text_36",
+      "query": "What customer service philosophy is described in the brand guidelines?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'customer' (SQL) present but answer is from a brand guidelines document. LLM must recognise document intent."
+    },
+    {
+      "id": "text_37",
+      "query": "What does the report say about average transaction processing delays?",
+      "expected_route": "text",
+      "difficulty": "medium",
+      "description": "'report' (text) conflicts with 'average' (SQL). The analysis is documented, not computed live."
+    },
+    {
+      "id": "text_38",
+      "query": "What were the main conclusions from the executive strategy retreat?",
+      "expected_route": "text",
+      "difficulty": "hard",
+      "description": "No text keywords present. Keyword router defaults to 'text' which is correct, but only by chance; LLM must reason from context."
+    },
+    {
+      "id": "text_39",
+      "query": "What does the company believe about its competitive differentiation?",
+      "expected_route": "text",
+      "difficulty": "hard",
+      "description": "No keyword matches. Open-ended organisational question requiring document retrieval."
+    },
+    {
+      "id": "text_40",
+      "query": "What milestones are planned for the product roadmap over the next two years?",
+      "expected_route": "text",
+      "difficulty": "hard",
+      "description": "No text or SQL keywords. Roadmap is stored in documents; LLM must infer text retrieval intent."
+    },
+    {
+      "id": "hybrid_01",
+      "query": "How many customer orders were placed last month and what does the return policy say?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "Clear split: COUNT query + policy document lookup. Both keyword sets fire → hybrid correctly predicted."
+    },
+    {
+      "id": "hybrid_02",
+      "query": "What is the total revenue for Q3 and can you summarize the investor report?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "Revenue aggregation + document summary. Four keyword hits across both sets."
+    },
+    {
+      "id": "hybrid_03",
+      "query": "Count active users by plan and explain the subscription tiers from the pricing document.",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'count' hits SQL; 'explain'+'document' hit text. Both pipelines needed."
+    },
+    {
+      "id": "hybrid_04",
+      "query": "Show the average order value per segment and describe the segmentation policy.",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "AVG aggregation + policy retrieval. Keyword router correctly picks hybrid."
+    },
+    {
+      "id": "hybrid_05",
+      "query": "Which customers have the highest total spend and what does the loyalty program document say about tiers?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "Structured ranking + document policy. Both keyword types triggered."
+    },
+    {
+      "id": "hybrid_06",
+      "query": "What is the sum of sales by region and please summarize the regional expansion strategy?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "SUM aggregation + summarization. 'sum' hits SQL; 'summarize' hits text."
+    },
+    {
+      "id": "hybrid_07",
+      "query": "Show revenue breakdown by product and explain the pricing policy.",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "Revenue query + policy explanation. Clear hybrid with both keyword sets."
+    },
+    {
+      "id": "hybrid_08",
+      "query": "Show a database summary of user counts and give the context from the onboarding file.",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'database' triggers SQL; 'summary','context','file' trigger text."
+    },
+    {
+      "id": "hybrid_09",
+      "query": "How many total employees are in each department and what does the HR handbook say about benefits?",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "Requires both structured headcount data and HR document. 'total' hits SQL but no text keyword. Keyword router predicts 'sql' — WRONG."
+    },
+    {
+      "id": "hybrid_10",
+      "query": "What are the top customer segments by order volume and what marketing strategies are described in the playbook?",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "'customer'+'order' hit SQL but no text keywords. Keyword router predicts 'sql'; needs text for playbook — WRONG."
+    },
+    {
+      "id": "hybrid_11",
+      "query": "Show average transaction value by channel and what acquisition strategy is outlined in the growth document.",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "Single SQL keyword and single text keyword. Keyword router correctly predicts hybrid here."
+    },
+    {
+      "id": "hybrid_12",
+      "query": "Explain the onboarding process described in the guide and also show how many new hires joined per quarter.",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "Text keyword 'explain' fires; no SQL keyword. 'how many new hires per quarter' is SQL intent but 'quarter' isn't a keyword. Predicted 'text' — WRONG."
+    },
+    {
+      "id": "hybrid_13",
+      "query": "Summarize the compliance report and tell me how many violations were logged this year.",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "'summarize'+'report' hit text; no SQL keyword for the COUNT part. Keyword router predicts 'text' — WRONG."
+    },
+    {
+      "id": "hybrid_14",
+      "query": "What context does the SLA file provide and how many tickets were escalated last week?",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "Two text keywords fire; 'how many tickets escalated' is SQL intent but 'tickets' isn't a keyword. Predicted 'text' — WRONG."
+    },
+    {
+      "id": "hybrid_15",
+      "query": "Which geographic regions have the lowest retention rates and what strategies are recommended in the retention playbook?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "No keywords at all. Defaults to 'text' — WRONG. Both structured data (retention rates) and document (playbook) are needed."
+    },
+    {
+      "id": "hybrid_16",
+      "query": "Who generated the most sales last quarter and what commission guidelines apply to top performers?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "No keyword matches. Pure hybrid intent requiring DB ranking + document retrieval; keyword router fails."
+    },
+    {
+      "id": "hybrid_17",
+      "query": "Which warehouses have critically low stock levels and what does the replenishment procedure specify?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "Inventory threshold query (SQL) + procedure document (text). No keywords trigger; defaults to 'text' — WRONG."
+    },
+    {
+      "id": "hybrid_18",
+      "query": "Compare employee performance ratings across teams and summarize what the performance review guidelines recommend.",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "'summarize' fires one text keyword; no SQL keyword. Structured comparison is SQL intent but missed. Predicted 'text' — WRONG."
+    },
+    {
+      "id": "hybrid_19",
+      "query": "Which marketing campaigns drove the highest conversion rates and what does the brand guidelines document say?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "'document' fires one text keyword; no SQL keyword for the analytics part. Keyword router predicts 'text' — WRONG."
+    },
+    {
+      "id": "hybrid_20",
+      "query": "Show me user activity metrics for the past 90 days and explain the privacy implications from the policy.",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "'explain'+'policy' trigger text; no SQL keyword for the metrics part. Keyword router predicts 'text' — WRONG."
+    },
+    {
+      "id": "hybrid_21",
+      "query": "How many items are in the inventory database and what does the stock management policy specify?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'database' (SQL) + 'policy' (text). Both keyword sets fire correctly."
+    },
+    {
+      "id": "hybrid_22",
+      "query": "What is the total headcount by department and can you summarize the org structure from the company document?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'total' (SQL) + 'summarize'+'document' (text). Clear hybrid with strong keyword signal."
+    },
+    {
+      "id": "hybrid_23",
+      "query": "Count active users by subscription tier and explain the terms described in the service agreement document.",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'count' (SQL) + 'explain'+'document' (text). Both pipelines triggered."
+    },
+    {
+      "id": "hybrid_24",
+      "query": "What is the average revenue per user and what does the monetization strategy document describe?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'average'+'revenue' (SQL) + 'document' (text). Strong multi-keyword hybrid."
+    },
+    {
+      "id": "hybrid_25",
+      "query": "Show the total orders by region and summarize the regional distribution strategy from the operations report.",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'total'+'orders' (SQL) + 'summarize'+'report' (text). Both keyword sets fire."
+    },
+    {
+      "id": "hybrid_26",
+      "query": "How many customer support cases were opened last week and what does the service level policy say about resolution times?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'customer' (SQL) + 'policy' (text). Hybrid intent is clear."
+    },
+    {
+      "id": "hybrid_27",
+      "query": "What is the sum of marketing spend by channel and what strategy is described in the brand guidelines document?",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'sum' (SQL) + 'document' (text). Classic structured aggregation + document retrieval."
+    },
+    {
+      "id": "hybrid_28",
+      "query": "List the top customers by revenue and summarize what the customer success playbook says about retention.",
+      "expected_route": "hybrid",
+      "difficulty": "easy",
+      "description": "'customers'+'revenue' (SQL) + 'summarize' (text). Both keyword types present."
+    },
+    {
+      "id": "hybrid_29",
+      "query": "Which product categories are experiencing the highest churn and what retention strategies does the product guide document recommend?",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "No SQL keyword for 'highest churn'; 'document' fires text. LLM must infer churn analysis requires structured data."
+    },
+    {
+      "id": "hybrid_30",
+      "query": "Show employee headcount trends by business unit and explain the restructuring plan outlined in the reorganization document.",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "No SQL keyword; 'explain'+'document' (text). LLM must route headcount trends to SQL."
+    },
+    {
+      "id": "hybrid_31",
+      "query": "What is the average time-to-hire by department and what does the recruiting handbook specify about required interview stages?",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "'average' (SQL) only; no text keyword for 'recruiting handbook'. Medium ambiguity."
+    },
+    {
+      "id": "hybrid_32",
+      "query": "How has the NPS score trended quarterly and what does the customer experience report say about improvement initiatives?",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "No SQL keyword; 'report' (text). LLM must infer NPS trending requires a database query."
+    },
+    {
+      "id": "hybrid_33",
+      "query": "Summarize the vendor performance report and show which vendors had the most delivery delays.",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "'summarize'+'report' (text) fire; no SQL keyword for delivery delay analysis. Keyword router predicts 'text' — WRONG."
+    },
+    {
+      "id": "hybrid_34",
+      "query": "What does the context file describe about pricing tiers and how many users are on each tier?",
+      "expected_route": "hybrid",
+      "difficulty": "medium",
+      "description": "'context'+'file' (text) fire; implicit COUNT for user tiers has no SQL keyword. Medium ambiguity."
+    },
+    {
+      "id": "hybrid_35",
+      "query": "Which sales territories are showing declining pipeline and what does the sales enablement guide recommend?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "No keyword matches at all. LLM may route entirely to 'text' given the document reference, missing the SQL intent — WRONG."
+    },
+    {
+      "id": "hybrid_36",
+      "query": "Which supplier contracts are approaching expiration and what does the vendor management policy specify about renewals?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "'policy' (text); no SQL keyword for contract expiration analysis. Hard semantic disambiguation required."
+    },
+    {
+      "id": "hybrid_37",
+      "query": "Which customer cohorts have the lowest lifetime retention and what does the customer lifecycle guide describe?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "No keywords at all. Both cohort analytics (SQL) and lifecycle guide (text) are required; pure semantic routing."
+    },
+    {
+      "id": "hybrid_38",
+      "query": "Show attrition trends across departments and what does the talent strategy document recommend for retention?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "No SQL keyword; 'document' (text) fires. LLM must identify attrition trend analysis as SQL intent."
+    },
+    {
+      "id": "hybrid_39",
+      "query": "Compare lead conversion rates by campaign type and summarize the campaign optimization framework from the marketing document.",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "No SQL keyword for the analytics part; 'summarize'+'document' (text) fire. Mixed-intent without explicit SQL signal."
+    },
+    {
+      "id": "hybrid_40",
+      "query": "Which store formats are most profitable per square foot and what retail strategy is described in the expansion document?",
+      "expected_route": "hybrid",
+      "difficulty": "hard",
+      "description": "No SQL keyword; 'document' (text) fires. Profitability-per-unit analysis requires structured data; LLM must infer."
+    }
+  ]
+}

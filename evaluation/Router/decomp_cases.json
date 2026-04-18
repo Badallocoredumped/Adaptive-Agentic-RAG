@@ -1,0 +1,142 @@
+{
+  "description": "10 complex mixed-intent queries for evaluating decompose_with_zeroshot. Each case defines quality criteria the decomposition must satisfy.",
+  "quality_axes": {
+    "route_validity": "Every sub-task route must be 'sql' or 'text' (never 'hybrid' or other).",
+    "atomicity": "Each sub-task should address a single intent; no sub-task should mix sql+text signals.",
+    "coverage": "The union of sub-task queries must address all key concepts in the original query.",
+    "no_raw_sql": "sub_query fields must be natural-language questions, not raw SQL statements.",
+    "count_ok": "Number of sub-tasks must be between min_subtasks and max_subtasks."
+  },
+  "test_cases": [
+    {
+      "id": "decomp_01",
+      "query": "How many orders were placed last month and what does the return policy document say about eligible items?",
+      "description": "Two clean intents: a COUNT aggregation and a policy document lookup.",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["orders", "return policy", "eligible"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["orders", "how many", "count"],
+        "text_subtask_should_contain": ["return policy", "document", "eligible"]
+      }
+    },
+    {
+      "id": "decomp_02",
+      "query": "What is the total revenue by region for Q3 2023 and can you summarize the regional expansion strategy from the business plan?",
+      "description": "SUM aggregation by region (SQL) + summarization of a strategy document (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["revenue", "region", "expansion strategy", "business plan"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["revenue", "region"],
+        "text_subtask_should_contain": ["expansion strategy", "business plan", "summarize"]
+      }
+    },
+    {
+      "id": "decomp_03",
+      "query": "Count active subscriptions by pricing tier and explain the upgrade process described in the user guide.",
+      "description": "COUNT with GROUP BY (SQL) + procedure explanation from a document (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["subscriptions", "pricing tier", "upgrade process", "user guide"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["subscriptions", "pricing tier", "count"],
+        "text_subtask_should_contain": ["upgrade", "process", "user guide"]
+      }
+    },
+    {
+      "id": "decomp_04",
+      "query": "Which products have the highest profit margin and what does the procurement policy document say about sole-source vendors?",
+      "description": "Ranking query (SQL) + policy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["profit margin", "products", "procurement policy", "sole-source"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["profit margin", "products"],
+        "text_subtask_should_contain": ["procurement policy", "sole-source", "vendor"]
+      }
+    },
+    {
+      "id": "decomp_05",
+      "query": "How many employees had overtime hours last quarter and what does the overtime compensation policy specify about weekend rates?",
+      "description": "Overtime COUNT (SQL) + compensation policy details (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["employees", "overtime", "compensation policy", "weekend rates"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["employees", "overtime"],
+        "text_subtask_should_contain": ["compensation policy", "weekend", "rate"]
+      }
+    },
+    {
+      "id": "decomp_06",
+      "query": "Show the average transaction value by sales channel and summarize the go-to-market strategy described in the Q4 planning document, then also list the top five customers by lifetime value.",
+      "description": "Three intents: AVG by channel (SQL), document summary (text), and TOP-N customer query (SQL). Tests 3-way split.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["transaction value", "sales channel", "go-to-market", "planning document", "customers", "lifetime value"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["transaction", "channel", "customer", "lifetime"],
+        "text_subtask_should_contain": ["go-to-market", "strategy", "planning document"]
+      }
+    },
+    {
+      "id": "decomp_07",
+      "query": "How many support tickets were escalated to tier-2 last week and what are the escalation guidelines described in the SLA document?",
+      "description": "COUNT with filter (SQL) + SLA document retrieval (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["support tickets", "escalated", "tier-2", "escalation guidelines", "SLA"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["support tickets", "escalated", "tier-2"],
+        "text_subtask_should_contain": ["escalation guidelines", "SLA", "document"]
+      }
+    },
+    {
+      "id": "decomp_08",
+      "query": "What percentage of new users converted to paid plans in Q2 and what does the onboarding guide say about the activation checklist?",
+      "description": "Conversion rate calculation (SQL) + onboarding document retrieval (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["new users", "converted", "paid plans", "onboarding guide", "activation checklist"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["users", "converted", "paid plans", "percentage"],
+        "text_subtask_should_contain": ["onboarding", "activation checklist", "guide"]
+      }
+    },
+    {
+      "id": "decomp_09",
+      "query": "Which five branches had the lowest net sales last year and what turnaround strategies does the operations manual recommend for underperforming locations?",
+      "description": "BOTTOM-N ranking (SQL) + strategy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["branches", "net sales", "turnaround strategies", "operations manual", "underperforming"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["branches", "net sales", "lowest"],
+        "text_subtask_should_contain": ["turnaround", "operations manual", "underperforming"]
+      }
+    },
+    {
+      "id": "decomp_10",
+      "query": "How many new hires joined each department this year, what does the HR policy say about probation periods, and which departments had the highest attrition rate last year?",
+      "description": "Three intents: headcount by department (SQL), HR policy lookup (text), attrition ranking (SQL). Tests clean 3-way split.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["new hires", "department", "HR policy", "probation", "attrition"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["new hires", "department", "attrition"],
+        "text_subtask_should_contain": ["HR policy", "probation", "period"]
+      }
+    }
+  ]
+}
