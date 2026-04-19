@@ -96,12 +96,13 @@ class RagRetriever:
         # Deduplicate and map text -> metadata
         doc_map = {}
         text_to_score = {}
-        for doc, distance in results:
+        for doc, distance in faiss_results:
             normalized_text = " ".join(doc.page_content.split())
             if normalized_text not in doc_map:
                 doc_map[normalized_text] = doc
                 text_to_score[normalized_text] = 1.0 / (1.0 + float(distance))
 
+        faiss_ranked = list(doc_map.keys())
         _debug(f"[RAG Pipeline] FAISS returned {len(faiss_ranked)} unique chunks.")
 
         # ── Sparse BM25 retrieval + RRF fusion ───────────────────────────
@@ -138,18 +139,18 @@ class RagRetriever:
             reranked = []
             
             for text in documents_text:
-                score = text_to_score[text]
+                score = text_to_score.get(text, 0.0)
                 if score >= score_threshold:
                     reranked.append({"text": text, "score": score})
                     if len(reranked) >= max_chunks:
                         break
-                        
+
             # Fallback if nothing met threshold
             if not reranked and documents_text:
                 fallback_k = min(top_k, max_chunks)
                 _debug(f"[RAG Pipeline] No chunks passed threshold, falling back to top {fallback_k}.")
                 for text in documents_text[:fallback_k]:
-                    reranked.append({"text": text, "score": text_to_score[text]})
+                    reranked.append({"text": text, "score": text_to_score.get(text, 0.0)})
         
         _debug(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
         payload: list[dict] = []

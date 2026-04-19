@@ -162,8 +162,8 @@ def _ensure_schema_index_exists() -> None:
         with open(texts_path, "r", encoding="utf-8") as f:
             stored = json.load(f)
         live_schema = _load_schema_dict()
-        if len(stored) == len(live_schema):
-            return  # schema hasn't changed (based on table count)
+        if set(stored) == set(get_schema_texts(live_schema)):
+            return  # schema unchanged (tables and columns match)
 
     schema_dict = _load_schema_dict()
     if schema_dict:
@@ -317,7 +317,7 @@ def _generate_sql(query: str, schema_context: str) -> str | None:
 
     user_prompt = (
         f"Schema context (available tables and columns):\n{schema_context}\n\n"
-        f"Task: Write one correct PostgreSQL SELECT query for the following request.\n"
+        f"Task: Write one correct {dialect} SELECT query for the following request.\n"
         f"User request: {query}\n"
         f"SQL:"
     )

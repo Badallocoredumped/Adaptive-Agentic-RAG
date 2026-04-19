@@ -95,12 +95,14 @@ def execute_query(sql: str) -> list[dict[str, Any]]:
     """
     if config.SQLITE_PATH:
         conn = _get_sqlite_conn()
+        cur = conn.cursor()
         try:
-            cur = conn.cursor()
             cur.execute(sql)
             return [dict(row) for row in cur.fetchall()]
         except sqlite3.Error as exc:
             raise RuntimeError(f"SQL execution failed: {exc}\nQuery: {sql}") from exc
+        finally:
+            cur.close()
 
     pool = _get_pg_pool()
     conn = pool.getconn()

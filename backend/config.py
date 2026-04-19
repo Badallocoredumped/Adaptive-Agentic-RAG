@@ -66,8 +66,6 @@ RAG_TOP_K = 5        # number of text chunks to retrieve
 SQL_TOP_K = 3        # number of schema tables to retrieve
 
 
-RAG_FETCH_MULTIPLIER = 2
-RAG_ENABLE_SEMANTIC_RERANK = True
 RAG_RERANKER_MODEL = "BAAI/bge-reranker-large"
 
 # Retrieval mode:
