@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +34,7 @@ class SQLCache:
 
         self.index: faiss.Index | None = None
         self.metadata: list[dict[str, Any]] = []
+        self._lock = threading.Lock()
 
 
 
@@ -83,34 +85,30 @@ class SQLCache:
             return True
         except Exception as e:
             _debug(f"[SQLCache] Failed to load cache: {e}")
+            self.index = None
+            self.metadata = []
             return False
 
     def save_cache(self) -> None:
         """Save index and metadata to disk."""
-        if self.index is None:
-            return
+        with self._lock:
+            if self.index is None:
+                return
 
-        self.index_path.parent.mkdir(parents=True, exist_ok=True)
-        faiss.write_index(self.index, config.win_short_path(self.index_path))
+            self.index_path.parent.mkdir(parents=True, exist_ok=True)
+            faiss.write_index(self.index, config.win_short_path(self.index_path))
 
-        with self.metadata_path.open("w", encoding="utf-8") as f:
-            json.dump(self.metadata, f, ensure_ascii=True, indent=2)
+            with self.metadata_path.open("w", encoding="utf-8") as f:
+                json.dump(self.metadata, f, ensure_ascii=True, indent=2)
 
     def add_to_cache(self, question: str, sql: str, schema: str | None = None) -> None:
         """Add a new question-SQL pair to the cache."""
-        if self.index is None:
-            self.initialize_cache()
-
-        vector = self._embed_texts([question], is_query=True)        
-        # We know self.index is not None here because of initialize_cache above
-        self.index.add(vector)  # type: ignore
-
-        entry = {
-            "question": question,
-            "sql": sql,
-            "schema": schema,
-        }
-        self.metadata.append(entry)
+        vector = self._embed_texts([question], is_query=True)
+        with self._lock:
+            if self.index is None:
+                self.initialize_cache()
+            self.index.add(vector)  # type: ignore
+            self.metadata.append({"question": question, "sql": sql, "schema": schema})
 
     def search_cache(self, query: str, top_k: int = 3) -> list[dict[str, Any]]:
         """Search for similar past questions and return their SQL and scores."""
@@ -158,6 +156,3 @@ class SQLCache:
         else:
             _debug(f"[SQLCache] Decision: MISS | Score: {score:.4f} (Below threshold {threshold:.4f}) | Query: '{query}'")
             return {"hit": False}
-
-
-

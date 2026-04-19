@@ -48,7 +48,7 @@ class ResponseSynthesizer:
             if chat_openai_cls is None:
                 raise RuntimeError("ChatOpenAI class unavailable for synthesis")
             self._llm = chat_openai_cls(
-                model=config.SQL_OPENAI_MODEL,
+                model=config.SYNTHESIS_MODEL,
                 temperature=config.SYNTHESIS_TEMPERATURE,
                 api_key=config.OPENAI_API_KEY,
                 timeout=config.ROUTER_TIMEOUT_SECONDS,

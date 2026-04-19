@@ -97,12 +97,13 @@ class RagRetriever:
         # Deduplicate and map text -> metadata
         doc_map = {}
         text_to_score = {}
-        for doc, distance in results:
+        for doc, distance in faiss_results:
             normalized_text = " ".join(doc.page_content.split())
             if normalized_text not in doc_map:
                 doc_map[normalized_text] = doc
                 text_to_score[normalized_text] = 1.0 / (1.0 + float(distance))
 
+        faiss_ranked = list(doc_map.keys())
         _debug(f"[RAG Pipeline] FAISS returned {len(faiss_ranked)} unique chunks.")
 
         # ── Sparse BM25 retrieval + RRF fusion ───────────────────────────
@@ -136,23 +137,30 @@ class RagRetriever:
             reranked = self._reranker.rerank(query, candidates, top_k=top_k)
         else:
             max_chunks = getattr(config, "RAG_MAX_CHUNKS", 8)
-            score_threshold = getattr(config, "RAG_SCORE_THRESHOLD", 0.5)
-            _debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Applying dynamic sizing (Threshold: {score_threshold}, Max: {max_chunks}).")
+            limit = min(top_k, max_chunks)
             reranked = []
-            
-            for text in documents_text:
-                score = text_to_score[text]
-                if score >= score_threshold:
-                    reranked.append({"text": text, "score": score})
-                    if len(reranked) >= max_chunks:
-                        break
-                        
-            # Fallback if nothing met threshold
-            if not reranked and documents_text:
-                fallback_k = min(top_k, max_chunks)
-                _debug(f"[RAG Pipeline] No chunks passed threshold, falling back to top {fallback_k}.")
-                for text in documents_text[:fallback_k]:
-                    reranked.append({"text": text, "score": text_to_score[text]})
+
+            if retrieval_mode == "hybrid":
+                _debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Hybrid mode bypasses score thresholding. Taking top {limit}.")
+                # Fused results are already sorted by RRF. We just return the top entries.
+                for text in documents_text[:limit]:
+                    reranked.append({"text": text, "score": text_to_score.get(text, 0.0)})
+            else:
+                score_threshold = getattr(config, "RAG_SCORE_THRESHOLD", 0.5)
+                _debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Applying dense threshold (Threshold: {score_threshold}, Max: {limit}).")
+                
+                for text in documents_text:
+                    score = text_to_score.get(text, 0.0)
+                    if score >= score_threshold:
+                        reranked.append({"text": text, "score": score})
+                        if len(reranked) >= limit:
+                            break
+
+                # Fallback if nothing met threshold
+                if not reranked and documents_text:
+                    _debug(f"[RAG Pipeline] No chunks passed threshold, falling back to top {limit}.")
+                    for text in documents_text[:limit]:
+                        reranked.append({"text": text, "score": text_to_score.get(text, 0.0)})
         
         _debug(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
         payload: list[dict] = []

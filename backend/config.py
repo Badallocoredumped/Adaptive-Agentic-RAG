@@ -35,19 +35,24 @@ def win_short_path(path: Path) -> str:
 
 load_dotenv(override=True)  # loads .env, overriding any pre-existing system env vars
 
+# ============================================================================
+# Paths
+# ============================================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 INDEX_DIR = DATA_DIR / "index"
 INDEX_PATH = INDEX_DIR / "faiss.index"
 METADATA_PATH = INDEX_DIR / "chunk_metadata.json"
 
-# ── Database backend ──────────────────────────────────────────────────────────
+# ============================================================================
+# Database
+# ============================================================================
 # Set SQLITE_PATH to a .db file path to use SQLite instead of PostgreSQL.
 # Example: SQLITE_PATH=data/mydata.db
 SQLITE_PATH: str = os.getenv("SQLITE_PATH", "")
 DB_BACKEND: str = "sqlite" if SQLITE_PATH else "postgres"
 
-# ── PostgreSQL connection settings (ignored when SQLITE_PATH is set) ──────────
+# PostgreSQL connection settings (ignored when SQLITE_PATH is set).
 # Set DATABASE_URL to override all individual vars (preferred in production).
 # Format: postgresql://user:password@host:port/dbname
 DATABASE_URL: str = os.getenv("DATABASE_URL", "")
@@ -57,29 +62,40 @@ PG_DB: str        = os.getenv("PG_DB", "adaptive_rag")
 PG_USER: str      = os.getenv("PG_USER", "postgres")
 PG_PASSWORD: str  = os.getenv("PG_PASSWORD", "")
 
+# ============================================================================
+# Embeddings
+# ============================================================================
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-base"
 E5_PREFIX_ENABLED = True
 E5_QUERY_PREFIX = "query: "
 E5_PASSAGE_PREFIX = "passage: "
 
-RAG_TOP_K = 5        # number of text chunks to retrieve
-SQL_TOP_K = 3        # number of schema tables to retrieve
+# RAG_TOP_K (number of retrieved text chunks passed into synthesis)
+RAG_TOP_K = 5
+# SQL_TOP_K (number of schema tables retrieved by TableRAG)
+SQL_TOP_K = 3
 
 
-RAG_FETCH_MULTIPLIER = 4
-RAG_FETCH_K = 0          # explicit fetch count; 0 = use top_k * RAG_FETCH_MULTIPLIER
-RAG_RERANK_POOL = 0      # chunks passed to reranker; 0 = all fetched chunks
-RAG_ENABLE_SEMANTIC_RERANK = True
-RAG_RERANKER_MODEL = "BAAI/bge-reranker-base"
+# ============================================================================
+# Reranker
+# ============================================================================
+RAG_RERANKER_MODEL = "BAAI/bge-reranker-large"
 
+# ============================================================================
+# Retrieval
+# ============================================================================
 # Retrieval mode:
 #   "hybrid" -> BM25 + FAISS fused via Reciprocal Rank Fusion (higher recall)
 #   "faiss"  -> dense-only FAISS cosine search (faster, lower memory)
-RAG_RETRIEVAL_MODE = "hybrid"
+# This setting controls retrieval strategy only.
+RAG_RETRIEVAL_MODE = "faiss"
 RAG_RRF_K = 60             # RRF constant -- only used when RAG_RETRIEVAL_MODE="hybrid"
 
 RAG_FETCH_MULTIPLIER = 20
-RAG_ENABLE_SEMANTIC_RERANK = False
+# Enables an extra semantic reranking pass over retrieved candidates.
+# In hybrid mode, reranking is applied after BM25+FAISS fusion and can increase latency.
+RAG_ENABLE_SEMANTIC_RERANK = True
+# FAISS-only thresholding hint: hybrid mode uses rank fusion, so this should be unset there.
 RAG_SCORE_THRESHOLD = 0.5
 RAG_MAX_CHUNKS = 8
 RAG_PREVIEW_CHARS = 100
@@ -92,6 +108,22 @@ VECTOR_NORMALIZE_L2 = True
 
 RECURSIVE_SEPARATORS = ["\n\n", "\n", ". ", " ", ""]
 
+
+def validate_retrieval_config() -> None:
+    """Optional warning-only checks for retrieval-related settings."""
+    if RAG_RETRIEVAL_MODE == "hybrid" and RAG_SCORE_THRESHOLD is not None:
+        print("WARNING: RAG_SCORE_THRESHOLD should not be used in hybrid mode.")
+    if RAG_RETRIEVAL_MODE not in {"hybrid", "faiss"}:
+        print(
+            f"WARNING: Unknown RAG_RETRIEVAL_MODE='{RAG_RETRIEVAL_MODE}'. "
+            "Expected 'hybrid' or 'faiss'."
+        )
+    if RAG_TOP_K <= 0:
+        print("WARNING: RAG_TOP_K should be > 0 to return retrieval context.")
+
+# ============================================================================
+# Router
+# ============================================================================
 DEFAULT_ROUTE = "text"
 
 # decompose -> LLM decomposes query into routed sub-tasks (project default)
@@ -110,13 +142,19 @@ ROUTER_API_KEY = os.getenv("ROUTER_API_KEY", OPENAI_API_KEY)
 SYNTHESIS_MODEL = ROUTER_MODEL
 SYNTHESIS_TEMPERATURE = 0.0
 
+# ============================================================================
+# SQL
+# ============================================================================
 SQL_OPENAI_MODEL = "gpt-4o-mini"
 SQL_GENERATE_TEMPERATURE = 0.0
 SQL_REFINE_TEMPERATURE = 0.0
 
+# ============================================================================
+# Debug
+# ============================================================================
 # Global runtime debug logging toggle for Router/RAG/TableRAG/ReAct internals.
 # Set False to keep terminal output concise (final answers/errors only).
-DEBUG_LOGGING = False
+DEBUG_LOGGING = True
 
 # Legacy alias kept for compatibility with existing references.
 ROUTER_DEBUG = DEBUG_LOGGING
