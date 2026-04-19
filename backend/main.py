@@ -168,7 +168,18 @@ class AdaptiveAgenticRAGSystem:
             }
 
         futures = [self._executor.submit(run_task, t) for t in sub_tasks]
-        outputs = [f.result() for f in futures]
+        outputs = []
+        for f in futures:
+            try:
+                outputs.append(f.result())
+            except Exception as exc:
+                outputs.append({
+                    "sub_query": None,
+                    "route": "error",
+                    "sql_result": None,
+                    "rag_result": None,
+                    "error": str(exc),
+                })
 
         return outputs
 

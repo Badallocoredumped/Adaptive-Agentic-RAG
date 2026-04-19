@@ -356,16 +356,19 @@ def run_react_sql_agent(
             final_sql = candidate_sql
             final_error = None
             # Parse JSON rows embedded in the observation string
-            try:
-                json_start = observation.index("[")
-                json_part = observation[json_start:].split("\n(truncated")[0]
-                final_rows = json.loads(json_part)
-            except (ValueError, json.JSONDecodeError):
+            if "[" not in observation:
+                final_rows = []
+            else:
                 try:
-                    final_rows = _raw_execute_sql(candidate_sql)
-                except RuntimeError as exc:
-                    final_error = str(exc)
-                    final_rows = []
+                    json_start = observation.index("[")
+                    json_part = observation[json_start:].split("\n(truncated")[0]
+                    final_rows = json.loads(json_part)
+                except (ValueError, json.JSONDecodeError):
+                    try:
+                        final_rows = _raw_execute_sql(candidate_sql)
+                    except RuntimeError as exc:
+                        final_error = str(exc)
+                        final_rows = []
         else:
             if final_sql is None:
                 final_error = observation
