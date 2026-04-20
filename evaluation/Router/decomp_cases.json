@@ -137,6 +137,136 @@
         "sql_subtask_should_contain": ["new hires", "department", "attrition"],
         "text_subtask_should_contain": ["HR policy", "probation", "period"]
       }
+    },
+    {
+      "id": "decomp_11",
+      "query": "How many invoices exceeded the purchase order limit last quarter and what does the financial compliance policy say about pre-approval thresholds?",
+      "description": "COUNT with threshold filter (SQL) + financial policy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["invoices", "purchase order limit", "financial compliance policy", "pre-approval thresholds"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["invoices", "purchase order", "limit"],
+        "text_subtask_should_contain": ["compliance policy", "pre-approval", "threshold"]
+      }
+    },
+    {
+      "id": "decomp_12",
+      "query": "What was the month-over-month growth in API calls over the past year and what does the system architecture document say about rate limiting?",
+      "description": "Time-series growth calculation (SQL) + architecture document retrieval (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["API calls", "month-over-month growth", "system architecture", "rate limiting"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["API calls", "growth", "month"],
+        "text_subtask_should_contain": ["architecture", "rate limiting", "document"]
+      }
+    },
+    {
+      "id": "decomp_13",
+      "query": "How many vendor contracts were signed per country this year and what does the master service agreement template say about governing law clauses?",
+      "description": "COUNT grouped by country (SQL) + MSA template document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["vendor contracts", "country", "master service agreement", "governing law"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["contracts", "country", "signed"],
+        "text_subtask_should_contain": ["master service agreement", "governing law", "clause"]
+      }
+    },
+    {
+      "id": "decomp_14",
+      "query": "What is the average session duration for mobile users versus desktop users and what best practices does the UX research report recommend for improving mobile engagement?",
+      "description": "AVG grouped by device type (SQL) + UX research document retrieval (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["session duration", "mobile", "desktop", "UX research report", "mobile engagement"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["session duration", "mobile", "desktop"],
+        "text_subtask_should_contain": ["UX", "research", "mobile engagement", "best practices"]
+      }
+    },
+    {
+      "id": "decomp_15",
+      "query": "Which customers have more than 3 open support tickets, what does the customer success playbook say about escalation procedures, and what is the average ticket resolution time per product category?",
+      "description": "Three intents: filtered customer list (SQL), playbook document lookup (text), AVG by category (SQL). Tests 3-way split with two distinct SQL operations.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["support tickets", "customers", "customer success playbook", "escalation", "resolution time", "product category"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["support tickets", "customers", "resolution time", "product category"],
+        "text_subtask_should_contain": ["customer success playbook", "escalation", "procedures"]
+      }
+    },
+    {
+      "id": "decomp_16",
+      "query": "How many units of SKU-9812 are currently in stock across all warehouses and what does the product specification sheet say about storage temperature requirements?",
+      "description": "Inventory SUM across locations (SQL) + product specification document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["units", "SKU-9812", "warehouses", "product specification", "storage temperature"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["units", "stock", "warehouse"],
+        "text_subtask_should_contain": ["product specification", "storage", "temperature"]
+      }
+    },
+    {
+      "id": "decomp_17",
+      "query": "Which departments exceeded their Q2 budget and what does the financial governance policy say about mandatory board approval for budget overruns?",
+      "description": "Filter against budget threshold (SQL) + financial governance policy lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["departments", "Q2 budget", "financial governance policy", "board approval", "budget overruns"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["departments", "budget", "exceeded"],
+        "text_subtask_should_contain": ["governance policy", "board approval", "overrun"]
+      }
+    },
+    {
+      "id": "decomp_18",
+      "query": "How many users opted out of email marketing last month and what does the privacy policy say about the right to withdraw consent?",
+      "description": "Opt-out COUNT (SQL) + privacy policy document retrieval (text). Tests GDPR-adjacent domain.",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["users", "opted out", "email marketing", "privacy policy", "withdraw consent"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["users", "opted out", "email marketing"],
+        "text_subtask_should_contain": ["privacy policy", "consent", "withdraw"]
+      }
+    },
+    {
+      "id": "decomp_19",
+      "query": "What are the top 5 most frequent error codes returned by the payment gateway in the last 7 days and what does the integration guide say about handling those error codes gracefully?",
+      "description": "TOP-N frequency ranking (SQL) + integration guide document lookup (text). The phrase 'those error codes' intentionally links both intents.",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["error codes", "payment gateway", "frequency", "integration guide", "handling"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["error codes", "payment gateway", "frequent"],
+        "text_subtask_should_contain": ["integration guide", "error", "handling"]
+      }
+    },
+    {
+      "id": "decomp_20",
+      "query": "What was the total headcount reduction in Q3, what does the restructuring announcement say about severance packages, and which departments maintained full staffing levels throughout the year?",
+      "description": "Three intents: SUM reduction (SQL), restructuring document lookup (text), staffing filter (SQL). Tests 3-way split in a sensitive HR context.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["headcount reduction", "Q3", "restructuring", "severance packages", "departments", "staffing"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["headcount", "reduction", "departments", "staffing"],
+        "text_subtask_should_contain": ["restructuring", "severance", "announcement"]
+      }
     }
   ]
 }

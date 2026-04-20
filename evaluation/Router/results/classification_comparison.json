@@ -1,0 +1,1014 @@
+{
+  "routers": [
+    "keyword",
+    "semantic",
+    "zeroshot"
+  ],
+  "metrics_summary": {
+    "keyword": {
+      "accuracy": 0.5833,
+      "macro_f1": 0.5895,
+      "weighted_f1": 0.5895,
+      "cohen_kappa": 0.375,
+      "mcc": 0.3873,
+      "per_class_f1": {
+        "sql": 0.7143,
+        "text": 0.54,
+        "hybrid": 0.5143
+      }
+    },
+    "semantic": {
+      "accuracy": 0.6333,
+      "macro_f1": 0.613,
+      "weighted_f1": 0.613,
+      "cohen_kappa": 0.45,
+      "mcc": 0.4609,
+      "per_class_f1": {
+        "sql": 0.6947,
+        "text": 0.775,
+        "hybrid": 0.3692
+      }
+    },
+    "zeroshot": {
+      "accuracy": 0.975,
+      "macro_f1": 0.975,
+      "weighted_f1": 0.975,
+      "cohen_kappa": 0.9625,
+      "mcc": 0.9626,
+      "per_class_f1": {
+        "sql": 0.963,
+        "text": 0.962,
+        "hybrid": 1.0
+      }
+    }
+  },
+  "n_disagreements": 69,
+  "disagreements": [
+    {
+      "id": "sql_15",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_16",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_17",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_18",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_19",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "text",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_20",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_21",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "sql",
+        "semantic": "hybrid",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_25",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "sql",
+        "semantic": "hybrid",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_31",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_32",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "sql",
+        "semantic": "hybrid",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_33",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_34",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_35",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_36",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_37",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_38",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_39",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "sql_40",
+      "expected": "sql",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": false
+      }
+    },
+    {
+      "id": "text_09",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "text",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": false
+      }
+    },
+    {
+      "id": "text_10",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "text",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_11",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "hybrid",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_12",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_13",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "hybrid",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_14",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "hybrid",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_15",
+      "expected": "text",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_17",
+      "expected": "text",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_31",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "hybrid",
+        "zeroshot": "sql"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": false
+      }
+    },
+    {
+      "id": "text_32",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "text",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_33",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "hybrid",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_34",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "hybrid",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_35",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "text",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_36",
+      "expected": "text",
+      "predictions": {
+        "keyword": "sql",
+        "semantic": "text",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "text_37",
+      "expected": "text",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "text",
+        "zeroshot": "text"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_01",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_02",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_03",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_04",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_05",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_06",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_08",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "text",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_09",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "sql",
+        "semantic": "text",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_10",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "sql",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_11",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_12",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "text",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_13",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "text",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_14",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "text",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_15",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_16",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_17",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_18",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_19",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_20",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "text",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_21",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_22",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "text",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_23",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_24",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_25",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_28",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "hybrid",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": true,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_29",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_30",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_31",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "sql",
+        "semantic": "text",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_33",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_34",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_35",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_36",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_37",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "sql",
+        "semantic": "sql",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": false,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_38",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_39",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    },
+    {
+      "id": "hybrid_40",
+      "expected": "hybrid",
+      "predictions": {
+        "keyword": "text",
+        "semantic": "hybrid",
+        "zeroshot": "hybrid"
+      },
+      "correct": {
+        "keyword": false,
+        "semantic": true,
+        "zeroshot": true
+      }
+    }
+  ]
+}

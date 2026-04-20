@@ -1,0 +1,1282 @@
+{
+  "router": "semantic",
+  "metrics": {
+    "n_cases": 120,
+    "n_errors": 0,
+    "accuracy": 0.6333,
+    "macro_precision": 0.6183,
+    "macro_recall": 0.6333,
+    "macro_f1": 0.613,
+    "weighted_f1": 0.613,
+    "cohen_kappa": 0.45,
+    "mcc": 0.4609,
+    "per_class": {
+      "sql": {
+        "label": "sql",
+        "tp": 33,
+        "fp": 22,
+        "fn": 7,
+        "support": 40,
+        "precision": 0.6,
+        "recall": 0.825,
+        "f1": 0.6947
+      },
+      "text": {
+        "label": "text",
+        "tp": 31,
+        "fp": 9,
+        "fn": 9,
+        "support": 40,
+        "precision": 0.775,
+        "recall": 0.775,
+        "f1": 0.775
+      },
+      "hybrid": {
+        "label": "hybrid",
+        "tp": 12,
+        "fp": 13,
+        "fn": 28,
+        "support": 40,
+        "precision": 0.48,
+        "recall": 0.3,
+        "f1": 0.3692
+      }
+    },
+    "confusion_matrix": {
+      "sql": {
+        "sql": 33,
+        "text": 1,
+        "hybrid": 6
+      },
+      "text": {
+        "sql": 2,
+        "text": 31,
+        "hybrid": 7
+      },
+      "hybrid": {
+        "sql": 20,
+        "text": 8,
+        "hybrid": 12
+      }
+    },
+    "by_difficulty": {
+      "easy": {
+        "n": 60,
+        "correct": 43,
+        "accuracy": 0.7167
+      },
+      "medium": {
+        "n": 35,
+        "correct": 16,
+        "accuracy": 0.4571
+      },
+      "hard": {
+        "n": 25,
+        "correct": 17,
+        "accuracy": 0.68
+      }
+    }
+  },
+  "per_case": [
+    {
+      "id": "sql_01",
+      "query": "How many customer orders were placed in January?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_02",
+      "query": "What is the total revenue from all product lines?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_03",
+      "query": "Show me the average order value grouped by region.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_04",
+      "query": "Count the active customers in each country.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_05",
+      "query": "What is the sum of all invoices for premium accounts this quarter?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_06",
+      "query": "List all customers who placed orders worth over five hundred dollars.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_07",
+      "query": "How much revenue did each product category generate last year?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_08",
+      "query": "How many rows are in the transactions table right now?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_09",
+      "query": "What is the average number of orders per customer in 2023?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_10",
+      "query": "What is the avg transaction size across all database records?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_11",
+      "query": "Which customer accounts have the highest lifetime spending?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_12",
+      "query": "Show total sales broken down by sales representative for Q3.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_13",
+      "query": "How much did revenue grow quarter over quarter in 2023?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_14",
+      "query": "What SQL query would return all orders placed before noon today?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_15",
+      "query": "Which departments spent the most on vendor contracts last quarter?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_16",
+      "query": "Who are the top five best-performing sales representatives this year?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_17",
+      "query": "What percentage of projects were delivered on time last quarter?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_18",
+      "query": "Which product categories are trending downward in units sold?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_19",
+      "query": "How do employee satisfaction scores vary across office locations?",
+      "expected": "sql",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_20",
+      "query": "Rank all store branches by net profit margin for the past fiscal year.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_21",
+      "query": "Count the number of open invoices in the billing system.",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_22",
+      "query": "What is the total revenue generated by the enterprise segment this quarter?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_23",
+      "query": "How many customer records have a missing phone number?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_24",
+      "query": "What is the average order fulfillment time in days?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_25",
+      "query": "Show the sum of all refunds processed in the last thirty days.",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_26",
+      "query": "How many database entries were inserted yesterday?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_27",
+      "query": "What is the avg number of items per customer order this month?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_28",
+      "query": "List all orders placed by customers in the premium tier last week.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_29",
+      "query": "What is the total count of transactions flagged for fraud review?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_30",
+      "query": "Show the revenue contribution of each sales channel for Q1.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_31",
+      "query": "Which distribution centers had the highest throughput last month?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_32",
+      "query": "How has the average contract renewal rate changed year over year?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_33",
+      "query": "Identify the sales agents who exceeded their quota in every quarter.",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_34",
+      "query": "What fraction of enterprise accounts are currently on an annual plan?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_35",
+      "query": "Show monthly active users broken down by device type.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_36",
+      "query": "Which payment gateways have the highest transaction failure rate?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_37",
+      "query": "What is the cohort-based retention curve for users acquired in Q1?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_38",
+      "query": "Which departments are consistently over budget on headcount?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_39",
+      "query": "Identify underperforming product lines based on gross margin trends.",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "sql_40",
+      "query": "Map the correlation between marketing spend and lead conversion velocity.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_01",
+      "query": "Summarize the key points in the annual report.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_02",
+      "query": "What does the company policy say about overtime and remote work?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_03",
+      "query": "Explain the architecture described in the design document.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_04",
+      "query": "Give me the context around the regulatory changes announced last month.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_05",
+      "query": "What does the PDF file contain about the new onboarding process?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_06",
+      "query": "Provide a summary of the strategic roadmap presented in the deck.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_07",
+      "query": "Explain what the text mentions about machine learning best practices.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_08",
+      "query": "What does the GDPR policy document state about data retention?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_09",
+      "query": "What does the report say about the average employee tenure at the company?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_10",
+      "query": "Explain the total cost breakdown discussed in the proposal document.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_11",
+      "query": "What customer feedback is documented in the user research report?",
+      "expected": "text",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_12",
+      "query": "Summarize the revenue trends discussed in the annual strategy document.",
+      "expected": "text",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_13",
+      "query": "What does the context file say about order processing workflows?",
+      "expected": "text",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_14",
+      "query": "What does the summary document reveal about database performance bottlenecks?",
+      "expected": "text",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_15",
+      "query": "What innovations did the company introduce in 2023?",
+      "expected": "text",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_16",
+      "query": "Describe the founding story and mission of the organization.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_17",
+      "query": "What was discussed in the executive board meeting last quarter?",
+      "expected": "text",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_18",
+      "query": "Tell me about the company's approach to environmental sustainability.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_19",
+      "query": "What are the key themes in the company mission statement?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_20",
+      "query": "Who were the key contributors to the product redesign initiative?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_21",
+      "query": "What does the HR policy document describe about vacation accrual?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_22",
+      "query": "Summarize the key findings in the market research report.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_23",
+      "query": "Explain the deployment process described in the technical runbook document.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_24",
+      "query": "What does the context file reveal about the product vision?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_25",
+      "query": "Provide a summary of the legal terms outlined in the master service agreement.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_26",
+      "query": "What does the PDF document say about the warranty and return conditions?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_27",
+      "query": "What does the policy manual state about data privacy obligations?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_28",
+      "query": "Explain the incident response procedures documented in the security playbook.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_29",
+      "query": "What does the annual report text say about corporate governance?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_30",
+      "query": "Give me context from the release notes about the new authentication feature.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_31",
+      "query": "What does the report indicate about the average customer satisfaction score?",
+      "expected": "text",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_32",
+      "query": "Summarize the total investment thesis described in the fund strategy document.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_33",
+      "query": "What does the context file say about order processing delays?",
+      "expected": "text",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_34",
+      "query": "Explain the revenue sharing model documented in the partnership agreement.",
+      "expected": "text",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_35",
+      "query": "What does the summary document say about database performance improvements?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_36",
+      "query": "What customer service philosophy is described in the brand guidelines?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_37",
+      "query": "What does the report say about average transaction processing delays?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_38",
+      "query": "What were the main conclusions from the executive strategy retreat?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_39",
+      "query": "What does the company believe about its competitive differentiation?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "text_40",
+      "query": "What milestones are planned for the product roadmap over the next two years?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_01",
+      "query": "How many customer orders were placed last month and what does the return policy say?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_02",
+      "query": "What is the total revenue for Q3 and can you summarize the investor report?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_03",
+      "query": "Count active users by plan and explain the subscription tiers from the pricing document.",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_04",
+      "query": "Show the average order value per segment and describe the segmentation policy.",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_05",
+      "query": "Which customers have the highest total spend and what does the loyalty program document say about tiers?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_06",
+      "query": "What is the sum of sales by region and please summarize the regional expansion strategy?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_07",
+      "query": "Show revenue breakdown by product and explain the pricing policy.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_08",
+      "query": "Show a database summary of user counts and give the context from the onboarding file.",
+      "expected": "hybrid",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_09",
+      "query": "How many total employees are in each department and what does the HR handbook say about benefits?",
+      "expected": "hybrid",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_10",
+      "query": "What are the top customer segments by order volume and what marketing strategies are described in the playbook?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_11",
+      "query": "Show average transaction value by channel and what acquisition strategy is outlined in the growth document.",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_12",
+      "query": "Explain the onboarding process described in the guide and also show how many new hires joined per quarter.",
+      "expected": "hybrid",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_13",
+      "query": "Summarize the compliance report and tell me how many violations were logged this year.",
+      "expected": "hybrid",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_14",
+      "query": "What context does the SLA file provide and how many tickets were escalated last week?",
+      "expected": "hybrid",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_15",
+      "query": "Which geographic regions have the lowest retention rates and what strategies are recommended in the retention playbook?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_16",
+      "query": "Who generated the most sales last quarter and what commission guidelines apply to top performers?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_17",
+      "query": "Which warehouses have critically low stock levels and what does the replenishment procedure specify?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_18",
+      "query": "Compare employee performance ratings across teams and summarize what the performance review guidelines recommend.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_19",
+      "query": "Which marketing campaigns drove the highest conversion rates and what does the brand guidelines document say?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_20",
+      "query": "Show me user activity metrics for the past 90 days and explain the privacy implications from the policy.",
+      "expected": "hybrid",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_21",
+      "query": "How many items are in the inventory database and what does the stock management policy specify?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_22",
+      "query": "What is the total headcount by department and can you summarize the org structure from the company document?",
+      "expected": "hybrid",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_23",
+      "query": "Count active users by subscription tier and explain the terms described in the service agreement document.",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_24",
+      "query": "What is the average revenue per user and what does the monetization strategy document describe?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_25",
+      "query": "Show the total orders by region and summarize the regional distribution strategy from the operations report.",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_26",
+      "query": "How many customer support cases were opened last week and what does the service level policy say about resolution times?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_27",
+      "query": "What is the sum of marketing spend by channel and what strategy is described in the brand guidelines document?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_28",
+      "query": "List the top customers by revenue and summarize what the customer success playbook says about retention.",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "easy",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_29",
+      "query": "Which product categories are experiencing the highest churn and what retention strategies does the product guide document recommend?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_30",
+      "query": "Show employee headcount trends by business unit and explain the restructuring plan outlined in the reorganization document.",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_31",
+      "query": "What is the average time-to-hire by department and what does the recruiting handbook specify about required interview stages?",
+      "expected": "hybrid",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_32",
+      "query": "How has the NPS score trended quarterly and what does the customer experience report say about improvement initiatives?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_33",
+      "query": "Summarize the vendor performance report and show which vendors had the most delivery delays.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_34",
+      "query": "What does the context file describe about pricing tiers and how many users are on each tier?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_35",
+      "query": "Which sales territories are showing declining pipeline and what does the sales enablement guide recommend?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_36",
+      "query": "Which supplier contracts are approaching expiration and what does the vendor management policy specify about renewals?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_37",
+      "query": "Which customer cohorts have the lowest lifetime retention and what does the customer lifecycle guide describe?",
+      "expected": "hybrid",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_38",
+      "query": "Show attrition trends across departments and what does the talent strategy document recommend for retention?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_39",
+      "query": "Compare lead conversion rates by campaign type and summarize the campaign optimization framework from the marketing document.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    },
+    {
+      "id": "hybrid_40",
+      "query": "Which store formats are most profitable per square foot and what retail strategy is described in the expansion document?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [],
+      "error": null
+    }
+  ]
+}

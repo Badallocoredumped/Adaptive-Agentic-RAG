@@ -87,6 +87,7 @@ class AdaptiveAgenticRAGSystem:
         decompose : LLM decomposes query into routed sub-tasks (project default).
         llm       : Local LLM classifies the whole query into a single route.
         keyword   : Rule-based keyword matching into a single route (fallback).
+        semantic  : Cosine similarity to seed query embeddings; no LLM required.
         """
         self._debug(f"run_query() mode={config.ROUTER_MODE}, query={user_query!r}")
 
@@ -108,6 +109,8 @@ class AdaptiveAgenticRAGSystem:
         # --- single-route modes ---
         if config.ROUTER_MODE == "llm":
             route = self.router.route_with_llm(user_query)
+        elif config.ROUTER_MODE == "semantic":
+            route = self.router.route_with_semantic(user_query)
         else:  # "keyword" or any unrecognised value
             route = self.router.route(user_query)
 
