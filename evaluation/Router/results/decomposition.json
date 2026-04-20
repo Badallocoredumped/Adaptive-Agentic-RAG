@@ -1,0 +1,450 @@
+{
+  "router": "zeroshot",
+  "summary": {
+    "n_cases": 20,
+    "avg_quality": 0.9537,
+    "avg_route_validity": 1.0,
+    "avg_atomicity": 0.85,
+    "avg_coverage": 0.99,
+    "avg_no_raw_sql": 0.975,
+    "count_ok_rate": 1.0
+  },
+  "per_case": [
+    {
+      "id": "decomp_01",
+      "query": "How many orders were placed last month and what does the return policy document say about eligible items?",
+      "subtasks": [
+        {
+          "sub_query": "How many orders were placed last month?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the return policy document say about eligible items?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_02",
+      "query": "What is the total revenue by region for Q3 2023 and can you summarize the regional expansion strategy from the business plan?",
+      "subtasks": [
+        {
+          "sub_query": "What is the total revenue by region for Q3 2023?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Can you summarize the regional expansion strategy from the business plan?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 0.5,
+      "count_ok": true,
+      "quality_score": 0.875,
+      "error": null
+    },
+    {
+      "id": "decomp_03",
+      "query": "Count active subscriptions by pricing tier and explain the upgrade process described in the user guide.",
+      "subtasks": [
+        {
+          "sub_query": "Count the number of active subscriptions for each pricing tier.",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Explain the upgrade process as described in the user guide.",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_04",
+      "query": "Which products have the highest profit margin and what does the procurement policy document say about sole-source vendors?",
+      "subtasks": [
+        {
+          "sub_query": "What are the products with the highest profit margin?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the procurement policy document say about sole-source vendors?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_05",
+      "query": "How many employees had overtime hours last quarter and what does the overtime compensation policy specify about weekend rates?",
+      "subtasks": [
+        {
+          "sub_query": "How many employees had overtime hours last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the overtime compensation policy specify about weekend rates?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_06",
+      "query": "Show the average transaction value by sales channel and summarize the go-to-market strategy described in the Q4 planning document, then also list the top five customers by lifetime value.",
+      "subtasks": [
+        {
+          "sub_query": "Show the average transaction value by sales channel.",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Summarize the go-to-market strategy described in the Q4 planning document.",
+          "route": "text"
+        },
+        {
+          "sub_query": "List the top five customers by lifetime value.",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_07",
+      "query": "How many support tickets were escalated to tier-2 last week and what are the escalation guidelines described in the SLA document?",
+      "subtasks": [
+        {
+          "sub_query": "How many support tickets were escalated to tier-2 last week?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What are the escalation guidelines described in the SLA document?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_08",
+      "query": "What percentage of new users converted to paid plans in Q2 and what does the onboarding guide say about the activation checklist?",
+      "subtasks": [
+        {
+          "sub_query": "What percentage of new users converted to paid plans in Q2?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the onboarding guide say about the activation checklist?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_09",
+      "query": "Which five branches had the lowest net sales last year and what turnaround strategies does the operations manual recommend for underperforming locations?",
+      "subtasks": [
+        {
+          "sub_query": "Which five branches had the lowest net sales last year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What turnaround strategies does the operations manual recommend for underperforming locations?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_10",
+      "query": "How many new hires joined each department this year, what does the HR policy say about probation periods, and which departments had the highest attrition rate last year?",
+      "subtasks": [
+        {
+          "sub_query": "How many new hires joined each department this year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the HR policy say about probation periods?",
+          "route": "text"
+        },
+        {
+          "sub_query": "Which departments had the highest attrition rate last year?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.8,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.95,
+      "error": null
+    },
+    {
+      "id": "decomp_11",
+      "query": "How many invoices exceeded the purchase order limit last quarter and what does the financial compliance policy say about pre-approval thresholds?",
+      "subtasks": [
+        {
+          "sub_query": "How many invoices exceeded the purchase order limit last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the financial compliance policy say about pre-approval thresholds?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_12",
+      "query": "What was the month-over-month growth in API calls over the past year and what does the system architecture document say about rate limiting?",
+      "subtasks": [
+        {
+          "sub_query": "What was the month-over-month growth in API calls over the past year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the system architecture document say about rate limiting?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_13",
+      "query": "How many vendor contracts were signed per country this year and what does the master service agreement template say about governing law clauses?",
+      "subtasks": [
+        {
+          "sub_query": "How many vendor contracts were signed per country this year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the master service agreement template say about governing law clauses?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_14",
+      "query": "What is the average session duration for mobile users versus desktop users and what best practices does the UX research report recommend for improving mobile engagement?",
+      "subtasks": [
+        {
+          "sub_query": "What is the average session duration for mobile users versus desktop users?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What best practices does the UX research report recommend for improving mobile engagement?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_15",
+      "query": "Which customers have more than 3 open support tickets, what does the customer success playbook say about escalation procedures, and what is the average ticket resolution time per product category?",
+      "subtasks": [
+        {
+          "sub_query": "Which customers have more than 3 open support tickets?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the customer success playbook say about escalation procedures?",
+          "route": "text"
+        },
+        {
+          "sub_query": "What is the average ticket resolution time per product category?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.8,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.95,
+      "error": null
+    },
+    {
+      "id": "decomp_16",
+      "query": "How many units of SKU-9812 are currently in stock across all warehouses and what does the product specification sheet say about storage temperature requirements?",
+      "subtasks": [
+        {
+          "sub_query": "How many units of SKU-9812 are currently in stock across all warehouses?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the product specification sheet say about storage temperature requirements for SKU-9812?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_17",
+      "query": "Which departments exceeded their Q2 budget and what does the financial governance policy say about mandatory board approval for budget overruns?",
+      "subtasks": [
+        {
+          "sub_query": "Which departments exceeded their Q2 budget?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the financial governance policy say about mandatory board approval for budget overruns?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_18",
+      "query": "How many users opted out of email marketing last month and what does the privacy policy say about the right to withdraw consent?",
+      "subtasks": [
+        {
+          "sub_query": "How many users opted out of email marketing last month?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the privacy policy say about the right to withdraw consent?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_19",
+      "query": "What are the top 5 most frequent error codes returned by the payment gateway in the last 7 days and what does the integration guide say about handling those error codes gracefully?",
+      "subtasks": [
+        {
+          "sub_query": "What are the top 5 most frequent error codes returned by the payment gateway in the last 7 days?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the integration guide say about handling error codes gracefully?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 0.8,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.875,
+      "error": null
+    },
+    {
+      "id": "decomp_20",
+      "query": "What was the total headcount reduction in Q3, what does the restructuring announcement say about severance packages, and which departments maintained full staffing levels throughout the year?",
+      "subtasks": [
+        {
+          "sub_query": "What was the total headcount reduction in Q3?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the restructuring announcement say about severance packages?",
+          "route": "text"
+        },
+        {
+          "sub_query": "Which departments maintained full staffing levels throughout the year?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.8,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.95,
+      "error": null
+    }
+  ]
+}
