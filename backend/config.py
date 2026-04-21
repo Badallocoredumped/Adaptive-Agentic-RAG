@@ -58,9 +58,9 @@ DB_BACKEND: str = "sqlite" if SQLITE_PATH else "postgres"
 DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 PG_HOST: str      = os.getenv("PG_HOST", "localhost")
 PG_PORT: int      = int(os.getenv("PG_PORT", "5432"))
-PG_DB: str        = os.getenv("PG_DB", "adaptive_rag")
+PG_DB: str        = os.getenv("PG_DB", "fintech")
 PG_USER: str      = os.getenv("PG_USER", "postgres")
-PG_PASSWORD: str  = os.getenv("PG_PASSWORD", "")
+PG_PASSWORD: str  = os.getenv("PG_PASSWORD", "admin")
 
 # ============================================================================
 # Embeddings
@@ -73,7 +73,7 @@ E5_PASSAGE_PREFIX = "passage: "
 # RAG_TOP_K (number of retrieved text chunks passed into synthesis)
 RAG_TOP_K = 5
 # SQL_TOP_K (number of schema tables retrieved by TableRAG)
-SQL_TOP_K = 3
+SQL_TOP_K = 5
 
 
 # ============================================================================

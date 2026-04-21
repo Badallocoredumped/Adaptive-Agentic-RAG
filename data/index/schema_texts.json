@@ -1,6 +1,18 @@
 [
-  "Table: Customers | Columns: CustomerID, Country",
-  "Table: OrderDetails | Columns: InvoiceNo, StockCode, Quantity, UnitPrice",
-  "Table: Orders | Columns: InvoiceNo, CustomerID, InvoiceDate, ShipCountry",
-  "Table: Products | Columns: StockCode, Description, UnitPrice"
+  "Table account_types with columns id (integer), name (text), interest_rate (numeric), min_balance (numeric), description (text)",
+  "Table accounts with columns id (integer), customer_id (integer), account_type_id (integer), account_number (text), balance (numeric), currency (text), status (text), opened_date (date), last_activity (date) \u2014 references: customers(id), account_types(id)",
+  "Table assets with columns id (integer), symbol (text), name (text), asset_class (text), sector (text), currency (text), listed_exchange (text)",
+  "Table branches with columns id (integer), name (text), city (text), address (text), opened_date (date)",
+  "Table customers with columns id (integer), full_name (text), email (text), phone (text), national_id (text), date_of_birth (date), nationality (text), city (text), branch_id (integer), relationship_manager_id (integer), joined_date (date), is_active (boolean) \u2014 references: branches(id), employees(id)",
+  "Table employees with columns id (integer), full_name (text), role (text), branch_id (integer), salary (numeric), hire_date (date), is_active (boolean) \u2014 references: branches(id)",
+  "Table kyc_records with columns id (integer), customer_id (integer), kyc_status (text), verification_date (date), expiry_date (date), document_type (text), verified_by (text), notes (text) \u2014 references: customers(id)",
+  "Table loan_payments with columns id (integer), loan_id (integer), amount_paid (numeric), principal_portion (numeric), interest_portion (numeric), payment_date (date), payment_method (text), status (text), days_late (integer) \u2014 references: loans(id)",
+  "Table loan_types with columns id (integer), name (text), interest_rate (numeric), max_amount (numeric), max_tenure_months (integer), description (text)",
+  "Table loans with columns id (integer), customer_id (integer), loan_type_id (integer), branch_id (integer), disbursement_account_id (integer), principal (numeric), outstanding_balance (numeric), interest_rate (numeric), tenure_months (integer), monthly_installment (numeric), disbursement_date (date), maturity_date (date), status (text), collateral (text) \u2014 references: customers(id), loan_types(id), branches(id), accounts(id)",
+  "Table market_prices with columns id (integer), asset_id (integer), price (numeric), price_date (date), change_pct (numeric), volume (bigint) \u2014 references: assets(id)",
+  "Table portfolio_holdings with columns id (integer), portfolio_id (integer), asset_id (integer), quantity (numeric), avg_buy_price (numeric), current_value (numeric), unrealized_pnl (numeric), purchase_date (date) \u2014 references: portfolios(id), assets(id)",
+  "Table portfolios with columns id (integer), customer_id (integer), funding_account_id (integer), name (text), risk_profile (text), inception_date (date), total_value (numeric), currency (text), is_active (boolean) \u2014 references: customers(id), accounts(id)",
+  "Table risk_assessments with columns id (integer), customer_id (integer), loan_id (integer), assessment_date (date), credit_score (integer), risk_tier (text), debt_to_income (numeric), default_probability (numeric), assessment_notes (text) \u2014 references: customers(id), loans(id)",
+  "Table transaction_categories with columns id (integer), name (text), type (text)",
+  "Table transactions with columns id (integer), account_id (integer), category_id (integer), loan_id (integer), amount (numeric), direction (text), balance_after (numeric), description (text), channel (text), reference_no (text), transaction_date (date), status (text) \u2014 references: accounts(id), transaction_categories(id), loans(id)"
 ]

@@ -1,0 +1,34 @@
+[
+  {
+    "question": "What is the total revenue from all completed orders?",
+    "sql": "SELECT SUM(amount) AS total_revenue FROM orders WHERE status = 'completed';"
+  },
+  {
+    "question": "How many orders does each customer have?",
+    "sql": "SELECT c.name, COUNT(o.id) AS order_count FROM customers c LEFT JOIN orders o ON c.id = o.customer_id GROUP BY c.id, c.name ORDER BY order_count DESC;"
+  },
+  {
+    "question": "Which customers are from Cairo?",
+    "sql": "SELECT id, name, city FROM customers WHERE city = 'Cairo';"
+  },
+  {
+    "question": "What is the average salary per department?",
+    "sql": "SELECT d.name AS department, AVG(e.salary) AS avg_salary FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name ORDER BY avg_salary DESC;"
+  },
+  {
+    "question": "Show all open high-priority support tickets with customer names",
+    "sql": "SELECT st.id, c.name AS customer, st.subject, st.priority, st.status FROM support_tickets st JOIN customers c ON st.customer_id = c.id WHERE st.status = 'open' AND st.priority = 'high';"
+  },
+  {
+    "question": "What is the most viewed blog post?",
+    "sql": "SELECT title, author, views FROM blog_posts ORDER BY views DESC LIMIT 1;"
+  },
+  {
+    "question": "Which warehouse has the most total stock?",
+    "sql": "SELECT warehouse, SUM(stock_qty) AS total_stock FROM inventory GROUP BY warehouse ORDER BY total_stock DESC LIMIT 1;"
+  },
+  {
+    "question": "What is the total revenue per city?",
+    "sql": "SELECT c.city, SUM(o.amount) AS total_revenue FROM orders o JOIN customers c ON o.customer_id = c.id WHERE o.status = 'completed' GROUP BY c.city ORDER BY total_revenue DESC;"
+  }
+]
