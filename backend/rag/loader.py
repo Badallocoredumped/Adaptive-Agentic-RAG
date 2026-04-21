@@ -30,46 +30,76 @@ class DocumentLoader:
 
         def _load_single(raw_path: str) -> Document | None:
             path = Path(raw_path)
-            if not path.exists() or not path.is_file():
-                return None
+            try:
+                if not path.exists() or not path.is_file():
+                    print(f"[WARNING] Failed to load {raw_path}: File does not exist or is not a file.")
+                    return None
 
-            if path.suffix.lower() == ".pdf":
-                text = self._read_pdf(path)
-            elif path.suffix.lower() in self.SUPPORTED_TEXT_EXTENSIONS:
-                text = self._read_text(path)
-            else:
-                return None
+                if path.suffix.lower() == ".pdf":
+                    text = self._read_pdf(path)
+                elif path.suffix.lower() in self.SUPPORTED_TEXT_EXTENSIONS:
+                    text = self._read_text(path)
+                else:
+                    print(f"[WARNING] Failed to load {raw_path}: Unsupported extension '{path.suffix}'.")
+                    return None
 
-            if text.strip():
-                domain = self._infer_domain(path)
-                return Document(
-                    text=text,
-                    source=str(path),
-                    metadata={
-                        "filename": path.name,
-                        "extension": path.suffix.lower(),
-                        "domain": domain,
-                    },
-                )
-            return None
+                if text.strip():
+                    domain = self._infer_domain(path, text)
+                    return Document(
+                        text=text,
+                        source=str(path),
+                        metadata={
+                            "filename": path.name,
+                            "extension": path.suffix.lower(),
+                            "domain": domain,
+                        },
+                    )
+                else:
+                    print(f"[WARNING] Failed to load {raw_path}: Document is empty.")
+                    return None
+            except Exception as e:
+                print(f"[WARNING] Failed to load {raw_path}: {e}")
+                return None
 
         # Load concurrently using standard ThreadPoolExecutor limits
         with ThreadPoolExecutor() as executor:
-            futures = [executor.submit(_load_single, str(p)) for p in paths]
-            for future in as_completed(futures):
-                doc = future.result()
-                if doc is not None:
-                    documents.append(doc)
+            # executor.map yields results strictly in the original order of paths
+            results = list(executor.map(_load_single, paths))
 
+        success_count = 0
+        failure_count = 0
+        for doc in results:
+            if doc is not None:
+                documents.append(doc)
+                success_count += 1
+            else:
+                failure_count += 1
+
+        print(f"[INFO] Ingestion complete: {success_count} succeeded, {failure_count} failed")
         return documents
 
     @staticmethod
-    def _infer_domain(path: Path) -> str:
+    def _infer_domain(path: Path, text: str) -> str:
         name = path.name.lower()
         for hint, domain in config.FILENAME_DOMAIN_HINTS.items():
             if hint in name:
                 return domain
-        return "general"
+                
+        # Fallback to content-based keyword matching (first 1000 chars)
+        import re
+        text_lower = text[:1000].lower()
+        tokens = set(re.findall(r"\b\w+\b", text_lower))
+        
+        best_domain = "general"
+        best_hits = 0
+        
+        for domain, keywords in config.DOMAIN_KEYWORDS.items():
+            hits = sum(1 for keyword in keywords if keyword in tokens)
+            if hits > best_hits:
+                best_domain = domain
+                best_hits = hits
+
+        return best_domain
 
     @staticmethod
     def _read_text(path: Path) -> str:
