@@ -1,12 +1,12 @@
 {
   "router": "zeroshot",
   "summary": {
-    "n_cases": 20,
-    "avg_quality": 0.9537,
+    "n_cases": 50,
+    "avg_quality": 0.9525,
     "avg_route_validity": 1.0,
-    "avg_atomicity": 0.85,
-    "avg_coverage": 0.99,
-    "avg_no_raw_sql": 0.975,
+    "avg_atomicity": 0.844,
+    "avg_coverage": 0.976,
+    "avg_no_raw_sql": 0.99,
     "count_ok_rate": 1.0
   },
   "per_case": [
@@ -57,7 +57,7 @@
       "query": "Count active subscriptions by pricing tier and explain the upgrade process described in the user guide.",
       "subtasks": [
         {
-          "sub_query": "Count the number of active subscriptions for each pricing tier.",
+          "sub_query": "Count the number of active subscriptions grouped by pricing tier.",
           "route": "sql"
         },
         {
@@ -78,7 +78,7 @@
       "query": "Which products have the highest profit margin and what does the procurement policy document say about sole-source vendors?",
       "subtasks": [
         {
-          "sub_query": "What are the products with the highest profit margin?",
+          "sub_query": "Which products have the highest profit margin?",
           "route": "sql"
         },
         {
@@ -435,6 +435,664 @@
         },
         {
           "sub_query": "Which departments maintained full staffing levels throughout the year?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.8,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.95,
+      "error": null
+    },
+    {
+      "id": "decomp_21",
+      "query": "Which marketing campaigns generated the most leads last quarter and what does the brand guidelines document say about approved messaging channels?",
+      "subtasks": [
+        {
+          "sub_query": "Which marketing campaigns generated the most leads last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the brand guidelines document say about approved messaging channels?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_22",
+      "query": "What is the average NPS score by customer tier this quarter and what does the customer experience strategy document say about improving detractor outcomes?",
+      "subtasks": [
+        {
+          "sub_query": "What is the average NPS score by customer tier this quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the customer experience strategy document say about improving detractor outcomes?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_23",
+      "query": "What was the refund rate for each product category in Q1 and what does the returns policy document specify about the conditions for a full refund?",
+      "subtasks": [
+        {
+          "sub_query": "What was the refund rate for each product category in Q1?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the returns policy document specify about the conditions for a full refund?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 0.75,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9,
+      "error": null
+    },
+    {
+      "id": "decomp_24",
+      "query": "How has the monthly churn rate changed for each subscription tier over the past year and what does the retention strategy guide recommend for reducing voluntary churn?",
+      "subtasks": [
+        {
+          "sub_query": "What is the monthly churn rate for each subscription tier over the past year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the retention strategy guide recommend for reducing voluntary churn?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_25",
+      "query": "How many leads were generated per acquisition channel last month, what does the sales playbook describe about lead qualification criteria, and what was the lead-to-opportunity conversion rate by channel?",
+      "subtasks": [
+        {
+          "sub_query": "How many leads were generated per acquisition channel last month?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the sales playbook describe about lead qualification criteria?",
+          "route": "text"
+        },
+        {
+          "sub_query": "What was the lead-to-opportunity conversion rate by channel?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_26",
+      "query": "How many shipments were delivered late last month and what does the carrier SLA document specify about penalty clauses for late delivery?",
+      "subtasks": [
+        {
+          "sub_query": "How many shipments were delivered late last month?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the carrier SLA document specify about penalty clauses for late delivery?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_27",
+      "query": "Which ten products had the highest unit sales volume this quarter and what does the product roadmap document describe about planned enhancements for those product lines?",
+      "subtasks": [
+        {
+          "sub_query": "Which ten products had the highest unit sales volume this quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the product roadmap document describe about planned enhancements for those product lines?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_28",
+      "query": "What fraction of employees completed the mandatory compliance training this year, what does the L&D policy document say about training completion deadlines, and which departments have the lowest completion rates?",
+      "subtasks": [
+        {
+          "sub_query": "What fraction of employees completed the mandatory compliance training this year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the L&D policy document say about training completion deadlines?",
+          "route": "text"
+        },
+        {
+          "sub_query": "Which departments have the lowest completion rates?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.8,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.95,
+      "error": null
+    },
+    {
+      "id": "decomp_29",
+      "query": "How many software licenses are currently unassigned in the asset management system and what does the software procurement policy say about license utilization thresholds?",
+      "subtasks": [
+        {
+          "sub_query": "How many software licenses are currently unassigned in the asset management system?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the software procurement policy say about license utilization thresholds?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_30",
+      "query": "How many P1 incidents were opened and resolved each month this year and what does the incident response playbook describe about post-mortem requirements for P1 events?",
+      "subtasks": [
+        {
+          "sub_query": "How many P1 incidents were opened and resolved each month this year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the incident response playbook describe about post-mortem requirements for P1 events?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 0.75,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.8625,
+      "error": null
+    },
+    {
+      "id": "decomp_31",
+      "query": "What was the total revenue generated through each partner channel last quarter and what does the channel partner agreement document specify about revenue sharing arrangements?",
+      "subtasks": [
+        {
+          "sub_query": "What was the total revenue generated through each partner channel last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the channel partner agreement document specify about revenue sharing arrangements?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_32",
+      "query": "How many bugs were logged per severity level in the last sprint and what does the quality assurance policy document define as the acceptable defect density threshold?",
+      "subtasks": [
+        {
+          "sub_query": "How many bugs were logged per severity level in the last sprint?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the quality assurance policy document define as the acceptable defect density threshold?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_33",
+      "query": "How many trial accounts are currently active, what does the product pitch deck describe about key value propositions, and what percentage of trials converted to paid plans last quarter?",
+      "subtasks": [
+        {
+          "sub_query": "How many trial accounts are currently active?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the product pitch deck describe about key value propositions?",
+          "route": "text"
+        },
+        {
+          "sub_query": "What percentage of trials converted to paid plans last quarter?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_34",
+      "query": "What is the average cost per hire for each department this year and what does the talent acquisition policy document say about constraints on using external recruiting agencies?",
+      "subtasks": [
+        {
+          "sub_query": "What is the average cost per hire for each department this year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the talent acquisition policy document say about constraints on using external recruiting agencies?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_35",
+      "query": "What is the average uptime percentage per server cluster over the last quarter and what does the disaster recovery plan describe about RTO and RPO targets?",
+      "subtasks": [
+        {
+          "sub_query": "What is the average uptime percentage per server cluster over the last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the disaster recovery plan describe about RTO and RPO targets?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_36",
+      "query": "What is the customer acquisition cost broken down by pricing tier and what does the pricing strategy document describe about tier eligibility and positioning?",
+      "subtasks": [
+        {
+          "sub_query": "What is the customer acquisition cost broken down by pricing tier?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the pricing strategy document describe about tier eligibility and positioning?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_37",
+      "query": "How many contracts are up for renewal in the next 90 days, what does the contract renewal procedure document specify about required notice periods, and which accounts are at the highest risk of not renewing?",
+      "subtasks": [
+        {
+          "sub_query": "How many contracts are up for renewal in the next 90 days?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the contract renewal procedure document specify about required notice periods?",
+          "route": "text"
+        },
+        {
+          "sub_query": "Which accounts are at the highest risk of not renewing?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.8,
+      "coverage": 0.8333,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9083,
+      "error": null
+    },
+    {
+      "id": "decomp_38",
+      "query": "What was the defect rate per production line over the last six months and what does the quality management policy say about mandatory corrective actions when defect rates exceed thresholds?",
+      "subtasks": [
+        {
+          "sub_query": "What was the defect rate per production line over the last six months?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the quality management policy say about mandatory corrective actions when defect rates exceed thresholds?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_39",
+      "query": "How has social media engagement (likes, shares, comments) trended per platform over the last quarter and what does the social media content strategy document say about optimal posting frequency?",
+      "subtasks": [
+        {
+          "sub_query": "What are the trends in social media engagement (likes, shares, comments) per platform over the last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the social media content strategy document say about optimal posting frequency?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_40",
+      "query": "What is the cross-sell attach rate by product bundle this quarter and what does the sales enablement guide describe about recommended cross-sell conversation scripts?",
+      "subtasks": [
+        {
+          "sub_query": "What is the cross-sell attach rate by product bundle this quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the sales enablement guide describe about recommended cross-sell conversation scripts?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_41",
+      "query": "How many expense reports were flagged as out-of-policy last quarter, what does the expense reimbursement policy document specify about non-compliant submissions, and who were the top five employees by total flagged expense amount?",
+      "subtasks": [
+        {
+          "sub_query": "How many expense reports were flagged as out-of-policy last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the expense reimbursement policy document specify about non-compliant submissions?",
+          "route": "text"
+        },
+        {
+          "sub_query": "Who were the top five employees by total flagged expense amount?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.8,
+      "coverage": 0.8333,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9083,
+      "error": null
+    },
+    {
+      "id": "decomp_42",
+      "query": "How many partner deal registrations were submitted and approved per region last quarter and what does the partner program agreement document say about deal registration exclusivity rules?",
+      "subtasks": [
+        {
+          "sub_query": "How many partner deal registrations were submitted and approved per region last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the partner program agreement document say about deal registration exclusivity rules?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_43",
+      "query": "What is the average number of days to close a deal for each sales representative this year and what does the sales methodology document describe about the stages that typically cause the longest delays?",
+      "subtasks": [
+        {
+          "sub_query": "What is the average number of days to close a deal for each sales representative this year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the sales methodology document describe about the stages that typically cause the longest delays?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_44",
+      "query": "What percentage of active users have enabled the new dashboard feature since rollout and what do the release notes describe about the feature's intended use cases and known limitations?",
+      "subtasks": [
+        {
+          "sub_query": "What percentage of active users have enabled the new dashboard feature since rollout?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What do the release notes describe about the feature's intended use cases and known limitations?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 0.8333,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.8833,
+      "error": null
+    },
+    {
+      "id": "decomp_45",
+      "query": "How are customers distributed across bronze, silver, gold, and platinum tiers and what does the loyalty program document specify about the spending thresholds required to qualify for each tier?",
+      "subtasks": [
+        {
+          "sub_query": "How are customers distributed across bronze, silver, gold, and platinum tiers?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the loyalty program document specify about the spending thresholds required to qualify for each tier?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 1.0,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 1.0,
+      "error": null
+    },
+    {
+      "id": "decomp_46",
+      "query": "What is our market share by region for the last two fiscal years, what does the competitive intelligence report say about key differentiators versus our top three competitors, and how has quarterly revenue growth compared to overall market growth rates?",
+      "subtasks": [
+        {
+          "sub_query": "What is our market share by region for the last two fiscal years?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the competitive intelligence report say about key differentiators versus our top three competitors?",
+          "route": "text"
+        },
+        {
+          "sub_query": "How has quarterly revenue growth compared to overall market growth rates?",
+          "route": "sql"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.9,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.975,
+      "error": null
+    },
+    {
+      "id": "decomp_47",
+      "query": "How many SLA breaches occurred per service tier last month and what does the service level agreement document specify about customer credits for each breach category?",
+      "subtasks": [
+        {
+          "sub_query": "How many SLA breaches occurred per service tier last month?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the service level agreement document specify about customer credits for each breach category?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_48",
+      "query": "What is the inventory turnover rate per product category for the last two quarters and what does the supply chain management guide describe about reorder point calculations?",
+      "subtasks": [
+        {
+          "sub_query": "What is the inventory turnover rate per product category for the last two quarters?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the supply chain management guide describe about reorder point calculations?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.7,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.925,
+      "error": null
+    },
+    {
+      "id": "decomp_49",
+      "query": "Which API endpoints have the highest error rate over the last 30 days and what does the technical runbook document say about remediation steps for the most common failure modes?",
+      "subtasks": [
+        {
+          "sub_query": "What are the API endpoints with the highest error rate over the last 30 days?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the technical runbook document say about remediation steps for the most common failure modes?",
+          "route": "text"
+        }
+      ],
+      "route_validity": 1.0,
+      "atomicity": 0.85,
+      "coverage": 1.0,
+      "no_raw_sql": 1.0,
+      "count_ok": true,
+      "quality_score": 0.9625,
+      "error": null
+    },
+    {
+      "id": "decomp_50",
+      "query": "What does the trial-to-paid conversion funnel look like for each pricing plan this quarter, what does the onboarding playbook say about the activation milestones that most strongly predict conversion, and what is the total revenue attributable to trials that converted in the last 90 days?",
+      "subtasks": [
+        {
+          "sub_query": "What does the trial-to-paid conversion funnel look like for each pricing plan this quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the onboarding playbook say about the activation milestones that most strongly predict conversion?",
+          "route": "text"
+        },
+        {
+          "sub_query": "What is the total revenue attributable to trials that converted in the last 90 days?",
           "route": "sql"
         }
       ],
