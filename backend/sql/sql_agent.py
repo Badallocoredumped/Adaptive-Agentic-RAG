@@ -475,6 +475,7 @@ def run_table_rag_pipeline(
     # context and reasons iteratively (Thought → Action → Observation) to
     # generate and verify its SQL.  The single-pass run_sql_agent() is kept
     # as a fallback in case the ReAct layer produces nothing at all.
+    used_react = False
     if getattr(config, "SQL_REACT_ENABLED", True):
         _debug("[TableRAG Pipeline] Running ReAct agent with schema context...")
         react_fn = _get_react_sql_agent()
@@ -487,6 +488,8 @@ def run_table_rag_pipeline(
                 "falling back to single-pass agent..."
             )
             agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
+        else:
+            used_react = True
     else:
         # ReAct disabled — use the original single-pass SQL agent
         agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
@@ -507,12 +510,8 @@ def run_table_rag_pipeline(
     latency = time.time() - start_time
     _debug(f"[TableRAG Pipeline] Latency: {latency:.2f}s")
 
-    # path label: "react" when the ReAct agent ran, "agent" for single-pass fallback
-    path_label = (
-        "react"
-        if getattr(config, "SQL_REACT_ENABLED", True) and agent_result.get("sql")
-        else "agent"
-    )
+    # path label: "react" only when the ReAct agent itself produced the result
+    path_label = "react" if used_react else "agent"
 
     # 4. Return unified result dict
     return {

@@ -1,6 +1,6 @@
 """Structured retrieval modules for PostgreSQL execution."""
 
-from .database import get_db_connection, get_db_cursor, get_live_schema
+from .database import get_db_connection, get_db_cursor, get_live_schema, PostgresDatabase
 from .schema import SchemaInfo
 from .react_agent import build_react_agent, run_react_sql_agent
 from .sql_agent import AgentResult, run_sql_agent, run_table_rag_pipeline
@@ -10,6 +10,7 @@ __all__ = [
     "get_live_schema",
     "get_db_connection",
     "get_db_cursor",
+    "PostgresDatabase",
     "AgentResult",
     "run_sql_agent",
     "run_table_rag_pipeline",
