@@ -1,8 +1,8 @@
 [
-  "Table: car_makers | Columns: Id, Maker, FullName, Country",
-  "Table: car_names | Columns: MakeId, Model, Make",
-  "Table: cars_data | Columns: Id, MPG, Cylinders, Edispl, Horsepower, Weight, Accelerate, Year",
-  "Table: continents | Columns: ContId, Continent",
-  "Table: countries | Columns: CountryId, CountryName, Continent",
-  "Table: model_list | Columns: ModelId, Maker, Model"
+  "Table car_makers with columns Id (integer), Maker (text), FullName (text), Country (text) \u2014 references: countries(CountryId)",
+  "Table car_names with columns MakeId (integer), Model (text), Make (text) \u2014 references: model_list(Model)",
+  "Table cars_data with columns Id (integer), MPG (text), Cylinders (integer), Edispl (real), Horsepower (text), Weight (integer), Accelerate (real), Year (integer) \u2014 references: car_names(MakeId)",
+  "Table continents with columns ContId (integer), Continent (text)",
+  "Table countries with columns CountryId (integer), CountryName (text), Continent (integer) \u2014 references: continents(ContId)",
+  "Table model_list with columns ModelId (integer), Maker (integer), Model (text) \u2014 references: car_makers(Id)"
 ]

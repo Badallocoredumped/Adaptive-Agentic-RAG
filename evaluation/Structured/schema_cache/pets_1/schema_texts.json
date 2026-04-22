@@ -1,0 +1,5 @@
+[
+  "Table Has_Pet with columns StuID (integer), PetID (integer) \u2014 references: Student(StuID), Pets(PetID)",
+  "Table Pets with columns PetID (integer), PetType (varchar(20)), pet_age (integer), weight (real)",
+  "Table Student with columns StuID (integer), LName (varchar(12)), Fname (varchar(12)), Age (integer), Sex (varchar(1)), Major (integer), Advisor (integer), city_code (varchar(3))"
+]

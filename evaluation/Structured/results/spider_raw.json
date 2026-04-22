@@ -1,13 +1,355 @@
 [
   {
     "idx": 0,
-    "question": "List the first name and birth date of all players from the country with code USA.",
-    "gold_sql": "SELECT first_name ,  birth_date FROM players WHERE country_code  =  'USA'",
-    "db_id": "wta_1",
+    "question": "What are the different template type codes, and how many templates correspond to each?",
+    "gold_sql": "SELECT template_type_code ,  count(*) FROM Templates GROUP BY template_type_code",
+    "db_id": "cre_Doc_Template_Mgt",
     "hardness": "medium",
+    "S1": {
+      "sql": "SELECT r.Template_Type_Code, COUNT(t.Template_ID) AS Template_Count\nFROM Ref_Template_Types r\nLEFT JOIN Templates t ON r.Template_Type_Code = t.Template_Type_Code\nGROUP BY r.Template_Type_Code;",
+      "latency": 3.036,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT Template_Type_Code, COUNT(Template_ID) AS Template_Count\nFROM Templates\nGROUP BY Template_Type_Code;",
+      "latency": 22.824,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
     "S3": {
-      "sql": "SELECT first_name, birth_date FROM players WHERE country_code = 'USA';",
-      "latency": 25.637,
+      "sql": "SELECT Ref_Template_Types.Template_Type_Code, COUNT(Templates.Template_ID) AS Template_Count\nFROM Ref_Template_Types\nLEFT JOIN Templates ON Ref_Template_Types.Template_Type_Code = Templates.Template_Type_Code\nGROUP BY Ref_Template_Types.Template_Type_Code;",
+      "latency": 4.18,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 1,
+    "question": "what is the name and nation of the singer who have a song having 'Hey' in its name?",
+    "gold_sql": "SELECT name ,  country FROM singer WHERE song_name LIKE '%Hey%'",
+    "db_id": "concert_singer",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';",
+      "latency": 1.051,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';",
+      "latency": 1.116,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';",
+      "latency": 3.274,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 2,
+    "question": "What are the id and names of the countries which have more than 3 car makers or produce the 'fiat' model?",
+    "gold_sql": "SELECT T1.countryId ,  T1.CountryName FROM Countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.countryId HAVING count(*)  >  3 UNION SELECT T1.countryId ,  T1.CountryName FROM Countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country JOIN MODEL_LIST AS T3 ON T2.Id  =  T3.Maker WHERE T3.Model  =  'fiat';",
+    "db_id": "car_1",
+    "hardness": "extra",
+    "S1": {
+      "sql": "SELECT DISTINCT c.CountryId, c.CountryName \nFROM countries c \nLEFT JOIN car_makers cm ON c.CountryName = cm.Country \nLEFT JOIN car_names cn ON cm.Id = cn.MakeId \nWHERE (cm.Country IS NOT NULL AND (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3) \n   OR (cn.Model = 'fiat');",
+      "latency": 2.122,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 6,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT DISTINCT c.CountryId, c.CountryName\nFROM countries c\nLEFT JOIN car_makers cm ON c.CountryName = cm.Country\nLEFT JOIN model_list ml ON cm.Id = ml.Maker\nLEFT JOIN car_names cn ON ml.Model = cn.Model\nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3\n   OR cn.Make LIKE 'fiat';",
+      "latency": 1.954,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 6,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT DISTINCT c.CountryId, c.CountryName \nFROM countries c \nJOIN car_makers cm ON c.CountryId = cm.Country \nJOIN model_list ml ON cm.Id = ml.Maker \nWHERE ml.Model LIKE 'fiat';",
+      "latency": 12.182,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 6,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 3,
+    "question": "What is the name and id of the department with the most number of degrees ?",
+    "gold_sql": "select t2.department_name ,  t1.department_id from degree_programs as t1 join departments as t2 on t1.department_id  =  t2.department_id group by t1.department_id order by count(*) desc limit 1",
+    "db_id": "student_transcripts_tracking",
+    "hardness": "hard",
+    "S1": {
+      "sql": "SELECT department_id, department_name \nFROM Degree_Programs \nGROUP BY department_id \nORDER BY COUNT(degree_program_id) DESC \nLIMIT 1;",
+      "latency": 1.033,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 11,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT department_id, department_name\nFROM Departments\nWHERE department_id = (\n    SELECT department_id\n    FROM Degree_Programs\n    GROUP BY department_id\n    ORDER BY COUNT(degree_program_id) DESC\n    LIMIT 1\n);",
+      "latency": 1.398,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 11,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT department_id, department_name FROM Departments;",
+      "latency": 2.613,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 11,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 4,
+    "question": "Give me all the information about hiring.",
+    "gold_sql": "SELECT * FROM hiring",
+    "db_id": "employee_hire_evaluation",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT * FROM hiring;",
+      "latency": 0.69,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT * FROM hiring;",
+      "latency": 0.545,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT * FROM hiring;",
+      "latency": 4.775,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 5,
+    "question": "What are the names of conductors who have conducted at more than one orchestra?",
+    "gold_sql": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID GROUP BY T2.Conductor_ID HAVING COUNT(*)  >  1",
+    "db_id": "orchestra",
+    "hardness": "hard",
+    "S1": {
+      "sql": "SELECT c.Name \nFROM conductor c \nJOIN orchestra o ON c.Conductor_ID = o.Conductor_ID \nGROUP BY c.Conductor_ID \nHAVING COUNT(DISTINCT o.Orchestra_ID) > 1;",
+      "latency": 1.072,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT c.Name\nFROM conductor c\nJOIN orchestra o ON c.Conductor_ID = o.Conductor_ID\nGROUP BY c.Conductor_ID\nHAVING COUNT(DISTINCT o.Orchestra_ID) > 1;",
+      "latency": 1.151,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT c.Name, COUNT(DISTINCT o.Orchestra_ID) AS Orchestra_Count\nFROM conductor c\nJOIN orchestra o ON c.Conductor_ID = o.Conductor_ID\nGROUP BY c.Conductor_ID, c.Name;",
+      "latency": 16.67,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 6,
+    "question": "How many available features are there in total?",
+    "gold_sql": "SELECT count(*) FROM Other_Available_Features",
+    "db_id": "real_estate_properties",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT COUNT(*) AS total_available_features FROM Other_Available_Features;",
+      "latency": 0.775,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 5,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT COUNT(*) AS total_available_features FROM Other_Available_Features;",
+      "latency": 0.762,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 5,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT COUNT(*) AS total_features FROM Other_Available_Features;",
+      "latency": 2.651,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 5,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 7,
+    "question": "What are the dog name, age and weight of the dogs that were abandoned? Note that 1 stands for yes, and 0 stands for no in the tables.",
+    "gold_sql": "SELECT name ,  age ,  weight FROM Dogs WHERE abandoned_yn  =  1",
+    "db_id": "dog_kennels",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT name, age, weight FROM Dogs WHERE abandoned_yn = 1;",
+      "latency": 0.683,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 8,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT name, age, weight FROM Dogs WHERE abandoned_yn = '1';",
+      "latency": 0.793,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 8,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT name, age, weight FROM Dogs WHERE abandoned_yn = '1';",
+      "latency": 4.096,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 8,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 8,
+    "question": "How many paragraphs for the document with name 'Summer Show'?",
+    "gold_sql": "SELECT count(*) FROM Paragraphs AS T1 JOIN Documents AS T2 ON T1.document_ID  =  T2.document_ID WHERE T2.document_name  =  'Summer Show'",
+    "db_id": "cre_Doc_Template_Mgt",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT COUNT(*) FROM Paragraphs p JOIN Documents d ON p.Document_ID = d.Document_ID WHERE d.Document_Name = 'Summer Show';",
+      "latency": 1.42,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT COUNT(*) AS Paragraph_Count \nFROM Paragraphs \nJOIN Documents ON Paragraphs.Document_ID = Documents.Document_ID \nWHERE Documents.Document_Name = 'Summer Show';",
+      "latency": 1.347,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT COUNT(*) AS Paragraph_Count \nFROM Paragraphs p \nJOIN Documents d ON p.Document_ID = d.Document_ID \nWHERE d.Document_Name = 'Summer Show';",
+      "latency": 2.198,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 9,
+    "question": "Find the total number of players.",
+    "gold_sql": "SELECT count(*) FROM players",
+    "db_id": "wta_1",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT COUNT(*) AS total_players FROM players;",
+      "latency": 0.651,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 3,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT COUNT(*) AS total_players FROM players;",
+      "latency": 0.998,
+      "error": null,
+      "tables_selected": 3,
+      "total_tables": 3,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT COUNT(*) AS total_players FROM players;",
+      "latency": 2.352,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
@@ -18,16 +360,34 @@
     }
   },
   {
-    "idx": 1,
-    "question": "What are the id and names of the countries which have more than 3 car makers or produce the 'fiat' model?",
-    "gold_sql": "SELECT T1.countryId ,  T1.CountryName FROM Countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.countryId HAVING count(*)  >  3 UNION SELECT T1.countryId ,  T1.CountryName FROM Countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country JOIN MODEL_LIST AS T3 ON T2.Id  =  T3.Maker WHERE T3.Model  =  'fiat';",
+    "idx": 10,
+    "question": "Which are the car makers which produce at least 2 models and more than 3 car makers ? List the id and the maker .",
+    "gold_sql": "select t1.id ,  t1.maker from car_makers as t1 join model_list as t2 on t1.id  =  t2.maker group by t1.id having count(*)  >=  2 intersect select t1.id ,  t1.maker from car_makers as t1 join model_list as t2 on t1.id  =  t2.maker join car_names as t3 on t2.model  =  t3.model group by t1.id having count(*)  >  3;",
     "db_id": "car_1",
     "hardness": "extra",
+    "S1": {
+      "sql": "SELECT Id, Maker \nFROM car_makers \nWHERE Maker IN (\n    SELECT Maker \n    FROM model_list \n    GROUP BY Maker \n    HAVING COUNT(ModelId) >= 2\n) \nGROUP BY Maker \nHAVING COUNT(DISTINCT Id) > 3;",
+      "latency": 1.72,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 6,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT cm.Id, cm.Maker\nFROM car_makers cm\nJOIN model_list ml ON cm.Id = ml.Maker\nGROUP BY cm.Id, cm.Maker\nHAVING COUNT(ml.ModelId) >= 2\nAND COUNT(DISTINCT cm.Id) > 3;",
+      "latency": 1.653,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 6,
+      "path": "tablerag_only",
+      "ex": false
+    },
     "S3": {
-      "sql": null,
-      "latency": 5.142,
-      "error": "Query executed successfully. Result set is empty (0 rows).",
-      "tables_selected": 3,
+      "sql": "SELECT COUNT(DISTINCT cm.Id) as MakerCount\nFROM car_makers cm\nJOIN model_list ml ON cm.Id = ml.Maker\nGROUP BY cm.Id, cm.Maker\nHAVING COUNT(ml.ModelId) >= 2;",
+      "latency": 9.577,
+      "error": null,
+      "tables_selected": 5,
       "total_tables": 6,
       "path": "react",
       "cache_hit": false,
@@ -36,53 +396,71 @@
     }
   },
   {
-    "idx": 2,
-    "question": "What are the names , themes , and number of singers for every concert ?",
-    "gold_sql": "select t2.concert_name ,  t2.theme ,  count(*) from singer_in_concert as t1 join concert as t2 on t1.concert_id  =  t2.concert_id group by t2.concert_id",
-    "db_id": "concert_singer",
-    "hardness": "medium",
-    "S3": {
-      "sql": "SELECT c.concert_Name, c.Theme, COUNT(sic.Singer_ID) AS number_of_singers \nFROM concert c \nLEFT JOIN singer_in_concert sic ON c.concert_ID = sic.concert_ID \nGROUP BY c.concert_ID;",
-      "latency": 4.481,
-      "error": null,
-      "tables_selected": 3,
-      "total_tables": 4,
-      "path": "react",
-      "cache_hit": false,
-      "cache_score": 0.0,
-      "ex": true
-    }
-  },
-  {
-    "idx": 3,
-    "question": "How many available features are there in total?",
-    "gold_sql": "SELECT count(*) FROM Other_Available_Features",
-    "db_id": "real_estate_properties",
-    "hardness": "easy",
-    "S3": {
-      "sql": "SELECT COUNT(*) AS total_features FROM Other_Available_Features;",
-      "latency": 1.636,
-      "error": null,
-      "tables_selected": 3,
-      "total_tables": 5,
-      "path": "react",
-      "cache_hit": false,
-      "cache_score": 0.0,
-      "ex": true
-    }
-  },
-  {
-    "idx": 4,
-    "question": "Return the type code of the template type that the most templates belong to.",
-    "gold_sql": "SELECT template_type_code FROM Templates GROUP BY template_type_code ORDER BY count(*) DESC LIMIT 1",
-    "db_id": "cre_Doc_Template_Mgt",
+    "idx": 11,
+    "question": "Find the kind of program which most number of students are enrolled in?",
+    "gold_sql": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY count(*) DESC LIMIT 1",
+    "db_id": "student_transcripts_tracking",
     "hardness": "hard",
+    "S1": {
+      "sql": "SELECT dp.degree_summary_name, COUNT(se.student_enrolment_id) AS student_count\nFROM Degree_Programs dp\nJOIN Student_Enrolment se ON dp.degree_program_id = se.degree_program_id\nGROUP BY dp.degree_summary_name\nORDER BY student_count DESC\nLIMIT 1;",
+      "latency": 1.565,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 11,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT dp.degree_summary_name, COUNT(se.student_id) AS student_count\nFROM Student_Enrolment se\nJOIN Degree_Programs dp ON se.degree_program_id = dp.degree_program_id\nGROUP BY dp.degree_summary_name\nORDER BY student_count DESC\nLIMIT 1;",
+      "latency": 1.453,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 11,
+      "path": "tablerag_only",
+      "ex": false
+    },
     "S3": {
-      "sql": "SELECT Template_Type_Code\nFROM Templates\nGROUP BY Template_Type_Code\nORDER BY COUNT(*) DESC\nLIMIT 1;",
-      "latency": 2.308,
+      "sql": "SELECT dp.degree_summary_name, COUNT(se.student_id) AS student_count\nFROM Student_Enrolment se\nJOIN Degree_Programs dp ON se.degree_program_id = dp.degree_program_id\nGROUP BY dp.degree_summary_name\nORDER BY student_count DESC\nLIMIT 1;",
+      "latency": 2.345,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 11,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 12,
+    "question": "What are the average ages of losers and winners across matches?",
+    "gold_sql": "SELECT avg(loser_age) ,  avg(winner_age) FROM matches",
+    "db_id": "wta_1",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT AVG(loser_age) AS average_loser_age, AVG(winner_age) AS average_winner_age FROM matches;",
+      "latency": 1.047,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 3,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT AVG(loser_age) AS average_loser_age, AVG(winner_age) AS average_winner_age FROM matches;",
+      "latency": 0.744,
       "error": null,
       "tables_selected": 3,
-      "total_tables": 4,
+      "total_tables": 3,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT AVG(loser_age) AS average_loser_age, AVG(winner_age) AS average_winner_age FROM matches;",
+      "latency": 2.76,
+      "error": null,
+      "tables_selected": 3,
+      "total_tables": 3,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
@@ -90,16 +468,70 @@
     }
   },
   {
-    "idx": 5,
+    "idx": 13,
+    "question": "Give the nationality that is most common across all people.",
+    "gold_sql": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1",
+    "db_id": "poker_player",
+    "hardness": "hard",
+    "S1": {
+      "sql": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1;",
+      "latency": 0.72,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 2,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT Nationality\nFROM people\nGROUP BY Nationality\nORDER BY COUNT(*) DESC\nLIMIT 1;",
+      "latency": 0.951,
+      "error": null,
+      "tables_selected": 2,
+      "total_tables": 2,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT Nationality, COUNT(*) as Count FROM people GROUP BY Nationality ORDER BY Count DESC LIMIT 1;",
+      "latency": 2.225,
+      "error": null,
+      "tables_selected": 2,
+      "total_tables": 2,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 14,
     "question": "What are the ids and makers of all car makers that produce at least 2 models and make more than 3 cars?",
     "gold_sql": "SELECT T1.Id ,  T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker GROUP BY T1.Id HAVING count(*)  >=  2 INTERSECT SELECT T1.Id ,  T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker JOIN CAR_NAMES AS T3 ON T2.model  =  T3.model GROUP BY T1.Id HAVING count(*)  >  3;",
     "db_id": "car_1",
     "hardness": "extra",
-    "S3": {
-      "sql": "SELECT Maker, COUNT(Model) AS CarCount\nFROM model_list\nGROUP BY Maker\nHAVING CarCount > 3;",
-      "latency": 6.937,
+    "S1": {
+      "sql": "SELECT cm.Id, cm.Maker \nFROM car_makers cm \nJOIN model_list ml ON cm.Id = ml.Maker \nJOIN car_names cn ON ml.Model = cn.Model \nJOIN cars_data cd ON cn.MakeId = cd.Id \nGROUP BY cm.Id, cm.Maker \nHAVING COUNT(DISTINCT ml.Model) >= 2 AND COUNT(cd.Id) > 3;",
+      "latency": 2.44,
       "error": null,
-      "tables_selected": 3,
+      "tables_selected": null,
+      "total_tables": 6,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT cm.Id, cm.Maker\nFROM car_makers cm\nJOIN model_list ml ON cm.Id = ml.Maker\nJOIN car_names cn ON ml.Model = cn.Model\nJOIN cars_data cd ON cn.MakeId = cd.Id\nGROUP BY cm.Id, cm.Maker\nHAVING COUNT(DISTINCT ml.Model) >= 2 AND COUNT(cd.Id) > 3;",
+      "latency": 1.65,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 6,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT cm.Id, cm.Maker\nFROM car_makers cm\nWHERE cm.Id IN (4, 5, 6);",
+      "latency": 13.774,
+      "error": null,
+      "tables_selected": 5,
       "total_tables": 6,
       "path": "react",
       "cache_hit": false,
@@ -108,16 +540,70 @@
     }
   },
   {
-    "idx": 6,
-    "question": "What is the id and type code for the template used by the most documents?",
-    "gold_sql": "SELECT T1.template_id ,  T2.Template_Type_Code FROM Documents AS T1 JOIN Templates AS T2 ON T1.template_id  =  T2.template_id GROUP BY T1.template_id ORDER BY count(*) DESC LIMIT 1",
-    "db_id": "cre_Doc_Template_Mgt",
+    "idx": 15,
+    "question": "What is the series name and country of all TV channels that are playing cartoons directed by Ben Jones and cartoons directed by Michael Chang?",
+    "gold_sql": "SELECT T1.series_name ,  T1.country FROM TV_Channel AS T1 JOIN cartoon AS T2 ON T1.id = T2.Channel WHERE T2.directed_by  =  'Michael Chang' INTERSECT SELECT T1.series_name ,  T1.country FROM TV_Channel AS T1 JOIN cartoon AS T2 ON T1.id = T2.Channel WHERE T2.directed_by  =  'Ben Jones'",
+    "db_id": "tvshow",
     "hardness": "hard",
-    "S3": {
-      "sql": "SELECT Templates.Template_ID, Templates.Template_Type_Code\nFROM Templates\nJOIN Documents ON Templates.Template_ID = Documents.Template_ID\nGROUP BY Templates.Template_ID, Templates.Template_Type_Code\nORDER BY COUNT(Documents.Document_ID) DESC\nLIMIT 1;",
-      "latency": 2.752,
+    "S1": {
+      "sql": "SELECT DISTINCT TV_Channel.series_name, TV_Channel.Country \nFROM TV_Channel \nJOIN Cartoon ON TV_Channel.id = Cartoon.Channel \nWHERE Cartoon.Directed_by IN ('Ben Jones', 'Michael Chang');",
+      "latency": 1.14,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 3,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT TV_Channel.series_name, TV_Channel.Country\nFROM TV_Channel\nJOIN Cartoon ON TV_Channel.id = Cartoon.Channel\nWHERE Cartoon.Directed_by IN ('Ben Jones', 'Michael Chang');",
+      "latency": 1.392,
       "error": null,
       "tables_selected": 3,
+      "total_tables": 3,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT DISTINCT TV_Channel.series_name, TV_Channel.Country \nFROM TV_Channel \nJOIN Cartoon ON TV_Channel.id = Cartoon.Channel \nWHERE Cartoon.Directed_by = 'Michael Chang';",
+      "latency": 5.212,
+      "error": null,
+      "tables_selected": 3,
+      "total_tables": 3,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 16,
+    "question": "Which language is the most popular in Aruba?",
+    "gold_sql": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Aruba\" ORDER BY Percentage DESC LIMIT 1",
+    "db_id": "world_1",
+    "hardness": "hard",
+    "S1": {
+      "sql": "SELECT Language FROM countrylanguage WHERE CountryCode = 'ABW' ORDER BY Percentage DESC LIMIT 1;",
+      "latency": 1.356,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT Language FROM countrylanguage WHERE CountryCode = 'ABW' ORDER BY Percentage DESC LIMIT 1;",
+      "latency": 0.951,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT Language, SUM(Percentage) as TotalPercentage \nFROM countrylanguage \nWHERE CountryCode = 'ABW' \nGROUP BY Language \nORDER BY TotalPercentage DESC \nLIMIT 1;",
+      "latency": 2.442,
+      "error": null,
+      "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
@@ -126,16 +612,610 @@
     }
   },
   {
-    "idx": 7,
+    "idx": 17,
+    "question": "What are the ids and names of all countries that either have more than 3 car makers or produce fiat model ?",
+    "gold_sql": "select t1.countryid ,  t1.countryname from countries as t1 join car_makers as t2 on t1.countryid  =  t2.country group by t1.countryid having count(*)  >  3 union select t1.countryid ,  t1.countryname from countries as t1 join car_makers as t2 on t1.countryid  =  t2.country join model_list as t3 on t2.id  =  t3.maker where t3.model  =  'fiat';",
+    "db_id": "car_1",
+    "hardness": "extra",
+    "S1": {
+      "sql": "SELECT DISTINCT c.CountryId, c.CountryName \nFROM countries c \nLEFT JOIN car_makers cm ON c.CountryName = cm.Country \nLEFT JOIN car_names cn ON cm.Id = cn.MakeId \nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3 \n   OR cn.Model = 'fiat';",
+      "latency": 1.932,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 6,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT DISTINCT c.CountryId, c.CountryName\nFROM countries c\nLEFT JOIN car_makers cm ON c.CountryName = cm.Country\nLEFT JOIN model_list ml ON cm.Id = ml.Maker\nLEFT JOIN car_names cn ON ml.Model = cn.Model\nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3\n   OR cn.Make = 'fiat';",
+      "latency": 1.808,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 6,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT c.CountryId, c.CountryName \nFROM countries c \nJOIN car_makers cm ON c.CountryId = cm.Country \nJOIN model_list ml ON cm.Id = ml.Maker \nWHERE ml.Model = 'fiat';",
+      "latency": 11.324,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 6,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 18,
+    "question": "What is the minimum weight of the car with 8 cylinders produced in 1974 ?",
+    "gold_sql": "select min(weight) from cars_data where cylinders  =  8 and year  =  1974",
+    "db_id": "car_1",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974;",
+      "latency": 0.828,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 6,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974;",
+      "latency": 0.793,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 6,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT MIN(Weight) AS MinWeight FROM cars_data WHERE Cylinders = 8 AND Year = 1974;",
+      "latency": 2.068,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 6,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 19,
     "question": "How many different store locations are there?",
     "gold_sql": "SELECT count(DISTINCT LOCATION) FROM shop",
     "db_id": "employee_hire_evaluation",
     "hardness": "easy",
+    "S1": {
+      "sql": "SELECT COUNT(DISTINCT Location) FROM shop;",
+      "latency": 1.045,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT COUNT(DISTINCT Location) AS Different_Locations FROM shop;",
+      "latency": 0.965,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
     "S3": {
       "sql": "SELECT COUNT(DISTINCT Location) AS Different_Locations FROM shop;",
-      "latency": 2.069,
+      "latency": 1.919,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 20,
+    "question": "How many dogs went through any treatments?",
+    "gold_sql": "SELECT count(DISTINCT dog_id) FROM Treatments",
+    "db_id": "dog_kennels",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT COUNT(DISTINCT dog_id) AS number_of_dogs_treated FROM Treatments;",
+      "latency": 0.647,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 8,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT COUNT(DISTINCT dog_id) AS number_of_dogs_treated FROM Treatments;",
+      "latency": 0.78,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 8,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT COUNT(DISTINCT dog_id) AS number_of_dogs_treated FROM Treatments;",
+      "latency": 2.432,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 8,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 21,
+    "question": "What are the names of the singers and number of concerts for each person?",
+    "gold_sql": "SELECT T2.name ,  count(*) FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.singer_id  =  T2.singer_id GROUP BY T2.singer_id",
+    "db_id": "concert_singer",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT s.Name, COUNT(sic.concert_ID) AS Number_of_Concerts\nFROM singer s\nLEFT JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID\nGROUP BY s.Name;",
+      "latency": 1.964,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT s.Name, COUNT(sic.concert_ID) AS Number_of_Concerts\nFROM singer s\nLEFT JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID\nGROUP BY s.Singer_ID;",
+      "latency": 1.367,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT s.Name, COUNT(sc.concert_ID) AS Number_of_Concerts \nFROM singer s \nLEFT JOIN singer_in_concert sc ON s.Singer_ID = sc.Singer_ID \nGROUP BY s.Name;",
+      "latency": 3.245,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 22,
+    "question": "Which languages are spoken by only one country in republic governments?",
+    "gold_sql": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.GovernmentForm  =  \"Republic\" GROUP BY T2.Language HAVING COUNT(*)  =  1",
+    "db_id": "world_1",
+    "hardness": "hard",
+    "S1": {
+      "sql": "SELECT cl.Language \nFROM countrylanguage cl \nJOIN country c ON cl.CountryCode = c.Code \nWHERE c.GovernmentForm LIKE '%Republic%' \nGROUP BY cl.Language \nHAVING COUNT(DISTINCT c.Code) = 1;",
+      "latency": 1.337,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT cl.Language\nFROM countrylanguage cl\nJOIN country c ON cl.CountryCode = c.Code\nWHERE cl.IsOfficial = 'T' AND c.GovernmentForm LIKE '%Republic%'\nGROUP BY cl.Language\nHAVING COUNT(DISTINCT c.Code) = 1;",
+      "latency": 1.427,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT DISTINCT c.GovernmentForm FROM country c WHERE c.GovernmentForm LIKE '%Republic%';",
+      "latency": 10.117,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 23,
+    "question": "What are the names of the contestants whose names are not 'Jessie Alloway'",
+    "gold_sql": "SELECT contestant_name FROM contestants WHERE contestant_name != 'Jessie Alloway'",
+    "db_id": "voter_1",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT DISTINCT c.contestant_name \nFROM CONTESTANTS c \nWHERE c.contestant_name != 'Jessie Alloway';",
+      "latency": 0.98,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 3,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT contestant_name FROM CONTESTANTS WHERE contestant_name != 'Jessie Alloway';",
+      "latency": 0.736,
       "error": null,
       "tables_selected": 3,
+      "total_tables": 3,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT contestant_name FROM CONTESTANTS WHERE contestant_name != 'Jessie Alloway';",
+      "latency": 3.174,
+      "error": null,
+      "tables_selected": 3,
+      "total_tables": 3,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 24,
+    "question": "Find the districts in which there are both shops selling less than 3000 products and shops selling more than 10000 products.",
+    "gold_sql": "SELECT district FROM shop WHERE Number_products  <  3000 INTERSECT SELECT district FROM shop WHERE Number_products  >  10000",
+    "db_id": "employee_hire_evaluation",
+    "hardness": "hard",
+    "S1": {
+      "sql": "SELECT DISTINCT s1.District\nFROM shop s1\nJOIN shop s2 ON s1.District = s2.District\nWHERE s1.Number_products < 3000 AND s2.Number_products > 10000;",
+      "latency": 1.83,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT DISTINCT s1.District\nFROM shop s1\nJOIN shop s2 ON s1.District = s2.District\nWHERE s1.Number_products < 3000 AND s2.Number_products > 10000;",
+      "latency": 1.224,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT DISTINCT s.District \nFROM shop s \nWHERE s.Number_products < 3000 \nAND s.District IN (\n    SELECT s2.District \n    FROM shop s2 \n    WHERE s2.Number_products > 10000\n);",
+      "latency": 17.779,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 25,
+    "question": "Find the number of concerts happened in the stadium with the highest capacity .",
+    "gold_sql": "select count(*) from concert where stadium_id = (select stadium_id from stadium order by capacity desc limit 1)",
+    "db_id": "concert_singer",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT COUNT(*) AS Number_of_Concerts \nFROM concert \nWHERE Stadium_ID = (SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1);",
+      "latency": 0.953,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT COUNT(*) AS NumberOfConcerts\nFROM concert\nWHERE Stadium_ID = (SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1);",
+      "latency": 1.56,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1;",
+      "latency": 5.019,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 26,
+    "question": "Find the first name and age of students who have a pet.",
+    "gold_sql": "SELECT DISTINCT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid",
+    "db_id": "pets_1",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT S.Fname, S.Age FROM Student S JOIN Has_Pet HP ON S.StuID = HP.StuID;",
+      "latency": 1.754,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 3,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT Student.Fname, Student.Age \nFROM Student \nJOIN Has_Pet ON Student.StuID = Has_Pet.StuID;",
+      "latency": 0.849,
+      "error": null,
+      "tables_selected": 3,
+      "total_tables": 3,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT Student.Fname, Student.Age \nFROM Student \nJOIN Has_Pet ON Student.StuID = Has_Pet.StuID;",
+      "latency": 4.121,
+      "error": null,
+      "tables_selected": 3,
+      "total_tables": 3,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 27,
+    "question": "How many different loser names are there?",
+    "gold_sql": "SELECT count(DISTINCT loser_name) FROM matches",
+    "db_id": "wta_1",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT COUNT(DISTINCT loser_name) AS different_loser_names FROM matches;",
+      "latency": 0.786,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 3,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT COUNT(DISTINCT loser_name) AS different_loser_names FROM matches;",
+      "latency": 0.738,
+      "error": null,
+      "tables_selected": 3,
+      "total_tables": 3,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT COUNT(DISTINCT loser_name) AS different_loser_names FROM matches;",
+      "latency": 1.901,
+      "error": null,
+      "tables_selected": 3,
+      "total_tables": 3,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 28,
+    "question": "Return the first name, last name and email of the owners living in a state whose name contains the substring 'North'.",
+    "gold_sql": "SELECT first_name ,  last_name ,  email_address FROM Owners WHERE state LIKE '%North%'",
+    "db_id": "dog_kennels",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';",
+      "latency": 0.714,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 8,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';",
+      "latency": 0.969,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 8,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';",
+      "latency": 2.259,
+      "error": null,
+      "tables_selected": 5,
+      "total_tables": 8,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 29,
+    "question": "What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?",
+    "gold_sql": "SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72",
+    "db_id": "world_1",
+    "hardness": "hard",
+    "S1": {
+      "sql": "SELECT Continent, SUM(Population) AS TotalPopulation, AVG(LifeExpectancy) AS AverageLifeExpectancy\nFROM country\nGROUP BY Continent\nHAVING AVG(LifeExpectancy) < 72;",
+      "latency": 1.418,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT Continent, SUM(Population) AS TotalPopulation, AVG(LifeExpectancy) AS AverageLifeExpectancy\nFROM country\nGROUP BY Continent\nHAVING AVG(LifeExpectancy) < 72;",
+      "latency": 1.269,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT Continent, SUM(Population) AS TotalPopulation, AVG(LifeExpectancy) AS AverageLifeExpectancy \nFROM country \nGROUP BY Continent \nHAVING AVG(LifeExpectancy) < 72;",
+      "latency": 4.989,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 30,
+    "question": "Count the number of different templates used for documents.",
+    "gold_sql": "SELECT count(DISTINCT template_id) FROM Documents",
+    "db_id": "cre_Doc_Template_Mgt",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT COUNT(DISTINCT Template_ID) AS Different_Template_Count FROM Documents;",
+      "latency": 0.771,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT COUNT(DISTINCT Template_ID) AS Different_Template_Count FROM Documents;",
+      "latency": 0.731,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT COUNT(DISTINCT Template_ID) AS Different_Template_Count FROM Documents;",
+      "latency": 1.727,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 31,
+    "question": "find the minimum and maximum number of products of all stores.",
+    "gold_sql": "SELECT min(Number_products) ,  max(Number_products) FROM shop",
+    "db_id": "employee_hire_evaluation",
+    "hardness": "easy",
+    "S1": {
+      "sql": "SELECT MIN(Number_products) AS Min_Products, MAX(Number_products) AS Max_Products FROM shop;",
+      "latency": 0.788,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT MIN(Number_products) AS Min_Products, MAX(Number_products) AS Max_Products FROM shop;",
+      "latency": 0.746,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT MIN(Number_products) AS Min_Products, MAX(Number_products) AS Max_Products FROM shop;",
+      "latency": 2.453,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": true
+    }
+  },
+  {
+    "idx": 32,
+    "question": "What is the language spoken by the largest percentage of people in each country?",
+    "gold_sql": "SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode",
+    "db_id": "world_1",
+    "hardness": "medium",
+    "S1": {
+      "sql": "SELECT cl.CountryCode, cl.Language, MAX(cl.Percentage) AS MaxPercentage\nFROM countrylanguage cl\nGROUP BY cl.CountryCode;",
+      "latency": 0.847,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": false
+    },
+    "S2": {
+      "sql": "SELECT cl.CountryCode, cl.Language, MAX(cl.Percentage) AS MaxPercentage\nFROM countrylanguage cl\nGROUP BY cl.CountryCode;",
+      "latency": 0.877,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": false
+    },
+    "S3": {
+      "sql": "SELECT c.Name AS Country, cl.Language, MAX(cl.Percentage) AS MaxPercentage\nFROM country c\nJOIN countrylanguage cl ON c.Code = cl.CountryCode\nGROUP BY c.Name;",
+      "latency": 5.626,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "react",
+      "cache_hit": false,
+      "cache_score": 0.0,
+      "ex": false
+    }
+  },
+  {
+    "idx": 33,
+    "question": "Find the cities that have more than one employee under age 30.",
+    "gold_sql": "SELECT city FROM employee WHERE age  <  30 GROUP BY city HAVING count(*)  >  1",
+    "db_id": "employee_hire_evaluation",
+    "hardness": "hard",
+    "S1": {
+      "sql": "SELECT City FROM employee WHERE Age < 30 GROUP BY City HAVING COUNT(Employee_ID) > 1;",
+      "latency": 0.817,
+      "error": null,
+      "tables_selected": null,
+      "total_tables": 4,
+      "path": "zeroshot",
+      "ex": true
+    },
+    "S2": {
+      "sql": "SELECT City\nFROM employee\nWHERE Age < 30\nGROUP BY City\nHAVING COUNT(Employee_ID) > 1;",
+      "latency": 0.927,
+      "error": null,
+      "tables_selected": 4,
+      "total_tables": 4,
+      "path": "tablerag_only",
+      "ex": true
+    },
+    "S3": {
+      "sql": "SELECT City\nFROM employee\nWHERE Age < 30\nGROUP BY City\nHAVING COUNT(Employee_ID) > 1;",
+      "latency": 2.32,
+      "error": null,
+      "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,

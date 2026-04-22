@@ -1,5 +1,5 @@
 [
-  "Table: matches | Columns: best_of, draw_size, loser_age, loser_entry, loser_hand, loser_ht, loser_id, loser_ioc, loser_name, loser_rank, loser_rank_points, loser_seed, match_num, minutes, round, score, surface, tourney_date, tourney_id, tourney_level, tourney_name, winner_age, winner_entry, winner_hand, winner_ht, winner_id, winner_ioc, winner_name, winner_rank, winner_rank_points, winner_seed, year",
-  "Table: players | Columns: player_id, first_name, last_name, hand, birth_date, country_code",
-  "Table: rankings | Columns: ranking_date, ranking, player_id, ranking_points, tours"
+  "Table matches with columns best_of (int), draw_size (int), loser_age (float), loser_entry (text), loser_hand (text), loser_ht (int), loser_id (int), loser_ioc (text), loser_name (text), loser_rank (int), loser_rank_points (int), loser_seed (int), match_num (int), minutes (int), round (text), score (text), surface (text), tourney_date (date), tourney_id (text), tourney_level (text), tourney_name (text), winner_age (float), winner_entry (text), winner_hand (text), winner_ht (int), winner_id (int), winner_ioc (text), winner_name (text), winner_rank (int), winner_rank_points (int), winner_seed (int), year (int) \u2014 references: players(player_id), players(player_id)",
+  "Table players with columns player_id (int), first_name (text), last_name (text), hand (text), birth_date (date), country_code (text)",
+  "Table rankings with columns ranking_date (date), ranking (int), player_id (int), ranking_points (int), tours (int) \u2014 references: players(player_id)"
 ]

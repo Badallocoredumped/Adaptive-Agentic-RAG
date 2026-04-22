@@ -63,8 +63,8 @@ SCHEMA_CACHE_DIR.mkdir(parents=True, exist_ok=True)
  
 # ── CLI ───────────────────────────────────────────────────────────────────────
 parser = argparse.ArgumentParser()
-parser.add_argument("--per_tier", type=int,   default=20,
-                    help="Questions per difficulty tier (default 20 → 80 total)")
+parser.add_argument("--per_tier", type=int,   default=None,
+                    help="Questions per difficulty tier (default: all available)")
 parser.add_argument("--configs",  nargs="+",  default=["S1", "S2", "S3"],
                     choices=["S1", "S2", "S3"],
                     help="Which pipeline configs to run")
@@ -73,7 +73,17 @@ parser.add_argument("--no_react", action="store_true",
 parser.add_argument("--seed",     type=int,   default=42)
 parser.add_argument("--delay",    type=float, default=0.4,
                     help="Sleep between LLM calls (seconds)")
+parser.add_argument("--clear_sql_cache", action="store_true",
+                    help="Delete sql_cache.faiss/json from each schema_cache dir before running")
 args = parser.parse_args()
+
+if args.clear_sql_cache:
+    import glob as _glob
+    deleted = 0
+    for f in _glob.glob(str(SCHEMA_CACHE_DIR / "**" / "sql_cache*"), recursive=True):
+        Path(f).unlink(missing_ok=True)
+        deleted += 1
+    print(f"[clear_sql_cache] Removed {deleted} SQL cache file(s).")
  
 random.seed(args.seed)
  
@@ -212,7 +222,7 @@ for item in dev_data:
 sampled: list[dict] = []
 for diff in DIFFICULTIES:
     pool = by_difficulty[diff]
-    take = min(args.per_tier, len(pool))
+    take = len(pool) if args.per_tier is None else min(args.per_tier, len(pool))
     sampled.extend(random.sample(pool, take))
  
 random.shuffle(sampled)
@@ -220,7 +230,8 @@ random.shuffle(sampled)
 tier_counts = {d: sum(1 for q in sampled if q.get("hardness") == d) for d in DIFFICULTIES}
 print(f"\n{'='*65}")
 print(f"  Spider Benchmark — stratified sample")
-print(f"  Total questions : {len(sampled)}  ({args.per_tier} per tier)")
+_per_tier_label = args.per_tier if args.per_tier is not None else "all"
+print(f"  Total questions : {len(sampled)}  ({_per_tier_label} per tier)")
 print(f"  Tier breakdown  : {tier_counts}")
 print(f"  Configs         : {args.configs}")
 print(f"{'='*65}\n")

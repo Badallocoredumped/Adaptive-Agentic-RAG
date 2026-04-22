@@ -1,0 +1,5 @@
+[
+  "Table airlines with columns uid (integer), Airline (text), Abbreviation (text), Country (text)",
+  "Table airports with columns City (text), AirportCode (text), AirportName (text), Country (text), CountryAbbrev (text)",
+  "Table flights with columns Airline (integer), FlightNo (integer), SourceAirport (text), DestAirport (text) \u2014 references: airports(AirportCode), airports(AirportCode)"
+]

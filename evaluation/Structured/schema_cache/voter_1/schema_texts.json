@@ -1,0 +1,5 @@
+[
+  "Table AREA_CODE_STATE with columns area_code (integer), state (varchar(2))",
+  "Table CONTESTANTS with columns contestant_number (integer), contestant_name (varchar(50))",
+  "Table VOTES with columns vote_id (integer), phone_number (integer), state (varchar(2)), contestant_number (integer), created (timestamp) \u2014 references: CONTESTANTS(contestant_number), AREA_CODE_STATE(state)"
+]

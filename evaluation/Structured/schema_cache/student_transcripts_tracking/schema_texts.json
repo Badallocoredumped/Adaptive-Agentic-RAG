@@ -1,0 +1,13 @@
+[
+  "Table Addresses with columns address_id (integer), line_1 (varchar(255)), line_2 (varchar(255)), line_3 (varchar(255)), city (varchar(255)), zip_postcode (varchar(20)), state_province_county (varchar(255)), country (varchar(255)), other_address_details (varchar(255))",
+  "Table Courses with columns course_id (integer), course_name (varchar(255)), course_description (varchar(255)), other_details (varchar(255))",
+  "Table Degree_Programs with columns degree_program_id (integer), department_id (integer), degree_summary_name (varchar(255)), degree_summary_description (varchar(255)), other_details (varchar(255)) \u2014 references: Departments(department_id)",
+  "Table Departments with columns department_id (integer), department_name (varchar(255)), department_description (varchar(255)), other_details (varchar(255))",
+  "Table Sections with columns section_id (integer), course_id (integer), section_name (varchar(255)), section_description (varchar(255)), other_details (varchar(255)) \u2014 references: Courses(course_id)",
+  "Table Semesters with columns semester_id (integer), semester_name (varchar(255)), semester_description (varchar(255)), other_details (varchar(255))",
+  "Table Student_Enrolment with columns student_enrolment_id (integer), degree_program_id (integer), semester_id (integer), student_id (integer), other_details (varchar(255)) \u2014 references: Students(student_id), Semesters(semester_id), Degree_Programs(degree_program_id)",
+  "Table Student_Enrolment_Courses with columns student_course_id (integer), course_id (integer), student_enrolment_id (integer) \u2014 references: Student_Enrolment(student_enrolment_id), Courses(course_id)",
+  "Table Students with columns student_id (integer), current_address_id (integer), permanent_address_id (integer), first_name (varchar(80)), middle_name (varchar(40)), last_name (varchar(40)), cell_mobile_number (varchar(40)), email_address (varchar(40)), ssn (varchar(40)), date_first_registered (datetime), date_left (datetime), other_student_details (varchar(255)) \u2014 references: Addresses(address_id), Addresses(address_id)",
+  "Table Transcript_Contents with columns student_course_id (integer), transcript_id (integer) \u2014 references: Transcripts(transcript_id), Student_Enrolment_Courses(student_course_id)",
+  "Table Transcripts with columns transcript_id (integer), transcript_date (datetime), other_details (varchar(255))"
+]
