@@ -40,7 +40,7 @@ def get_shared_hf_embeddings() -> HuggingFaceEmbeddings:
 
 def get_shared_st_model() -> SentenceTransformer:
     """Return the raw SentenceTransformer backing the shared embeddings."""
-    return get_shared_hf_embeddings().client
+    return get_shared_hf_embeddings()._client
 
 
 # ── CrossEncoder reranker ─────────────────────────────────────────────────
