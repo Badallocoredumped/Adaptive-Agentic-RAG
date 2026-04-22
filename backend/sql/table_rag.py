@@ -11,6 +11,7 @@ import numpy as np
 
 from backend import config
 from backend.models import get_shared_st_model
+from backend.sql.schema import SchemaInfo
 
 _SCHEMA_INDEX_PATH = config.INDEX_DIR / "schema.faiss"
 _SCHEMA_TEXTS_PATH = config.INDEX_DIR / "schema_texts.json"
@@ -43,20 +44,16 @@ def _embed_texts(texts: list[str], is_query: bool) -> np.ndarray:
     return vectors
 
 
-def get_schema_texts(schema_dict: dict[str, list[str]]) -> list[str]:
-    """Convert structured schema dictionary into retrieval-friendly text lines."""
-    schema_texts: list[str] = []
-    for table_name, columns in schema_dict.items():
-        cols = ", ".join(columns)
-        schema_texts.append(f"Table: {table_name} | Columns: {cols}")
-    return schema_texts
+def get_schema_texts(schema_info: SchemaInfo) -> list[str]:
+    """Convert structured schema properties into retrieval-friendly text lines."""
+    return schema_info.to_embedding_texts()
 
 
-def build_schema_index(schema_dict: dict[str, list[str]]) -> None:
+def build_schema_index(schema_info: SchemaInfo) -> None:
     """Build and persist a FAISS index for schema texts."""
-    schema_texts = get_schema_texts(schema_dict)
+    schema_texts = get_schema_texts(schema_info)
     if not schema_texts:
-        raise ValueError("schema_dict is empty; cannot build schema index.")
+        raise ValueError("schema_info is empty; cannot build schema index.")
 
     vectors = _embed_texts(schema_texts, is_query=False)
     dim = int(vectors.shape[1])
@@ -79,7 +76,7 @@ def retrieve_relevant_schema(query: str, top_k: int = 3) -> list[str]:
     """Retrieve top-k relevant schema text rows for a natural-language query."""
     if not _SCHEMA_INDEX_PATH.exists() or not _SCHEMA_TEXTS_PATH.exists():
         raise FileNotFoundError(
-            "Schema index not found. Run build_schema_index(schema_dict) first."
+            "Schema index not found. Run build_schema_index(schema_info) first."
         )
 
     index = faiss.read_index(config.win_short_path(_SCHEMA_INDEX_PATH))
