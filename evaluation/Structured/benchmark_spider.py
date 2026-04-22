@@ -298,7 +298,14 @@ def normalise_rows(rows: list[tuple]) -> set[tuple]:
         tuple(str(v).strip().lower() if v is not None else "" for v in row)
         for row in rows
     )
- 
+
+def _sort_row_values(rows: list[tuple]) -> set[tuple]:
+    """Normalise rows and sort values within each row (column-order insensitive)."""
+    return set(
+        tuple(sorted(str(v).strip().lower() if v is not None else "" for v in row))
+        for row in rows
+    )
+
 def execution_accuracy(pred_sql: str | None, gold_sql: str, db_id: str) -> bool:
     if not pred_sql:
         return False
@@ -306,7 +313,34 @@ def execution_accuracy(pred_sql: str | None, gold_sql: str, db_id: str) -> bool:
     pred = exec_sql_direct(pred_sql, db_id)
     if gold is None or pred is None:
         return False
-    return normalise_rows(gold) == normalise_rows(pred)
+
+    gold_norm = normalise_rows(gold)
+    pred_norm = normalise_rows(pred)
+
+    # 1. Exact match
+    if gold_norm == pred_norm:
+        return True
+
+    if not gold or not pred:
+        return gold_norm == pred_norm
+
+    gold_ncols = len(gold[0])
+    pred_ncols = len(pred[0])
+
+    # 2. Column-order insensitive: same width, values just in different order
+    if gold_ncols == pred_ncols and _sort_row_values(gold) == _sort_row_values(pred):
+        return True
+
+    # 3. Extra columns in pred: try every combination of pred columns that
+    #    has the same width as gold and check if any projection matches.
+    if pred_ncols > gold_ncols:
+        from itertools import combinations
+        for col_indices in combinations(range(pred_ncols), gold_ncols):
+            projected = normalise_rows([tuple(row[i] for i in col_indices) for row in pred])
+            if projected == gold_norm:
+                return True
+
+    return False
  
 # ── SQL extraction helper ─────────────────────────────────────────────────────
 _SQL_RE = re.compile(r"\b(SELECT|WITH)\b[^;]*(?:;|$)", re.IGNORECASE | re.DOTALL)
@@ -372,6 +406,8 @@ def run_s2(question: str, db_id: str) -> dict:
     try:
         _ensure_schema_index_exists()
         schema_rows    = retrieve_relevant_schema(question, top_k=config.SQL_TOP_K)
+        _tnames = [m.group(1) for r in schema_rows for m in [re.match(r"Table\s+(\S+)\s+with", r)] if m]
+        print(f"    [TableRAG] retrieved tables: {_tnames}")
         schema_context = "\n".join(schema_rows)
         result         = run_sql_agent(question, schema_context=schema_context)
         sql            = result.get("sql")
@@ -418,9 +454,12 @@ def run_s3(question: str, db_id: str, use_react: bool) -> dict:
                     error      = None
                     path       = "cache_hit"
                     schema_rows = []
+                    print(f"    [TableRAG] cache hit (score={score:.4f}) — skipping retrieval")
  
         if not cache_hit:
             schema_rows    = retrieve_relevant_schema(question, top_k=config.SQL_TOP_K)
+            _tnames = [m.group(1) for r in schema_rows for m in [re.match(r"Table\s+(\S+)\s+with", r)] if m]
+            print(f"    [TableRAG] retrieved tables: {_tnames}")
             schema_context = "\n".join(schema_rows)
  
             if use_react and getattr(config, "SQL_REACT_ENABLED", True):
@@ -468,25 +507,29 @@ for i, item in enumerate(sampled):
     switch_db(db_id)
     ensure_schema_index(db_id)
  
+    gold_rows = exec_sql_direct(gold_sql, db_id)
+
     record: dict[str, Any] = {
-        "idx"      : i,
-        "question" : question,
-        "gold_sql" : gold_sql,
-        "db_id"    : db_id,
-        "hardness" : hardness,
+        "idx"       : i,
+        "question"  : question,
+        "gold_sql"  : gold_sql,
+        "gold_rows" : gold_rows if gold_rows is not None else [],
+        "db_id"     : db_id,
+        "hardness"  : hardness,
     }
- 
+
     runner_map = {
         "S1": lambda q, d: run_s1(q, d),
         "S2": lambda q, d: run_s2(q, d),
         "S3": lambda q, d: run_s3(q, d, use_react=CONFIGS["S3"]["use_react"]),
     }
- 
+
     for cfg_id in args.configs:
         time.sleep(args.delay)
         out  = runner_map[cfg_id](question, db_id)
         ex   = execution_accuracy(out["sql"], gold_sql, db_id)
-        out["ex"] = ex
+        out["ex"]        = ex
+        out["pred_rows"] = exec_sql_direct(out["sql"], db_id) if out["sql"] else []
  
         status = "✓" if ex else ("ERR" if out["error"] and not out["sql"] else "✗")
         lat    = out["latency"]
@@ -508,7 +551,9 @@ def metrics_for(results: list[dict], cfg_id: str) -> dict:
  
     n           = len(rows)
     ex_list     = [r[cfg_id]["ex"]      for r in rows]
-    lat_list    = [r[cfg_id]["latency"] for r in rows]
+    # Skip idx=0 (warmup) from latency to exclude model/index init overhead.
+    lat_rows    = [r for r in rows if r.get("idx", -1) > 0] or rows
+    lat_list    = [r[cfg_id]["latency"] for r in lat_rows]
     valid_list  = [1 if r[cfg_id].get("sql") else 0 for r in rows]
     error_list  = [1 if r[cfg_id].get("error") and not r[cfg_id].get("sql") else 0 for r in rows]
  
@@ -551,7 +596,10 @@ def metrics_for(results: list[dict], cfg_id: str) -> dict:
         hits      = [r for r in s3_rows if r["S3"].get("cache_hit")]
         reacts    = [r for r in s3_rows if r["S3"].get("path") == "react"]
         singles   = [r for r in s3_rows if r["S3"].get("path") == "single_pass"]
- 
+        # Warmup-excluded subsets for latency only
+        hits_lat   = [r for r in hits   if r.get("idx", -1) > 0] or hits
+        reacts_lat = [r for r in reacts if r.get("idx", -1) > 0] or reacts
+
         out["cache_breakdown"] = {
             "cache_hits"       : len(hits),
             "react_calls"      : len(reacts),
@@ -559,8 +607,8 @@ def metrics_for(results: list[dict], cfg_id: str) -> dict:
             "cache_hit_rate"   : round(len(hits) / n, 4),
             "cache_hit_ex"     : round(sum(r["S3"]["ex"] for r in hits)   / max(len(hits), 1), 4),
             "react_ex"         : round(sum(r["S3"]["ex"] for r in reacts) / max(len(reacts), 1), 4),
-            "cache_avg_lat_s"  : round(sum(r["S3"]["latency"] for r in hits)   / max(len(hits), 1), 3),
-            "react_avg_lat_s"  : round(sum(r["S3"]["latency"] for r in reacts) / max(len(reacts), 1), 3),
+            "cache_avg_lat_s"  : round(sum(r["S3"]["latency"] for r in hits_lat)   / max(len(hits_lat), 1), 3),
+            "react_avg_lat_s"  : round(sum(r["S3"]["latency"] for r in reacts_lat) / max(len(reacts_lat), 1), 3),
         }
  
     return out

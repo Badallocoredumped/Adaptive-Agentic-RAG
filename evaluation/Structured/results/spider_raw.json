@@ -3,997 +3,4108 @@
     "idx": 0,
     "question": "What are the different template type codes, and how many templates correspond to each?",
     "gold_sql": "SELECT template_type_code ,  count(*) FROM Templates GROUP BY template_type_code",
+    "gold_rows": [
+      [
+        "AD",
+        3
+      ],
+      [
+        "BK",
+        6
+      ],
+      [
+        "CV",
+        2
+      ],
+      [
+        "PP",
+        6
+      ],
+      [
+        "PPT",
+        3
+      ]
+    ],
     "db_id": "cre_Doc_Template_Mgt",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT r.Template_Type_Code, COUNT(t.Template_ID) AS Template_Count\nFROM Ref_Template_Types r\nLEFT JOIN Templates t ON r.Template_Type_Code = t.Template_Type_Code\nGROUP BY r.Template_Type_Code;",
-      "latency": 3.036,
+      "latency": 2.228,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "AD",
+          3
+        ],
+        [
+          "BK",
+          6
+        ],
+        [
+          "CV",
+          2
+        ],
+        [
+          "PP",
+          6
+        ],
+        [
+          "PPT",
+          3
+        ]
+      ]
     },
     "S2": {
-      "sql": "SELECT Template_Type_Code, COUNT(Template_ID) AS Template_Count\nFROM Templates\nGROUP BY Template_Type_Code;",
-      "latency": 22.824,
+      "sql": "SELECT Template_Type_Code, COUNT(*) AS Template_Count\nFROM Templates\nGROUP BY Template_Type_Code;",
+      "latency": 25.102,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "AD",
+          3
+        ],
+        [
+          "BK",
+          6
+        ],
+        [
+          "CV",
+          2
+        ],
+        [
+          "PP",
+          6
+        ],
+        [
+          "PPT",
+          3
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT Ref_Template_Types.Template_Type_Code, COUNT(Templates.Template_ID) AS Template_Count\nFROM Ref_Template_Types\nLEFT JOIN Templates ON Ref_Template_Types.Template_Type_Code = Templates.Template_Type_Code\nGROUP BY Ref_Template_Types.Template_Type_Code;",
-      "latency": 4.18,
+      "sql": "SELECT Template_Type_Code, COUNT(*) AS Template_Count \nFROM Templates \nGROUP BY Template_Type_Code;",
+      "latency": 3.525,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "AD",
+          3
+        ],
+        [
+          "BK",
+          6
+        ],
+        [
+          "CV",
+          2
+        ],
+        [
+          "PP",
+          6
+        ],
+        [
+          "PPT",
+          3
+        ]
+      ]
     }
   },
   {
     "idx": 1,
     "question": "what is the name and nation of the singer who have a song having 'Hey' in its name?",
     "gold_sql": "SELECT name ,  country FROM singer WHERE song_name LIKE '%Hey%'",
+    "gold_rows": [
+      [
+        "Justin Brown",
+        "France"
+      ]
+    ],
     "db_id": "concert_singer",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';",
-      "latency": 1.051,
+      "latency": 1.041,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Justin Brown",
+          "France"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';",
-      "latency": 1.116,
+      "latency": 1.003,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Justin Brown",
+          "France"
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT Name, Country FROM singer WHERE Song_Name LIKE '%Hey%';",
-      "latency": 3.274,
+      "latency": 2.383,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Justin Brown",
+          "France"
+        ]
+      ]
     }
   },
   {
     "idx": 2,
     "question": "What are the id and names of the countries which have more than 3 car makers or produce the 'fiat' model?",
     "gold_sql": "SELECT T1.countryId ,  T1.CountryName FROM Countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.countryId HAVING count(*)  >  3 UNION SELECT T1.countryId ,  T1.CountryName FROM Countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country JOIN MODEL_LIST AS T3 ON T2.Id  =  T3.Maker WHERE T3.Model  =  'fiat';",
+    "gold_rows": [
+      [
+        1,
+        "usa"
+      ],
+      [
+        2,
+        "germany"
+      ],
+      [
+        4,
+        "japan"
+      ],
+      [
+        5,
+        "italy"
+      ]
+    ],
     "db_id": "car_1",
     "hardness": "extra",
     "S1": {
-      "sql": "SELECT DISTINCT c.CountryId, c.CountryName \nFROM countries c \nLEFT JOIN car_makers cm ON c.CountryName = cm.Country \nLEFT JOIN car_names cn ON cm.Id = cn.MakeId \nWHERE (cm.Country IS NOT NULL AND (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3) \n   OR (cn.Model = 'fiat');",
-      "latency": 2.122,
+      "sql": "SELECT DISTINCT c.CountryId, c.CountryName \nFROM countries c \nLEFT JOIN car_makers cm ON c.CountryName = cm.Country \nLEFT JOIN car_names cn ON cm.Id = cn.MakeId \nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3 \n   OR cn.Model = 'fiat';",
+      "latency": 1.66,
       "error": null,
       "tables_selected": null,
       "total_tables": 6,
       "path": "zeroshot",
-      "ex": false
+      "ex": false,
+      "pred_rows": []
     },
     "S2": {
-      "sql": "SELECT DISTINCT c.CountryId, c.CountryName\nFROM countries c\nLEFT JOIN car_makers cm ON c.CountryName = cm.Country\nLEFT JOIN model_list ml ON cm.Id = ml.Maker\nLEFT JOIN car_names cn ON ml.Model = cn.Model\nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3\n   OR cn.Make LIKE 'fiat';",
-      "latency": 1.954,
+      "sql": "SELECT DISTINCT c.CountryId, c.CountryName\nFROM countries c\nLEFT JOIN car_makers cm ON c.CountryId = cm.Country\nLEFT JOIN model_list ml ON cm.Id = ml.Maker\nLEFT JOIN car_names cn ON ml.Model = cn.Model\nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryId) > 3\n   OR cn.Make LIKE 'fiat';",
+      "latency": 1.894,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 6,
       "total_tables": 6,
       "path": "tablerag_only",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          1,
+          "usa"
+        ],
+        [
+          2,
+          "germany"
+        ],
+        [
+          4,
+          "japan"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT DISTINCT c.CountryId, c.CountryName \nFROM countries c \nJOIN car_makers cm ON c.CountryId = cm.Country \nJOIN model_list ml ON cm.Id = ml.Maker \nWHERE ml.Model LIKE 'fiat';",
-      "latency": 12.182,
+      "sql": "SELECT DISTINCT CountryId, CountryName \nFROM ( \n    SELECT c.CountryId, c.CountryName \n    FROM countries c \n    JOIN car_makers cm ON c.CountryId = cm.Country \n    GROUP BY c.CountryId, c.CountryName \n    HAVING COUNT(cm.Id) > 3 \n    UNION \n    SELECT c.CountryId, c.CountryName \n    FROM countries c \n    JOIN car_makers cm ON c.CountryId = cm.Country \n    JOIN model_list ml ON cm.Id = ml.Maker \n    WHERE ml.Model = 'fiat' \n) AS combined;",
+      "latency": 9.454,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 6,
       "total_tables": 6,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          1,
+          "usa"
+        ],
+        [
+          2,
+          "germany"
+        ],
+        [
+          4,
+          "japan"
+        ],
+        [
+          5,
+          "italy"
+        ]
+      ]
     }
   },
   {
     "idx": 3,
     "question": "What is the name and id of the department with the most number of degrees ?",
     "gold_sql": "select t2.department_name ,  t1.department_id from degree_programs as t1 join departments as t2 on t1.department_id  =  t2.department_id group by t1.department_id order by count(*) desc limit 1",
+    "gold_rows": [
+      [
+        "statistics",
+        8
+      ]
+    ],
     "db_id": "student_transcripts_tracking",
     "hardness": "hard",
     "S1": {
-      "sql": "SELECT department_id, department_name \nFROM Degree_Programs \nGROUP BY department_id \nORDER BY COUNT(degree_program_id) DESC \nLIMIT 1;",
-      "latency": 1.033,
+      "sql": "SELECT department_id, department_name \nFROM Departments \nWHERE department_id = (\n    SELECT department_id \n    FROM Degree_Programs \n    GROUP BY department_id \n    ORDER BY COUNT(degree_program_id) DESC \n    LIMIT 1\n);",
+      "latency": 1.041,
       "error": null,
       "tables_selected": null,
       "total_tables": 11,
       "path": "zeroshot",
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          8,
+          "statistics"
+        ]
+      ]
     },
     "S2": {
-      "sql": "SELECT department_id, department_name\nFROM Departments\nWHERE department_id = (\n    SELECT department_id\n    FROM Degree_Programs\n    GROUP BY department_id\n    ORDER BY COUNT(degree_program_id) DESC\n    LIMIT 1\n);",
-      "latency": 1.398,
+      "sql": "SELECT department_id, department_name \nFROM Departments \nWHERE department_id = (\n    SELECT department_id \n    FROM Degree_Programs \n    GROUP BY department_id \n    ORDER BY COUNT(degree_program_id) DESC \n    LIMIT 1\n);",
+      "latency": 1.525,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 11,
       "total_tables": 11,
       "path": "tablerag_only",
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          8,
+          "statistics"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT department_id, department_name FROM Departments;",
-      "latency": 2.613,
+      "sql": "SELECT d.department_id, d.department_name\nFROM Departments d\nJOIN Degree_Programs dp ON d.department_id = dp.department_id\nGROUP BY d.department_id, d.department_name\nORDER BY COUNT(dp.degree_program_id) DESC\nLIMIT 1;",
+      "latency": 2.402,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 11,
       "total_tables": 11,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          8,
+          "statistics"
+        ]
+      ]
     }
   },
   {
     "idx": 4,
     "question": "Give me all the information about hiring.",
     "gold_sql": "SELECT * FROM hiring",
+    "gold_rows": [
+      [
+        1,
+        1,
+        "2009",
+        "T"
+      ],
+      [
+        1,
+        2,
+        "2003",
+        "T"
+      ],
+      [
+        8,
+        3,
+        "2011",
+        "F"
+      ],
+      [
+        4,
+        4,
+        "2012",
+        "T"
+      ],
+      [
+        5,
+        5,
+        "2013",
+        "T"
+      ],
+      [
+        2,
+        6,
+        "2010",
+        "F"
+      ],
+      [
+        6,
+        7,
+        "2008",
+        "T"
+      ]
+    ],
     "db_id": "employee_hire_evaluation",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT * FROM hiring;",
-      "latency": 0.69,
+      "latency": 0.605,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1,
+          1,
+          "2009",
+          "T"
+        ],
+        [
+          1,
+          2,
+          "2003",
+          "T"
+        ],
+        [
+          8,
+          3,
+          "2011",
+          "F"
+        ],
+        [
+          4,
+          4,
+          "2012",
+          "T"
+        ],
+        [
+          5,
+          5,
+          "2013",
+          "T"
+        ],
+        [
+          2,
+          6,
+          "2010",
+          "F"
+        ],
+        [
+          6,
+          7,
+          "2008",
+          "T"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT * FROM hiring;",
-      "latency": 0.545,
+      "latency": 0.738,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1,
+          1,
+          "2009",
+          "T"
+        ],
+        [
+          1,
+          2,
+          "2003",
+          "T"
+        ],
+        [
+          8,
+          3,
+          "2011",
+          "F"
+        ],
+        [
+          4,
+          4,
+          "2012",
+          "T"
+        ],
+        [
+          5,
+          5,
+          "2013",
+          "T"
+        ],
+        [
+          2,
+          6,
+          "2010",
+          "F"
+        ],
+        [
+          6,
+          7,
+          "2008",
+          "T"
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT * FROM hiring;",
-      "latency": 4.775,
+      "latency": 5.157,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1,
+          1,
+          "2009",
+          "T"
+        ],
+        [
+          1,
+          2,
+          "2003",
+          "T"
+        ],
+        [
+          8,
+          3,
+          "2011",
+          "F"
+        ],
+        [
+          4,
+          4,
+          "2012",
+          "T"
+        ],
+        [
+          5,
+          5,
+          "2013",
+          "T"
+        ],
+        [
+          2,
+          6,
+          "2010",
+          "F"
+        ],
+        [
+          6,
+          7,
+          "2008",
+          "T"
+        ]
+      ]
     }
   },
   {
     "idx": 5,
     "question": "What are the names of conductors who have conducted at more than one orchestra?",
     "gold_sql": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID  =  T2.Conductor_ID GROUP BY T2.Conductor_ID HAVING COUNT(*)  >  1",
+    "gold_rows": [],
     "db_id": "orchestra",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT c.Name \nFROM conductor c \nJOIN orchestra o ON c.Conductor_ID = o.Conductor_ID \nGROUP BY c.Conductor_ID \nHAVING COUNT(DISTINCT o.Orchestra_ID) > 1;",
-      "latency": 1.072,
+      "latency": 1.152,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": []
     },
     "S2": {
       "sql": "SELECT c.Name\nFROM conductor c\nJOIN orchestra o ON c.Conductor_ID = o.Conductor_ID\nGROUP BY c.Conductor_ID\nHAVING COUNT(DISTINCT o.Orchestra_ID) > 1;",
-      "latency": 1.151,
+      "latency": 1.279,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": []
     },
     "S3": {
-      "sql": "SELECT c.Name, COUNT(DISTINCT o.Orchestra_ID) AS Orchestra_Count\nFROM conductor c\nJOIN orchestra o ON c.Conductor_ID = o.Conductor_ID\nGROUP BY c.Conductor_ID, c.Name;",
-      "latency": 16.67,
+      "sql": "SELECT c.Name\nFROM conductor c\nJOIN orchestra o ON c.Conductor_ID = o.Conductor_ID\nGROUP BY c.Conductor_ID\nHAVING COUNT(DISTINCT o.Orchestra_ID) > 1;",
+      "latency": 2.517,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": []
     }
   },
   {
     "idx": 6,
     "question": "How many available features are there in total?",
     "gold_sql": "SELECT count(*) FROM Other_Available_Features",
+    "gold_rows": [
+      [
+        3
+      ]
+    ],
     "db_id": "real_estate_properties",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT COUNT(*) AS total_available_features FROM Other_Available_Features;",
-      "latency": 0.775,
+      "latency": 0.744,
       "error": null,
       "tables_selected": null,
       "total_tables": 5,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          3
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT COUNT(*) AS total_available_features FROM Other_Available_Features;",
-      "latency": 0.762,
+      "latency": 1.237,
       "error": null,
       "tables_selected": 5,
       "total_tables": 5,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          3
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT COUNT(*) AS total_features FROM Other_Available_Features;",
-      "latency": 2.651,
+      "latency": 1.983,
       "error": null,
       "tables_selected": 5,
       "total_tables": 5,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          3
+        ]
+      ]
     }
   },
   {
     "idx": 7,
     "question": "What are the dog name, age and weight of the dogs that were abandoned? Note that 1 stands for yes, and 0 stands for no in the tables.",
     "gold_sql": "SELECT name ,  age ,  weight FROM Dogs WHERE abandoned_yn  =  1",
+    "gold_rows": [
+      [
+        "Kacey",
+        "6",
+        "7.57"
+      ],
+      [
+        "Lyric",
+        "4",
+        "4.36"
+      ],
+      [
+        "Evangeline",
+        "1",
+        "4.01"
+      ]
+    ],
     "db_id": "dog_kennels",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT name, age, weight FROM Dogs WHERE abandoned_yn = 1;",
-      "latency": 0.683,
+      "latency": 1.565,
       "error": null,
       "tables_selected": null,
       "total_tables": 8,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Kacey",
+          "6",
+          "7.57"
+        ],
+        [
+          "Lyric",
+          "4",
+          "4.36"
+        ],
+        [
+          "Evangeline",
+          "1",
+          "4.01"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT name, age, weight FROM Dogs WHERE abandoned_yn = '1';",
-      "latency": 0.793,
+      "latency": 0.823,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 8,
       "total_tables": 8,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Kacey",
+          "6",
+          "7.57"
+        ],
+        [
+          "Lyric",
+          "4",
+          "4.36"
+        ],
+        [
+          "Evangeline",
+          "1",
+          "4.01"
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT name, age, weight FROM Dogs WHERE abandoned_yn = '1';",
-      "latency": 4.096,
+      "latency": 2.839,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 8,
       "total_tables": 8,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Kacey",
+          "6",
+          "7.57"
+        ],
+        [
+          "Lyric",
+          "4",
+          "4.36"
+        ],
+        [
+          "Evangeline",
+          "1",
+          "4.01"
+        ]
+      ]
     }
   },
   {
     "idx": 8,
     "question": "How many paragraphs for the document with name 'Summer Show'?",
     "gold_sql": "SELECT count(*) FROM Paragraphs AS T1 JOIN Documents AS T2 ON T1.document_ID  =  T2.document_ID WHERE T2.document_name  =  'Summer Show'",
+    "gold_rows": [
+      [
+        1
+      ]
+    ],
     "db_id": "cre_Doc_Template_Mgt",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT COUNT(*) FROM Paragraphs p JOIN Documents d ON p.Document_ID = d.Document_ID WHERE d.Document_Name = 'Summer Show';",
-      "latency": 1.42,
+      "latency": 0.76,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT COUNT(*) AS Paragraph_Count \nFROM Paragraphs \nJOIN Documents ON Paragraphs.Document_ID = Documents.Document_ID \nWHERE Documents.Document_Name = 'Summer Show';",
-      "latency": 1.347,
+      "latency": 1.018,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT COUNT(*) AS Paragraph_Count \nFROM Paragraphs p \nJOIN Documents d ON p.Document_ID = d.Document_ID \nWHERE d.Document_Name = 'Summer Show';",
-      "latency": 2.198,
+      "sql": "SELECT COUNT(*) AS Paragraph_Count \nFROM Paragraphs \nJOIN Documents ON Paragraphs.Document_ID = Documents.Document_ID \nWHERE Documents.Document_Name = 'Summer Show';",
+      "latency": 2.209,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1
+        ]
+      ]
     }
   },
   {
     "idx": 9,
     "question": "Find the total number of players.",
     "gold_sql": "SELECT count(*) FROM players",
+    "gold_rows": [
+      [
+        20662
+      ]
+    ],
     "db_id": "wta_1",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT COUNT(*) AS total_players FROM players;",
-      "latency": 0.651,
+      "latency": 0.675,
       "error": null,
       "tables_selected": null,
       "total_tables": 3,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          20662
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT COUNT(*) AS total_players FROM players;",
-      "latency": 0.998,
+      "latency": 0.886,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          20662
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT COUNT(*) AS total_players FROM players;",
-      "latency": 2.352,
+      "latency": 1.581,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          20662
+        ]
+      ]
     }
   },
   {
     "idx": 10,
     "question": "Which are the car makers which produce at least 2 models and more than 3 car makers ? List the id and the maker .",
     "gold_sql": "select t1.id ,  t1.maker from car_makers as t1 join model_list as t2 on t1.id  =  t2.maker group by t1.id having count(*)  >=  2 intersect select t1.id ,  t1.maker from car_makers as t1 join model_list as t2 on t1.id  =  t2.maker join car_names as t3 on t2.model  =  t3.model group by t1.id having count(*)  >  3;",
+    "gold_rows": [
+      [
+        2,
+        "volkswagen"
+      ],
+      [
+        4,
+        "gm"
+      ],
+      [
+        5,
+        "ford"
+      ],
+      [
+        6,
+        "chrysler"
+      ],
+      [
+        8,
+        "nissan"
+      ],
+      [
+        19,
+        "toyota"
+      ]
+    ],
     "db_id": "car_1",
     "hardness": "extra",
     "S1": {
       "sql": "SELECT Id, Maker \nFROM car_makers \nWHERE Maker IN (\n    SELECT Maker \n    FROM model_list \n    GROUP BY Maker \n    HAVING COUNT(ModelId) >= 2\n) \nGROUP BY Maker \nHAVING COUNT(DISTINCT Id) > 3;",
-      "latency": 1.72,
+      "latency": 1.664,
       "error": null,
       "tables_selected": null,
       "total_tables": 6,
       "path": "zeroshot",
-      "ex": false
+      "ex": false,
+      "pred_rows": []
     },
     "S2": {
-      "sql": "SELECT cm.Id, cm.Maker\nFROM car_makers cm\nJOIN model_list ml ON cm.Id = ml.Maker\nGROUP BY cm.Id, cm.Maker\nHAVING COUNT(ml.ModelId) >= 2\nAND COUNT(DISTINCT cm.Id) > 3;",
-      "latency": 1.653,
+      "sql": "SELECT ml.Maker, cm.Maker\nFROM model_list ml\nJOIN car_makers cm ON ml.Maker = cm.Id\nGROUP BY ml.Maker\nHAVING COUNT(ml.ModelId) >= 2 AND COUNT(DISTINCT ml.Maker) > 3;",
+      "latency": 1.657,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 6,
       "total_tables": 6,
       "path": "tablerag_only",
-      "ex": false
+      "ex": false,
+      "pred_rows": []
     },
     "S3": {
-      "sql": "SELECT COUNT(DISTINCT cm.Id) as MakerCount\nFROM car_makers cm\nJOIN model_list ml ON cm.Id = ml.Maker\nGROUP BY cm.Id, cm.Maker\nHAVING COUNT(ml.ModelId) >= 2;",
-      "latency": 9.577,
+      "sql": "SELECT DISTINCT ml.Maker, cm.Maker AS MakerName\nFROM model_list ml\nJOIN car_makers cm ON ml.Maker = cm.Id\nWHERE ml.Maker IN (\n    SELECT Maker\n    FROM model_list\n    GROUP BY Maker\n    HAVING COUNT(Model) >= 2\n) AND (SELECT COUNT(DISTINCT Maker) FROM model_list) > 3;",
+      "latency": 6.041,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 6,
       "total_tables": 6,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          2,
+          "volkswagen"
+        ],
+        [
+          4,
+          "gm"
+        ],
+        [
+          5,
+          "ford"
+        ],
+        [
+          6,
+          "chrysler"
+        ],
+        [
+          8,
+          "nissan"
+        ],
+        [
+          13,
+          "daimler benz"
+        ],
+        [
+          19,
+          "toyota"
+        ]
+      ]
     }
   },
   {
     "idx": 11,
     "question": "Find the kind of program which most number of students are enrolled in?",
     "gold_sql": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY count(*) DESC LIMIT 1",
+    "gold_rows": [
+      [
+        "Bachelor"
+      ]
+    ],
     "db_id": "student_transcripts_tracking",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT dp.degree_summary_name, COUNT(se.student_enrolment_id) AS student_count\nFROM Degree_Programs dp\nJOIN Student_Enrolment se ON dp.degree_program_id = se.degree_program_id\nGROUP BY dp.degree_summary_name\nORDER BY student_count DESC\nLIMIT 1;",
-      "latency": 1.565,
+      "latency": 1.378,
       "error": null,
       "tables_selected": null,
       "total_tables": 11,
       "path": "zeroshot",
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "Bachelor",
+          8
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT dp.degree_summary_name, COUNT(se.student_id) AS student_count\nFROM Student_Enrolment se\nJOIN Degree_Programs dp ON se.degree_program_id = dp.degree_program_id\nGROUP BY dp.degree_summary_name\nORDER BY student_count DESC\nLIMIT 1;",
-      "latency": 1.453,
+      "latency": 1.41,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 11,
       "total_tables": 11,
       "path": "tablerag_only",
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "Bachelor",
+          8
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT dp.degree_summary_name, COUNT(se.student_id) AS student_count\nFROM Student_Enrolment se\nJOIN Degree_Programs dp ON se.degree_program_id = dp.degree_program_id\nGROUP BY dp.degree_summary_name\nORDER BY student_count DESC\nLIMIT 1;",
-      "latency": 2.345,
+      "sql": "SELECT dp.degree_summary_name, COUNT(se.student_enrolment_id) AS student_count\nFROM Student_Enrolment se\nJOIN Degree_Programs dp ON se.degree_program_id = dp.degree_program_id\nGROUP BY dp.degree_summary_name\nORDER BY student_count DESC\nLIMIT 1;",
+      "latency": 2.894,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 11,
       "total_tables": 11,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "Bachelor",
+          8
+        ]
+      ]
     }
   },
   {
     "idx": 12,
     "question": "What are the average ages of losers and winners across matches?",
     "gold_sql": "SELECT avg(loser_age) ,  avg(winner_age) FROM matches",
+    "gold_rows": [
+      [
+        27.31121386258453,
+        27.062177773183823
+      ]
+    ],
     "db_id": "wta_1",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT AVG(loser_age) AS average_loser_age, AVG(winner_age) AS average_winner_age FROM matches;",
-      "latency": 1.047,
+      "latency": 0.94,
       "error": null,
       "tables_selected": null,
       "total_tables": 3,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          27.31121386258453,
+          27.062177773183823
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT AVG(loser_age) AS average_loser_age, AVG(winner_age) AS average_winner_age FROM matches;",
-      "latency": 0.744,
+      "latency": 0.975,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          27.31121386258453,
+          27.062177773183823
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT AVG(loser_age) AS average_loser_age, AVG(winner_age) AS average_winner_age FROM matches;",
-      "latency": 2.76,
+      "latency": 2.258,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          27.31121386258453,
+          27.062177773183823
+        ]
+      ]
     }
   },
   {
     "idx": 13,
     "question": "Give the nationality that is most common across all people.",
     "gold_sql": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1",
+    "gold_rows": [
+      [
+        "Russia"
+      ]
+    ],
     "db_id": "poker_player",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1;",
-      "latency": 0.72,
+      "latency": 0.85,
       "error": null,
       "tables_selected": null,
       "total_tables": 2,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Russia"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT Nationality\nFROM people\nGROUP BY Nationality\nORDER BY COUNT(*) DESC\nLIMIT 1;",
-      "latency": 0.951,
+      "latency": 0.807,
       "error": null,
       "tables_selected": 2,
       "total_tables": 2,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Russia"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT Nationality, COUNT(*) as Count FROM people GROUP BY Nationality ORDER BY Count DESC LIMIT 1;",
-      "latency": 2.225,
+      "sql": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1;",
+      "latency": 2.427,
       "error": null,
       "tables_selected": 2,
       "total_tables": 2,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "Russia"
+        ]
+      ]
     }
   },
   {
     "idx": 14,
     "question": "What are the ids and makers of all car makers that produce at least 2 models and make more than 3 cars?",
     "gold_sql": "SELECT T1.Id ,  T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker GROUP BY T1.Id HAVING count(*)  >=  2 INTERSECT SELECT T1.Id ,  T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker JOIN CAR_NAMES AS T3 ON T2.model  =  T3.model GROUP BY T1.Id HAVING count(*)  >  3;",
+    "gold_rows": [
+      [
+        2,
+        "volkswagen"
+      ],
+      [
+        4,
+        "gm"
+      ],
+      [
+        5,
+        "ford"
+      ],
+      [
+        6,
+        "chrysler"
+      ],
+      [
+        8,
+        "nissan"
+      ],
+      [
+        19,
+        "toyota"
+      ]
+    ],
     "db_id": "car_1",
     "hardness": "extra",
     "S1": {
       "sql": "SELECT cm.Id, cm.Maker \nFROM car_makers cm \nJOIN model_list ml ON cm.Id = ml.Maker \nJOIN car_names cn ON ml.Model = cn.Model \nJOIN cars_data cd ON cn.MakeId = cd.Id \nGROUP BY cm.Id, cm.Maker \nHAVING COUNT(DISTINCT ml.Model) >= 2 AND COUNT(cd.Id) > 3;",
-      "latency": 2.44,
+      "latency": 2.189,
       "error": null,
       "tables_selected": null,
       "total_tables": 6,
       "path": "zeroshot",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          2,
+          "volkswagen"
+        ],
+        [
+          4,
+          "gm"
+        ],
+        [
+          5,
+          "ford"
+        ],
+        [
+          6,
+          "chrysler"
+        ],
+        [
+          8,
+          "nissan"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT cm.Id, cm.Maker\nFROM car_makers cm\nJOIN model_list ml ON cm.Id = ml.Maker\nJOIN car_names cn ON ml.Model = cn.Model\nJOIN cars_data cd ON cn.MakeId = cd.Id\nGROUP BY cm.Id, cm.Maker\nHAVING COUNT(DISTINCT ml.Model) >= 2 AND COUNT(cd.Id) > 3;",
-      "latency": 1.65,
+      "latency": 3.872,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 6,
       "total_tables": 6,
       "path": "tablerag_only",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          2,
+          "volkswagen"
+        ],
+        [
+          4,
+          "gm"
+        ],
+        [
+          5,
+          "ford"
+        ],
+        [
+          6,
+          "chrysler"
+        ],
+        [
+          8,
+          "nissan"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT cm.Id, cm.Maker\nFROM car_makers cm\nWHERE cm.Id IN (4, 5, 6);",
-      "latency": 13.774,
+      "sql": "SELECT cm.Id, cm.Maker\nFROM car_makers cm\nJOIN (\n    SELECT Maker, COUNT(ModelId) AS ModelCount\n    FROM model_list\n    GROUP BY Maker\n    HAVING ModelCount >= 2\n) AS ml ON cm.Id = ml.Maker\nJOIN (\n    SELECT MakeId\n    FROM car_names\n    GROUP BY MakeId\n    HAVING COUNT(*) > 3\n) AS cn ON cm.Id = cn.MakeId;",
+      "latency": 7.626,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 6,
       "total_tables": 6,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": false,
+      "pred_rows": []
     }
   },
   {
     "idx": 15,
     "question": "What is the series name and country of all TV channels that are playing cartoons directed by Ben Jones and cartoons directed by Michael Chang?",
     "gold_sql": "SELECT T1.series_name ,  T1.country FROM TV_Channel AS T1 JOIN cartoon AS T2 ON T1.id = T2.Channel WHERE T2.directed_by  =  'Michael Chang' INTERSECT SELECT T1.series_name ,  T1.country FROM TV_Channel AS T1 JOIN cartoon AS T2 ON T1.id = T2.Channel WHERE T2.directed_by  =  'Ben Jones'",
+    "gold_rows": [
+      [
+        "MTV Dance",
+        "United Kingdom"
+      ]
+    ],
     "db_id": "tvshow",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT DISTINCT TV_Channel.series_name, TV_Channel.Country \nFROM TV_Channel \nJOIN Cartoon ON TV_Channel.id = Cartoon.Channel \nWHERE Cartoon.Directed_by IN ('Ben Jones', 'Michael Chang');",
-      "latency": 1.14,
+      "latency": 1.183,
       "error": null,
       "tables_selected": null,
       "total_tables": 3,
       "path": "zeroshot",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          "Sky Radio",
+          "Italy"
+        ],
+        [
+          "Music Box Italia",
+          "Italy"
+        ],
+        [
+          "MTV Hits",
+          "Italy"
+        ],
+        [
+          "MTV Rocks",
+          "United Kingdom"
+        ],
+        [
+          "MTV Dance",
+          "United Kingdom"
+        ],
+        [
+          "Classica",
+          "Italy"
+        ]
+      ]
     },
     "S2": {
-      "sql": "SELECT TV_Channel.series_name, TV_Channel.Country\nFROM TV_Channel\nJOIN Cartoon ON TV_Channel.id = Cartoon.Channel\nWHERE Cartoon.Directed_by IN ('Ben Jones', 'Michael Chang');",
-      "latency": 1.392,
+      "sql": "SELECT TV_Channel.series_name, TV_Channel.Country \nFROM Cartoon \nJOIN TV_Channel ON Cartoon.Channel = TV_Channel.id \nWHERE Cartoon.Directed_by IN ('Ben Jones', 'Michael Chang');",
+      "latency": 1.021,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "tablerag_only",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          "Sky Radio",
+          "Italy"
+        ],
+        [
+          "Music Box Italia",
+          "Italy"
+        ],
+        [
+          "MTV Hits",
+          "Italy"
+        ],
+        [
+          "MTV Rocks",
+          "United Kingdom"
+        ],
+        [
+          "MTV Dance",
+          "United Kingdom"
+        ],
+        [
+          "MTV Dance",
+          "United Kingdom"
+        ],
+        [
+          "Classica",
+          "Italy"
+        ],
+        [
+          "MTV Dance",
+          "United Kingdom"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT DISTINCT TV_Channel.series_name, TV_Channel.Country \nFROM TV_Channel \nJOIN Cartoon ON TV_Channel.id = Cartoon.Channel \nWHERE Cartoon.Directed_by = 'Michael Chang';",
-      "latency": 5.212,
+      "sql": "SELECT DISTINCT TV_Channel.series_name, TV_Channel.Country \nFROM Cartoon \nJOIN TV_Channel ON Cartoon.Channel = TV_Channel.id \nWHERE Cartoon.Directed_by = 'Ben Jones' \nINTERSECT \nSELECT DISTINCT TV_Channel.series_name, TV_Channel.Country \nFROM Cartoon \nJOIN TV_Channel ON Cartoon.Channel = TV_Channel.id \nWHERE Cartoon.Directed_by = 'Michael Chang';",
+      "latency": 5.063,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "MTV Dance",
+          "United Kingdom"
+        ]
+      ]
     }
   },
   {
     "idx": 16,
     "question": "Which language is the most popular in Aruba?",
     "gold_sql": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Aruba\" ORDER BY Percentage DESC LIMIT 1",
+    "gold_rows": [
+      [
+        "Papiamento"
+      ]
+    ],
     "db_id": "world_1",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT Language FROM countrylanguage WHERE CountryCode = 'ABW' ORDER BY Percentage DESC LIMIT 1;",
-      "latency": 1.356,
+      "latency": 1.248,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Papiamento"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT Language FROM countrylanguage WHERE CountryCode = 'ABW' ORDER BY Percentage DESC LIMIT 1;",
-      "latency": 0.951,
+      "latency": 0.863,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Papiamento"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT Language, SUM(Percentage) as TotalPercentage \nFROM countrylanguage \nWHERE CountryCode = 'ABW' \nGROUP BY Language \nORDER BY TotalPercentage DESC \nLIMIT 1;",
-      "latency": 2.442,
+      "sql": "SELECT Language FROM countrylanguage WHERE CountryCode = 'ABW' ORDER BY Percentage DESC LIMIT 1;",
+      "latency": 1.665,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "Papiamento"
+        ]
+      ]
     }
   },
   {
     "idx": 17,
     "question": "What are the ids and names of all countries that either have more than 3 car makers or produce fiat model ?",
     "gold_sql": "select t1.countryid ,  t1.countryname from countries as t1 join car_makers as t2 on t1.countryid  =  t2.country group by t1.countryid having count(*)  >  3 union select t1.countryid ,  t1.countryname from countries as t1 join car_makers as t2 on t1.countryid  =  t2.country join model_list as t3 on t2.id  =  t3.maker where t3.model  =  'fiat';",
+    "gold_rows": [
+      [
+        1,
+        "usa"
+      ],
+      [
+        2,
+        "germany"
+      ],
+      [
+        4,
+        "japan"
+      ],
+      [
+        5,
+        "italy"
+      ]
+    ],
     "db_id": "car_1",
     "hardness": "extra",
     "S1": {
       "sql": "SELECT DISTINCT c.CountryId, c.CountryName \nFROM countries c \nLEFT JOIN car_makers cm ON c.CountryName = cm.Country \nLEFT JOIN car_names cn ON cm.Id = cn.MakeId \nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3 \n   OR cn.Model = 'fiat';",
-      "latency": 1.932,
+      "latency": 1.695,
       "error": null,
       "tables_selected": null,
       "total_tables": 6,
       "path": "zeroshot",
-      "ex": false
+      "ex": false,
+      "pred_rows": []
     },
     "S2": {
-      "sql": "SELECT DISTINCT c.CountryId, c.CountryName\nFROM countries c\nLEFT JOIN car_makers cm ON c.CountryName = cm.Country\nLEFT JOIN model_list ml ON cm.Id = ml.Maker\nLEFT JOIN car_names cn ON ml.Model = cn.Model\nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryName) > 3\n   OR cn.Make = 'fiat';",
-      "latency": 1.808,
+      "sql": "SELECT DISTINCT c.CountryId, c.CountryName\nFROM countries c\nLEFT JOIN car_makers cm ON c.CountryId = cm.Country\nLEFT JOIN model_list ml ON cm.Id = ml.Maker\nLEFT JOIN car_names cn ON ml.Model = cn.Model\nWHERE (SELECT COUNT(*) FROM car_makers WHERE Country = c.CountryId) > 3\n   OR cn.Make = 'fiat';",
+      "latency": 2.096,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 6,
       "total_tables": 6,
       "path": "tablerag_only",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          1,
+          "usa"
+        ],
+        [
+          2,
+          "germany"
+        ],
+        [
+          4,
+          "japan"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT c.CountryId, c.CountryName \nFROM countries c \nJOIN car_makers cm ON c.CountryId = cm.Country \nJOIN model_list ml ON cm.Id = ml.Maker \nWHERE ml.Model = 'fiat';",
-      "latency": 11.324,
+      "sql": "SELECT CountryId, CountryName FROM countries WHERE CountryId IN (SELECT Country FROM car_makers GROUP BY Country HAVING COUNT(Id) > 3) OR CountryId = 9;",
+      "latency": 5.361,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 6,
       "total_tables": 6,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          1,
+          "usa"
+        ],
+        [
+          2,
+          "germany"
+        ],
+        [
+          4,
+          "japan"
+        ],
+        [
+          9,
+          "russia"
+        ]
+      ]
     }
   },
   {
     "idx": 18,
     "question": "What is the minimum weight of the car with 8 cylinders produced in 1974 ?",
     "gold_sql": "select min(weight) from cars_data where cylinders  =  8 and year  =  1974",
+    "gold_rows": [
+      [
+        4141
+      ]
+    ],
     "db_id": "car_1",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974;",
-      "latency": 0.828,
+      "latency": 0.826,
       "error": null,
       "tables_selected": null,
       "total_tables": 6,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          4141
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974;",
-      "latency": 0.793,
+      "latency": 0.842,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 4,
       "total_tables": 6,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          4141
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT MIN(Weight) AS MinWeight FROM cars_data WHERE Cylinders = 8 AND Year = 1974;",
-      "latency": 2.068,
+      "latency": 2.03,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 4,
       "total_tables": 6,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          4141
+        ]
+      ]
     }
   },
   {
     "idx": 19,
     "question": "How many different store locations are there?",
     "gold_sql": "SELECT count(DISTINCT LOCATION) FROM shop",
+    "gold_rows": [
+      [
+        9
+      ]
+    ],
     "db_id": "employee_hire_evaluation",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT COUNT(DISTINCT Location) FROM shop;",
-      "latency": 1.045,
+      "latency": 0.603,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          9
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT COUNT(DISTINCT Location) AS Different_Locations FROM shop;",
-      "latency": 0.965,
+      "latency": 1.192,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          9
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT COUNT(DISTINCT Location) AS Different_Locations FROM shop;",
-      "latency": 1.919,
+      "latency": 1.699,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          9
+        ]
+      ]
     }
   },
   {
     "idx": 20,
     "question": "How many dogs went through any treatments?",
     "gold_sql": "SELECT count(DISTINCT dog_id) FROM Treatments",
+    "gold_rows": [
+      [
+        9
+      ]
+    ],
     "db_id": "dog_kennels",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT COUNT(DISTINCT dog_id) AS number_of_dogs_treated FROM Treatments;",
-      "latency": 0.647,
+      "latency": 0.693,
       "error": null,
       "tables_selected": null,
       "total_tables": 8,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          9
+        ]
+      ]
     },
     "S2": {
-      "sql": "SELECT COUNT(DISTINCT dog_id) AS number_of_dogs_treated FROM Treatments;",
-      "latency": 0.78,
+      "sql": "SELECT COUNT(DISTINCT dog_id) AS number_of_dogs_treated\nFROM Treatments;",
+      "latency": 0.976,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 4,
       "total_tables": 8,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          9
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT COUNT(DISTINCT dog_id) AS number_of_dogs_treated FROM Treatments;",
-      "latency": 2.432,
+      "latency": 2.046,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 4,
       "total_tables": 8,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          9
+        ]
+      ]
     }
   },
   {
     "idx": 21,
     "question": "What are the names of the singers and number of concerts for each person?",
     "gold_sql": "SELECT T2.name ,  count(*) FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.singer_id  =  T2.singer_id GROUP BY T2.singer_id",
+    "gold_rows": [
+      [
+        "Timbaland",
+        2
+      ],
+      [
+        "Justin Brown",
+        3
+      ],
+      [
+        "Rose White",
+        1
+      ],
+      [
+        "John Nizinik",
+        2
+      ],
+      [
+        "Tribal King",
+        2
+      ]
+    ],
     "db_id": "concert_singer",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT s.Name, COUNT(sic.concert_ID) AS Number_of_Concerts\nFROM singer s\nLEFT JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID\nGROUP BY s.Name;",
-      "latency": 1.964,
+      "latency": 1.232,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          "Joe Sharp",
+          0
+        ],
+        [
+          "John Nizinik",
+          2
+        ],
+        [
+          "Justin Brown",
+          3
+        ],
+        [
+          "Rose White",
+          1
+        ],
+        [
+          "Timbaland",
+          2
+        ],
+        [
+          "Tribal King",
+          2
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT s.Name, COUNT(sic.concert_ID) AS Number_of_Concerts\nFROM singer s\nLEFT JOIN singer_in_concert sic ON s.Singer_ID = sic.Singer_ID\nGROUP BY s.Singer_ID;",
-      "latency": 1.367,
+      "latency": 1.946,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          "Joe Sharp",
+          0
+        ],
+        [
+          "Timbaland",
+          2
+        ],
+        [
+          "Justin Brown",
+          3
+        ],
+        [
+          "Rose White",
+          1
+        ],
+        [
+          "John Nizinik",
+          2
+        ],
+        [
+          "Tribal King",
+          2
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT s.Name, COUNT(sc.concert_ID) AS Number_of_Concerts \nFROM singer s \nLEFT JOIN singer_in_concert sc ON s.Singer_ID = sc.Singer_ID \nGROUP BY s.Name;",
-      "latency": 3.245,
+      "sql": "SELECT s.Name, COUNT(sc.concert_ID) AS Number_of_Concerts\nFROM singer s\nLEFT JOIN singer_in_concert sc ON s.Singer_ID = sc.Singer_ID\nGROUP BY s.Singer_ID;",
+      "latency": 4.847,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          "Joe Sharp",
+          0
+        ],
+        [
+          "Timbaland",
+          2
+        ],
+        [
+          "Justin Brown",
+          3
+        ],
+        [
+          "Rose White",
+          1
+        ],
+        [
+          "John Nizinik",
+          2
+        ],
+        [
+          "Tribal King",
+          2
+        ]
+      ]
     }
   },
   {
     "idx": 22,
     "question": "Which languages are spoken by only one country in republic governments?",
     "gold_sql": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.GovernmentForm  =  \"Republic\" GROUP BY T2.Language HAVING COUNT(*)  =  1",
+    "gold_rows": [
+      [
+        "Abhyasi"
+      ],
+      [
+        "Acholi"
+      ],
+      [
+        "Adja"
+      ],
+      [
+        "Aizo"
+      ],
+      [
+        "Ambo"
+      ],
+      [
+        "Amhara"
+      ],
+      [
+        "Ami"
+      ],
+      [
+        "Ane"
+      ],
+      [
+        "Arabic-French"
+      ],
+      [
+        "Arabic-French-English"
+      ],
+      [
+        "Araucan"
+      ],
+      [
+        "Assyrian"
+      ],
+      [
+        "Atayal"
+      ],
+      [
+        "Bajad"
+      ],
+      [
+        "Balante"
+      ],
+      [
+        "Bali"
+      ],
+      [
+        "Balochi"
+      ],
+      [
+        "Bambara"
+      ],
+      [
+        "Bamileke-bamum"
+      ],
+      [
+        "Banda"
+      ],
+      [
+        "Banja"
+      ],
+      [
+        "Bariba"
+      ],
+      [
+        "Bassa"
+      ],
+      [
+        "Batakki"
+      ],
+      [
+        "Bemba"
+      ],
+      [
+        "Bengali"
+      ],
+      [
+        "Berberi"
+      ],
+      [
+        "Bhojpuri"
+      ],
+      [
+        "Bicol"
+      ],
+      [
+        "Bilin"
+      ],
+      [
+        "Bislama"
+      ],
+      [
+        "Boa"
+      ],
+      [
+        "Brahui"
+      ],
+      [
+        "Bubi"
+      ],
+      [
+        "Bugi"
+      ],
+      [
+        "Bullom-sherbro"
+      ],
+      [
+        "Burmese"
+      ],
+      [
+        "Buryat"
+      ],
+      [
+        "Busansi"
+      ],
+      [
+        "Cakchiquel"
+      ],
+      [
+        "Caprivi"
+      ],
+      [
+        "Cebuano"
+      ],
+      [
+        "Chaga and Pare"
+      ],
+      [
+        "Chakma"
+      ],
+      [
+        "Chewa"
+      ],
+      [
+        "Chichewa"
+      ],
+      [
+        "Chin"
+      ],
+      [
+        "Chuabo"
+      ],
+      [
+        "Comorian"
+      ],
+      [
+        "Comorian-Arabic"
+      ],
+      [
+        "Comorian-French"
+      ],
+      [
+        "Comorian-Swahili"
+      ],
+      [
+        "Comorian-madagassi"
+      ],
+      [
+        "Cuna"
+      ],
+      [
+        "Czech"
+      ],
+      [
+        "Czech and Moravian"
+      ],
+      [
+        "Dagara"
+      ],
+      [
+        "Dariganga"
+      ],
+      [
+        "Dhivehi"
+      ],
+      [
+        "Dorbet"
+      ],
+      [
+        "Duala"
+      ],
+      [
+        "Dyula"
+      ],
+      [
+        "Embera"
+      ],
+      [
+        "Fijian"
+      ],
+      [
+        "Fon"
+      ],
+      [
+        "Friuli"
+      ],
+      [
+        "Ga-adangme"
+      ],
+      [
+        "Gagauzi"
+      ],
+      [
+        "Ganda"
+      ],
+      [
+        "Garifuna"
+      ],
+      [
+        "Garo"
+      ],
+      [
+        "Gbaya"
+      ],
+      [
+        "Georgiana"
+      ],
+      [
+        "Gio"
+      ],
+      [
+        "Gisu"
+      ],
+      [
+        "Gogo"
+      ],
+      [
+        "Gorane"
+      ],
+      [
+        "Grebo"
+      ],
+      [
+        "Guaymí"
+      ],
+      [
+        "Gur"
+      ],
+      [
+        "Gurage"
+      ],
+      [
+        "Gusii"
+      ],
+      [
+        "Ha"
+      ],
+      [
+        "Hadareb"
+      ],
+      [
+        "Hadjarai"
+      ],
+      [
+        "Haiti Creole"
+      ],
+      [
+        "Hakka"
+      ],
+      [
+        "Hassaniya"
+      ],
+      [
+        "Hausa"
+      ],
+      [
+        "Haya"
+      ],
+      [
+        "Hebrew"
+      ],
+      [
+        "Hehet"
+      ],
+      [
+        "Herero"
+      ],
+      [
+        "Hiligaynon"
+      ],
+      [
+        "Hindko"
+      ],
+      [
+        "Icelandic"
+      ],
+      [
+        "Ilocano"
+      ],
+      [
+        "Irish"
+      ],
+      [
+        "Javanese"
+      ],
+      [
+        "Kabyé"
+      ],
+      [
+        "Kachin"
+      ],
+      [
+        "Kalenjin"
+      ],
+      [
+        "Kamba"
+      ],
+      [
+        "Kanem-bornu"
+      ],
+      [
+        "Kanuri"
+      ],
+      [
+        "Karakalpak"
+      ],
+      [
+        "Karen"
+      ],
+      [
+        "Kavango"
+      ],
+      [
+        "Kayah"
+      ],
+      [
+        "Kekchí"
+      ],
+      [
+        "Khasi"
+      ],
+      [
+        "Khoekhoe"
+      ],
+      [
+        "Kiga"
+      ],
+      [
+        "Kikuyu"
+      ],
+      [
+        "Kirgiz"
+      ],
+      [
+        "Kirundi"
+      ],
+      [
+        "Kissi"
+      ],
+      [
+        "Kono-vai"
+      ],
+      [
+        "Korean"
+      ],
+      [
+        "Kotokoli"
+      ],
+      [
+        "Kuranko"
+      ],
+      [
+        "Lango"
+      ],
+      [
+        "Lao"
+      ],
+      [
+        "Lao-Soung"
+      ],
+      [
+        "Latvian"
+      ],
+      [
+        "Limba"
+      ],
+      [
+        "Lozi"
+      ],
+      [
+        "Luba"
+      ],
+      [
+        "Luchazi"
+      ],
+      [
+        "Lugbara"
+      ],
+      [
+        "Luguru"
+      ],
+      [
+        "Luhya"
+      ],
+      [
+        "Luimbe-nganguela"
+      ],
+      [
+        "Luo"
+      ],
+      [
+        "Luvale"
+      ],
+      [
+        "Madura"
+      ],
+      [
+        "Maguindanao"
+      ],
+      [
+        "Maka"
+      ],
+      [
+        "Makonde"
+      ],
+      [
+        "Makua"
+      ],
+      [
+        "Maltese"
+      ],
+      [
+        "Mam"
+      ],
+      [
+        "Mandara"
+      ],
+      [
+        "Mandarin Chinese"
+      ],
+      [
+        "Mandjia"
+      ],
+      [
+        "Mandyako"
+      ],
+      [
+        "Mano"
+      ],
+      [
+        "Maranao"
+      ],
+      [
+        "Marathi"
+      ],
+      [
+        "Marendje"
+      ],
+      [
+        "Marma"
+      ],
+      [
+        "Marshallese"
+      ],
+      [
+        "Masai"
+      ],
+      [
+        "Masana"
+      ],
+      [
+        "Mayo-kebbi"
+      ],
+      [
+        "Mboshi"
+      ],
+      [
+        "Mbum"
+      ],
+      [
+        "Mbundu"
+      ],
+      [
+        "Mende"
+      ],
+      [
+        "Meru"
+      ],
+      [
+        "Min"
+      ],
+      [
+        "Minangkabau"
+      ],
+      [
+        "Mixed Languages"
+      ],
+      [
+        "Moba"
+      ],
+      [
+        "Mon"
+      ],
+      [
+        "Mon-khmer"
+      ],
+      [
+        "Mongo"
+      ],
+      [
+        "Mongolian"
+      ],
+      [
+        "Moravian"
+      ],
+      [
+        "Mpongwe"
+      ],
+      [
+        "Nahua"
+      ],
+      [
+        "Nama"
+      ],
+      [
+        "Naudemba"
+      ],
+      [
+        "Nauru"
+      ],
+      [
+        "Ngala and Bangi"
+      ],
+      [
+        "Ngbaka"
+      ],
+      [
+        "Ngoni"
+      ],
+      [
+        "Nkole"
+      ],
+      [
+        "Northsotho"
+      ],
+      [
+        "Nsenga"
+      ],
+      [
+        "Nyakusa"
+      ],
+      [
+        "Nyamwesi"
+      ],
+      [
+        "Nyaneka-nkhumbi"
+      ],
+      [
+        "Nyika"
+      ],
+      [
+        "Oromo"
+      ],
+      [
+        "Osseetti"
+      ],
+      [
+        "Ouaddai"
+      ],
+      [
+        "Ovambo"
+      ],
+      [
+        "Ovimbundu"
+      ],
+      [
+        "Paiwan"
+      ],
+      [
+        "Palau"
+      ],
+      [
+        "Pampango"
+      ],
+      [
+        "Pangasinan"
+      ],
+      [
+        "Pashto"
+      ],
+      [
+        "Persian"
+      ],
+      [
+        "Philippene Languages"
+      ],
+      [
+        "Pilipino"
+      ],
+      [
+        "Punjabi"
+      ],
+      [
+        "Punu"
+      ],
+      [
+        "Punu-sira-nzebi"
+      ],
+      [
+        "Quiché"
+      ],
+      [
+        "Rakhine"
+      ],
+      [
+        "Rapa nui"
+      ],
+      [
+        "Ronga"
+      ],
+      [
+        "Rundi"
+      ],
+      [
+        "Saame"
+      ],
+      [
+        "Saho"
+      ],
+      [
+        "Sango"
+      ],
+      [
+        "Santhali"
+      ],
+      [
+        "Saraiki"
+      ],
+      [
+        "Sardinian"
+      ],
+      [
+        "Sena"
+      ],
+      [
+        "Senufo and Minianka"
+      ],
+      [
+        "Serer"
+      ],
+      [
+        "Seselwa"
+      ],
+      [
+        "Shambala"
+      ],
+      [
+        "Shan"
+      ],
+      [
+        "Sidamo"
+      ],
+      [
+        "Silesiana"
+      ],
+      [
+        "Sinaberberi"
+      ],
+      [
+        "Sindhi"
+      ],
+      [
+        "Singali"
+      ],
+      [
+        "Soga"
+      ],
+      [
+        "Somba"
+      ],
+      [
+        "Songhai"
+      ],
+      [
+        "Songhai-zerma"
+      ],
+      [
+        "Soqutri"
+      ],
+      [
+        "Southsotho"
+      ],
+      [
+        "Sranantonga"
+      ],
+      [
+        "Sumo"
+      ],
+      [
+        "Sunda"
+      ],
+      [
+        "Susu"
+      ],
+      [
+        "Swazi"
+      ],
+      [
+        "Swedish"
+      ],
+      [
+        "Tandjile"
+      ],
+      [
+        "Temne"
+      ],
+      [
+        "Teso"
+      ],
+      [
+        "Thai"
+      ],
+      [
+        "Tigre"
+      ],
+      [
+        "Tikar"
+      ],
+      [
+        "Tongan"
+      ],
+      [
+        "Tripuri"
+      ],
+      [
+        "Tswa"
+      ],
+      [
+        "Tukulor"
+      ],
+      [
+        "Turkana"
+      ],
+      [
+        "Turkmenian"
+      ],
+      [
+        "Ukrainian and Russian"
+      ],
+      [
+        "Urdu"
+      ],
+      [
+        "Venda"
+      ],
+      [
+        "Walaita"
+      ],
+      [
+        "Waray-waray"
+      ],
+      [
+        "Watyi"
+      ],
+      [
+        "Xhosa"
+      ],
+      [
+        "Yao"
+      ],
+      [
+        "Zande"
+      ],
+      [
+        "Zenaga"
+      ],
+      [
+        "Zulu"
+      ],
+      [
+        "[South]Mande"
+      ]
+    ],
     "db_id": "world_1",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT cl.Language \nFROM countrylanguage cl \nJOIN country c ON cl.CountryCode = c.Code \nWHERE c.GovernmentForm LIKE '%Republic%' \nGROUP BY cl.Language \nHAVING COUNT(DISTINCT c.Code) = 1;",
-      "latency": 1.337,
+      "latency": 1.636,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          "Abhyasi"
+        ],
+        [
+          "Acholi"
+        ],
+        [
+          "Adja"
+        ],
+        [
+          "Aizo"
+        ],
+        [
+          "Ambo"
+        ],
+        [
+          "Amhara"
+        ],
+        [
+          "Ami"
+        ],
+        [
+          "Ane"
+        ],
+        [
+          "Arabic-French"
+        ],
+        [
+          "Arabic-French-English"
+        ],
+        [
+          "Araucan"
+        ],
+        [
+          "Asami"
+        ],
+        [
+          "Assyrian"
+        ],
+        [
+          "Atayal"
+        ],
+        [
+          "Avarian"
+        ],
+        [
+          "Bajad"
+        ],
+        [
+          "Bakhtyari"
+        ],
+        [
+          "Balante"
+        ],
+        [
+          "Bali"
+        ],
+        [
+          "Bambara"
+        ],
+        [
+          "Bamileke-bamum"
+        ],
+        [
+          "Banda"
+        ],
+        [
+          "Banja"
+        ],
+        [
+          "Bari"
+        ],
+        [
+          "Bariba"
+        ],
+        [
+          "Bashkir"
+        ],
+        [
+          "Bassa"
+        ],
+        [
+          "Batakki"
+        ],
+        [
+          "Beja"
+        ],
+        [
+          "Bemba"
+        ],
+        [
+          "Berberi"
+        ],
+        [
+          "Bhojpuri"
+        ],
+        [
+          "Bicol"
+        ],
+        [
+          "Bilin"
+        ],
+        [
+          "Bislama"
+        ],
+        [
+          "Boa"
+        ],
+        [
+          "Brahui"
+        ],
+        [
+          "Bubi"
+        ],
+        [
+          "Bugi"
+        ],
+        [
+          "Bullom-sherbro"
+        ],
+        [
+          "Bura"
+        ],
+        [
+          "Burmese"
+        ],
+        [
+          "Buryat"
+        ],
+        [
+          "Busansi"
+        ],
+        [
+          "Cakchiquel"
+        ],
+        [
+          "Caprivi"
+        ],
+        [
+          "Cebuano"
+        ],
+        [
+          "Chaga and Pare"
+        ],
+        [
+          "Chakma"
+        ],
+        [
+          "Chechen"
+        ],
+        [
+          "Chewa"
+        ],
+        [
+          "Chichewa"
+        ],
+        [
+          "Chilluk"
+        ],
+        [
+          "Chin"
+        ],
+        [
+          "Chuabo"
+        ],
+        [
+          "Chuvash"
+        ],
+        [
+          "Comorian"
+        ],
+        [
+          "Comorian-Arabic"
+        ],
+        [
+          "Comorian-French"
+        ],
+        [
+          "Comorian-Swahili"
+        ],
+        [
+          "Comorian-madagassi"
+        ],
+        [
+          "Cuna"
+        ],
+        [
+          "Czech and Moravian"
+        ],
+        [
+          "Dagara"
+        ],
+        [
+          "Dariganga"
+        ],
+        [
+          "Dhivehi"
+        ],
+        [
+          "Dinka"
+        ],
+        [
+          "Dong"
+        ],
+        [
+          "Dorbet"
+        ],
+        [
+          "Duala"
+        ],
+        [
+          "Dyula"
+        ],
+        [
+          "Edo"
+        ],
+        [
+          "Embera"
+        ],
+        [
+          "Fijian"
+        ],
+        [
+          "Fon"
+        ],
+        [
+          "Friuli"
+        ],
+        [
+          "Fur"
+        ],
+        [
+          "Ga-adangme"
+        ],
+        [
+          "Gagauzi"
+        ],
+        [
+          "Ganda"
+        ],
+        [
+          "Garifuna"
+        ],
+        [
+          "Garo"
+        ],
+        [
+          "Gbaya"
+        ],
+        [
+          "Georgiana"
+        ],
+        [
+          "Gilaki"
+        ],
+        [
+          "Gio"
+        ],
+        [
+          "Gisu"
+        ],
+        [
+          "Goajiro"
+        ],
+        [
+          "Gogo"
+        ],
+        [
+          "Gorane"
+        ],
+        [
+          "Grebo"
+        ],
+        [
+          "Guaymí"
+        ],
+        [
+          "Gujarati"
+        ],
+        [
+          "Gur"
+        ],
+        [
+          "Gurage"
+        ],
+        [
+          "Gusii"
+        ],
+        [
+          "Ha"
+        ],
+        [
+          "Hadareb"
+        ],
+        [
+          "Hadjarai"
+        ],
+        [
+          "Haiti Creole"
+        ],
+        [
+          "Hakka"
+        ],
+        [
+          "Hassaniya"
+        ],
+        [
+          "Haya"
+        ],
+        [
+          "Hebrew"
+        ],
+        [
+          "Hehet"
+        ],
+        [
+          "Herero"
+        ],
+        [
+          "Hiligaynon"
+        ],
+        [
+          "Hindko"
+        ],
+        [
+          "Hui"
+        ],
+        [
+          "Ibibio"
+        ],
+        [
+          "Ibo"
+        ],
+        [
+          "Icelandic"
+        ],
+        [
+          "Ijo"
+        ],
+        [
+          "Ilocano"
+        ],
+        [
+          "Irish"
+        ],
+        [
+          "Javanese"
+        ],
+        [
+          "Kabyé"
+        ],
+        [
+          "Kachin"
+        ],
+        [
+          "Kalenjin"
+        ],
+        [
+          "Kamba"
+        ],
+        [
+          "Kanem-bornu"
+        ],
+        [
+          "Kannada"
+        ],
+        [
+          "Karakalpak"
+        ],
+        [
+          "Karen"
+        ],
+        [
+          "Kavango"
+        ],
+        [
+          "Kayah"
+        ],
+        [
+          "Kekchí"
+        ],
+        [
+          "Khasi"
+        ],
+        [
+          "Khmer"
+        ],
+        [
+          "Khoekhoe"
+        ],
+        [
+          "Kiga"
+        ],
+        [
+          "Kikuyu"
+        ],
+        [
+          "Kirgiz"
+        ],
+        [
+          "Kirundi"
+        ],
+        [
+          "Kissi"
+        ],
+        [
+          "Kono-vai"
+        ],
+        [
+          "Kosrean"
+        ],
+        [
+          "Kotokoli"
+        ],
+        [
+          "Kuranko"
+        ],
+        [
+          "Lango"
+        ],
+        [
+          "Lao"
+        ],
+        [
+          "Lao-Soung"
+        ],
+        [
+          "Latvian"
+        ],
+        [
+          "Lezgian"
+        ],
+        [
+          "Limba"
+        ],
+        [
+          "Lotuko"
+        ],
+        [
+          "Lozi"
+        ],
+        [
+          "Luba"
+        ],
+        [
+          "Luchazi"
+        ],
+        [
+          "Lugbara"
+        ],
+        [
+          "Luguru"
+        ],
+        [
+          "Luhya"
+        ],
+        [
+          "Luimbe-nganguela"
+        ],
+        [
+          "Luo"
+        ],
+        [
+          "Luri"
+        ],
+        [
+          "Luvale"
+        ],
+        [
+          "Madura"
+        ],
+        [
+          "Maguindanao"
+        ],
+        [
+          "Maka"
+        ],
+        [
+          "Makonde"
+        ],
+        [
+          "Makua"
+        ],
+        [
+          "Malagasy"
+        ],
+        [
+          "Malajalam"
+        ],
+        [
+          "Maltese"
+        ],
+        [
+          "Mam"
+        ],
+        [
+          "Man"
+        ],
+        [
+          "Mandara"
+        ],
+        [
+          "Mandarin Chinese"
+        ],
+        [
+          "Mandjia"
+        ],
+        [
+          "Mandyako"
+        ],
+        [
+          "Mano"
+        ],
+        [
+          "Mantšu"
+        ],
+        [
+          "Maranao"
+        ],
+        [
+          "Marendje"
+        ],
+        [
+          "Mari"
+        ],
+        [
+          "Marma"
+        ],
+        [
+          "Marshallese"
+        ],
+        [
+          "Masai"
+        ],
+        [
+          "Masana"
+        ],
+        [
+          "Mayo-kebbi"
+        ],
+        [
+          "Mazandarani"
+        ],
+        [
+          "Mboshi"
+        ],
+        [
+          "Mbum"
+        ],
+        [
+          "Mbundu"
+        ],
+        [
+          "Mende"
+        ],
+        [
+          "Meru"
+        ],
+        [
+          "Min"
+        ],
+        [
+          "Minangkabau"
+        ],
+        [
+          "Mixed Languages"
+        ],
+        [
+          "Mixtec"
+        ],
+        [
+          "Moba"
+        ],
+        [
+          "Mon"
+        ],
+        [
+          "Mon-khmer"
+        ],
+        [
+          "Mongo"
+        ],
+        [
+          "Moravian"
+        ],
+        [
+          "Mordva"
+        ],
+        [
+          "Mortlock"
+        ],
+        [
+          "Mpongwe"
+        ],
+        [
+          "Muong"
+        ],
+        [
+          "Nahua"
+        ],
+        [
+          "Nama"
+        ],
+        [
+          "Naudemba"
+        ],
+        [
+          "Nauru"
+        ],
+        [
+          "Ngala and Bangi"
+        ],
+        [
+          "Ngbaka"
+        ],
+        [
+          "Ngoni"
+        ],
+        [
+          "Nkole"
+        ],
+        [
+          "Northsotho"
+        ],
+        [
+          "Nsenga"
+        ],
+        [
+          "Nubian Languages"
+        ],
+        [
+          "Nuer"
+        ],
+        [
+          "Nung"
+        ],
+        [
+          "Nyakusa"
+        ],
+        [
+          "Nyamwesi"
+        ],
+        [
+          "Nyaneka-nkhumbi"
+        ],
+        [
+          "Nyika"
+        ],
+        [
+          "Náhuatl"
+        ],
+        [
+          "Orija"
+        ],
+        [
+          "Oromo"
+        ],
+        [
+          "Osseetti"
+        ],
+        [
+          "Otomí"
+        ],
+        [
+          "Ouaddai"
+        ],
+        [
+          "Ovambo"
+        ],
+        [
+          "Ovimbundu"
+        ],
+        [
+          "Paiwan"
+        ],
+        [
+          "Palau"
+        ],
+        [
+          "Pampango"
+        ],
+        [
+          "Pangasinan"
+        ],
+        [
+          "Pashto"
+        ],
+        [
+          "Philippene Languages"
+        ],
+        [
+          "Pilipino"
+        ],
+        [
+          "Pohnpei"
+        ],
+        [
+          "Punu"
+        ],
+        [
+          "Punu-sira-nzebi"
+        ],
+        [
+          "Puyi"
+        ],
+        [
+          "Quiché"
+        ],
+        [
+          "Rakhine"
+        ],
+        [
+          "Rapa nui"
+        ],
+        [
+          "Ronga"
+        ],
+        [
+          "Rundi"
+        ],
+        [
+          "Saame"
+        ],
+        [
+          "Saho"
+        ],
+        [
+          "Sango"
+        ],
+        [
+          "Santhali"
+        ],
+        [
+          "Saraiki"
+        ],
+        [
+          "Sardinian"
+        ],
+        [
+          "Sena"
+        ],
+        [
+          "Senufo and Minianka"
+        ],
+        [
+          "Serer"
+        ],
+        [
+          "Seselwa"
+        ],
+        [
+          "Shambala"
+        ],
+        [
+          "Shan"
+        ],
+        [
+          "Sidamo"
+        ],
+        [
+          "Silesiana"
+        ],
+        [
+          "Sinaberberi"
+        ],
+        [
+          "Sindhi"
+        ],
+        [
+          "Singali"
+        ],
+        [
+          "Soga"
+        ],
+        [
+          "Somba"
+        ],
+        [
+          "Songhai"
+        ],
+        [
+          "Songhai-zerma"
+        ],
+        [
+          "Soqutri"
+        ],
+        [
+          "Southern Slavic Languages"
+        ],
+        [
+          "Southsotho"
+        ],
+        [
+          "Sranantonga"
+        ],
+        [
+          "Sumo"
+        ],
+        [
+          "Sunda"
+        ],
+        [
+          "Susu"
+        ],
+        [
+          "Swazi"
+        ],
+        [
+          "Swedish"
+        ],
+        [
+          "Tagalog"
+        ],
+        [
+          "Tandjile"
+        ],
+        [
+          "Telugu"
+        ],
+        [
+          "Temne"
+        ],
+        [
+          "Teso"
+        ],
+        [
+          "Tho"
+        ],
+        [
+          "Tibetan"
+        ],
+        [
+          "Tigre"
+        ],
+        [
+          "Tikar"
+        ],
+        [
+          "Tiv"
+        ],
+        [
+          "Tongan"
+        ],
+        [
+          "Tripuri"
+        ],
+        [
+          "Trukese"
+        ],
+        [
+          "Tswa"
+        ],
+        [
+          "Tujia"
+        ],
+        [
+          "Tukulor"
+        ],
+        [
+          "Turkana"
+        ],
+        [
+          "Udmur"
+        ],
+        [
+          "Uighur"
+        ],
+        [
+          "Ukrainian and Russian"
+        ],
+        [
+          "Venda"
+        ],
+        [
+          "Walaita"
+        ],
+        [
+          "Waray-waray"
+        ],
+        [
+          "Warrau"
+        ],
+        [
+          "Watyi"
+        ],
+        [
+          "Wolea"
+        ],
+        [
+          "Xhosa"
+        ],
+        [
+          "Yao"
+        ],
+        [
+          "Yap"
+        ],
+        [
+          "Yi"
+        ],
+        [
+          "Yucatec"
+        ],
+        [
+          "Zapotec"
+        ],
+        [
+          "Zenaga"
+        ],
+        [
+          "Zhuang"
+        ],
+        [
+          "Zulu"
+        ],
+        [
+          "[South]Mande"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT cl.Language\nFROM countrylanguage cl\nJOIN country c ON cl.CountryCode = c.Code\nWHERE cl.IsOfficial = 'T' AND c.GovernmentForm LIKE '%Republic%'\nGROUP BY cl.Language\nHAVING COUNT(DISTINCT c.Code) = 1;",
-      "latency": 1.427,
+      "latency": 1.566,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          "Afrikaans"
+        ],
+        [
+          "Albaniana"
+        ],
+        [
+          "Armenian"
+        ],
+        [
+          "Azerbaijani"
+        ],
+        [
+          "Belorussian"
+        ],
+        [
+          "Bengali"
+        ],
+        [
+          "Bislama"
+        ],
+        [
+          "Bulgariana"
+        ],
+        [
+          "Burmese"
+        ],
+        [
+          "Chichewa"
+        ],
+        [
+          "Comorian"
+        ],
+        [
+          "Czech"
+        ],
+        [
+          "Dhivehi"
+        ],
+        [
+          "Estonian"
+        ],
+        [
+          "Ewe"
+        ],
+        [
+          "Fijian"
+        ],
+        [
+          "Finnish"
+        ],
+        [
+          "Georgiana"
+        ],
+        [
+          "Guaraní"
+        ],
+        [
+          "Hebrew"
+        ],
+        [
+          "Hindi"
+        ],
+        [
+          "Hungarian"
+        ],
+        [
+          "Icelandic"
+        ],
+        [
+          "Irish"
+        ],
+        [
+          "Kabyé"
+        ],
+        [
+          "Kazakh"
+        ],
+        [
+          "Kirgiz"
+        ],
+        [
+          "Kiribati"
+        ],
+        [
+          "Kirundi"
+        ],
+        [
+          "Lao"
+        ],
+        [
+          "Latvian"
+        ],
+        [
+          "Lithuanian"
+        ],
+        [
+          "Macedonian"
+        ],
+        [
+          "Malagasy"
+        ],
+        [
+          "Maltese"
+        ],
+        [
+          "Mandarin Chinese"
+        ],
+        [
+          "Marshallese"
+        ],
+        [
+          "Mongolian"
+        ],
+        [
+          "Nauru"
+        ],
+        [
+          "Palau"
+        ],
+        [
+          "Persian"
+        ],
+        [
+          "Pilipino"
+        ],
+        [
+          "Polish"
+        ],
+        [
+          "Romani"
+        ],
+        [
+          "Rwanda"
+        ],
+        [
+          "Singali"
+        ],
+        [
+          "Slovak"
+        ],
+        [
+          "Slovene"
+        ],
+        [
+          "Somali"
+        ],
+        [
+          "Swahili"
+        ],
+        [
+          "Swedish"
+        ],
+        [
+          "Tadzhik"
+        ],
+        [
+          "Tigrinja"
+        ],
+        [
+          "Turkmenian"
+        ],
+        [
+          "Ukrainian"
+        ],
+        [
+          "Urdu"
+        ],
+        [
+          "Uzbek"
+        ],
+        [
+          "Vietnamese"
+        ],
+        [
+          "Wolof"
+        ],
+        [
+          "Xhosa"
+        ],
+        [
+          "Zulu"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT DISTINCT c.GovernmentForm FROM country c WHERE c.GovernmentForm LIKE '%Republic%';",
-      "latency": 10.117,
+      "sql": "SELECT DISTINCT c.GovernmentForm \nFROM country c \nWHERE c.GovernmentForm LIKE '%Republic%';",
+      "latency": 7.29,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": false,
+      "pred_rows": [
+        [
+          "Republic"
+        ],
+        [
+          "Federal Republic"
+        ],
+        [
+          "People'sRepublic"
+        ],
+        [
+          "Socialistic Republic"
+        ],
+        [
+          "Islamic Republic"
+        ]
+      ]
     }
   },
   {
     "idx": 23,
     "question": "What are the names of the contestants whose names are not 'Jessie Alloway'",
     "gold_sql": "SELECT contestant_name FROM contestants WHERE contestant_name != 'Jessie Alloway'",
+    "gold_rows": [
+      [
+        "Edwina Burnam"
+      ],
+      [
+        "Tabatha Gehling"
+      ],
+      [
+        "Kelly Clauss"
+      ],
+      [
+        "Alana Bregman"
+      ],
+      [
+        "Jessie Eichman"
+      ],
+      [
+        "Allie Rogalski"
+      ],
+      [
+        "Nita Coster"
+      ],
+      [
+        "Kurt Walser"
+      ],
+      [
+        "Ericka Dieter"
+      ],
+      [
+        "Loraine NygrenTania Mattioli"
+      ]
+    ],
     "db_id": "voter_1",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT DISTINCT c.contestant_name \nFROM CONTESTANTS c \nWHERE c.contestant_name != 'Jessie Alloway';",
-      "latency": 0.98,
+      "latency": 1.061,
       "error": null,
       "tables_selected": null,
       "total_tables": 3,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Edwina Burnam"
+        ],
+        [
+          "Tabatha Gehling"
+        ],
+        [
+          "Kelly Clauss"
+        ],
+        [
+          "Alana Bregman"
+        ],
+        [
+          "Jessie Eichman"
+        ],
+        [
+          "Allie Rogalski"
+        ],
+        [
+          "Nita Coster"
+        ],
+        [
+          "Kurt Walser"
+        ],
+        [
+          "Ericka Dieter"
+        ],
+        [
+          "Loraine NygrenTania Mattioli"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT contestant_name FROM CONTESTANTS WHERE contestant_name != 'Jessie Alloway';",
-      "latency": 0.736,
+      "latency": 0.762,
       "error": null,
-      "tables_selected": 3,
+      "tables_selected": 2,
       "total_tables": 3,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Edwina Burnam"
+        ],
+        [
+          "Tabatha Gehling"
+        ],
+        [
+          "Kelly Clauss"
+        ],
+        [
+          "Alana Bregman"
+        ],
+        [
+          "Jessie Eichman"
+        ],
+        [
+          "Allie Rogalski"
+        ],
+        [
+          "Nita Coster"
+        ],
+        [
+          "Kurt Walser"
+        ],
+        [
+          "Ericka Dieter"
+        ],
+        [
+          "Loraine NygrenTania Mattioli"
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT contestant_name FROM CONTESTANTS WHERE contestant_name != 'Jessie Alloway';",
-      "latency": 3.174,
+      "latency": 3.005,
       "error": null,
-      "tables_selected": 3,
+      "tables_selected": 2,
       "total_tables": 3,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Edwina Burnam"
+        ],
+        [
+          "Tabatha Gehling"
+        ],
+        [
+          "Kelly Clauss"
+        ],
+        [
+          "Alana Bregman"
+        ],
+        [
+          "Jessie Eichman"
+        ],
+        [
+          "Allie Rogalski"
+        ],
+        [
+          "Nita Coster"
+        ],
+        [
+          "Kurt Walser"
+        ],
+        [
+          "Ericka Dieter"
+        ],
+        [
+          "Loraine NygrenTania Mattioli"
+        ]
+      ]
     }
   },
   {
     "idx": 24,
     "question": "Find the districts in which there are both shops selling less than 3000 products and shops selling more than 10000 products.",
     "gold_sql": "SELECT district FROM shop WHERE Number_products  <  3000 INTERSECT SELECT district FROM shop WHERE Number_products  >  10000",
+    "gold_rows": [],
     "db_id": "employee_hire_evaluation",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT DISTINCT s1.District\nFROM shop s1\nJOIN shop s2 ON s1.District = s2.District\nWHERE s1.Number_products < 3000 AND s2.Number_products > 10000;",
-      "latency": 1.83,
+      "latency": 1.291,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": []
     },
     "S2": {
       "sql": "SELECT DISTINCT s1.District\nFROM shop s1\nJOIN shop s2 ON s1.District = s2.District\nWHERE s1.Number_products < 3000 AND s2.Number_products > 10000;",
-      "latency": 1.224,
+      "latency": 1.686,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": []
     },
     "S3": {
-      "sql": "SELECT DISTINCT s.District \nFROM shop s \nWHERE s.Number_products < 3000 \nAND s.District IN (\n    SELECT s2.District \n    FROM shop s2 \n    WHERE s2.Number_products > 10000\n);",
-      "latency": 17.779,
+      "sql": "SELECT DISTINCT s1.District \nFROM shop s1 \nWHERE s1.Number_products < 3000 \nAND s1.District IN (SELECT s2.District \n                    FROM shop s2 \n                    WHERE s2.Number_products > 10000);",
+      "latency": 3.507,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": []
     }
   },
   {
     "idx": 25,
     "question": "Find the number of concerts happened in the stadium with the highest capacity .",
     "gold_sql": "select count(*) from concert where stadium_id = (select stadium_id from stadium order by capacity desc limit 1)",
+    "gold_rows": [
+      [
+        0
+      ]
+    ],
     "db_id": "concert_singer",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT COUNT(*) AS Number_of_Concerts \nFROM concert \nWHERE Stadium_ID = (SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1);",
-      "latency": 0.953,
+      "latency": 1.418,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          0
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT COUNT(*) AS NumberOfConcerts\nFROM concert\nWHERE Stadium_ID = (SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1);",
-      "latency": 1.56,
+      "latency": 0.799,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          0
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT * FROM stadium ORDER BY Capacity DESC LIMIT 1;",
-      "latency": 5.019,
+      "sql": "SELECT COUNT(*) as concert_count FROM concert WHERE Stadium_ID = 4;",
+      "latency": 3.09,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          0
+        ]
+      ]
     }
   },
   {
     "idx": 26,
     "question": "Find the first name and age of students who have a pet.",
     "gold_sql": "SELECT DISTINCT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid",
+    "gold_rows": [
+      [
+        "Linda",
+        18
+      ],
+      [
+        "Tracy",
+        19
+      ]
+    ],
     "db_id": "pets_1",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT S.Fname, S.Age FROM Student S JOIN Has_Pet HP ON S.StuID = HP.StuID;",
-      "latency": 1.754,
+      "latency": 1.074,
       "error": null,
       "tables_selected": null,
       "total_tables": 3,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Linda",
+          18
+        ],
+        [
+          "Tracy",
+          19
+        ],
+        [
+          "Tracy",
+          19
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT Student.Fname, Student.Age \nFROM Student \nJOIN Has_Pet ON Student.StuID = Has_Pet.StuID;",
-      "latency": 0.849,
+      "latency": 0.84,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Linda",
+          18
+        ],
+        [
+          "Tracy",
+          19
+        ],
+        [
+          "Tracy",
+          19
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT Student.Fname, Student.Age \nFROM Student \nJOIN Has_Pet ON Student.StuID = Has_Pet.StuID;",
-      "latency": 4.121,
+      "latency": 2.605,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Linda",
+          18
+        ],
+        [
+          "Tracy",
+          19
+        ],
+        [
+          "Tracy",
+          19
+        ]
+      ]
     }
   },
   {
     "idx": 27,
     "question": "How many different loser names are there?",
     "gold_sql": "SELECT count(DISTINCT loser_name) FROM matches",
+    "gold_rows": [
+      [
+        49
+      ]
+    ],
     "db_id": "wta_1",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT COUNT(DISTINCT loser_name) AS different_loser_names FROM matches;",
-      "latency": 0.786,
+      "latency": 0.762,
       "error": null,
       "tables_selected": null,
       "total_tables": 3,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          49
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT COUNT(DISTINCT loser_name) AS different_loser_names FROM matches;",
-      "latency": 0.738,
+      "latency": 0.739,
       "error": null,
       "tables_selected": 3,
       "total_tables": 3,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          49
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT COUNT(DISTINCT loser_name) AS different_loser_names FROM matches;",
@@ -1004,223 +4115,5096 @@
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          49
+        ]
+      ]
     }
   },
   {
     "idx": 28,
     "question": "Return the first name, last name and email of the owners living in a state whose name contains the substring 'North'.",
     "gold_sql": "SELECT first_name ,  last_name ,  email_address FROM Owners WHERE state LIKE '%North%'",
+    "gold_rows": [
+      [
+        "Johann",
+        "Fisher",
+        "zboncak.madonna@example.net"
+      ],
+      [
+        "Cindy",
+        "Schmitt",
+        "wpfeffer@example.net"
+      ]
+    ],
     "db_id": "dog_kennels",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';",
-      "latency": 0.714,
+      "latency": 0.723,
       "error": null,
       "tables_selected": null,
       "total_tables": 8,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Johann",
+          "Fisher",
+          "zboncak.madonna@example.net"
+        ],
+        [
+          "Cindy",
+          "Schmitt",
+          "wpfeffer@example.net"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';",
-      "latency": 0.969,
+      "latency": 1.067,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 8,
       "total_tables": 8,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Johann",
+          "Fisher",
+          "zboncak.madonna@example.net"
+        ],
+        [
+          "Cindy",
+          "Schmitt",
+          "wpfeffer@example.net"
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%';",
-      "latency": 2.259,
+      "latency": 3.499,
       "error": null,
-      "tables_selected": 5,
+      "tables_selected": 8,
       "total_tables": 8,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Johann",
+          "Fisher",
+          "zboncak.madonna@example.net"
+        ],
+        [
+          "Cindy",
+          "Schmitt",
+          "wpfeffer@example.net"
+        ]
+      ]
     }
   },
   {
     "idx": 29,
     "question": "What are the different continents and the total popuation and average life expectancy corresponding to each, for continents that have an average life expectancy less than 72?",
     "gold_sql": "SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72",
+    "gold_rows": [
+      [
+        784475000,
+        52.571929824561394,
+        "Africa"
+      ],
+      [
+        3705025700,
+        67.44117647058825,
+        "Asia"
+      ],
+      [
+        30401150,
+        69.715,
+        "Oceania"
+      ],
+      [
+        345780000,
+        70.94615384615386,
+        "South America"
+      ]
+    ],
     "db_id": "world_1",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT Continent, SUM(Population) AS TotalPopulation, AVG(LifeExpectancy) AS AverageLifeExpectancy\nFROM country\nGROUP BY Continent\nHAVING AVG(LifeExpectancy) < 72;",
-      "latency": 1.418,
+      "latency": 1.328,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "Africa",
+          784475000,
+          52.571929824561394
+        ],
+        [
+          "Asia",
+          3705025700,
+          67.44117647058825
+        ],
+        [
+          "Oceania",
+          30401150,
+          69.715
+        ],
+        [
+          "South America",
+          345780000,
+          70.94615384615386
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT Continent, SUM(Population) AS TotalPopulation, AVG(LifeExpectancy) AS AverageLifeExpectancy\nFROM country\nGROUP BY Continent\nHAVING AVG(LifeExpectancy) < 72;",
-      "latency": 1.269,
+      "latency": 1.188,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "Africa",
+          784475000,
+          52.571929824561394
+        ],
+        [
+          "Asia",
+          3705025700,
+          67.44117647058825
+        ],
+        [
+          "Oceania",
+          30401150,
+          69.715
+        ],
+        [
+          "South America",
+          345780000,
+          70.94615384615386
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT Continent, SUM(Population) AS TotalPopulation, AVG(LifeExpectancy) AS AverageLifeExpectancy \nFROM country \nGROUP BY Continent \nHAVING AVG(LifeExpectancy) < 72;",
-      "latency": 4.989,
+      "latency": 8.219,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "Africa",
+          784475000,
+          52.571929824561394
+        ],
+        [
+          "Asia",
+          3705025700,
+          67.44117647058825
+        ],
+        [
+          "Oceania",
+          30401150,
+          69.715
+        ],
+        [
+          "South America",
+          345780000,
+          70.94615384615386
+        ]
+      ]
     }
   },
   {
     "idx": 30,
     "question": "Count the number of different templates used for documents.",
     "gold_sql": "SELECT count(DISTINCT template_id) FROM Documents",
+    "gold_rows": [
+      [
+        12
+      ]
+    ],
     "db_id": "cre_Doc_Template_Mgt",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT COUNT(DISTINCT Template_ID) AS Different_Template_Count FROM Documents;",
-      "latency": 0.771,
+      "latency": 0.746,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          12
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT COUNT(DISTINCT Template_ID) AS Different_Template_Count FROM Documents;",
-      "latency": 0.731,
+      "latency": 0.814,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          12
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT COUNT(DISTINCT Template_ID) AS Different_Template_Count FROM Documents;",
-      "latency": 1.727,
+      "latency": 1.992,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          12
+        ]
+      ]
     }
   },
   {
     "idx": 31,
     "question": "find the minimum and maximum number of products of all stores.",
     "gold_sql": "SELECT min(Number_products) ,  max(Number_products) FROM shop",
+    "gold_rows": [
+      [
+        1600,
+        15000
+      ]
+    ],
     "db_id": "employee_hire_evaluation",
     "hardness": "easy",
     "S1": {
       "sql": "SELECT MIN(Number_products) AS Min_Products, MAX(Number_products) AS Max_Products FROM shop;",
-      "latency": 0.788,
+      "latency": 0.765,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1600,
+          15000
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT MIN(Number_products) AS Min_Products, MAX(Number_products) AS Max_Products FROM shop;",
-      "latency": 0.746,
+      "latency": 0.912,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1600,
+          15000
+        ]
+      ]
     },
     "S3": {
       "sql": "SELECT MIN(Number_products) AS Min_Products, MAX(Number_products) AS Max_Products FROM shop;",
-      "latency": 2.453,
+      "latency": 3.005,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          1600,
+          15000
+        ]
+      ]
     }
   },
   {
     "idx": 32,
     "question": "What is the language spoken by the largest percentage of people in each country?",
     "gold_sql": "SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode",
+    "gold_rows": [
+      [
+        "Papiamento",
+        "ABW",
+        76.7
+      ],
+      [
+        "Pashto",
+        "AFG",
+        52.4
+      ],
+      [
+        "Ovimbundu",
+        "AGO",
+        37.2
+      ],
+      [
+        "English",
+        "AIA",
+        0.0
+      ],
+      [
+        "Albaniana",
+        "ALB",
+        97.9
+      ],
+      [
+        "Spanish",
+        "AND",
+        44.6
+      ],
+      [
+        "Papiamento",
+        "ANT",
+        86.2
+      ],
+      [
+        "Arabic",
+        "ARE",
+        42.0
+      ],
+      [
+        "Spanish",
+        "ARG",
+        96.8
+      ],
+      [
+        "Armenian",
+        "ARM",
+        93.4
+      ],
+      [
+        "Samoan",
+        "ASM",
+        90.6
+      ],
+      [
+        "Creole English",
+        "ATG",
+        95.7
+      ],
+      [
+        "English",
+        "AUS",
+        81.2
+      ],
+      [
+        "German",
+        "AUT",
+        92.0
+      ],
+      [
+        "Azerbaijani",
+        "AZE",
+        89.0
+      ],
+      [
+        "Kirundi",
+        "BDI",
+        98.1
+      ],
+      [
+        "Dutch",
+        "BEL",
+        59.2
+      ],
+      [
+        "Fon",
+        "BEN",
+        39.8
+      ],
+      [
+        "Mossi",
+        "BFA",
+        50.2
+      ],
+      [
+        "Bengali",
+        "BGD",
+        97.7
+      ],
+      [
+        "Bulgariana",
+        "BGR",
+        83.2
+      ],
+      [
+        "Arabic",
+        "BHR",
+        67.7
+      ],
+      [
+        "Creole English",
+        "BHS",
+        89.7
+      ],
+      [
+        "Serbo-Croatian",
+        "BIH",
+        99.2
+      ],
+      [
+        "Belorussian",
+        "BLR",
+        65.6
+      ],
+      [
+        "English",
+        "BLZ",
+        50.8
+      ],
+      [
+        "English",
+        "BMU",
+        100.0
+      ],
+      [
+        "Spanish",
+        "BOL",
+        87.7
+      ],
+      [
+        "Portuguese",
+        "BRA",
+        97.5
+      ],
+      [
+        "Bajan",
+        "BRB",
+        95.1
+      ],
+      [
+        "Malay",
+        "BRN",
+        45.5
+      ],
+      [
+        "Dzongkha",
+        "BTN",
+        50.0
+      ],
+      [
+        "Tswana",
+        "BWA",
+        75.5
+      ],
+      [
+        "Gbaya",
+        "CAF",
+        23.8
+      ],
+      [
+        "English",
+        "CAN",
+        60.4
+      ],
+      [
+        "English",
+        "CCK",
+        0.0
+      ],
+      [
+        "German",
+        "CHE",
+        63.6
+      ],
+      [
+        "Spanish",
+        "CHL",
+        89.7
+      ],
+      [
+        "Chinese",
+        "CHN",
+        92.0
+      ],
+      [
+        "Akan",
+        "CIV",
+        30.0
+      ],
+      [
+        "Fang",
+        "CMR",
+        19.7
+      ],
+      [
+        "Luba",
+        "COD",
+        18.0
+      ],
+      [
+        "Kongo",
+        "COG",
+        51.5
+      ],
+      [
+        "English",
+        "COK",
+        0.0
+      ],
+      [
+        "Spanish",
+        "COL",
+        99.0
+      ],
+      [
+        "Comorian",
+        "COM",
+        75.0
+      ],
+      [
+        "Crioulo",
+        "CPV",
+        100.0
+      ],
+      [
+        "Spanish",
+        "CRI",
+        97.5
+      ],
+      [
+        "Spanish",
+        "CUB",
+        100.0
+      ],
+      [
+        "Chinese",
+        "CXR",
+        0.0
+      ],
+      [
+        "English",
+        "CYM",
+        0.0
+      ],
+      [
+        "Greek",
+        "CYP",
+        74.1
+      ],
+      [
+        "Czech",
+        "CZE",
+        81.2
+      ],
+      [
+        "German",
+        "DEU",
+        91.3
+      ],
+      [
+        "Somali",
+        "DJI",
+        43.9
+      ],
+      [
+        "Creole English",
+        "DMA",
+        100.0
+      ],
+      [
+        "Danish",
+        "DNK",
+        93.5
+      ],
+      [
+        "Spanish",
+        "DOM",
+        98.0
+      ],
+      [
+        "Arabic",
+        "DZA",
+        86.0
+      ],
+      [
+        "Spanish",
+        "ECU",
+        93.0
+      ],
+      [
+        "Arabic",
+        "EGY",
+        98.8
+      ],
+      [
+        "Tigrinja",
+        "ERI",
+        49.1
+      ],
+      [
+        "Arabic",
+        "ESH",
+        100.0
+      ],
+      [
+        "Spanish",
+        "ESP",
+        74.4
+      ],
+      [
+        "Estonian",
+        "EST",
+        65.3
+      ],
+      [
+        "Oromo",
+        "ETH",
+        31.0
+      ],
+      [
+        "Finnish",
+        "FIN",
+        92.7
+      ],
+      [
+        "Fijian",
+        "FJI",
+        50.8
+      ],
+      [
+        "English",
+        "FLK",
+        0.0
+      ],
+      [
+        "French",
+        "FRA",
+        93.6
+      ],
+      [
+        "Faroese",
+        "FRO",
+        100.0
+      ],
+      [
+        "Trukese",
+        "FSM",
+        41.6
+      ],
+      [
+        "Fang",
+        "GAB",
+        35.8
+      ],
+      [
+        "English",
+        "GBR",
+        97.3
+      ],
+      [
+        "Georgiana",
+        "GEO",
+        71.7
+      ],
+      [
+        "Akan",
+        "GHA",
+        52.4
+      ],
+      [
+        "English",
+        "GIB",
+        88.9
+      ],
+      [
+        "Ful",
+        "GIN",
+        38.6
+      ],
+      [
+        "Creole French",
+        "GLP",
+        95.0
+      ],
+      [
+        "Malinke",
+        "GMB",
+        34.1
+      ],
+      [
+        "Crioulo",
+        "GNB",
+        36.4
+      ],
+      [
+        "Fang",
+        "GNQ",
+        84.8
+      ],
+      [
+        "Greek",
+        "GRC",
+        98.5
+      ],
+      [
+        "Creole English",
+        "GRD",
+        100.0
+      ],
+      [
+        "Greenlandic",
+        "GRL",
+        87.5
+      ],
+      [
+        "Spanish",
+        "GTM",
+        64.7
+      ],
+      [
+        "Creole French",
+        "GUF",
+        94.3
+      ],
+      [
+        "English",
+        "GUM",
+        37.5
+      ],
+      [
+        "Creole English",
+        "GUY",
+        96.4
+      ],
+      [
+        "Canton Chinese",
+        "HKG",
+        88.7
+      ],
+      [
+        "Spanish",
+        "HND",
+        97.2
+      ],
+      [
+        "Serbo-Croatian",
+        "HRV",
+        95.9
+      ],
+      [
+        "Haiti Creole",
+        "HTI",
+        100.0
+      ],
+      [
+        "Hungarian",
+        "HUN",
+        98.5
+      ],
+      [
+        "Javanese",
+        "IDN",
+        39.4
+      ],
+      [
+        "Hindi",
+        "IND",
+        39.9
+      ],
+      [
+        "English",
+        "IRL",
+        98.4
+      ],
+      [
+        "Persian",
+        "IRN",
+        45.7
+      ],
+      [
+        "Arabic",
+        "IRQ",
+        77.2
+      ],
+      [
+        "Icelandic",
+        "ISL",
+        95.7
+      ],
+      [
+        "Hebrew",
+        "ISR",
+        63.1
+      ],
+      [
+        "Italian",
+        "ITA",
+        94.1
+      ],
+      [
+        "Creole English",
+        "JAM",
+        94.2
+      ],
+      [
+        "Arabic",
+        "JOR",
+        97.9
+      ],
+      [
+        "Japanese",
+        "JPN",
+        99.1
+      ],
+      [
+        "Kazakh",
+        "KAZ",
+        46.0
+      ],
+      [
+        "Kikuyu",
+        "KEN",
+        20.9
+      ],
+      [
+        "Kirgiz",
+        "KGZ",
+        59.7
+      ],
+      [
+        "Khmer",
+        "KHM",
+        88.6
+      ],
+      [
+        "Kiribati",
+        "KIR",
+        98.9
+      ],
+      [
+        "Creole English",
+        "KNA",
+        100.0
+      ],
+      [
+        "Korean",
+        "KOR",
+        99.9
+      ],
+      [
+        "Arabic",
+        "KWT",
+        78.1
+      ],
+      [
+        "Lao",
+        "LAO",
+        67.2
+      ],
+      [
+        "Arabic",
+        "LBN",
+        93.0
+      ],
+      [
+        "Kpelle",
+        "LBR",
+        19.5
+      ],
+      [
+        "Arabic",
+        "LBY",
+        96.0
+      ],
+      [
+        "Creole French",
+        "LCA",
+        80.0
+      ],
+      [
+        "German",
+        "LIE",
+        89.0
+      ],
+      [
+        "Singali",
+        "LKA",
+        60.3
+      ],
+      [
+        "Sotho",
+        "LSO",
+        85.0
+      ],
+      [
+        "Lithuanian",
+        "LTU",
+        81.6
+      ],
+      [
+        "Luxembourgish",
+        "LUX",
+        64.4
+      ],
+      [
+        "Latvian",
+        "LVA",
+        55.1
+      ],
+      [
+        "Canton Chinese",
+        "MAC",
+        85.6
+      ],
+      [
+        "Arabic",
+        "MAR",
+        65.0
+      ],
+      [
+        "French",
+        "MCO",
+        41.9
+      ],
+      [
+        "Romanian",
+        "MDA",
+        61.9
+      ],
+      [
+        "Malagasy",
+        "MDG",
+        98.9
+      ],
+      [
+        "Dhivehi",
+        "MDV",
+        100.0
+      ],
+      [
+        "Spanish",
+        "MEX",
+        92.1
+      ],
+      [
+        "Marshallese",
+        "MHL",
+        96.8
+      ],
+      [
+        "Macedonian",
+        "MKD",
+        66.5
+      ],
+      [
+        "Bambara",
+        "MLI",
+        31.8
+      ],
+      [
+        "Maltese",
+        "MLT",
+        95.8
+      ],
+      [
+        "Burmese",
+        "MMR",
+        69.0
+      ],
+      [
+        "Mongolian",
+        "MNG",
+        78.8
+      ],
+      [
+        "Philippene Languages",
+        "MNP",
+        34.1
+      ],
+      [
+        "Makua",
+        "MOZ",
+        27.8
+      ],
+      [
+        "Hassaniya",
+        "MRT",
+        81.7
+      ],
+      [
+        "English",
+        "MSR",
+        0.0
+      ],
+      [
+        "Creole French",
+        "MTQ",
+        96.6
+      ],
+      [
+        "Creole French",
+        "MUS",
+        70.6
+      ],
+      [
+        "Chichewa",
+        "MWI",
+        58.3
+      ],
+      [
+        "Malay",
+        "MYS",
+        58.4
+      ],
+      [
+        "Mahoré",
+        "MYT",
+        41.9
+      ],
+      [
+        "Ovambo",
+        "NAM",
+        50.7
+      ],
+      [
+        "Malenasian Languages",
+        "NCL",
+        45.4
+      ],
+      [
+        "Hausa",
+        "NER",
+        53.1
+      ],
+      [
+        "English",
+        "NFK",
+        0.0
+      ],
+      [
+        "Joruba",
+        "NGA",
+        21.4
+      ],
+      [
+        "Spanish",
+        "NIC",
+        97.6
+      ],
+      [
+        "English",
+        "NIU",
+        0.0
+      ],
+      [
+        "Dutch",
+        "NLD",
+        95.6
+      ],
+      [
+        "Norwegian",
+        "NOR",
+        96.6
+      ],
+      [
+        "Nepali",
+        "NPL",
+        50.4
+      ],
+      [
+        "Nauru",
+        "NRU",
+        57.5
+      ],
+      [
+        "English",
+        "NZL",
+        87.0
+      ],
+      [
+        "Arabic",
+        "OMN",
+        76.7
+      ],
+      [
+        "Punjabi",
+        "PAK",
+        48.2
+      ],
+      [
+        "Spanish",
+        "PAN",
+        76.8
+      ],
+      [
+        "Pitcairnese",
+        "PCN",
+        0.0
+      ],
+      [
+        "Spanish",
+        "PER",
+        79.8
+      ],
+      [
+        "Pilipino",
+        "PHL",
+        29.3
+      ],
+      [
+        "Palau",
+        "PLW",
+        82.2
+      ],
+      [
+        "Papuan Languages",
+        "PNG",
+        78.1
+      ],
+      [
+        "Polish",
+        "POL",
+        97.6
+      ],
+      [
+        "Spanish",
+        "PRI",
+        51.3
+      ],
+      [
+        "Korean",
+        "PRK",
+        99.9
+      ],
+      [
+        "Portuguese",
+        "PRT",
+        99.0
+      ],
+      [
+        "Spanish",
+        "PRY",
+        55.1
+      ],
+      [
+        "Arabic",
+        "PSE",
+        95.9
+      ],
+      [
+        "Tahitian",
+        "PYF",
+        46.4
+      ],
+      [
+        "Arabic",
+        "QAT",
+        40.7
+      ],
+      [
+        "Creole French",
+        "REU",
+        91.5
+      ],
+      [
+        "Romanian",
+        "ROM",
+        90.7
+      ],
+      [
+        "Russian",
+        "RUS",
+        86.6
+      ],
+      [
+        "Rwanda",
+        "RWA",
+        100.0
+      ],
+      [
+        "Arabic",
+        "SAU",
+        95.0
+      ],
+      [
+        "Arabic",
+        "SDN",
+        49.4
+      ],
+      [
+        "Wolof",
+        "SEN",
+        48.1
+      ],
+      [
+        "Chinese",
+        "SGP",
+        77.1
+      ],
+      [
+        "English",
+        "SHN",
+        0.0
+      ],
+      [
+        "Norwegian",
+        "SJM",
+        0.0
+      ],
+      [
+        "Malenasian Languages",
+        "SLB",
+        85.6
+      ],
+      [
+        "Mende",
+        "SLE",
+        34.8
+      ],
+      [
+        "Spanish",
+        "SLV",
+        100.0
+      ],
+      [
+        "Italian",
+        "SMR",
+        100.0
+      ],
+      [
+        "Somali",
+        "SOM",
+        98.3
+      ],
+      [
+        "French",
+        "SPM",
+        0.0
+      ],
+      [
+        "Crioulo",
+        "STP",
+        86.3
+      ],
+      [
+        "Sranantonga",
+        "SUR",
+        81.0
+      ],
+      [
+        "Slovak",
+        "SVK",
+        85.6
+      ],
+      [
+        "Slovene",
+        "SVN",
+        87.9
+      ],
+      [
+        "Swedish",
+        "SWE",
+        89.5
+      ],
+      [
+        "Swazi",
+        "SWZ",
+        89.9
+      ],
+      [
+        "Seselwa",
+        "SYC",
+        91.3
+      ],
+      [
+        "Arabic",
+        "SYR",
+        90.0
+      ],
+      [
+        "English",
+        "TCA",
+        0.0
+      ],
+      [
+        "Sara",
+        "TCD",
+        27.7
+      ],
+      [
+        "Ewe",
+        "TGO",
+        23.2
+      ],
+      [
+        "Thai",
+        "THA",
+        52.6
+      ],
+      [
+        "Tadzhik",
+        "TJK",
+        62.2
+      ],
+      [
+        "English",
+        "TKL",
+        0.0
+      ],
+      [
+        "Turkmenian",
+        "TKM",
+        76.7
+      ],
+      [
+        "Portuguese",
+        "TMP",
+        0.0
+      ],
+      [
+        "Tongan",
+        "TON",
+        98.3
+      ],
+      [
+        "English",
+        "TTO",
+        93.5
+      ],
+      [
+        "Arabic",
+        "TUN",
+        69.9
+      ],
+      [
+        "Turkish",
+        "TUR",
+        87.6
+      ],
+      [
+        "Tuvalu",
+        "TUV",
+        92.5
+      ],
+      [
+        "Min",
+        "TWN",
+        66.7
+      ],
+      [
+        "Nyamwesi",
+        "TZA",
+        21.1
+      ],
+      [
+        "Ganda",
+        "UGA",
+        18.1
+      ],
+      [
+        "Ukrainian",
+        "UKR",
+        64.7
+      ],
+      [
+        "English",
+        "UMI",
+        0.0
+      ],
+      [
+        "Spanish",
+        "URY",
+        95.7
+      ],
+      [
+        "English",
+        "USA",
+        86.2
+      ],
+      [
+        "Uzbek",
+        "UZB",
+        72.6
+      ],
+      [
+        "Italian",
+        "VAT",
+        0.0
+      ],
+      [
+        "Creole English",
+        "VCT",
+        99.1
+      ],
+      [
+        "Spanish",
+        "VEN",
+        96.9
+      ],
+      [
+        "English",
+        "VGB",
+        0.0
+      ],
+      [
+        "English",
+        "VIR",
+        81.7
+      ],
+      [
+        "Vietnamese",
+        "VNM",
+        86.8
+      ],
+      [
+        "Bislama",
+        "VUT",
+        56.6
+      ],
+      [
+        "Futuna",
+        "WLF",
+        0.0
+      ],
+      [
+        "Samoan-English",
+        "WSM",
+        52.0
+      ],
+      [
+        "Arabic",
+        "YEM",
+        99.6
+      ],
+      [
+        "Serbo-Croatian",
+        "YUG",
+        75.2
+      ],
+      [
+        "Zulu",
+        "ZAF",
+        22.7
+      ],
+      [
+        "Bemba",
+        "ZMB",
+        29.7
+      ],
+      [
+        "Shona",
+        "ZWE",
+        72.1
+      ]
+    ],
     "db_id": "world_1",
     "hardness": "medium",
     "S1": {
       "sql": "SELECT cl.CountryCode, cl.Language, MAX(cl.Percentage) AS MaxPercentage\nFROM countrylanguage cl\nGROUP BY cl.CountryCode;",
-      "latency": 0.847,
+      "latency": 1.377,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "ABW",
+          "Papiamento",
+          76.7
+        ],
+        [
+          "AFG",
+          "Pashto",
+          52.4
+        ],
+        [
+          "AGO",
+          "Ovimbundu",
+          37.2
+        ],
+        [
+          "AIA",
+          "English",
+          0.0
+        ],
+        [
+          "ALB",
+          "Albaniana",
+          97.9
+        ],
+        [
+          "AND",
+          "Spanish",
+          44.6
+        ],
+        [
+          "ANT",
+          "Papiamento",
+          86.2
+        ],
+        [
+          "ARE",
+          "Arabic",
+          42.0
+        ],
+        [
+          "ARG",
+          "Spanish",
+          96.8
+        ],
+        [
+          "ARM",
+          "Armenian",
+          93.4
+        ],
+        [
+          "ASM",
+          "Samoan",
+          90.6
+        ],
+        [
+          "ATG",
+          "Creole English",
+          95.7
+        ],
+        [
+          "AUS",
+          "English",
+          81.2
+        ],
+        [
+          "AUT",
+          "German",
+          92.0
+        ],
+        [
+          "AZE",
+          "Azerbaijani",
+          89.0
+        ],
+        [
+          "BDI",
+          "Kirundi",
+          98.1
+        ],
+        [
+          "BEL",
+          "Dutch",
+          59.2
+        ],
+        [
+          "BEN",
+          "Fon",
+          39.8
+        ],
+        [
+          "BFA",
+          "Mossi",
+          50.2
+        ],
+        [
+          "BGD",
+          "Bengali",
+          97.7
+        ],
+        [
+          "BGR",
+          "Bulgariana",
+          83.2
+        ],
+        [
+          "BHR",
+          "Arabic",
+          67.7
+        ],
+        [
+          "BHS",
+          "Creole English",
+          89.7
+        ],
+        [
+          "BIH",
+          "Serbo-Croatian",
+          99.2
+        ],
+        [
+          "BLR",
+          "Belorussian",
+          65.6
+        ],
+        [
+          "BLZ",
+          "English",
+          50.8
+        ],
+        [
+          "BMU",
+          "English",
+          100.0
+        ],
+        [
+          "BOL",
+          "Spanish",
+          87.7
+        ],
+        [
+          "BRA",
+          "Portuguese",
+          97.5
+        ],
+        [
+          "BRB",
+          "Bajan",
+          95.1
+        ],
+        [
+          "BRN",
+          "Malay",
+          45.5
+        ],
+        [
+          "BTN",
+          "Dzongkha",
+          50.0
+        ],
+        [
+          "BWA",
+          "Tswana",
+          75.5
+        ],
+        [
+          "CAF",
+          "Gbaya",
+          23.8
+        ],
+        [
+          "CAN",
+          "English",
+          60.4
+        ],
+        [
+          "CCK",
+          "English",
+          0.0
+        ],
+        [
+          "CHE",
+          "German",
+          63.6
+        ],
+        [
+          "CHL",
+          "Spanish",
+          89.7
+        ],
+        [
+          "CHN",
+          "Chinese",
+          92.0
+        ],
+        [
+          "CIV",
+          "Akan",
+          30.0
+        ],
+        [
+          "CMR",
+          "Fang",
+          19.7
+        ],
+        [
+          "COD",
+          "Luba",
+          18.0
+        ],
+        [
+          "COG",
+          "Kongo",
+          51.5
+        ],
+        [
+          "COK",
+          "English",
+          0.0
+        ],
+        [
+          "COL",
+          "Spanish",
+          99.0
+        ],
+        [
+          "COM",
+          "Comorian",
+          75.0
+        ],
+        [
+          "CPV",
+          "Crioulo",
+          100.0
+        ],
+        [
+          "CRI",
+          "Spanish",
+          97.5
+        ],
+        [
+          "CUB",
+          "Spanish",
+          100.0
+        ],
+        [
+          "CXR",
+          "Chinese",
+          0.0
+        ],
+        [
+          "CYM",
+          "English",
+          0.0
+        ],
+        [
+          "CYP",
+          "Greek",
+          74.1
+        ],
+        [
+          "CZE",
+          "Czech",
+          81.2
+        ],
+        [
+          "DEU",
+          "German",
+          91.3
+        ],
+        [
+          "DJI",
+          "Somali",
+          43.9
+        ],
+        [
+          "DMA",
+          "Creole English",
+          100.0
+        ],
+        [
+          "DNK",
+          "Danish",
+          93.5
+        ],
+        [
+          "DOM",
+          "Spanish",
+          98.0
+        ],
+        [
+          "DZA",
+          "Arabic",
+          86.0
+        ],
+        [
+          "ECU",
+          "Spanish",
+          93.0
+        ],
+        [
+          "EGY",
+          "Arabic",
+          98.8
+        ],
+        [
+          "ERI",
+          "Tigrinja",
+          49.1
+        ],
+        [
+          "ESH",
+          "Arabic",
+          100.0
+        ],
+        [
+          "ESP",
+          "Spanish",
+          74.4
+        ],
+        [
+          "EST",
+          "Estonian",
+          65.3
+        ],
+        [
+          "ETH",
+          "Oromo",
+          31.0
+        ],
+        [
+          "FIN",
+          "Finnish",
+          92.7
+        ],
+        [
+          "FJI",
+          "Fijian",
+          50.8
+        ],
+        [
+          "FLK",
+          "English",
+          0.0
+        ],
+        [
+          "FRA",
+          "French",
+          93.6
+        ],
+        [
+          "FRO",
+          "Faroese",
+          100.0
+        ],
+        [
+          "FSM",
+          "Trukese",
+          41.6
+        ],
+        [
+          "GAB",
+          "Fang",
+          35.8
+        ],
+        [
+          "GBR",
+          "English",
+          97.3
+        ],
+        [
+          "GEO",
+          "Georgiana",
+          71.7
+        ],
+        [
+          "GHA",
+          "Akan",
+          52.4
+        ],
+        [
+          "GIB",
+          "English",
+          88.9
+        ],
+        [
+          "GIN",
+          "Ful",
+          38.6
+        ],
+        [
+          "GLP",
+          "Creole French",
+          95.0
+        ],
+        [
+          "GMB",
+          "Malinke",
+          34.1
+        ],
+        [
+          "GNB",
+          "Crioulo",
+          36.4
+        ],
+        [
+          "GNQ",
+          "Fang",
+          84.8
+        ],
+        [
+          "GRC",
+          "Greek",
+          98.5
+        ],
+        [
+          "GRD",
+          "Creole English",
+          100.0
+        ],
+        [
+          "GRL",
+          "Greenlandic",
+          87.5
+        ],
+        [
+          "GTM",
+          "Spanish",
+          64.7
+        ],
+        [
+          "GUF",
+          "Creole French",
+          94.3
+        ],
+        [
+          "GUM",
+          "English",
+          37.5
+        ],
+        [
+          "GUY",
+          "Creole English",
+          96.4
+        ],
+        [
+          "HKG",
+          "Canton Chinese",
+          88.7
+        ],
+        [
+          "HND",
+          "Spanish",
+          97.2
+        ],
+        [
+          "HRV",
+          "Serbo-Croatian",
+          95.9
+        ],
+        [
+          "HTI",
+          "Haiti Creole",
+          100.0
+        ],
+        [
+          "HUN",
+          "Hungarian",
+          98.5
+        ],
+        [
+          "IDN",
+          "Javanese",
+          39.4
+        ],
+        [
+          "IND",
+          "Hindi",
+          39.9
+        ],
+        [
+          "IRL",
+          "English",
+          98.4
+        ],
+        [
+          "IRN",
+          "Persian",
+          45.7
+        ],
+        [
+          "IRQ",
+          "Arabic",
+          77.2
+        ],
+        [
+          "ISL",
+          "Icelandic",
+          95.7
+        ],
+        [
+          "ISR",
+          "Hebrew",
+          63.1
+        ],
+        [
+          "ITA",
+          "Italian",
+          94.1
+        ],
+        [
+          "JAM",
+          "Creole English",
+          94.2
+        ],
+        [
+          "JOR",
+          "Arabic",
+          97.9
+        ],
+        [
+          "JPN",
+          "Japanese",
+          99.1
+        ],
+        [
+          "KAZ",
+          "Kazakh",
+          46.0
+        ],
+        [
+          "KEN",
+          "Kikuyu",
+          20.9
+        ],
+        [
+          "KGZ",
+          "Kirgiz",
+          59.7
+        ],
+        [
+          "KHM",
+          "Khmer",
+          88.6
+        ],
+        [
+          "KIR",
+          "Kiribati",
+          98.9
+        ],
+        [
+          "KNA",
+          "Creole English",
+          100.0
+        ],
+        [
+          "KOR",
+          "Korean",
+          99.9
+        ],
+        [
+          "KWT",
+          "Arabic",
+          78.1
+        ],
+        [
+          "LAO",
+          "Lao",
+          67.2
+        ],
+        [
+          "LBN",
+          "Arabic",
+          93.0
+        ],
+        [
+          "LBR",
+          "Kpelle",
+          19.5
+        ],
+        [
+          "LBY",
+          "Arabic",
+          96.0
+        ],
+        [
+          "LCA",
+          "Creole French",
+          80.0
+        ],
+        [
+          "LIE",
+          "German",
+          89.0
+        ],
+        [
+          "LKA",
+          "Singali",
+          60.3
+        ],
+        [
+          "LSO",
+          "Sotho",
+          85.0
+        ],
+        [
+          "LTU",
+          "Lithuanian",
+          81.6
+        ],
+        [
+          "LUX",
+          "Luxembourgish",
+          64.4
+        ],
+        [
+          "LVA",
+          "Latvian",
+          55.1
+        ],
+        [
+          "MAC",
+          "Canton Chinese",
+          85.6
+        ],
+        [
+          "MAR",
+          "Arabic",
+          65.0
+        ],
+        [
+          "MCO",
+          "French",
+          41.9
+        ],
+        [
+          "MDA",
+          "Romanian",
+          61.9
+        ],
+        [
+          "MDG",
+          "Malagasy",
+          98.9
+        ],
+        [
+          "MDV",
+          "Dhivehi",
+          100.0
+        ],
+        [
+          "MEX",
+          "Spanish",
+          92.1
+        ],
+        [
+          "MHL",
+          "Marshallese",
+          96.8
+        ],
+        [
+          "MKD",
+          "Macedonian",
+          66.5
+        ],
+        [
+          "MLI",
+          "Bambara",
+          31.8
+        ],
+        [
+          "MLT",
+          "Maltese",
+          95.8
+        ],
+        [
+          "MMR",
+          "Burmese",
+          69.0
+        ],
+        [
+          "MNG",
+          "Mongolian",
+          78.8
+        ],
+        [
+          "MNP",
+          "Philippene Languages",
+          34.1
+        ],
+        [
+          "MOZ",
+          "Makua",
+          27.8
+        ],
+        [
+          "MRT",
+          "Hassaniya",
+          81.7
+        ],
+        [
+          "MSR",
+          "English",
+          0.0
+        ],
+        [
+          "MTQ",
+          "Creole French",
+          96.6
+        ],
+        [
+          "MUS",
+          "Creole French",
+          70.6
+        ],
+        [
+          "MWI",
+          "Chichewa",
+          58.3
+        ],
+        [
+          "MYS",
+          "Malay",
+          58.4
+        ],
+        [
+          "MYT",
+          "Mahoré",
+          41.9
+        ],
+        [
+          "NAM",
+          "Ovambo",
+          50.7
+        ],
+        [
+          "NCL",
+          "Malenasian Languages",
+          45.4
+        ],
+        [
+          "NER",
+          "Hausa",
+          53.1
+        ],
+        [
+          "NFK",
+          "English",
+          0.0
+        ],
+        [
+          "NGA",
+          "Joruba",
+          21.4
+        ],
+        [
+          "NIC",
+          "Spanish",
+          97.6
+        ],
+        [
+          "NIU",
+          "English",
+          0.0
+        ],
+        [
+          "NLD",
+          "Dutch",
+          95.6
+        ],
+        [
+          "NOR",
+          "Norwegian",
+          96.6
+        ],
+        [
+          "NPL",
+          "Nepali",
+          50.4
+        ],
+        [
+          "NRU",
+          "Nauru",
+          57.5
+        ],
+        [
+          "NZL",
+          "English",
+          87.0
+        ],
+        [
+          "OMN",
+          "Arabic",
+          76.7
+        ],
+        [
+          "PAK",
+          "Punjabi",
+          48.2
+        ],
+        [
+          "PAN",
+          "Spanish",
+          76.8
+        ],
+        [
+          "PCN",
+          "Pitcairnese",
+          0.0
+        ],
+        [
+          "PER",
+          "Spanish",
+          79.8
+        ],
+        [
+          "PHL",
+          "Pilipino",
+          29.3
+        ],
+        [
+          "PLW",
+          "Palau",
+          82.2
+        ],
+        [
+          "PNG",
+          "Papuan Languages",
+          78.1
+        ],
+        [
+          "POL",
+          "Polish",
+          97.6
+        ],
+        [
+          "PRI",
+          "Spanish",
+          51.3
+        ],
+        [
+          "PRK",
+          "Korean",
+          99.9
+        ],
+        [
+          "PRT",
+          "Portuguese",
+          99.0
+        ],
+        [
+          "PRY",
+          "Spanish",
+          55.1
+        ],
+        [
+          "PSE",
+          "Arabic",
+          95.9
+        ],
+        [
+          "PYF",
+          "Tahitian",
+          46.4
+        ],
+        [
+          "QAT",
+          "Arabic",
+          40.7
+        ],
+        [
+          "REU",
+          "Creole French",
+          91.5
+        ],
+        [
+          "ROM",
+          "Romanian",
+          90.7
+        ],
+        [
+          "RUS",
+          "Russian",
+          86.6
+        ],
+        [
+          "RWA",
+          "Rwanda",
+          100.0
+        ],
+        [
+          "SAU",
+          "Arabic",
+          95.0
+        ],
+        [
+          "SDN",
+          "Arabic",
+          49.4
+        ],
+        [
+          "SEN",
+          "Wolof",
+          48.1
+        ],
+        [
+          "SGP",
+          "Chinese",
+          77.1
+        ],
+        [
+          "SHN",
+          "English",
+          0.0
+        ],
+        [
+          "SJM",
+          "Norwegian",
+          0.0
+        ],
+        [
+          "SLB",
+          "Malenasian Languages",
+          85.6
+        ],
+        [
+          "SLE",
+          "Mende",
+          34.8
+        ],
+        [
+          "SLV",
+          "Spanish",
+          100.0
+        ],
+        [
+          "SMR",
+          "Italian",
+          100.0
+        ],
+        [
+          "SOM",
+          "Somali",
+          98.3
+        ],
+        [
+          "SPM",
+          "French",
+          0.0
+        ],
+        [
+          "STP",
+          "Crioulo",
+          86.3
+        ],
+        [
+          "SUR",
+          "Sranantonga",
+          81.0
+        ],
+        [
+          "SVK",
+          "Slovak",
+          85.6
+        ],
+        [
+          "SVN",
+          "Slovene",
+          87.9
+        ],
+        [
+          "SWE",
+          "Swedish",
+          89.5
+        ],
+        [
+          "SWZ",
+          "Swazi",
+          89.9
+        ],
+        [
+          "SYC",
+          "Seselwa",
+          91.3
+        ],
+        [
+          "SYR",
+          "Arabic",
+          90.0
+        ],
+        [
+          "TCA",
+          "English",
+          0.0
+        ],
+        [
+          "TCD",
+          "Sara",
+          27.7
+        ],
+        [
+          "TGO",
+          "Ewe",
+          23.2
+        ],
+        [
+          "THA",
+          "Thai",
+          52.6
+        ],
+        [
+          "TJK",
+          "Tadzhik",
+          62.2
+        ],
+        [
+          "TKL",
+          "English",
+          0.0
+        ],
+        [
+          "TKM",
+          "Turkmenian",
+          76.7
+        ],
+        [
+          "TMP",
+          "Portuguese",
+          0.0
+        ],
+        [
+          "TON",
+          "Tongan",
+          98.3
+        ],
+        [
+          "TTO",
+          "English",
+          93.5
+        ],
+        [
+          "TUN",
+          "Arabic",
+          69.9
+        ],
+        [
+          "TUR",
+          "Turkish",
+          87.6
+        ],
+        [
+          "TUV",
+          "Tuvalu",
+          92.5
+        ],
+        [
+          "TWN",
+          "Min",
+          66.7
+        ],
+        [
+          "TZA",
+          "Nyamwesi",
+          21.1
+        ],
+        [
+          "UGA",
+          "Ganda",
+          18.1
+        ],
+        [
+          "UKR",
+          "Ukrainian",
+          64.7
+        ],
+        [
+          "UMI",
+          "English",
+          0.0
+        ],
+        [
+          "URY",
+          "Spanish",
+          95.7
+        ],
+        [
+          "USA",
+          "English",
+          86.2
+        ],
+        [
+          "UZB",
+          "Uzbek",
+          72.6
+        ],
+        [
+          "VAT",
+          "Italian",
+          0.0
+        ],
+        [
+          "VCT",
+          "Creole English",
+          99.1
+        ],
+        [
+          "VEN",
+          "Spanish",
+          96.9
+        ],
+        [
+          "VGB",
+          "English",
+          0.0
+        ],
+        [
+          "VIR",
+          "English",
+          81.7
+        ],
+        [
+          "VNM",
+          "Vietnamese",
+          86.8
+        ],
+        [
+          "VUT",
+          "Bislama",
+          56.6
+        ],
+        [
+          "WLF",
+          "Futuna",
+          0.0
+        ],
+        [
+          "WSM",
+          "Samoan-English",
+          52.0
+        ],
+        [
+          "YEM",
+          "Arabic",
+          99.6
+        ],
+        [
+          "YUG",
+          "Serbo-Croatian",
+          75.2
+        ],
+        [
+          "ZAF",
+          "Zulu",
+          22.7
+        ],
+        [
+          "ZMB",
+          "Bemba",
+          29.7
+        ],
+        [
+          "ZWE",
+          "Shona",
+          72.1
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT cl.CountryCode, cl.Language, MAX(cl.Percentage) AS MaxPercentage\nFROM countrylanguage cl\nGROUP BY cl.CountryCode;",
-      "latency": 0.877,
+      "latency": 1.105,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "ABW",
+          "Papiamento",
+          76.7
+        ],
+        [
+          "AFG",
+          "Pashto",
+          52.4
+        ],
+        [
+          "AGO",
+          "Ovimbundu",
+          37.2
+        ],
+        [
+          "AIA",
+          "English",
+          0.0
+        ],
+        [
+          "ALB",
+          "Albaniana",
+          97.9
+        ],
+        [
+          "AND",
+          "Spanish",
+          44.6
+        ],
+        [
+          "ANT",
+          "Papiamento",
+          86.2
+        ],
+        [
+          "ARE",
+          "Arabic",
+          42.0
+        ],
+        [
+          "ARG",
+          "Spanish",
+          96.8
+        ],
+        [
+          "ARM",
+          "Armenian",
+          93.4
+        ],
+        [
+          "ASM",
+          "Samoan",
+          90.6
+        ],
+        [
+          "ATG",
+          "Creole English",
+          95.7
+        ],
+        [
+          "AUS",
+          "English",
+          81.2
+        ],
+        [
+          "AUT",
+          "German",
+          92.0
+        ],
+        [
+          "AZE",
+          "Azerbaijani",
+          89.0
+        ],
+        [
+          "BDI",
+          "Kirundi",
+          98.1
+        ],
+        [
+          "BEL",
+          "Dutch",
+          59.2
+        ],
+        [
+          "BEN",
+          "Fon",
+          39.8
+        ],
+        [
+          "BFA",
+          "Mossi",
+          50.2
+        ],
+        [
+          "BGD",
+          "Bengali",
+          97.7
+        ],
+        [
+          "BGR",
+          "Bulgariana",
+          83.2
+        ],
+        [
+          "BHR",
+          "Arabic",
+          67.7
+        ],
+        [
+          "BHS",
+          "Creole English",
+          89.7
+        ],
+        [
+          "BIH",
+          "Serbo-Croatian",
+          99.2
+        ],
+        [
+          "BLR",
+          "Belorussian",
+          65.6
+        ],
+        [
+          "BLZ",
+          "English",
+          50.8
+        ],
+        [
+          "BMU",
+          "English",
+          100.0
+        ],
+        [
+          "BOL",
+          "Spanish",
+          87.7
+        ],
+        [
+          "BRA",
+          "Portuguese",
+          97.5
+        ],
+        [
+          "BRB",
+          "Bajan",
+          95.1
+        ],
+        [
+          "BRN",
+          "Malay",
+          45.5
+        ],
+        [
+          "BTN",
+          "Dzongkha",
+          50.0
+        ],
+        [
+          "BWA",
+          "Tswana",
+          75.5
+        ],
+        [
+          "CAF",
+          "Gbaya",
+          23.8
+        ],
+        [
+          "CAN",
+          "English",
+          60.4
+        ],
+        [
+          "CCK",
+          "English",
+          0.0
+        ],
+        [
+          "CHE",
+          "German",
+          63.6
+        ],
+        [
+          "CHL",
+          "Spanish",
+          89.7
+        ],
+        [
+          "CHN",
+          "Chinese",
+          92.0
+        ],
+        [
+          "CIV",
+          "Akan",
+          30.0
+        ],
+        [
+          "CMR",
+          "Fang",
+          19.7
+        ],
+        [
+          "COD",
+          "Luba",
+          18.0
+        ],
+        [
+          "COG",
+          "Kongo",
+          51.5
+        ],
+        [
+          "COK",
+          "English",
+          0.0
+        ],
+        [
+          "COL",
+          "Spanish",
+          99.0
+        ],
+        [
+          "COM",
+          "Comorian",
+          75.0
+        ],
+        [
+          "CPV",
+          "Crioulo",
+          100.0
+        ],
+        [
+          "CRI",
+          "Spanish",
+          97.5
+        ],
+        [
+          "CUB",
+          "Spanish",
+          100.0
+        ],
+        [
+          "CXR",
+          "Chinese",
+          0.0
+        ],
+        [
+          "CYM",
+          "English",
+          0.0
+        ],
+        [
+          "CYP",
+          "Greek",
+          74.1
+        ],
+        [
+          "CZE",
+          "Czech",
+          81.2
+        ],
+        [
+          "DEU",
+          "German",
+          91.3
+        ],
+        [
+          "DJI",
+          "Somali",
+          43.9
+        ],
+        [
+          "DMA",
+          "Creole English",
+          100.0
+        ],
+        [
+          "DNK",
+          "Danish",
+          93.5
+        ],
+        [
+          "DOM",
+          "Spanish",
+          98.0
+        ],
+        [
+          "DZA",
+          "Arabic",
+          86.0
+        ],
+        [
+          "ECU",
+          "Spanish",
+          93.0
+        ],
+        [
+          "EGY",
+          "Arabic",
+          98.8
+        ],
+        [
+          "ERI",
+          "Tigrinja",
+          49.1
+        ],
+        [
+          "ESH",
+          "Arabic",
+          100.0
+        ],
+        [
+          "ESP",
+          "Spanish",
+          74.4
+        ],
+        [
+          "EST",
+          "Estonian",
+          65.3
+        ],
+        [
+          "ETH",
+          "Oromo",
+          31.0
+        ],
+        [
+          "FIN",
+          "Finnish",
+          92.7
+        ],
+        [
+          "FJI",
+          "Fijian",
+          50.8
+        ],
+        [
+          "FLK",
+          "English",
+          0.0
+        ],
+        [
+          "FRA",
+          "French",
+          93.6
+        ],
+        [
+          "FRO",
+          "Faroese",
+          100.0
+        ],
+        [
+          "FSM",
+          "Trukese",
+          41.6
+        ],
+        [
+          "GAB",
+          "Fang",
+          35.8
+        ],
+        [
+          "GBR",
+          "English",
+          97.3
+        ],
+        [
+          "GEO",
+          "Georgiana",
+          71.7
+        ],
+        [
+          "GHA",
+          "Akan",
+          52.4
+        ],
+        [
+          "GIB",
+          "English",
+          88.9
+        ],
+        [
+          "GIN",
+          "Ful",
+          38.6
+        ],
+        [
+          "GLP",
+          "Creole French",
+          95.0
+        ],
+        [
+          "GMB",
+          "Malinke",
+          34.1
+        ],
+        [
+          "GNB",
+          "Crioulo",
+          36.4
+        ],
+        [
+          "GNQ",
+          "Fang",
+          84.8
+        ],
+        [
+          "GRC",
+          "Greek",
+          98.5
+        ],
+        [
+          "GRD",
+          "Creole English",
+          100.0
+        ],
+        [
+          "GRL",
+          "Greenlandic",
+          87.5
+        ],
+        [
+          "GTM",
+          "Spanish",
+          64.7
+        ],
+        [
+          "GUF",
+          "Creole French",
+          94.3
+        ],
+        [
+          "GUM",
+          "English",
+          37.5
+        ],
+        [
+          "GUY",
+          "Creole English",
+          96.4
+        ],
+        [
+          "HKG",
+          "Canton Chinese",
+          88.7
+        ],
+        [
+          "HND",
+          "Spanish",
+          97.2
+        ],
+        [
+          "HRV",
+          "Serbo-Croatian",
+          95.9
+        ],
+        [
+          "HTI",
+          "Haiti Creole",
+          100.0
+        ],
+        [
+          "HUN",
+          "Hungarian",
+          98.5
+        ],
+        [
+          "IDN",
+          "Javanese",
+          39.4
+        ],
+        [
+          "IND",
+          "Hindi",
+          39.9
+        ],
+        [
+          "IRL",
+          "English",
+          98.4
+        ],
+        [
+          "IRN",
+          "Persian",
+          45.7
+        ],
+        [
+          "IRQ",
+          "Arabic",
+          77.2
+        ],
+        [
+          "ISL",
+          "Icelandic",
+          95.7
+        ],
+        [
+          "ISR",
+          "Hebrew",
+          63.1
+        ],
+        [
+          "ITA",
+          "Italian",
+          94.1
+        ],
+        [
+          "JAM",
+          "Creole English",
+          94.2
+        ],
+        [
+          "JOR",
+          "Arabic",
+          97.9
+        ],
+        [
+          "JPN",
+          "Japanese",
+          99.1
+        ],
+        [
+          "KAZ",
+          "Kazakh",
+          46.0
+        ],
+        [
+          "KEN",
+          "Kikuyu",
+          20.9
+        ],
+        [
+          "KGZ",
+          "Kirgiz",
+          59.7
+        ],
+        [
+          "KHM",
+          "Khmer",
+          88.6
+        ],
+        [
+          "KIR",
+          "Kiribati",
+          98.9
+        ],
+        [
+          "KNA",
+          "Creole English",
+          100.0
+        ],
+        [
+          "KOR",
+          "Korean",
+          99.9
+        ],
+        [
+          "KWT",
+          "Arabic",
+          78.1
+        ],
+        [
+          "LAO",
+          "Lao",
+          67.2
+        ],
+        [
+          "LBN",
+          "Arabic",
+          93.0
+        ],
+        [
+          "LBR",
+          "Kpelle",
+          19.5
+        ],
+        [
+          "LBY",
+          "Arabic",
+          96.0
+        ],
+        [
+          "LCA",
+          "Creole French",
+          80.0
+        ],
+        [
+          "LIE",
+          "German",
+          89.0
+        ],
+        [
+          "LKA",
+          "Singali",
+          60.3
+        ],
+        [
+          "LSO",
+          "Sotho",
+          85.0
+        ],
+        [
+          "LTU",
+          "Lithuanian",
+          81.6
+        ],
+        [
+          "LUX",
+          "Luxembourgish",
+          64.4
+        ],
+        [
+          "LVA",
+          "Latvian",
+          55.1
+        ],
+        [
+          "MAC",
+          "Canton Chinese",
+          85.6
+        ],
+        [
+          "MAR",
+          "Arabic",
+          65.0
+        ],
+        [
+          "MCO",
+          "French",
+          41.9
+        ],
+        [
+          "MDA",
+          "Romanian",
+          61.9
+        ],
+        [
+          "MDG",
+          "Malagasy",
+          98.9
+        ],
+        [
+          "MDV",
+          "Dhivehi",
+          100.0
+        ],
+        [
+          "MEX",
+          "Spanish",
+          92.1
+        ],
+        [
+          "MHL",
+          "Marshallese",
+          96.8
+        ],
+        [
+          "MKD",
+          "Macedonian",
+          66.5
+        ],
+        [
+          "MLI",
+          "Bambara",
+          31.8
+        ],
+        [
+          "MLT",
+          "Maltese",
+          95.8
+        ],
+        [
+          "MMR",
+          "Burmese",
+          69.0
+        ],
+        [
+          "MNG",
+          "Mongolian",
+          78.8
+        ],
+        [
+          "MNP",
+          "Philippene Languages",
+          34.1
+        ],
+        [
+          "MOZ",
+          "Makua",
+          27.8
+        ],
+        [
+          "MRT",
+          "Hassaniya",
+          81.7
+        ],
+        [
+          "MSR",
+          "English",
+          0.0
+        ],
+        [
+          "MTQ",
+          "Creole French",
+          96.6
+        ],
+        [
+          "MUS",
+          "Creole French",
+          70.6
+        ],
+        [
+          "MWI",
+          "Chichewa",
+          58.3
+        ],
+        [
+          "MYS",
+          "Malay",
+          58.4
+        ],
+        [
+          "MYT",
+          "Mahoré",
+          41.9
+        ],
+        [
+          "NAM",
+          "Ovambo",
+          50.7
+        ],
+        [
+          "NCL",
+          "Malenasian Languages",
+          45.4
+        ],
+        [
+          "NER",
+          "Hausa",
+          53.1
+        ],
+        [
+          "NFK",
+          "English",
+          0.0
+        ],
+        [
+          "NGA",
+          "Joruba",
+          21.4
+        ],
+        [
+          "NIC",
+          "Spanish",
+          97.6
+        ],
+        [
+          "NIU",
+          "English",
+          0.0
+        ],
+        [
+          "NLD",
+          "Dutch",
+          95.6
+        ],
+        [
+          "NOR",
+          "Norwegian",
+          96.6
+        ],
+        [
+          "NPL",
+          "Nepali",
+          50.4
+        ],
+        [
+          "NRU",
+          "Nauru",
+          57.5
+        ],
+        [
+          "NZL",
+          "English",
+          87.0
+        ],
+        [
+          "OMN",
+          "Arabic",
+          76.7
+        ],
+        [
+          "PAK",
+          "Punjabi",
+          48.2
+        ],
+        [
+          "PAN",
+          "Spanish",
+          76.8
+        ],
+        [
+          "PCN",
+          "Pitcairnese",
+          0.0
+        ],
+        [
+          "PER",
+          "Spanish",
+          79.8
+        ],
+        [
+          "PHL",
+          "Pilipino",
+          29.3
+        ],
+        [
+          "PLW",
+          "Palau",
+          82.2
+        ],
+        [
+          "PNG",
+          "Papuan Languages",
+          78.1
+        ],
+        [
+          "POL",
+          "Polish",
+          97.6
+        ],
+        [
+          "PRI",
+          "Spanish",
+          51.3
+        ],
+        [
+          "PRK",
+          "Korean",
+          99.9
+        ],
+        [
+          "PRT",
+          "Portuguese",
+          99.0
+        ],
+        [
+          "PRY",
+          "Spanish",
+          55.1
+        ],
+        [
+          "PSE",
+          "Arabic",
+          95.9
+        ],
+        [
+          "PYF",
+          "Tahitian",
+          46.4
+        ],
+        [
+          "QAT",
+          "Arabic",
+          40.7
+        ],
+        [
+          "REU",
+          "Creole French",
+          91.5
+        ],
+        [
+          "ROM",
+          "Romanian",
+          90.7
+        ],
+        [
+          "RUS",
+          "Russian",
+          86.6
+        ],
+        [
+          "RWA",
+          "Rwanda",
+          100.0
+        ],
+        [
+          "SAU",
+          "Arabic",
+          95.0
+        ],
+        [
+          "SDN",
+          "Arabic",
+          49.4
+        ],
+        [
+          "SEN",
+          "Wolof",
+          48.1
+        ],
+        [
+          "SGP",
+          "Chinese",
+          77.1
+        ],
+        [
+          "SHN",
+          "English",
+          0.0
+        ],
+        [
+          "SJM",
+          "Norwegian",
+          0.0
+        ],
+        [
+          "SLB",
+          "Malenasian Languages",
+          85.6
+        ],
+        [
+          "SLE",
+          "Mende",
+          34.8
+        ],
+        [
+          "SLV",
+          "Spanish",
+          100.0
+        ],
+        [
+          "SMR",
+          "Italian",
+          100.0
+        ],
+        [
+          "SOM",
+          "Somali",
+          98.3
+        ],
+        [
+          "SPM",
+          "French",
+          0.0
+        ],
+        [
+          "STP",
+          "Crioulo",
+          86.3
+        ],
+        [
+          "SUR",
+          "Sranantonga",
+          81.0
+        ],
+        [
+          "SVK",
+          "Slovak",
+          85.6
+        ],
+        [
+          "SVN",
+          "Slovene",
+          87.9
+        ],
+        [
+          "SWE",
+          "Swedish",
+          89.5
+        ],
+        [
+          "SWZ",
+          "Swazi",
+          89.9
+        ],
+        [
+          "SYC",
+          "Seselwa",
+          91.3
+        ],
+        [
+          "SYR",
+          "Arabic",
+          90.0
+        ],
+        [
+          "TCA",
+          "English",
+          0.0
+        ],
+        [
+          "TCD",
+          "Sara",
+          27.7
+        ],
+        [
+          "TGO",
+          "Ewe",
+          23.2
+        ],
+        [
+          "THA",
+          "Thai",
+          52.6
+        ],
+        [
+          "TJK",
+          "Tadzhik",
+          62.2
+        ],
+        [
+          "TKL",
+          "English",
+          0.0
+        ],
+        [
+          "TKM",
+          "Turkmenian",
+          76.7
+        ],
+        [
+          "TMP",
+          "Portuguese",
+          0.0
+        ],
+        [
+          "TON",
+          "Tongan",
+          98.3
+        ],
+        [
+          "TTO",
+          "English",
+          93.5
+        ],
+        [
+          "TUN",
+          "Arabic",
+          69.9
+        ],
+        [
+          "TUR",
+          "Turkish",
+          87.6
+        ],
+        [
+          "TUV",
+          "Tuvalu",
+          92.5
+        ],
+        [
+          "TWN",
+          "Min",
+          66.7
+        ],
+        [
+          "TZA",
+          "Nyamwesi",
+          21.1
+        ],
+        [
+          "UGA",
+          "Ganda",
+          18.1
+        ],
+        [
+          "UKR",
+          "Ukrainian",
+          64.7
+        ],
+        [
+          "UMI",
+          "English",
+          0.0
+        ],
+        [
+          "URY",
+          "Spanish",
+          95.7
+        ],
+        [
+          "USA",
+          "English",
+          86.2
+        ],
+        [
+          "UZB",
+          "Uzbek",
+          72.6
+        ],
+        [
+          "VAT",
+          "Italian",
+          0.0
+        ],
+        [
+          "VCT",
+          "Creole English",
+          99.1
+        ],
+        [
+          "VEN",
+          "Spanish",
+          96.9
+        ],
+        [
+          "VGB",
+          "English",
+          0.0
+        ],
+        [
+          "VIR",
+          "English",
+          81.7
+        ],
+        [
+          "VNM",
+          "Vietnamese",
+          86.8
+        ],
+        [
+          "VUT",
+          "Bislama",
+          56.6
+        ],
+        [
+          "WLF",
+          "Futuna",
+          0.0
+        ],
+        [
+          "WSM",
+          "Samoan-English",
+          52.0
+        ],
+        [
+          "YEM",
+          "Arabic",
+          99.6
+        ],
+        [
+          "YUG",
+          "Serbo-Croatian",
+          75.2
+        ],
+        [
+          "ZAF",
+          "Zulu",
+          22.7
+        ],
+        [
+          "ZMB",
+          "Bemba",
+          29.7
+        ],
+        [
+          "ZWE",
+          "Shona",
+          72.1
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT c.Name AS Country, cl.Language, MAX(cl.Percentage) AS MaxPercentage\nFROM country c\nJOIN countrylanguage cl ON c.Code = cl.CountryCode\nGROUP BY c.Name;",
-      "latency": 5.626,
+      "sql": "SELECT cl.CountryCode, cl.Language, MAX(cl.Percentage) AS MaxPercentage\nFROM countrylanguage cl\nGROUP BY cl.CountryCode;",
+      "latency": 14.185,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": false
+      "ex": true,
+      "pred_rows": [
+        [
+          "ABW",
+          "Papiamento",
+          76.7
+        ],
+        [
+          "AFG",
+          "Pashto",
+          52.4
+        ],
+        [
+          "AGO",
+          "Ovimbundu",
+          37.2
+        ],
+        [
+          "AIA",
+          "English",
+          0.0
+        ],
+        [
+          "ALB",
+          "Albaniana",
+          97.9
+        ],
+        [
+          "AND",
+          "Spanish",
+          44.6
+        ],
+        [
+          "ANT",
+          "Papiamento",
+          86.2
+        ],
+        [
+          "ARE",
+          "Arabic",
+          42.0
+        ],
+        [
+          "ARG",
+          "Spanish",
+          96.8
+        ],
+        [
+          "ARM",
+          "Armenian",
+          93.4
+        ],
+        [
+          "ASM",
+          "Samoan",
+          90.6
+        ],
+        [
+          "ATG",
+          "Creole English",
+          95.7
+        ],
+        [
+          "AUS",
+          "English",
+          81.2
+        ],
+        [
+          "AUT",
+          "German",
+          92.0
+        ],
+        [
+          "AZE",
+          "Azerbaijani",
+          89.0
+        ],
+        [
+          "BDI",
+          "Kirundi",
+          98.1
+        ],
+        [
+          "BEL",
+          "Dutch",
+          59.2
+        ],
+        [
+          "BEN",
+          "Fon",
+          39.8
+        ],
+        [
+          "BFA",
+          "Mossi",
+          50.2
+        ],
+        [
+          "BGD",
+          "Bengali",
+          97.7
+        ],
+        [
+          "BGR",
+          "Bulgariana",
+          83.2
+        ],
+        [
+          "BHR",
+          "Arabic",
+          67.7
+        ],
+        [
+          "BHS",
+          "Creole English",
+          89.7
+        ],
+        [
+          "BIH",
+          "Serbo-Croatian",
+          99.2
+        ],
+        [
+          "BLR",
+          "Belorussian",
+          65.6
+        ],
+        [
+          "BLZ",
+          "English",
+          50.8
+        ],
+        [
+          "BMU",
+          "English",
+          100.0
+        ],
+        [
+          "BOL",
+          "Spanish",
+          87.7
+        ],
+        [
+          "BRA",
+          "Portuguese",
+          97.5
+        ],
+        [
+          "BRB",
+          "Bajan",
+          95.1
+        ],
+        [
+          "BRN",
+          "Malay",
+          45.5
+        ],
+        [
+          "BTN",
+          "Dzongkha",
+          50.0
+        ],
+        [
+          "BWA",
+          "Tswana",
+          75.5
+        ],
+        [
+          "CAF",
+          "Gbaya",
+          23.8
+        ],
+        [
+          "CAN",
+          "English",
+          60.4
+        ],
+        [
+          "CCK",
+          "English",
+          0.0
+        ],
+        [
+          "CHE",
+          "German",
+          63.6
+        ],
+        [
+          "CHL",
+          "Spanish",
+          89.7
+        ],
+        [
+          "CHN",
+          "Chinese",
+          92.0
+        ],
+        [
+          "CIV",
+          "Akan",
+          30.0
+        ],
+        [
+          "CMR",
+          "Fang",
+          19.7
+        ],
+        [
+          "COD",
+          "Luba",
+          18.0
+        ],
+        [
+          "COG",
+          "Kongo",
+          51.5
+        ],
+        [
+          "COK",
+          "English",
+          0.0
+        ],
+        [
+          "COL",
+          "Spanish",
+          99.0
+        ],
+        [
+          "COM",
+          "Comorian",
+          75.0
+        ],
+        [
+          "CPV",
+          "Crioulo",
+          100.0
+        ],
+        [
+          "CRI",
+          "Spanish",
+          97.5
+        ],
+        [
+          "CUB",
+          "Spanish",
+          100.0
+        ],
+        [
+          "CXR",
+          "Chinese",
+          0.0
+        ],
+        [
+          "CYM",
+          "English",
+          0.0
+        ],
+        [
+          "CYP",
+          "Greek",
+          74.1
+        ],
+        [
+          "CZE",
+          "Czech",
+          81.2
+        ],
+        [
+          "DEU",
+          "German",
+          91.3
+        ],
+        [
+          "DJI",
+          "Somali",
+          43.9
+        ],
+        [
+          "DMA",
+          "Creole English",
+          100.0
+        ],
+        [
+          "DNK",
+          "Danish",
+          93.5
+        ],
+        [
+          "DOM",
+          "Spanish",
+          98.0
+        ],
+        [
+          "DZA",
+          "Arabic",
+          86.0
+        ],
+        [
+          "ECU",
+          "Spanish",
+          93.0
+        ],
+        [
+          "EGY",
+          "Arabic",
+          98.8
+        ],
+        [
+          "ERI",
+          "Tigrinja",
+          49.1
+        ],
+        [
+          "ESH",
+          "Arabic",
+          100.0
+        ],
+        [
+          "ESP",
+          "Spanish",
+          74.4
+        ],
+        [
+          "EST",
+          "Estonian",
+          65.3
+        ],
+        [
+          "ETH",
+          "Oromo",
+          31.0
+        ],
+        [
+          "FIN",
+          "Finnish",
+          92.7
+        ],
+        [
+          "FJI",
+          "Fijian",
+          50.8
+        ],
+        [
+          "FLK",
+          "English",
+          0.0
+        ],
+        [
+          "FRA",
+          "French",
+          93.6
+        ],
+        [
+          "FRO",
+          "Faroese",
+          100.0
+        ],
+        [
+          "FSM",
+          "Trukese",
+          41.6
+        ],
+        [
+          "GAB",
+          "Fang",
+          35.8
+        ],
+        [
+          "GBR",
+          "English",
+          97.3
+        ],
+        [
+          "GEO",
+          "Georgiana",
+          71.7
+        ],
+        [
+          "GHA",
+          "Akan",
+          52.4
+        ],
+        [
+          "GIB",
+          "English",
+          88.9
+        ],
+        [
+          "GIN",
+          "Ful",
+          38.6
+        ],
+        [
+          "GLP",
+          "Creole French",
+          95.0
+        ],
+        [
+          "GMB",
+          "Malinke",
+          34.1
+        ],
+        [
+          "GNB",
+          "Crioulo",
+          36.4
+        ],
+        [
+          "GNQ",
+          "Fang",
+          84.8
+        ],
+        [
+          "GRC",
+          "Greek",
+          98.5
+        ],
+        [
+          "GRD",
+          "Creole English",
+          100.0
+        ],
+        [
+          "GRL",
+          "Greenlandic",
+          87.5
+        ],
+        [
+          "GTM",
+          "Spanish",
+          64.7
+        ],
+        [
+          "GUF",
+          "Creole French",
+          94.3
+        ],
+        [
+          "GUM",
+          "English",
+          37.5
+        ],
+        [
+          "GUY",
+          "Creole English",
+          96.4
+        ],
+        [
+          "HKG",
+          "Canton Chinese",
+          88.7
+        ],
+        [
+          "HND",
+          "Spanish",
+          97.2
+        ],
+        [
+          "HRV",
+          "Serbo-Croatian",
+          95.9
+        ],
+        [
+          "HTI",
+          "Haiti Creole",
+          100.0
+        ],
+        [
+          "HUN",
+          "Hungarian",
+          98.5
+        ],
+        [
+          "IDN",
+          "Javanese",
+          39.4
+        ],
+        [
+          "IND",
+          "Hindi",
+          39.9
+        ],
+        [
+          "IRL",
+          "English",
+          98.4
+        ],
+        [
+          "IRN",
+          "Persian",
+          45.7
+        ],
+        [
+          "IRQ",
+          "Arabic",
+          77.2
+        ],
+        [
+          "ISL",
+          "Icelandic",
+          95.7
+        ],
+        [
+          "ISR",
+          "Hebrew",
+          63.1
+        ],
+        [
+          "ITA",
+          "Italian",
+          94.1
+        ],
+        [
+          "JAM",
+          "Creole English",
+          94.2
+        ],
+        [
+          "JOR",
+          "Arabic",
+          97.9
+        ],
+        [
+          "JPN",
+          "Japanese",
+          99.1
+        ],
+        [
+          "KAZ",
+          "Kazakh",
+          46.0
+        ],
+        [
+          "KEN",
+          "Kikuyu",
+          20.9
+        ],
+        [
+          "KGZ",
+          "Kirgiz",
+          59.7
+        ],
+        [
+          "KHM",
+          "Khmer",
+          88.6
+        ],
+        [
+          "KIR",
+          "Kiribati",
+          98.9
+        ],
+        [
+          "KNA",
+          "Creole English",
+          100.0
+        ],
+        [
+          "KOR",
+          "Korean",
+          99.9
+        ],
+        [
+          "KWT",
+          "Arabic",
+          78.1
+        ],
+        [
+          "LAO",
+          "Lao",
+          67.2
+        ],
+        [
+          "LBN",
+          "Arabic",
+          93.0
+        ],
+        [
+          "LBR",
+          "Kpelle",
+          19.5
+        ],
+        [
+          "LBY",
+          "Arabic",
+          96.0
+        ],
+        [
+          "LCA",
+          "Creole French",
+          80.0
+        ],
+        [
+          "LIE",
+          "German",
+          89.0
+        ],
+        [
+          "LKA",
+          "Singali",
+          60.3
+        ],
+        [
+          "LSO",
+          "Sotho",
+          85.0
+        ],
+        [
+          "LTU",
+          "Lithuanian",
+          81.6
+        ],
+        [
+          "LUX",
+          "Luxembourgish",
+          64.4
+        ],
+        [
+          "LVA",
+          "Latvian",
+          55.1
+        ],
+        [
+          "MAC",
+          "Canton Chinese",
+          85.6
+        ],
+        [
+          "MAR",
+          "Arabic",
+          65.0
+        ],
+        [
+          "MCO",
+          "French",
+          41.9
+        ],
+        [
+          "MDA",
+          "Romanian",
+          61.9
+        ],
+        [
+          "MDG",
+          "Malagasy",
+          98.9
+        ],
+        [
+          "MDV",
+          "Dhivehi",
+          100.0
+        ],
+        [
+          "MEX",
+          "Spanish",
+          92.1
+        ],
+        [
+          "MHL",
+          "Marshallese",
+          96.8
+        ],
+        [
+          "MKD",
+          "Macedonian",
+          66.5
+        ],
+        [
+          "MLI",
+          "Bambara",
+          31.8
+        ],
+        [
+          "MLT",
+          "Maltese",
+          95.8
+        ],
+        [
+          "MMR",
+          "Burmese",
+          69.0
+        ],
+        [
+          "MNG",
+          "Mongolian",
+          78.8
+        ],
+        [
+          "MNP",
+          "Philippene Languages",
+          34.1
+        ],
+        [
+          "MOZ",
+          "Makua",
+          27.8
+        ],
+        [
+          "MRT",
+          "Hassaniya",
+          81.7
+        ],
+        [
+          "MSR",
+          "English",
+          0.0
+        ],
+        [
+          "MTQ",
+          "Creole French",
+          96.6
+        ],
+        [
+          "MUS",
+          "Creole French",
+          70.6
+        ],
+        [
+          "MWI",
+          "Chichewa",
+          58.3
+        ],
+        [
+          "MYS",
+          "Malay",
+          58.4
+        ],
+        [
+          "MYT",
+          "Mahoré",
+          41.9
+        ],
+        [
+          "NAM",
+          "Ovambo",
+          50.7
+        ],
+        [
+          "NCL",
+          "Malenasian Languages",
+          45.4
+        ],
+        [
+          "NER",
+          "Hausa",
+          53.1
+        ],
+        [
+          "NFK",
+          "English",
+          0.0
+        ],
+        [
+          "NGA",
+          "Joruba",
+          21.4
+        ],
+        [
+          "NIC",
+          "Spanish",
+          97.6
+        ],
+        [
+          "NIU",
+          "English",
+          0.0
+        ],
+        [
+          "NLD",
+          "Dutch",
+          95.6
+        ],
+        [
+          "NOR",
+          "Norwegian",
+          96.6
+        ],
+        [
+          "NPL",
+          "Nepali",
+          50.4
+        ],
+        [
+          "NRU",
+          "Nauru",
+          57.5
+        ],
+        [
+          "NZL",
+          "English",
+          87.0
+        ],
+        [
+          "OMN",
+          "Arabic",
+          76.7
+        ],
+        [
+          "PAK",
+          "Punjabi",
+          48.2
+        ],
+        [
+          "PAN",
+          "Spanish",
+          76.8
+        ],
+        [
+          "PCN",
+          "Pitcairnese",
+          0.0
+        ],
+        [
+          "PER",
+          "Spanish",
+          79.8
+        ],
+        [
+          "PHL",
+          "Pilipino",
+          29.3
+        ],
+        [
+          "PLW",
+          "Palau",
+          82.2
+        ],
+        [
+          "PNG",
+          "Papuan Languages",
+          78.1
+        ],
+        [
+          "POL",
+          "Polish",
+          97.6
+        ],
+        [
+          "PRI",
+          "Spanish",
+          51.3
+        ],
+        [
+          "PRK",
+          "Korean",
+          99.9
+        ],
+        [
+          "PRT",
+          "Portuguese",
+          99.0
+        ],
+        [
+          "PRY",
+          "Spanish",
+          55.1
+        ],
+        [
+          "PSE",
+          "Arabic",
+          95.9
+        ],
+        [
+          "PYF",
+          "Tahitian",
+          46.4
+        ],
+        [
+          "QAT",
+          "Arabic",
+          40.7
+        ],
+        [
+          "REU",
+          "Creole French",
+          91.5
+        ],
+        [
+          "ROM",
+          "Romanian",
+          90.7
+        ],
+        [
+          "RUS",
+          "Russian",
+          86.6
+        ],
+        [
+          "RWA",
+          "Rwanda",
+          100.0
+        ],
+        [
+          "SAU",
+          "Arabic",
+          95.0
+        ],
+        [
+          "SDN",
+          "Arabic",
+          49.4
+        ],
+        [
+          "SEN",
+          "Wolof",
+          48.1
+        ],
+        [
+          "SGP",
+          "Chinese",
+          77.1
+        ],
+        [
+          "SHN",
+          "English",
+          0.0
+        ],
+        [
+          "SJM",
+          "Norwegian",
+          0.0
+        ],
+        [
+          "SLB",
+          "Malenasian Languages",
+          85.6
+        ],
+        [
+          "SLE",
+          "Mende",
+          34.8
+        ],
+        [
+          "SLV",
+          "Spanish",
+          100.0
+        ],
+        [
+          "SMR",
+          "Italian",
+          100.0
+        ],
+        [
+          "SOM",
+          "Somali",
+          98.3
+        ],
+        [
+          "SPM",
+          "French",
+          0.0
+        ],
+        [
+          "STP",
+          "Crioulo",
+          86.3
+        ],
+        [
+          "SUR",
+          "Sranantonga",
+          81.0
+        ],
+        [
+          "SVK",
+          "Slovak",
+          85.6
+        ],
+        [
+          "SVN",
+          "Slovene",
+          87.9
+        ],
+        [
+          "SWE",
+          "Swedish",
+          89.5
+        ],
+        [
+          "SWZ",
+          "Swazi",
+          89.9
+        ],
+        [
+          "SYC",
+          "Seselwa",
+          91.3
+        ],
+        [
+          "SYR",
+          "Arabic",
+          90.0
+        ],
+        [
+          "TCA",
+          "English",
+          0.0
+        ],
+        [
+          "TCD",
+          "Sara",
+          27.7
+        ],
+        [
+          "TGO",
+          "Ewe",
+          23.2
+        ],
+        [
+          "THA",
+          "Thai",
+          52.6
+        ],
+        [
+          "TJK",
+          "Tadzhik",
+          62.2
+        ],
+        [
+          "TKL",
+          "English",
+          0.0
+        ],
+        [
+          "TKM",
+          "Turkmenian",
+          76.7
+        ],
+        [
+          "TMP",
+          "Portuguese",
+          0.0
+        ],
+        [
+          "TON",
+          "Tongan",
+          98.3
+        ],
+        [
+          "TTO",
+          "English",
+          93.5
+        ],
+        [
+          "TUN",
+          "Arabic",
+          69.9
+        ],
+        [
+          "TUR",
+          "Turkish",
+          87.6
+        ],
+        [
+          "TUV",
+          "Tuvalu",
+          92.5
+        ],
+        [
+          "TWN",
+          "Min",
+          66.7
+        ],
+        [
+          "TZA",
+          "Nyamwesi",
+          21.1
+        ],
+        [
+          "UGA",
+          "Ganda",
+          18.1
+        ],
+        [
+          "UKR",
+          "Ukrainian",
+          64.7
+        ],
+        [
+          "UMI",
+          "English",
+          0.0
+        ],
+        [
+          "URY",
+          "Spanish",
+          95.7
+        ],
+        [
+          "USA",
+          "English",
+          86.2
+        ],
+        [
+          "UZB",
+          "Uzbek",
+          72.6
+        ],
+        [
+          "VAT",
+          "Italian",
+          0.0
+        ],
+        [
+          "VCT",
+          "Creole English",
+          99.1
+        ],
+        [
+          "VEN",
+          "Spanish",
+          96.9
+        ],
+        [
+          "VGB",
+          "English",
+          0.0
+        ],
+        [
+          "VIR",
+          "English",
+          81.7
+        ],
+        [
+          "VNM",
+          "Vietnamese",
+          86.8
+        ],
+        [
+          "VUT",
+          "Bislama",
+          56.6
+        ],
+        [
+          "WLF",
+          "Futuna",
+          0.0
+        ],
+        [
+          "WSM",
+          "Samoan-English",
+          52.0
+        ],
+        [
+          "YEM",
+          "Arabic",
+          99.6
+        ],
+        [
+          "YUG",
+          "Serbo-Croatian",
+          75.2
+        ],
+        [
+          "ZAF",
+          "Zulu",
+          22.7
+        ],
+        [
+          "ZMB",
+          "Bemba",
+          29.7
+        ],
+        [
+          "ZWE",
+          "Shona",
+          72.1
+        ]
+      ]
     }
   },
   {
     "idx": 33,
     "question": "Find the cities that have more than one employee under age 30.",
     "gold_sql": "SELECT city FROM employee WHERE age  <  30 GROUP BY city HAVING count(*)  >  1",
+    "gold_rows": [
+      [
+        "Bath"
+      ]
+    ],
     "db_id": "employee_hire_evaluation",
     "hardness": "hard",
     "S1": {
       "sql": "SELECT City FROM employee WHERE Age < 30 GROUP BY City HAVING COUNT(Employee_ID) > 1;",
-      "latency": 0.817,
+      "latency": 0.798,
       "error": null,
       "tables_selected": null,
       "total_tables": 4,
       "path": "zeroshot",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Bath"
+        ]
+      ]
     },
     "S2": {
       "sql": "SELECT City\nFROM employee\nWHERE Age < 30\nGROUP BY City\nHAVING COUNT(Employee_ID) > 1;",
-      "latency": 0.927,
+      "latency": 1.034,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "tablerag_only",
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Bath"
+        ]
+      ]
     },
     "S3": {
-      "sql": "SELECT City\nFROM employee\nWHERE Age < 30\nGROUP BY City\nHAVING COUNT(Employee_ID) > 1;",
-      "latency": 2.32,
+      "sql": "SELECT City FROM employee WHERE Age < 30 GROUP BY City HAVING COUNT(Employee_ID) > 1;",
+      "latency": 2.034,
       "error": null,
       "tables_selected": 4,
       "total_tables": 4,
       "path": "react",
       "cache_hit": false,
       "cache_score": 0.0,
-      "ex": true
+      "ex": true,
+      "pred_rows": [
+        [
+          "Bath"
+        ]
+      ]
     }
   }
 ]

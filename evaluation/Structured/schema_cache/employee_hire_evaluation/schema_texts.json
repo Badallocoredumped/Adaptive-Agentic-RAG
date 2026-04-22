@@ -1,6 +1,6 @@
 [
   "Table employee with columns Employee_ID (int), Name (text), Age (int), City (text)",
-  "Table evaluation with columns Employee_ID (text), Year_awarded (text), Bonus (real) \u2014 references: employee(Employee_ID)",
-  "Table hiring with columns Shop_ID (int), Employee_ID (int), Start_from (text), Is_full_time (bool) \u2014 references: employee(Employee_ID), shop(Shop_ID)",
+  "Table evaluation with columns Employee_ID (text), Year_awarded (text), Bonus (real) \u2014 foreign keys: Employee_ID \u2192 employee(Employee_ID)",
+  "Table hiring with columns Shop_ID (int), Employee_ID (int), Start_from (text), Is_full_time (bool) \u2014 foreign keys: Employee_ID \u2192 employee(Employee_ID), Shop_ID \u2192 shop(Shop_ID)",
   "Table shop with columns Shop_ID (int), Name (text), Location (text), District (text), Number_products (int), Manager_name (text)"
 ]

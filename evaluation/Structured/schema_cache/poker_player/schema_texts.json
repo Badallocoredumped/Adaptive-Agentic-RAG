@@ -1,4 +1,4 @@
 [
   "Table people with columns People_ID (int), Nationality (text), Name (text), Birth_Date (text), Height (real)",
-  "Table poker_player with columns Poker_Player_ID (int), People_ID (int), Final_Table_Made (real), Best_Finish (real), Money_Rank (real), Earnings (real) \u2014 references: people(People_ID)"
+  "Table poker_player with columns Poker_Player_ID (int), People_ID (int), Final_Table_Made (real), Best_Finish (real), Money_Rank (real), Earnings (real) \u2014 foreign keys: People_ID \u2192 people(People_ID)"
 ]

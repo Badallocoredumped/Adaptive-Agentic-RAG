@@ -1,6 +1,6 @@
 [
-  "Table city with columns ID (integer), Name (char(35)), CountryCode (char(3)), District (char(20)), Population (integer) \u2014 references: country(Code)",
+  "Table city with columns ID (integer), Name (char(35)), CountryCode (char(3)), District (char(20)), Population (integer) \u2014 foreign keys: CountryCode \u2192 country(Code)",
   "Table country with columns Code (char(3)), Name (char(52)), Continent (text), Region (char(26)), SurfaceArea (float(10,2)), IndepYear (integer), Population (integer), LifeExpectancy (float(3,1)), GNP (float(10,2)), GNPOld (float(10,2)), LocalName (char(45)), GovernmentForm (char(45)), HeadOfState (char(60)), Capital (integer), Code2 (char(2))",
-  "Table countrylanguage with columns CountryCode (char(3)), Language (char(30)), IsOfficial (text), Percentage (float(4,1)) \u2014 references: country(Code)",
+  "Table countrylanguage with columns CountryCode (char(3)), Language (char(30)), IsOfficial (text), Percentage (float(4,1)) \u2014 foreign keys: CountryCode \u2192 country(Code)",
   "Table sqlite_sequence with columns name (text), seq (text)"
 ]

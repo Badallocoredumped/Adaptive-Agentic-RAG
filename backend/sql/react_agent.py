@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import json
 import logging
+import textwrap
 import threading
 import os
 import re
@@ -48,6 +49,36 @@ logger = logging.getLogger(__name__)
 def _debug(message: str) -> None:
     if getattr(config, "DEBUG_LOGGING", False):
         print(message)
+
+
+def _trunc(text: str, n: int = 200) -> str:
+    return text if len(text) <= n else text[:n] + "…"
+
+
+def _print_msg(step: int, msg: Any) -> None:
+    """Print a single LangGraph message in the live trace format."""
+    if isinstance(msg, AIMessage):
+        if msg.tool_calls:
+            for tc in msg.tool_calls:
+                raw = next(iter(tc.get("args", {}).values()), "")
+                print(f"  🔧 [{step}] TOOL CALL → {tc['name']}")
+                print(f"       Input: {_trunc(str(raw), 120)}")
+        else:
+            content = msg.content or ""
+            if content.strip():
+                print(f"  🤖 [{step}] AGENT FINAL MESSAGE")
+                print(textwrap.fill(
+                    _trunc(content, 300),
+                    width=72,
+                    initial_indent="       ",
+                    subsequent_indent="       ",
+                ))
+    elif isinstance(msg, ToolMessage):
+        obs = msg.content if isinstance(msg.content, str) else str(msg.content)
+        icon = "✅" if obs.startswith("SUCCESS") else "❌"
+        print(f"  {icon} [{step}] OBSERVATION")
+        print(f"       {_trunc(obs, 200)}")
+    print()
 
 # ---------------------------------------------------------------------------
 # Regex helpers (kept local to avoid circular imports with sql_agent.py)
@@ -88,9 +119,10 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
         f"  4. {syntax_note}\n"
         "  5. If you think more tables might be needed, call schema_lookup FIRST to verify.\n"
         "  6. WRITE COMPLETE QUERIES. Use JOINs to connect tables. Do NOT write exploratory step-by-step queries just to look up intermediate IDs.\n"
-        "  7. Always call execute_sql to test your SQL before reporting the final answer.\n"
-        "  8. If execute_sql returns an error, read the error message, fix the SQL, and retry.\n"
-        f"     You have up to {max_iter} tool-calling rounds — use them wisely.\n"
+        "  7. SELECT ONLY the columns the question asks for. Do NOT add helper/informational columns (e.g. COUNT, rank, or intermediate IDs) unless the question explicitly requests them.\n"
+        "  8. Always call execute_sql to test your SQL before reporting the final answer.\n"
+        "  9. If execute_sql returns an error, read the error message, fix the SQL, and retry.\n"
+        f"       You have up to {max_iter} tool-calling rounds — use them wisely.\n"
     )
 
 
@@ -154,7 +186,7 @@ def _make_execute_sql_tool() -> Tool:
             return f"ERROR: {exc}"
 
         if not rows:
-            return "Query executed successfully. Result set is empty (0 rows)."
+            return "SUCCESS: 0 row(s) returned.\n[]"
 
         truncated = rows[:_MAX_ROWS]
         result_json = json.dumps(truncated, ensure_ascii=False, default=str)
@@ -301,16 +333,30 @@ def run_react_sql_agent(
     max_iter: int = getattr(config, "SQL_REACT_MAX_ITERATIONS", 6)
     graph = build_react_agent(schema_context)
 
+    print(f"\n  💬 Human: {query}\n")
+
+    step = 0
+    all_messages: list = []
+
     try:
-        # LangGraph uses a messages-based interface.
-        # recursion_limit caps the number of graph steps (each tool call = 2 steps).
-        agent_output = graph.invoke(
+        stream = graph.stream(
             {"messages": [HumanMessage(content=query)]},
             config={"recursion_limit": max_iter * 3},
+            stream_mode="values",
         )
+        prev_count = 0
+        for state in stream:
+            msgs = state.get("messages", [])
+            new_msgs = msgs[prev_count:]
+            prev_count = len(msgs)
+            all_messages = msgs
+            for msg in new_msgs:
+                if isinstance(msg, HumanMessage):
+                    continue
+                step += 1
+                _print_msg(step, msg)
     except Exception as exc:
-        logger.error("[ReAct Agent] graph.invoke() failed: %s", exc)
-        _debug(f"[ReAct Agent] Graph error: {exc}")
+        logger.error("[ReAct Agent] graph.stream() failed: %s", exc)
         return {
             "sql": None,
             "result": [],
@@ -318,18 +364,18 @@ def run_react_sql_agent(
             "schema_context": schema_context,
         }
 
-    # ── Walk messages to find the last *successful* execute_sql call ──
-    # Message sequence:  HumanMessage → AIMessage(tool_calls) → ToolMessage → …
-    # Build a map from tool_call_id → (tool_name, first_arg_value) using AIMessages,
-    # then correlate each ToolMessage observation back to its call.
-    messages: list = agent_output.get("messages", [])
+    # ── Extract final SQL from collected messages ────────────────────────────
+    # Priority order:
+    #   1. SQL in the agent's FINAL AIMessage (its declared conclusion) —
+    #      avoids picking up an intermediate/exploratory execute_sql call.
+    #   2. Last successful execute_sql input (fallback when the agent does
+    #      not restate the SQL in its conclusion text).
 
     # Map tool_call_id → (tool_name, raw_input_str)
     tool_call_map: dict[str, tuple[str, str]] = {}
-    for msg in messages:
+    for msg in all_messages:
         if isinstance(msg, AIMessage) and msg.tool_calls:
             for tc in msg.tool_calls:
-                # args is a dict; for single-arg tools grab the first value
                 raw_input = next(iter(tc.get("args", {}).values()), "") if tc.get("args") else ""
                 tool_call_map[tc["id"]] = (tc["name"], str(raw_input))
 
@@ -337,58 +383,73 @@ def run_react_sql_agent(
     final_rows: list[dict] = []
     final_error: str | None = None
 
-    for msg in messages:
+    # Priority 1: SQL in the agent's final non-tool-calling AIMessage
+    last_ai_msg = next(
+        (m for m in reversed(all_messages) if isinstance(m, AIMessage) and not m.tool_calls),
+        None,
+    )
+    if last_ai_msg:
+        content = last_ai_msg.content if isinstance(last_ai_msg.content, str) else ""
+        final_sql = _extract_and_normalise_sql(content)
+
+    # Priority 2: last successful execute_sql call (kept as fallback)
+    fallback_sql: str | None = None
+    fallback_rows: list[dict] = []
+
+    for msg in all_messages:
         if not isinstance(msg, ToolMessage):
             continue
-
         call_id = msg.tool_call_id
         if call_id not in tool_call_map:
             continue
-
         tool_name, raw_input = tool_call_map[call_id]
         if tool_name != "execute_sql":
             continue
-
         observation = msg.content if isinstance(msg.content, str) else str(msg.content)
         candidate_sql = _extract_and_normalise_sql(raw_input) or raw_input.strip()
-
         if observation.startswith("SUCCESS"):
-            final_sql = candidate_sql
-            final_error = None
-            # Parse JSON rows embedded in the observation string
+            fallback_sql = candidate_sql
             if "[" not in observation:
-                final_rows = []
+                fallback_rows = []
             else:
                 try:
                     json_start = observation.index("[")
                     json_part = observation[json_start:].split("\n(truncated")[0]
-                    final_rows = json.loads(json_part)
+                    fallback_rows = json.loads(json_part)
                 except (ValueError, json.JSONDecodeError):
                     try:
-                        final_rows = _raw_execute_sql(candidate_sql)
-                    except RuntimeError as exc:
-                        final_error = str(exc)
-                        final_rows = []
+                        fallback_rows = _raw_execute_sql(candidate_sql)
+                    except RuntimeError:
+                        fallback_rows = []
         else:
-            if final_sql is None:
+            if fallback_sql is None and final_sql is None:
                 final_error = observation
 
-    # If the agent never executed SQL at all, surface the final AI message text
-    if final_sql is None and final_error is None:
-        last_ai = next(
-            (m for m in reversed(messages) if isinstance(m, AIMessage) and not m.tool_calls),
-            None,
-        )
-        output_text = last_ai.content if last_ai else ""
-        final_error = (
-            f"ReAct agent completed without executing any SQL. "
-            f"Agent output: {output_text}"
-        )
+    if final_sql is None:
+        if fallback_sql:
+            final_sql = fallback_sql
+            final_rows = fallback_rows
+        elif final_error is None:
+            output_text = last_ai_msg.content if last_ai_msg else ""
+            final_error = (
+                f"ReAct agent completed without executing any SQL. "
+                f"Agent output: {output_text}"
+            )
+    else:
+        # Final AIMessage SQL found — execute it to get rows
+        try:
+            final_rows = _raw_execute_sql(final_sql)
+        except RuntimeError:
+            # Execution failed — fall back to the last verified execute_sql result
+            if fallback_sql:
+                final_sql = fallback_sql
+                final_rows = fallback_rows
 
-    _debug(f"[ReAct Agent] Final SQL : {final_sql}")
-    _debug(f"[ReAct Agent] Rows      : {len(final_rows)}")
+    print(f"  📌 Final SQL : {_trunc(final_sql or 'None', 120)}")
+    print(f"  📊 Rows      : {len(final_rows)}")
     if final_error:
-        _debug(f"[ReAct Agent] Error     : {final_error}")
+        print(f"  ⚠️  Error     : {_trunc(final_error, 120)}")
+    print()
 
     return {
         "sql": final_sql,

@@ -1,6 +1,6 @@
 [
   "Table conductor with columns Conductor_ID (int), Name (text), Age (int), Nationality (text), Year_of_Work (int)",
-  "Table orchestra with columns Orchestra_ID (int), Orchestra (text), Conductor_ID (int), Record_Company (text), Year_of_Founded (real), Major_Record_Format (text) \u2014 references: conductor(Conductor_ID)",
-  "Table performance with columns Performance_ID (int), Orchestra_ID (int), Type (text), Date (text), Official_ratings_(millions) (real), Weekly_rank (text), Share (text) \u2014 references: orchestra(Orchestra_ID)",
-  "Table show with columns Show_ID (int), Performance_ID (int), If_first_show (bool), Result (text), Attendance (real) \u2014 references: performance(Performance_ID)"
+  "Table orchestra with columns Orchestra_ID (int), Orchestra (text), Conductor_ID (int), Record_Company (text), Year_of_Founded (real), Major_Record_Format (text) \u2014 foreign keys: Conductor_ID \u2192 conductor(Conductor_ID)",
+  "Table performance with columns Performance_ID (int), Orchestra_ID (int), Type (text), Date (text), Official_ratings_(millions) (real), Weekly_rank (text), Share (text) \u2014 foreign keys: Orchestra_ID \u2192 orchestra(Orchestra_ID)",
+  "Table show with columns Show_ID (int), Performance_ID (int), If_first_show (bool), Result (text), Attendance (real) \u2014 foreign keys: Performance_ID \u2192 performance(Performance_ID)"
 ]
