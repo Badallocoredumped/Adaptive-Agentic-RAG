@@ -72,14 +72,18 @@ E5_PASSAGE_PREFIX = "passage: "
 
 # RAG_TOP_K (number of retrieved text chunks passed into synthesis)
 RAG_TOP_K = 5
-# SQL_TOP_K (number of schema tables retrieved by TableRAG)
-SQL_TOP_K = 5
+# SQL_TOP_K (max schema tables retrieved by TableRAG)
+SQL_TOP_K = 30
+# SQL_SCHEMA_THRESHOLD (min cosine similarity score to include a schema table).
+# Tables below this score are dropped. The top-1 match is always kept as a
+# fallback so the schema context is never empty.
+SQL_SCHEMA_THRESHOLD: float = 0.7
 
 
 # ============================================================================
 # Reranker
 # ============================================================================
-RAG_RERANKER_MODEL = "BAAI/bge-reranker-large"
+RAG_RERANKER_MODEL = "BAAI/bge-reranker-base"
 
 # ============================================================================
 # Retrieval
@@ -129,7 +133,96 @@ DEFAULT_ROUTE = "text"
 # decompose -> LLM decomposes query into routed sub-tasks (project default)
 # llm       -> local LLM classifies the whole query into a single route
 # keyword   -> rule-based keyword matching into a single route (fallback)
+# semantic  -> cosine similarity to seed query embeddings (no LLM required)
 ROUTER_MODE = "decompose"
+
+# Seed queries for the semantic router — representative user intents per route.
+# Embedded once at first use (query: prefix applied, same model as RAG retrieval).
+SEMANTIC_ROUTER_SQL_SEEDS: list[str] = [
+    # --- Original Clean Sentences ---
+    "How many orders were placed last month?",
+    "What is the total revenue by customer?",
+    "List all customers who placed more than 5 orders.",
+    "Show me the average order value per region.",
+    "Count the number of products in each category.",
+    "Which sales rep has the highest revenue this quarter?",
+    "Give me a breakdown of orders by status.",
+    "What is the sum of all invoices for 2023?",
+    "How many records are in the database?",
+    "Show the top 10 customers by spending.",
+    
+    # --- Additional Clean / Complex Aggregations ---
+    "What were the total sales figures for Q3?",
+    "Which region had the highest customer churn rate?",
+    "Show the average delivery time for international shipments.",
+    "Calculate the year-over-year growth in subscription revenue.",
+    "Identify the top-selling products in the electronics category.",
+    "What is the median salary for software engineers?",
+    "Group the active users by their subscription tier.",
+    "Find the maximum discount ever applied to a single cart.",
+    
+    # --- Terse / Keyword-Heavy Queries ---
+    "2023 Q4 sales numbers",
+    "revenue by quarter",
+    "active users count",
+    "inventory levels laptops",
+    "daily active users last 30 days",
+    "highest margin products",
+    
+    # --- Implicit Intents (Conversational DB lookups) ---
+    "Who bought the most expensive item?",
+    "Are there any pending orders from yesterday?",
+    "I need to know how much we spent on marketing in January.",
+    "Did sales drop after the pricing change?",
+    "Which warehouse has the least stock right now?",
+    "Can you pull the transaction history for client ID 4092?"
+]
+
+SEMANTIC_ROUTER_TEXT_SEEDS: list[str] = [
+    # --- Original Clean Sentences ---
+    "Explain the return policy in the document.",
+    "Summarize the contract terms.",
+    "What does the document say about data privacy?",
+    "Describe the onboarding process from the manual.",
+    "What are the compliance requirements mentioned in the report?",
+    "Find information about GDPR in the uploaded files.",
+    "What are the key terms in the agreement?",
+    "Explain the company policy on remote work.",
+    "What does the PDF say about refunds?",
+    "Give me a summary of the uploaded report.",
+    
+    # --- Additional Clean / Extraction Queries ---
+    "What is the procedure for filing a travel expense claim?",
+    "Detail the hardware requirements outlined in the installation manual.",
+    "How does the company handle intellectual property disputes?",
+    "According to the employee handbook, what are the core values?",
+    "Extract the main findings from the quarterly market analysis.",
+    "What are the prerequisites mentioned in the syllabus?",
+    "Identify the risk factors listed in the investment prospectus.",
+    
+    # --- Terse / Keyword-Heavy Queries ---
+    "vacation days accrual",
+    "onboarding checklist",
+    "SLA response times document",
+    "code of conduct guidelines",
+    "troubleshooting guide error 404",
+    "maternity leave benefits",
+    
+    # --- Implicit Intents / Help-Seeking ---
+    "I need help setting up my corporate email.",
+    "Where can I find instructions for resetting the staging server?",
+    "My company laptop broke, what do I do?",
+    "How am I supposed to configure the local firewall?",
+    
+    # --- Edge Cases (Sound quantitative, but are document-based) ---
+    "List all the uploaded files in the directory.",
+    "Count the paragraphs in section 4.",
+    "What are the section headers in the proposal design?"
+]
+
+# If the similarity margin between the top-ranked and second-ranked route is
+# below this value, both intents are considered present and "hybrid" is returned.
+SEMANTIC_ROUTER_HYBRID_MARGIN: float = 0.015
 
 # OpenAI settings for SQL generation & refinement
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # set in .env
@@ -185,6 +278,25 @@ SQL_KEYWORDS = {
     "sql",
     "database",
     "revenue",
+    "min",
+    "max",
+    "maximum",
+    "minimum",
+    "mean",
+    "percent",
+    "percentage",
+    "ratio",
+    "rank",
+    "top",
+    "bottom",
+    "highest",
+    "lowest",
+    "per",
+    "group",
+    "by",
+    "compare",
+    "versus",
+    "vs",
 }
 
 TEXT_KEYWORDS = {
@@ -198,6 +310,23 @@ TEXT_KEYWORDS = {
     "context",
     "policy",
     "report",
+    "how",
+    "why",
+    "meaning",
+    "definition",
+    "describe",
+    "description",
+    "purpose",
+    "background",
+    "history",
+    "narrative",
+    "overview",
+    "manual",
+    "guide",
+    "mentions",
+    "about",
+    "related",
+    "concept",
 }
 
 DOMAIN_KEYWORDS = {

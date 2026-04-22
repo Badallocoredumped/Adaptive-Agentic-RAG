@@ -89,13 +89,17 @@ def retrieve_relevant_schema(query: str, top_k: int = 3) -> list[str]:
     safe_top_k = max(1, min(top_k, len(schema_texts)))
 
     query_vector = _embed_texts([query], is_query=True)
-    _, indices = index.search(query_vector, safe_top_k)
+    scores, indices = index.search(query_vector, safe_top_k)
+
+    threshold: float | None = getattr(config, "SQL_SCHEMA_THRESHOLD", None)
 
     results: list[str] = []
-    for idx in indices[0]:
-        if idx < 0:
+    for i, (score, idx) in enumerate(zip(scores[0], indices[0])):
+        if idx < 0 or idx >= len(schema_texts):
             continue
-        if idx >= len(schema_texts):
+        # Always include the best match so the context is never empty;
+        # apply the threshold to every subsequent candidate.
+        if threshold is not None and i > 0 and float(score) < threshold:
             continue
         results.append(schema_texts[idx])
 

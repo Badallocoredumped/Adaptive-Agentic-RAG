@@ -4,21 +4,18 @@ ReAct SQL Agent Test Suite
 Tests run_react_sql_agent() DIRECTLY — bypasses the FAISS cache and full
 pipeline — so you can see exactly how the agent reasons step by step.
 
-Each test streams the LangGraph execution, printing every message as it
-arrives so you get a live Thought → Tool Call → Observation trace.
+run_react_sql_agent() streams the LangGraph execution internally, printing
+every message as it arrives (Tool Call → Observation → Final Message).
 
 Usage:
     python tests/test_react_agent.py                  # run all tests
     python tests/test_react_agent.py --top-k 6        # retrieve more schema
     python tests/test_react_agent.py --test 3         # run only test #3
-    python tests/test_react_agent.py --verbose        # show full SQL in trace
-    python tests/test_react_agent.py --no-stream      # suppress live trace
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 import textwrap
 import time
@@ -30,10 +27,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
-
 from backend import config
-from backend.sql.react_agent import build_react_agent, run_react_sql_agent
+from backend.sql.react_agent import run_react_sql_agent
 from backend.sql.sql_agent import _ensure_schema_index_exists
 from backend.sql.table_rag import retrieve_relevant_schema
 
@@ -158,163 +153,17 @@ TEST_CASES = [
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# Streaming trace printer
-# ═══════════════════════════════════════════════════════════════════════════
-
-def _truncate(text: str, max_len: int, verbose: bool) -> str:
-    if verbose:
-        return text
-    return text if len(text) <= max_len else text[:max_len] + "…"
-
-
-def stream_agent_trace(
-    query: str,
-    schema_context: str,
-    verbose: bool = False,
-) -> dict[str, Any]:
-    """
-    Stream the LangGraph ReAct agent and print each message as it arrives.
-    Returns the same result dict as run_react_sql_agent().
-    """
-    max_iter: int = getattr(config, "SQL_REACT_MAX_ITERATIONS", 6)
-    graph = build_react_agent(schema_context)
-
-    print(f"\n  💬 Human: {query}")
-    print()
-
-    step = 0
-    all_messages: list = []
-
-    try:
-        stream = graph.stream(
-            {"messages": [HumanMessage(content=query)]},
-            config={"recursion_limit": max_iter * 3},
-            stream_mode="values",
-        )
-        prev_count = 0
-        for state in stream:
-            msgs = state.get("messages", [])
-            new_msgs = msgs[prev_count:]
-            prev_count = len(msgs)
-            all_messages = msgs
-
-            for msg in new_msgs:
-                step += 1
-                if isinstance(msg, HumanMessage):
-                    continue  # already printed above
-
-                elif isinstance(msg, AIMessage):
-                    if msg.tool_calls:
-                        for tc in msg.tool_calls:
-                            tool_name = tc["name"]
-                            raw_input = next(iter(tc.get("args", {}).values()), "")
-                            print(f"  🔧 [{step}] TOOL CALL → {tool_name}")
-                            print(f"       Input: {_truncate(str(raw_input), 120, verbose)}")
-                    else:
-                        content = msg.content or ""
-                        if content.strip():
-                            print(f"  🤖 [{step}] AGENT FINAL MESSAGE")
-                            wrapped = textwrap.fill(
-                                _truncate(content, 300, verbose),
-                                width=72,
-                                initial_indent="       ",
-                                subsequent_indent="       ",
-                            )
-                            print(wrapped)
-
-                elif isinstance(msg, ToolMessage):
-                    obs = msg.content if isinstance(msg.content, str) else str(msg.content)
-                    is_success = obs.startswith("SUCCESS")
-                    icon = "✅" if is_success else "❌"
-                    print(f"  {icon} [{step}] OBSERVATION")
-                    print(f"       {_truncate(obs, 200, verbose)}")
-
-                print()
-
-    except Exception as exc:
-        print(f"  ❌ Graph execution failed: {exc}\n")
-        return {
-            "sql": None,
-            "result": [],
-            "error": str(exc),
-            "schema_context": schema_context,
-        }
-
-    # ── Parse final result from messages ─────────────────────────────────
-    # (same logic as run_react_sql_agent)
-    from backend.sql.react_agent import (
-        _extract_and_normalise_sql,
-        _raw_execute_sql,
-    )
-
-    tool_call_map: dict[str, tuple[str, str]] = {}
-    for msg in all_messages:
-        if isinstance(msg, AIMessage) and msg.tool_calls:
-            for tc in msg.tool_calls:
-                raw_input = next(iter(tc.get("args", {}).values()), "") if tc.get("args") else ""
-                tool_call_map[tc["id"]] = (tc["name"], str(raw_input))
-
-    final_sql: str | None = None
-    final_rows: list[dict] = []
-    final_error: str | None = None
-
-    for msg in all_messages:
-        if not isinstance(msg, ToolMessage):
-            continue
-        call_id = msg.tool_call_id
-        if call_id not in tool_call_map:
-            continue
-        tool_name, raw_input = tool_call_map[call_id]
-        if tool_name != "execute_sql":
-            continue
-
-        observation = msg.content if isinstance(msg.content, str) else str(msg.content)
-        candidate_sql = _extract_and_normalise_sql(raw_input) or raw_input.strip()
-
-        if observation.startswith("SUCCESS"):
-            final_sql = candidate_sql
-            final_error = None
-            try:
-                json_start = observation.index("[")
-                json_part = observation[json_start:].split("\n(truncated")[0]
-                final_rows = json.loads(json_part)
-            except (ValueError, json.JSONDecodeError):
-                try:
-                    final_rows = _raw_execute_sql(candidate_sql)
-                except RuntimeError as exc:
-                    final_error = str(exc)
-                    final_rows = []
-        else:
-            if final_sql is None:
-                final_error = observation
-
-    if final_sql is None and final_error is None:
-        last_ai = next(
-            (m for m in reversed(all_messages)
-             if isinstance(m, AIMessage) and not m.tool_calls),
-            None,
-        )
-        output_text = last_ai.content if last_ai else ""
-        final_error = f"Agent completed without executing SQL. Output: {output_text}"
-
-    return {
-        "sql": final_sql,
-        "result": final_rows,
-        "error": final_error,
-        "schema_context": schema_context,
-    }
-
-
-# ═══════════════════════════════════════════════════════════════════════════
 # Test runner
 # ═══════════════════════════════════════════════════════════════════════════
+
+def _trunc(text: str, n: int = 200) -> str:
+    return text if len(text) <= n else text[:n] + "…"
+
 
 def run_single_test(
     idx: int,
     case: dict,
     top_k: int,
-    verbose: bool,
-    stream: bool,
 ) -> dict[str, Any]:
     W = 72
     print(f"\n{'═' * W}")
@@ -324,7 +173,6 @@ def run_single_test(
     print(f"  Note  : {case['note']}")
     print(f"{'─' * W}")
 
-    # Retrieve schema context via TableRAG
     _ensure_schema_index_exists()
     schema_rows = retrieve_relevant_schema(case["query"], top_k=top_k)
     schema_context = "\n".join(schema_rows)
@@ -334,14 +182,11 @@ def run_single_test(
         print(f"     {row}")
     print()
 
+    # run_react_sql_agent streams and prints the live trace internally
     start = time.time()
-    if stream:
-        result = stream_agent_trace(case["query"], schema_context, verbose=verbose)
-    else:
-        result = run_react_sql_agent(case["query"], schema_context)
+    result = run_react_sql_agent(case["query"], schema_context)
     latency = time.time() - start
 
-    # ── Verdict ─────────────────────────────────────────────────────────
     sql      = result.get("sql")
     rows     = result.get("result", [])
     error    = result.get("error")
@@ -355,11 +200,10 @@ def run_single_test(
     print(f"  {status_icon}  |  Expected SQL={expected}  Got SQL={produced_sql}  |  {latency:.2f}s")
 
     if sql:
-        wrapped_sql = textwrap.fill(
-            _truncate(sql, 200, verbose),
+        print(textwrap.fill(
+            _trunc(sql, 200),
             width=68, initial_indent="  SQL    : ", subsequent_indent="           "
-        )
-        print(wrapped_sql)
+        ))
     if rows:
         print(f"  Rows   : {len(rows)} returned")
         for row in rows[:3]:
@@ -367,7 +211,7 @@ def run_single_test(
         if len(rows) > 3:
             print(f"           … and {len(rows)-3} more")
     if error:
-        print(f"  Error  : {_truncate(error, 150, verbose)}")
+        print(f"  Error  : {_trunc(error, 150)}")
 
     return {
         "idx":     idx,
@@ -391,17 +235,7 @@ def main() -> None:
         "--top-k", type=int, default=config.SQL_TOP_K,
         help=f"Number of schema rows to retrieve via TableRAG (default: {config.SQL_TOP_K})."
     )
-    parser.add_argument(
-        "--verbose", action="store_true",
-        help="Show full SQL / observation text without truncation."
-    )
-    parser.add_argument(
-        "--no-stream", action="store_true",
-        help="Run agent silently (no live Thought/Action/Obs trace)."
-    )
     args = parser.parse_args()
-
-    stream = not args.no_stream
 
     print(f"\n{'═' * 72}")
     print("  ReAct SQL Agent — Test Suite")
@@ -410,7 +244,6 @@ def main() -> None:
     print(f"  LLM model   : {config.SQL_OPENAI_MODEL}")
     print(f"  Max iter    : {config.SQL_REACT_MAX_ITERATIONS}")
     print(f"  Top-K schema: {args.top_k}")
-    print(f"  Streaming   : {'yes' if stream else 'no'}")
     print(f"{'═' * 72}")
 
     cases = (
@@ -422,7 +255,7 @@ def main() -> None:
 
     results = []
     for i, case in zip(indices, cases):
-        r = run_single_test(i, case, args.top_k, args.verbose, stream)
+        r = run_single_test(i, case, args.top_k)
         results.append(r)
 
     # ── Final report ──────────────────────────────────────────────────────

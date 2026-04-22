@@ -28,8 +28,8 @@ class SchemaInfo:
             text = f"Table {table_name} with columns {', '.join(cols)}"
             
             if table_info.foreign_keys:
-                fks = [f"{ref_table}({ref_col})" for _, ref_table, ref_col in table_info.foreign_keys]
-                text += f" — references: {', '.join(fks)}"
+                fks = [f"{local_col} → {ref_table}({ref_col})" for local_col, ref_table, ref_col in table_info.foreign_keys]
+                text += f" — foreign keys: {', '.join(fks)}"
             
             texts.append(text)
         return texts
