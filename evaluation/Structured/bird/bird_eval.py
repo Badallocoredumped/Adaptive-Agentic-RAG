@@ -1,47 +1,48 @@
 """
-BIRD Benchmark Harness — mirrors spider_eval.py structure.
+BIRD Benchmark Harness
+
+QUICK START — run from anywhere in the repo:
+
+  # Generate predictions AND score them in one command
+  python bird_eval.py --ablation tablerag_react --evaluate
+
+  # Quick smoke test (20 questions, auto-score)
+  python bird_eval.py --ablation full_single_pass --limit 20 --evaluate
+
+  # Score an existing predictions file without re-running the model
+  python bird_eval.py --ablation tablerag_react --score_only
+
+  # Include BIRD's evidence hints in the prompt
+  python bird_eval.py --ablation tablerag_react --use_evidence --evaluate
+
+  # Only simple questions
+  python bird_eval.py --ablation tablerag_single_pass --difficulty simple --evaluate
 
 Ablation modes:
-  full_single_pass     — No TableRAG, no ReAct. Full schema passed as plain text.
-  tablerag_single_pass — TableRAG schema pruning + single-pass SQL agent (no ReAct).
-  tablerag_react       — TableRAG schema pruning + ReAct loop (multi-turn agent).
-
-BIRD-specific options:
-  --use_evidence       — Append BIRD's evidence/hint field to each question prompt.
-  --difficulty         — Run only questions of a given difficulty level.
-
-Output:
-  predictions_bird_<stem>.json  — BIRD evaluator-compatible predictions (JSON array).
-  gold_bird_<stem>.sql          — Matching ground-truth SQL file (tab-separated).
-
-Score with BIRD's official evaluator:
-  python bird/evaluation/evaluation_ex.py \\
-      --predicted_sql_path predictions_bird_<stem>.json \\
-      --ground_truth_path gold_bird_<stem>.sql \\
-      --db_root_path bird/dev_databases/dev_databases/ \\
-      --diff_json_path bird/dev.json \\
-      --num_cpus 1 --meta_time_out 30.0 --sql_dialect SQLite \\
-      --output_log_path results_bird_<stem>.txt
+  full_single_pass     — Full schema + single LLM call (no TableRAG, no ReAct)
+  tablerag_single_pass — TableRAG schema pruning + single SQL agent call
+  tablerag_react       — TableRAG schema pruning + multi-turn ReAct agent
 """
 
 import json
-import os
+import subprocess
 import sys
 import argparse
 from pathlib import Path
 from collections import defaultdict
 
-# Ensure backend is importable from anywhere within the repo.
-# Walk up from this file until we find the directory that contains backend/.
+
+# ---------------------------------------------------------------------------
+# Locate project root robustly — works regardless of which directory you run from
+# ---------------------------------------------------------------------------
 def _find_project_root(start: Path) -> Path:
     current = start.resolve()
     while current != current.parent:
         if (current / "backend").is_dir():
             return current
         current = current.parent
-    raise RuntimeError(
-        "Could not find project root (expected a parent directory containing 'backend/')."
-    )
+    raise RuntimeError("Cannot find project root. Make sure 'backend/' exists in an ancestor directory.")
+
 
 project_root = _find_project_root(Path(__file__))
 sys.path.insert(0, str(project_root))
@@ -52,283 +53,296 @@ from backend.sql.database import get_live_schema
 from backend.sql.table_rag import build_schema_index, retrieve_relevant_schema
 from backend.sql.sql_agent import run_sql_agent
 from backend.sql import database as _db_module
-
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 
-BIRD_DIR = project_root / "evaluation" / "Structured" / "bird"
-DEV_JSON_PATH = BIRD_DIR / "dev.json"
-DEV_TABLES_PATH = BIRD_DIR / "dev_tables.json"
-DB_ROOT_PATH = BIRD_DIR / "dev_databases" / "dev_databases"
-OUTPUT_DIR = project_root / "evaluation" / "Structured"
+# ---------------------------------------------------------------------------
+# Fixed paths (all derived from project root)
+# ---------------------------------------------------------------------------
+BIRD_DIR    = project_root / "evaluation" / "Structured" / "bird"
+EVAL_SCRIPT = BIRD_DIR / "evaluation" / "evaluation_ex.py"
+DEV_JSON    = BIRD_DIR / "dev.json"
+DEV_TABLES  = BIRD_DIR / "dev_tables.json"
+DB_ROOT     = BIRD_DIR / "dev_databases" / "dev_databases"
+OUTPUT_DIR  = project_root / "evaluation" / "Structured"
 
 
 # ---------------------------------------------------------------------------
-# SQL helpers
+# Helpers
 # ---------------------------------------------------------------------------
+def clean_sql(raw: str) -> str:
+    s = raw.strip()
+    if s.startswith("```"):
+        s = s.split("\n", 1)[-1]
+        s = s.rsplit("```", 1)[0]
+    s = s.replace("\n", " ").replace("\r", " ")
+    if ";" in s:
+        s = s.split(";")[0]
+    s = s.strip()
+    return s if s else "SELECT 1"
 
-def clean_sql(raw_sql: str) -> str:
-    """Strip markdown fences, collapse newlines, and isolate a single statement."""
-    cleaned = raw_sql.strip()
-    if cleaned.startswith("```"):
-        cleaned = cleaned.split("\n", 1)[-1]
-        cleaned = cleaned.rsplit("```", 1)[0]
-    cleaned = cleaned.replace("\n", " ").replace("\r", " ")
-    if ";" in cleaned:
-        cleaned = cleaned.split(";")[0]
-    cleaned = cleaned.strip()
-    return cleaned if cleaned else "SELECT 1"
-
-
-# ---------------------------------------------------------------------------
-# Ablation implementations
-# ---------------------------------------------------------------------------
-
-def run_single_pass_baseline(question: str, schema_context: str, evidence: str = "") -> str:
-    """Naive single-turn LLM generation: no TableRAG, no ReAct."""
-    llm = ChatOpenAI(model=config.SQL_OPENAI_MODEL, temperature=0.0)
-    evidence_section = f"\nEvidence/Hints:\n{evidence}" if evidence else ""
-    prompt = ChatPromptTemplate.from_messages([
-        ("system",
-         "You are an expert SQLite developer. Given the following database schema, "
-         "write a valid SQLite query to answer the user's question. "
-         "STRICT RULE: Return ONLY the raw SQL query. No markdown, no code fences, no explanations.\n\n"
-         "Schema:\n{schema_context}{evidence_section}"),
-        ("human", "{query}"),
-    ])
-    chain = prompt | llm
-    response = chain.invoke({
-        "schema_context": schema_context,
-        "evidence_section": evidence_section,
-        "query": question,
-    })
-    return clean_sql(str(response.content))
-
-
-# ---------------------------------------------------------------------------
-# Schema loading
-# ---------------------------------------------------------------------------
 
 def load_schema_map() -> dict:
-    """Parse dev_tables.json into {db_id: schema_string}."""
-    with open(DEV_TABLES_PATH, "r", encoding="utf-8") as f:
-        tables_data = json.load(f)
-
+    with open(DEV_TABLES, "r", encoding="utf-8") as f:
+        data = json.load(f)
     schema_map = {}
-    for db in tables_data:
-        db_id = db["db_id"]
+    for db in data:
+        db_id  = db["db_id"]
         tables = db["table_names_original"]
-        cols = db["column_names_original"]
-
-        schema_lines = []
-        for i, table_name in enumerate(tables):
-            table_cols = [col[1] for col in cols if col[0] == i]
-            schema_lines.append(f"Table: {table_name} | Columns: {', '.join(table_cols)}")
-
-        schema_map[db_id] = "\n".join(schema_lines)
-
+        cols   = db["column_names_original"]
+        lines  = []
+        for i, tbl in enumerate(tables):
+            tcols = [c[1] for c in cols if c[0] == i]
+            lines.append(f"Table: {tbl} | Columns: {', '.join(tcols)}")
+        schema_map[db_id] = "\n".join(lines)
     return schema_map
 
 
-# ---------------------------------------------------------------------------
-# Main harness
-# ---------------------------------------------------------------------------
+def run_single_pass_baseline(question: str, schema: str, evidence: str = "") -> str:
+    llm = ChatOpenAI(model=config.SQL_OPENAI_MODEL, temperature=0.0)
+    ev  = f"\nEvidence/Hints:\n{evidence}" if evidence else ""
+    prompt = ChatPromptTemplate.from_messages([
+        ("system",
+         "You are an expert SQLite developer. Write a valid SQLite query for the question below.\n"
+         "STRICT RULE: Return ONLY the raw SQL — no markdown, no fences, no explanations.\n\n"
+         "Schema:\n{schema}{ev}"),
+        ("human", "{q}"),
+    ])
+    resp = (prompt | llm).invoke({"schema": schema, "ev": ev, "q": question})
+    return clean_sql(str(resp.content))
 
+
+def make_stem(ablation: str, use_evidence: bool, difficulty: str, limit) -> str:
+    parts = [ablation]
+    if use_evidence:
+        parts.append("evidence")
+    if difficulty != "all":
+        parts.append(difficulty)
+    if limit:
+        parts.append(f"limit{limit}")
+    return "_".join(parts)
+
+
+# ---------------------------------------------------------------------------
+# Prediction generation
+# ---------------------------------------------------------------------------
+def generate_predictions(args, stem: str):
+    predictions_path = OUTPUT_DIR / f"predictions_bird_{stem}.json"
+    gold_path        = OUTPUT_DIR / f"gold_bird_{stem}.sql"
+
+    print(f"\n{'='*60}")
+    print(f"  Mode      : {args.ablation}")
+    print(f"  Evidence  : {'ON' if args.use_evidence else 'OFF'}")
+    print(f"  Difficulty: {args.difficulty}")
+    print(f"  Limit     : {args.limit or 'all'}")
+    print(f"{'='*60}\n")
+
+    with open(DEV_JSON, "r", encoding="utf-8") as f:
+        queries = json.load(f)
+
+    if args.difficulty != "all":
+        queries = [q for q in queries if q.get("difficulty") == args.difficulty]
+        print(f"After difficulty filter: {len(queries)} questions")
+
+    if args.limit:
+        queries = queries[:args.limit]
+
+    total = len(queries)
+    print(f"Questions to process: {total}\n")
+
+    schema_map = load_schema_map()
+
+    # Write gold SQL
+    with open(gold_path, "w", encoding="utf-8") as f:
+        for q in queries:
+            sql = q["SQL"].replace("\n", " ").strip()
+            f.write(f"{sql}\t{q['db_id']}\n")
+
+    # Group by DB to amortise index builds
+    by_db = defaultdict(list)
+    for idx, q in enumerate(queries):
+        by_db[q["db_id"]].append((idx, q))
+
+    results = ["SELECT 1"] * total
+    saved_threshold = config.SQL_SCHEMA_THRESHOLD
+    config.SQL_SCHEMA_THRESHOLD = None  # disable threshold for BIRD (small DBs)
+
+    processed = 0
+    for db_id, items in by_db.items():
+        print(f"--- DB: {db_id} ({len(items)} questions) ---")
+
+        config.SQLITE_PATH = str(DB_ROOT / db_id / f"{db_id}.sqlite")
+        _db_module._sqlite_local.conn = None
+
+        if args.ablation in ("tablerag_single_pass", "tablerag_react"):
+            info = get_live_schema()
+            if info.tables:
+                build_schema_index(info)
+
+        full_schema = schema_map.get(db_id, "")
+
+        for orig_idx, entry in items:
+            processed += 1
+            question = entry["question"]
+            evidence = entry.get("evidence", "") if args.use_evidence else ""
+            prompt_q = f"{question}\nHint: {evidence}" if evidence else question
+            diff     = entry.get("difficulty", "?")
+
+            print(f"  [{processed}/{total}] ({diff}) {question[:75]}{'...' if len(question) > 75 else ''}")
+
+            try:
+                if args.ablation == "full_single_pass":
+                    sql = run_single_pass_baseline(question, full_schema, evidence)
+
+                elif args.ablation == "tablerag_single_pass":
+                    schema_list = retrieve_relevant_schema(prompt_q, top_k=config.SQL_TOP_K)
+                    schema_ctx  = "\n".join(schema_list) if schema_list else full_schema
+                    result = run_sql_agent(query=prompt_q, schema_context=schema_ctx)
+                    sql = clean_sql(result.get("sql", "SELECT 1"))
+
+                elif args.ablation == "tablerag_react":
+                    schema_list = retrieve_relevant_schema(prompt_q, top_k=config.SQL_TOP_K)
+                    schema_ctx  = "\n".join(schema_list) if schema_list else full_schema
+                    result = run_react_sql_agent(query=prompt_q, schema_context=schema_ctx)
+                    raw    = result.get("sql")
+                    sql    = clean_sql(raw) if raw else "SELECT 1"
+
+            except Exception as e:
+                print(f"    -> Error: {e}")
+                sql = "SELECT 1"
+
+            results[orig_idx] = sql
+
+    config.SQL_SCHEMA_THRESHOLD = saved_threshold
+
+    # Write predictions in BIRD format
+    payload = [
+        f"{sql}\t----- bird -----\t{queries[i]['db_id']}"
+        for i, sql in enumerate(results)
+    ]
+    with open(predictions_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+
+    print(f"\nPredictions saved : {predictions_path.name}")
+    print(f"Gold SQL saved    : {gold_path.name}")
+    return predictions_path, gold_path
+
+
+# ---------------------------------------------------------------------------
+# Scoring
+# ---------------------------------------------------------------------------
+def run_evaluation(predictions_path: Path, gold_path: Path, stem: str):
+    results_path = OUTPUT_DIR / f"results_bird_{stem}.txt"
+
+    print(f"\n{'='*60}")
+    print("  Running BIRD EX evaluation ...")
+    print(f"{'='*60}\n")
+
+    cmd = [
+        sys.executable, str(EVAL_SCRIPT),
+        "--predicted_sql_path", str(predictions_path),
+        "--ground_truth_path",  str(gold_path),
+        "--db_root_path",       str(DB_ROOT) + "/",
+        "--diff_json_path",     str(DEV_JSON),
+        "--num_cpus",           "1",
+        "--meta_time_out",      "30.0",
+        "--sql_dialect",        "SQLite",
+        "--output_log_path",    str(results_path),
+    ]
+
+    subprocess.run(cmd, check=False)
+    print(f"\nResults saved to: {results_path.name}")
+
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser(
-        description="BIRD Benchmark Harness — mirrors spider_eval.py"
+        description="BIRD Benchmark Harness",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python bird_eval.py --ablation tablerag_react --evaluate
+  python bird_eval.py --ablation full_single_pass --limit 20 --evaluate
+  python bird_eval.py --ablation tablerag_react --score_only
+  python bird_eval.py --ablation tablerag_react --use_evidence --difficulty simple --evaluate
+        """,
     )
     parser.add_argument(
         "--ablation",
-        type=str,
         choices=["full_single_pass", "tablerag_single_pass", "tablerag_react"],
         required=True,
-        help="Pipeline variant to benchmark.",
+        help="Pipeline variant to run.",
     )
     parser.add_argument(
         "--limit",
         type=int,
         default=None,
-        help="Cap the number of questions processed (e.g. 20 for a quick smoke test).",
+        help="Process only the first N questions (useful for quick tests).",
     )
     parser.add_argument(
         "--use_evidence",
         action="store_true",
-        default=False,
-        help="Append BIRD's evidence/hint field to each question prompt.",
+        help="Include BIRD's evidence/hint field in each question prompt.",
     )
     parser.add_argument(
         "--difficulty",
-        type=str,
         choices=["all", "simple", "moderate", "challenging"],
         default="all",
-        help="Restrict evaluation to one BIRD difficulty tier.",
+        help="Filter to a specific difficulty tier (default: all).",
     )
     parser.add_argument(
         "--top_k",
         type=int,
         default=None,
-        help="Override config.SQL_TOP_K for TableRAG schema retrieval.",
+        help="Override SQL_TOP_K for TableRAG retrieval.",
     )
+    parser.add_argument(
+        "--evaluate",
+        action="store_true",
+        help="Automatically score predictions after generating them.",
+    )
+    parser.add_argument(
+        "--score_only",
+        action="store_true",
+        help="Skip prediction generation; score the existing predictions file.",
+    )
+
     args = parser.parse_args()
 
-    # Override top_k if provided
     if args.top_k is not None:
         config.SQL_TOP_K = args.top_k
 
-    # Build a descriptive stem for output filenames
-    parts = [args.ablation]
-    if args.use_evidence:
-        parts.append("evidence")
-    if args.difficulty != "all":
-        parts.append(args.difficulty)
-    if args.limit:
-        parts.append(f"limit{args.limit}")
+    stem             = make_stem(args.ablation, args.use_evidence, args.difficulty, args.limit)
+    predictions_path = OUTPUT_DIR / f"predictions_bird_{stem}.json"
+    gold_path        = OUTPUT_DIR / f"gold_bird_{stem}.sql"
 
-    file_stem = "_".join(parts)
-    predictions_path = OUTPUT_DIR / f"predictions_bird_{file_stem}.json"
-    gold_sql_path = OUTPUT_DIR / f"gold_bird_{file_stem}.sql"
+    if args.score_only:
+        if not predictions_path.exists():
+            print(f"ERROR: No predictions file found at:\n  {predictions_path}")
+            print("Run without --score_only first to generate predictions.")
+            sys.exit(1)
+        if not gold_path.exists():
+            print(f"ERROR: No gold SQL file found at:\n  {gold_path}")
+            print("Run without --score_only first to generate the gold file.")
+            sys.exit(1)
+        run_evaluation(predictions_path, gold_path, stem)
+        return
 
-    # -----------------------------------------------------------------------
-    print(f"Starting BIRD benchmark: {args.ablation.upper()}")
-    print(f"  Evidence hints : {'ON' if args.use_evidence else 'OFF'}")
-    print(f"  Difficulty     : {args.difficulty}")
-    print(f"  SQL_TOP_K      : {config.SQL_TOP_K}")
-    if args.limit:
-        print(f"\n  ⚠️  LIMIT: first {args.limit} questions only\n")
+    predictions_path, gold_path = generate_predictions(args, stem)
 
-    # 1. Load questions
-    with open(DEV_JSON_PATH, "r", encoding="utf-8") as f:
-        dev_queries = json.load(f)
-
-    if args.difficulty != "all":
-        dev_queries = [q for q in dev_queries if q.get("difficulty") == args.difficulty]
-        print(f"After difficulty filter: {len(dev_queries)} questions")
-
-    if args.limit:
-        dev_queries = dev_queries[: args.limit]
-
-    total = len(dev_queries)
-    print(f"Total questions to process: {total}")
-
-    # 2. Load schema map
-    schema_map = load_schema_map()
-
-    # 3. Write gold SQL file for this evaluation run
-    with open(gold_sql_path, "w", encoding="utf-8") as f:
-        for entry in dev_queries:
-            sql = entry["SQL"].replace("\n", " ").strip()
-            f.write(f"{sql}\t{entry['db_id']}\n")
-    print(f"Gold SQL written to: {gold_sql_path.name}")
-
-    # 4. Group by db_id to amortise schema index builds
-    queries_by_db: dict[str, list] = defaultdict(list)
-    for idx, entry in enumerate(dev_queries):
-        queries_by_db[entry["db_id"]].append((idx, entry))
-
-    results_array = ["SELECT 1"] * total
-
-    # Disable cosine threshold during BIRD eval — same rationale as Spider:
-    # the threshold was tuned for large production DBs; BIRD DBs are self-contained
-    # and all tables may be relevant for JOINs.
-    _original_threshold = config.SQL_SCHEMA_THRESHOLD
-    config.SQL_SCHEMA_THRESHOLD = None
-
-    # 5. Process database by database
-    total_processed = 0
-    for db_id, items in queries_by_db.items():
-        print(f"\n--- DB: {db_id} ({len(items)} questions) ---")
-
-        db_path = DB_ROOT_PATH / db_id / f"{db_id}.sqlite"
-        config.SQLITE_PATH = str(db_path)
-        _db_module._sqlite_local.conn = None  # drop cached connection
-
-        full_schema_context = schema_map.get(db_id, "")
-
-        if args.ablation in ("tablerag_single_pass", "tablerag_react"):
-            schema_info = get_live_schema()
-            if schema_info.tables:
-                build_schema_index(schema_info)
-
-        for original_idx, entry in items:
-            total_processed += 1
-            question = entry["question"]
-            evidence = entry.get("evidence", "") if args.use_evidence else ""
-            difficulty = entry.get("difficulty", "?")
-
-            # Build the prompt question; evidence is appended as a hint when enabled
-            prompt_question = f"{question}\nHint: {evidence}" if evidence else question
-
-            print(
-                f"[{total_processed}/{total}] ({difficulty}) "
-                f"{question[:80]}{'...' if len(question) > 80 else ''}"
-            )
-
-            try:
-                if args.ablation == "full_single_pass":
-                    final_sql = run_single_pass_baseline(
-                        question, full_schema_context, evidence
-                    )
-
-                elif args.ablation == "tablerag_single_pass":
-                    pruned_schema_list = retrieve_relevant_schema(
-                        prompt_question, top_k=config.SQL_TOP_K
-                    )
-                    pruned_schema = (
-                        "\n".join(pruned_schema_list)
-                        if pruned_schema_list
-                        else full_schema_context
-                    )
-                    result = run_sql_agent(
-                        query=prompt_question, schema_context=pruned_schema
-                    )
-                    final_sql = clean_sql(result.get("sql", "SELECT 1"))
-
-                elif args.ablation == "tablerag_react":
-                    pruned_schema_list = retrieve_relevant_schema(
-                        prompt_question, top_k=config.SQL_TOP_K
-                    )
-                    pruned_schema = (
-                        "\n".join(pruned_schema_list)
-                        if pruned_schema_list
-                        else full_schema_context
-                    )
-                    result = run_react_sql_agent(
-                        query=prompt_question, schema_context=pruned_schema
-                    )
-                    generated_sql = result.get("sql")
-                    final_sql = clean_sql(generated_sql) if generated_sql else "SELECT 1"
-
-            except Exception as exc:
-                print(f"  -> Error: {exc}")
-                final_sql = "SELECT 1"
-
-            results_array[original_idx] = final_sql
-
-    config.SQL_SCHEMA_THRESHOLD = _original_threshold
-
-    # 6. Write predictions in BIRD evaluator format (JSON array of tagged strings)
-    predictions = [
-        f"{sql}\t----- bird -----\t{dev_queries[i]['db_id']}"
-        for i, sql in enumerate(results_array)
-    ]
-    with open(predictions_path, "w", encoding="utf-8") as f:
-        json.dump(predictions, f, indent=2, ensure_ascii=False)
-
-    # 7. Print summary and ready-to-run evaluation command
-    print(f"\nFinished! Processed {total_processed} questions.")
-    print(f"  Predictions : {predictions_path.name}")
-    print(f"  Gold SQL    : {gold_sql_path.name}")
-    print(
-        f"\nRun EX evaluation:\n"
-        f"  python bird/evaluation/evaluation_ex.py \\\n"
-        f"      --predicted_sql_path {predictions_path} \\\n"
-        f"      --ground_truth_path {gold_sql_path} \\\n"
-        f"      --db_root_path {DB_ROOT_PATH}/ \\\n"
-        f"      --diff_json_path {DEV_JSON_PATH} \\\n"
-        f"      --num_cpus 1 --meta_time_out 30.0 --sql_dialect SQLite \\\n"
-        f"      --output_log_path {OUTPUT_DIR / f'results_bird_{file_stem}.txt'}"
-    )
+    if args.evaluate:
+        run_evaluation(predictions_path, gold_path, stem)
+    else:
+        print(
+            f"\nTo score, run:\n"
+            f"  python bird_eval.py --ablation {args.ablation}"
+            + (" --use_evidence" if args.use_evidence else "")
+            + (f" --difficulty {args.difficulty}" if args.difficulty != "all" else "")
+            + (f" --limit {args.limit}" if args.limit else "")
+            + " --score_only"
+        )
 
 
 if __name__ == "__main__":

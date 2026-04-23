@@ -123,6 +123,12 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
         "  8. Always call execute_sql to test your SQL before reporting the final answer.\n"
         "  9. If execute_sql returns an error, read the error message, fix the SQL, and retry.\n"
         f"       You have up to {max_iter} tool-calling rounds — use them wisely.\n"
+        " 10. ALIAS CONSISTENCY: every alias you define in FROM/JOIN must be used exactly as written everywhere in the query. "
+        "Example: `FROM satscores ss JOIN frpm f` — use `ss.col` and `f.col`, never `s.col`.\n"
+        " 11. COLUMN QUOTING: column names that contain spaces or special characters MUST be wrapped in double quotes. "
+        'Example: `"FRPM Count (K-12)"`, `"Charter School (Y/N)"`. Never leave such names unquoted.\n'
+        " 12. UNKNOWN COLUMN: if execute_sql returns 'no such column: X', do NOT retry the same query. "
+        "Immediately call schema_lookup to get the exact column names for that table, then rewrite the query.\n"
     )
 
 
@@ -183,7 +189,22 @@ def _make_execute_sql_tool() -> Tool:
         try:
             rows = _raw_execute_sql(sql)
         except RuntimeError as exc:
-            return f"ERROR: {exc}"
+            err = str(exc)
+            if "no such column" in err:
+                bad_col = err.split("no such column:")[-1].strip().split("\n")[0]
+                return (
+                    f"ERROR: SQL execution failed: {err}\n"
+                    f"ACTION REQUIRED: column '{bad_col}' does not exist. "
+                    "You MUST call schema_lookup now to get the exact column names "
+                    "before retrying. Do NOT guess or retry the same query."
+                )
+            if "syntax error" in err:
+                return (
+                    f"ERROR: SQL execution failed: {err}\n"
+                    "HINT: Check for unquoted column names containing spaces or "
+                    'special characters — wrap them in double quotes, e.g. "Column Name (unit)".'
+                )
+            return f"ERROR: SQL execution failed: {err}"
 
         if not rows:
             return "SUCCESS: 0 row(s) returned.\n[]"

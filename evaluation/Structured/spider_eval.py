@@ -124,17 +124,11 @@ def main():
 
     results_array = ["SELECT 1;"] * len(dev_queries)
 
-    # Disable cosine threshold during Spider eval: Spider DBs have only 3-15 tables
-    # and all may be needed for JOINs. The threshold was tuned for large production
-    # DBs with many irrelevant tables; applying it here drops required join tables.
-    _original_threshold = config.SQL_SCHEMA_THRESHOLD
-    config.SQL_SCHEMA_THRESHOLD = None
-
     # 3. Process database by database
     total_processed = 0
     for db_id, questions in queries_by_db.items():
         print(f"\n--- Processing DB: {db_id} ({len(questions)} questions) ---")
-
+        
         # Override system SQLite path for this specific database
         db_path = SPIDER_DIR / "database" / db_id / f"{db_id}.sqlite"
         config.SQLITE_PATH = str(db_path)
@@ -179,8 +173,6 @@ def main():
                 final_sql = "SELECT 1;"
 
             results_array[original_idx] = final_sql
-
-    config.SQL_SCHEMA_THRESHOLD = _original_threshold
 
     # 4. Write aligned predictions
     with open(output_filename, "w", encoding="utf-8") as out_file:
