@@ -77,7 +77,8 @@ SQL_TOP_K = 30
 # SQL_SCHEMA_THRESHOLD (min cosine similarity score to include a schema table).
 # Tables below this score are dropped. The top-1 match is always kept as a
 # fallback so the schema context is never empty.
-SQL_SCHEMA_THRESHOLD: float = 0.5
+
+SQL_SCHEMA_THRESHOLD: float = 0.7
 
 
 # ============================================================================
