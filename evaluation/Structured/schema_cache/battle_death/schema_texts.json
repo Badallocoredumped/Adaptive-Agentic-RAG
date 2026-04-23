@@ -1,5 +1,5 @@
 [
   "Table battle with columns id (int), name (text), date (text), bulgarian_commander (text), latin_commander (text), result (text)",
-  "Table death with columns caused_by_ship_id (int), id (int), note (text), killed (int), injured (int) \u2014 references: ship(id)",
-  "Table ship with columns lost_in_battle (int), id (int), name (text), tonnage (text), ship_type (text), location (text), disposition_of_ship (text) \u2014 references: battle(id)"
+  "Table death with columns caused_by_ship_id (int), id (int), note (text), killed (int), injured (int) \u2014 foreign keys: caused_by_ship_id \u2192 ship(id)",
+  "Table ship with columns lost_in_battle (int), id (int), name (text), tonnage (text), ship_type (text), location (text), disposition_of_ship (text) \u2014 foreign keys: lost_in_battle \u2192 battle(id)"
 ]

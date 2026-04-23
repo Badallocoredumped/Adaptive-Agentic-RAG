@@ -1,5 +1,5 @@
 [
   "Table museum with columns Museum_ID (int), Name (text), Num_of_Staff (int), Open_Year (text)",
-  "Table visit with columns Museum_ID (int), visitor_ID (text), Num_of_Ticket (int), Total_spent (real) \u2014 references: visitor(ID), museum(Museum_ID)",
+  "Table visit with columns Museum_ID (int), visitor_ID (text), Num_of_Ticket (int), Total_spent (real) \u2014 foreign keys: visitor_ID \u2192 visitor(ID), Museum_ID \u2192 museum(Museum_ID)",
   "Table visitor with columns ID (int), Name (text), Level_of_membership (int), Age (int)"
 ]

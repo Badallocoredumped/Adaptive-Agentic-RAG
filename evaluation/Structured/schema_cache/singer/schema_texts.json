@@ -1,0 +1,4 @@
+[
+  "Table singer with columns Singer_ID (int), Name (text), Birth_Year (real), Net_Worth_Millions (real), Citizenship (text)",
+  "Table song with columns Song_ID (int), Title (text), Singer_ID (int), Sales (real), Highest_Position (real) \u2014 foreign keys: Singer_ID \u2192 singer(Singer_ID)"
+]

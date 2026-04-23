@@ -379,7 +379,7 @@ def run_table_rag_pipeline(
     # 1. Check Semantic Cache
     cache = _get_sql_cache()
     _debug(f"\n[TableRAG Pipeline] Analyzing query: {query!r}")
-    cache_result = cache.check_cache_hit(query, threshold=0.85)
+    cache_result = cache.check_cache_hit(query, threshold=config.SQL_CACHE_HIT_THRESHOLD)
 
     if cache_result["hit"]:
         cached_sql = cache_result["sql"]
@@ -446,7 +446,7 @@ def run_table_rag_pipeline(
         latency = time.time() - start_time
         _debug(f"[TableRAG Pipeline] Latency: {latency:.2f}s")
         return {
-            "schema_used": ["<from semantic cache>"],
+            "schema_used": _extract_table_names(cached_schema) or ["<from semantic cache>"],
             "sql": sql_to_execute,
             "result": rows,
             "error": error,
