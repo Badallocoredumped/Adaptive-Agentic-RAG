@@ -72,8 +72,16 @@ def _normalize_sql(raw_text: str) -> str | None:
 
 
 def _extract_table_names(schema_context: str) -> list[str]:
-    """Extract table names from schema context lines."""
-    names = re.findall(r"Table\s+([A-Za-z_][A-Za-z0-9_]*)\s+with\s+columns", schema_context)
+    """Extract table names from schema context lines.
+
+    Handles two formats:
+      - "Table X with columns ..."  (from SchemaInfo.to_embedding_texts)
+      - "Table: X | Columns: ..."  (from spider_eval load_schema_map)
+    """
+    names = re.findall(
+        r"Table[:\s]+([A-Za-z_][A-Za-z0-9_]*)\s*(?:with\s+columns|\|)",
+        schema_context,
+    )
     deduped: list[str] = []
     seen: set[str] = set()
     for name in names:
