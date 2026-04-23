@@ -243,6 +243,16 @@ SQL_OPENAI_MODEL = "gpt-4o-mini"
 SQL_GENERATE_TEMPERATURE = 0.0
 SQL_REFINE_TEMPERATURE = 0.0
 
+# Mode for retrieving fresh schema on a semantic cache hit:
+#   "always"    -> Always retrieve fresh schema for the new query.
+#   "threshold" -> Use cached schema if score >= threshold, otherwise retrieve.
+#   "never"     -> Never retrieve fresh schema, strictly use cached schema.
+SQL_CACHE_REFRESH_MODE = "threshold"
+
+# If SQL_CACHE_REFRESH_MODE is "threshold", this defines the minimum score
+# required to skip fresh schema retrieval and strictly use the cached schema.
+SQL_CACHE_REFRESH_THRESHOLD = 0.95
+
 # ============================================================================
 # Debug
 # ============================================================================
