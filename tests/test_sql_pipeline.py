@@ -211,39 +211,11 @@ def test_db_connection():
 
 
 @pytest.mark.integration
-def test_schema_initialization():
-    """PostgresDatabase.initialize_schema() must create all 9 tables."""
-    from backend.sql.database import PostgresDatabase, get_db_cursor
-
-    db = PostgresDatabase()
-    db.initialize_schema()
-
-    expected_tables = {
-        "customers", "orders", "products", "order_items",
-        "departments", "employees", "inventory",
-        "support_tickets", "blog_posts",
-    }
-
-    with get_db_cursor() as cur:
-        cur.execute(
-            """
-            SELECT table_name
-            FROM information_schema.tables
-            WHERE table_schema = 'public' AND table_type = 'BASE TABLE';
-            """
-        )
-        found = {row["table_name"] for row in cur.fetchall()}
-
-    missing = expected_tables - found
-    assert not missing, f"Missing tables: {missing}"
-
-
-@pytest.mark.integration
 def test_execute_sql_returns_rows():
-    """_execute_sql must execute a basic SELECT against PostgreSQL."""
-    from backend.sql.sql_agent import _execute_sql
+    """execute_query must execute a basic SELECT against PostgreSQL."""
+    from backend.sql.database import execute_query
 
-    rows = _execute_sql("SELECT id, name FROM customers ORDER BY id LIMIT 3;")
+    rows = execute_query("SELECT id, name FROM customers ORDER BY id LIMIT 3;")
     assert isinstance(rows, list)
     assert len(rows) > 0
     assert "id" in rows[0]
@@ -251,14 +223,14 @@ def test_execute_sql_returns_rows():
 
 
 @pytest.mark.integration
-def test_load_pg_schema_dict():
-    """_load_pg_schema_dict must return a dict with at least the 9 known tables."""
-    from backend.sql.sql_agent import _load_pg_schema_dict
+def test_get_live_schema():
+    """get_live_schema must return a SchemaInfo with fintech tables."""
+    from backend.sql.database import get_live_schema
 
-    schema = _load_pg_schema_dict()
-    assert "customers" in schema
-    assert "orders" in schema
-    assert "id" in schema["customers"]
+    schema_info = get_live_schema()
+    assert "customers" in schema_info.tables
+    assert "orders" in schema_info.tables
+    assert any(col.name == "id" for col in schema_info.tables["customers"].columns)
 
 
 # ── E2E tests (real PostgreSQL + real OpenAI API required) ────────────────────

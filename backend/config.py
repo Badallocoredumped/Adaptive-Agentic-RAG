@@ -58,9 +58,9 @@ DB_BACKEND: str = "sqlite" if SQLITE_PATH else "postgres"
 DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 PG_HOST: str      = os.getenv("PG_HOST", "localhost")
 PG_PORT: int      = int(os.getenv("PG_PORT", "5432"))
-PG_DB: str        = os.getenv("PG_DB", "adaptive_rag")
+PG_DB: str        = os.getenv("PG_DB", "fintech")
 PG_USER: str      = os.getenv("PG_USER", "postgres")
-PG_PASSWORD: str  = os.getenv("PG_PASSWORD", "")
+PG_PASSWORD: str  = os.getenv("PG_PASSWORD", "admin")
 
 # ============================================================================
 # Embeddings
@@ -72,8 +72,12 @@ E5_PASSAGE_PREFIX = "passage: "
 
 # RAG_TOP_K (number of retrieved text chunks passed into synthesis)
 RAG_TOP_K = 5
-# SQL_TOP_K (number of schema tables retrieved by TableRAG)
-SQL_TOP_K = 3
+# SQL_TOP_K (max schema tables retrieved by TableRAG)
+SQL_TOP_K = 30
+# SQL_SCHEMA_THRESHOLD (min cosine similarity score to include a schema table).
+# Tables below this score are dropped. The top-1 match is always kept as a
+# fallback so the schema context is never empty.
+SQL_SCHEMA_THRESHOLD: float = 0.7
 
 
 # ============================================================================
@@ -274,6 +278,25 @@ SQL_KEYWORDS = {
     "sql",
     "database",
     "revenue",
+    "min",
+    "max",
+    "maximum",
+    "minimum",
+    "mean",
+    "percent",
+    "percentage",
+    "ratio",
+    "rank",
+    "top",
+    "bottom",
+    "highest",
+    "lowest",
+    "per",
+    "group",
+    "by",
+    "compare",
+    "versus",
+    "vs",
 }
 
 TEXT_KEYWORDS = {
@@ -287,6 +310,23 @@ TEXT_KEYWORDS = {
     "context",
     "policy",
     "report",
+    "how",
+    "why",
+    "meaning",
+    "definition",
+    "describe",
+    "description",
+    "purpose",
+    "background",
+    "history",
+    "narrative",
+    "overview",
+    "manual",
+    "guide",
+    "mentions",
+    "about",
+    "related",
+    "concept",
 }
 
 DOMAIN_KEYWORDS = {
