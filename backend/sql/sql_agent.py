@@ -121,37 +121,19 @@ def _resolve_schema_context(query: str, schema_context: str | None, top_k: int) 
 # Few-shot examples used to guide the cache-hit SQL refiner
 # ---------------------------------------------------------------------------
 
-_REFINE_FEW_SHOT_EXAMPLES = [
-    {
-        "original_question": "What is the total revenue from all orders?",
-        "cached_sql": "SELECT SUM(amount) AS total_revenue FROM orders;",
-        "new_question": "What is the total revenue from completed orders?",
-        "refined_sql": "SELECT SUM(amount) AS total_revenue FROM orders WHERE status = 'completed';",
-    },
-    {
-        "original_question": "Show me the top 3 cities by number of customers.",
-        "cached_sql": "SELECT city, COUNT(id) AS customer_count FROM customers GROUP BY city ORDER BY customer_count DESC LIMIT 3;",
-        "new_question": "Show me the top 5 cities by number of customers.",
-        "refined_sql": "SELECT city, COUNT(id) AS customer_count FROM customers GROUP BY city ORDER BY customer_count DESC LIMIT 5;",
-    },
-    {
-        "original_question": "What is the average salary per department?",
-        "cached_sql": "SELECT d.name, AVG(e.salary) AS avg_salary FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name;",
-        "new_question": "What is the maximum salary per department?",
-        "refined_sql": "SELECT d.name, MAX(e.salary) AS max_salary FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name;",
-    },
-]
-
-
-def _build_refine_few_shot_block() -> str:
-    """Format the few-shot examples into a prompt block."""
+def _build_refine_few_shot_block(similar_queries: list[dict[str, Any]] | None) -> str:
+    """Format dynamic few-shot examples into a prompt block."""
+    if not similar_queries:
+        return "No similar queries available."
+        
     lines = []
-    for ex in _REFINE_FEW_SHOT_EXAMPLES:
-        lines.append(f"Original question: {ex['original_question']}")
-        lines.append(f"Cached SQL:        {ex['cached_sql']}")
-        lines.append(f"New question:      {ex['new_question']}")
-        lines.append(f"Refined SQL:       {ex['refined_sql']}")
-        lines.append("")
+    for ex in similar_queries:
+        q = ex.get("question", "")
+        s = ex.get("sql", "")
+        if q and s:
+            lines.append(f"Question: {q}")
+            lines.append(f"SQL:      {s}")
+            lines.append("")
     return "\n".join(lines).strip()
 
 
@@ -175,6 +157,7 @@ def _refine_sql_from_cache(
     original_question: str,
     cached_sql: str,
     schema_context: str,
+    similar_queries: list[dict[str, Any]] | None = None,
 ) -> str | None:
     """Use OpenAI with few-shot examples to make small adjustments to a cached SQL.
 
@@ -185,7 +168,7 @@ def _refine_sql_from_cache(
     """
     client = _get_openai_client()
 
-    few_shot_block = _build_refine_few_shot_block()
+    few_shot_block = _build_refine_few_shot_block(similar_queries)
 
     dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
     system_prompt = (
@@ -205,7 +188,7 @@ def _refine_sql_from_cache(
     )
 
     user_prompt = (
-        f"Here are examples of how to refine cached SQL:\n\n"
+        f"Here are some other valid queries from our system to help you understand the database patterns:\n\n"
         f"{few_shot_block}\n\n"
         "---\n\n"
         f"Now refine the following:\n"
@@ -403,6 +386,7 @@ def run_table_rag_pipeline(
             original_question=original_question,
             cached_sql=cached_sql,
             schema_context=cached_schema,
+            similar_queries=cache_result.get("similar_queries", []),
         )
 
         if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
