@@ -47,12 +47,15 @@ class ResponseSynthesizer:
             chat_openai_cls = self._resolve_chat_openai_class()
             if chat_openai_cls is None:
                 raise RuntimeError("ChatOpenAI class unavailable for synthesis")
-            self._llm = chat_openai_cls(
-                model=config.SYNTHESIS_MODEL,
-                temperature=config.SYNTHESIS_TEMPERATURE,
-                api_key=config.OPENAI_API_KEY,
-                timeout=config.ROUTER_TIMEOUT_SECONDS,
-            )
+            llm_kwargs: dict = {
+                "model": config.SYNTHESIS_MODEL,
+                "temperature": config.SYNTHESIS_TEMPERATURE,
+                "api_key": config.LLM_API_KEY,
+                "timeout": config.ROUTER_TIMEOUT_SECONDS,
+            }
+            if config.LLM_BASE_URL:
+                llm_kwargs["base_url"] = config.LLM_BASE_URL
+            self._llm = chat_openai_cls(**llm_kwargs)
         return self._llm
 
     def synthesize(

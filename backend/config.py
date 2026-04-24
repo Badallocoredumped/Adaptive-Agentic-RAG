@@ -228,10 +228,29 @@ SEMANTIC_ROUTER_HYBRID_MARGIN: float = 0.015
 # OpenAI settings for SQL generation & refinement
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # set in .env
 
+# ============================================================================
+# LLM Provider
+# ============================================================================
+# Set LLM_PROVIDER=ollama in .env (or environment) to use the Ollama endpoint.
+# Set LLM_PROVIDER=openai (default) to use the OpenAI API.
+LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "openai")
+
+# Ollama server address — WITHOUT trailing /v1 (it is appended automatically).
+OLLAMA_SERVER: str = os.getenv("OLLAMA_SERVER", "http://81.214.35.48:11434")
+OLLAMA_MODEL: str  = os.getenv("OLLAMA_MODEL",  "qwen2.5-coder:14b-instruct-q4_K_M")
+OLLAMA_API_KEY: str = os.getenv("OLLAMA_API_KEY", "ollama")
+
+# Effective LLM settings used by all agents (SQL, ReAct, Router, Synthesizer).
+# Override any individual variable via environment if needed.
+LLM_MODEL: str   = OLLAMA_MODEL if LLM_PROVIDER == "ollama" else os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+LLM_BASE_URL: str = f"{OLLAMA_SERVER.rstrip('/')}/v1" if LLM_PROVIDER == "ollama" else ""
+LLM_API_KEY: str  = OLLAMA_API_KEY if LLM_PROVIDER == "ollama" else OPENAI_API_KEY
+
 ROUTER_LLM_TEMPERATURE = 0.0
-ROUTER_MODEL = os.getenv("ROUTER_MODEL", "gpt-4o-mini")
-ROUTER_BASE_URL = os.getenv("ROUTER_BASE_URL", "") # Empty uses default OpenAI endpoints
-ROUTER_API_KEY = os.getenv("ROUTER_API_KEY", OPENAI_API_KEY)
+ROUTER_MODEL   = os.getenv("ROUTER_MODEL",   LLM_MODEL)
+# ROUTER_BASE_URL is used WITHOUT /v1 — the router appends /v1 itself.
+ROUTER_BASE_URL = os.getenv("ROUTER_BASE_URL", OLLAMA_SERVER if LLM_PROVIDER == "ollama" else "")
+ROUTER_API_KEY  = os.getenv("ROUTER_API_KEY",  LLM_API_KEY)
 
 SYNTHESIS_MODEL = ROUTER_MODEL
 SYNTHESIS_TEMPERATURE = 0.0
@@ -239,7 +258,7 @@ SYNTHESIS_TEMPERATURE = 0.0
 # ============================================================================
 # SQL
 # ============================================================================
-SQL_OPENAI_MODEL = "gpt-4o-mini"
+SQL_OPENAI_MODEL = LLM_MODEL
 SQL_GENERATE_TEMPERATURE = 0.0
 SQL_REFINE_TEMPERATURE = 0.0
 

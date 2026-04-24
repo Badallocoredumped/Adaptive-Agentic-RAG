@@ -99,7 +99,10 @@ def load_schema_map() -> dict:
 
 
 def run_single_pass_baseline(question: str, schema: str, evidence: str = "") -> str:
-    llm = ChatOpenAI(model=config.SQL_OPENAI_MODEL, temperature=0.0)
+    llm_kwargs: dict = {"model": config.SQL_OPENAI_MODEL, "temperature": 0.0, "api_key": config.LLM_API_KEY}
+    if config.LLM_BASE_URL:
+        llm_kwargs["base_url"] = config.LLM_BASE_URL
+    llm = ChatOpenAI(**llm_kwargs)
     ev  = f"\nEvidence/Hints:\n{evidence}" if evidence else ""
     prompt = ChatPromptTemplate.from_messages([
         ("system",
@@ -112,12 +115,14 @@ def run_single_pass_baseline(question: str, schema: str, evidence: str = "") -> 
     return clean_sql(str(resp.content))
 
 
-def make_stem(ablation: str, use_evidence: bool, difficulty: str, limit) -> str:
+def make_stem(ablation: str, use_evidence: bool, difficulty: str, limit, threshold) -> str:
     parts = [ablation]
     if use_evidence:
         parts.append("evidence")
     if difficulty != "all":
         parts.append(difficulty)
+    if threshold is not None:
+        parts.append(f"thr{threshold}")
     if limit:
         parts.append(f"limit{limit}")
     return "_".join(parts)
@@ -165,7 +170,7 @@ def generate_predictions(args, stem: str):
 
     results = ["SELECT 1"] * total
     saved_threshold = config.SQL_SCHEMA_THRESHOLD
-    config.SQL_SCHEMA_THRESHOLD = None  # disable threshold for BIRD (small DBs)
+    config.SQL_SCHEMA_THRESHOLD = args.threshold  # None disables threshold; explicit value enables it
 
     processed = 0
     for db_id, items in by_db.items():
@@ -299,6 +304,12 @@ Examples:
         help="Override SQL_TOP_K for TableRAG retrieval.",
     )
     parser.add_argument(
+        "--threshold",
+        type=float,
+        default=None,
+        help="TableRAG schema similarity threshold (SQL_SCHEMA_THRESHOLD). Default: disabled (None).",
+    )
+    parser.add_argument(
         "--evaluate",
         action="store_true",
         help="Automatically score predictions after generating them.",
@@ -314,7 +325,7 @@ Examples:
     if args.top_k is not None:
         config.SQL_TOP_K = args.top_k
 
-    stem             = make_stem(args.ablation, args.use_evidence, args.difficulty, args.limit)
+    stem             = make_stem(args.ablation, args.use_evidence, args.difficulty, args.limit, args.threshold)
     predictions_path = OUTPUT_DIR / f"predictions_bird_{stem}.json"
     gold_path        = OUTPUT_DIR / f"gold_bird_{stem}.sql"
 

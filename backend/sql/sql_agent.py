@@ -153,10 +153,11 @@ def _get_openai_client() -> Any:
     global _openai_client
     with _openai_client_lock:
         if _openai_client is None:
-            import os
             from openai import OpenAI
-            api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-            _openai_client = OpenAI(api_key=api_key)
+            kwargs: dict = {"api_key": config.LLM_API_KEY}
+            if config.LLM_BASE_URL:
+                kwargs["base_url"] = config.LLM_BASE_URL
+            _openai_client = OpenAI(**kwargs)
     return _openai_client
 
 

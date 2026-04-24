@@ -330,12 +330,14 @@ def _get_react_llm() -> ChatOpenAI:
     global _react_llm_instance
     with _react_llm_lock:
         if _react_llm_instance is None:
-            api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-            _react_llm_instance = ChatOpenAI(
-                model=config.SQL_OPENAI_MODEL,
-                temperature=0.0,
-                api_key=api_key,
-            )
+            llm_kwargs: dict = {
+                "model": config.SQL_OPENAI_MODEL,
+                "temperature": 0.0,
+                "api_key": config.LLM_API_KEY,
+            }
+            if config.LLM_BASE_URL:
+                llm_kwargs["base_url"] = config.LLM_BASE_URL
+            _react_llm_instance = ChatOpenAI(**llm_kwargs)
     return _react_llm_instance
 
 

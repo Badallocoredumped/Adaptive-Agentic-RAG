@@ -157,7 +157,7 @@ def _get_sqlite_schema() -> SchemaInfo:
         cur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
         tables = [row[0] for row in cur.fetchall()]
         for table in tables:
-            cur.execute(f"PRAGMA table_info({table});")
+            cur.execute(f'PRAGMA foreign_key_list("{table}");')
             # PRAGMA row: (cid, name, type, notnull, dflt_value, pk)
             columns = []
             for row in cur.fetchall():
@@ -168,7 +168,7 @@ def _get_sqlite_schema() -> SchemaInfo:
             
             # Simple SQLite FK extraction using PRAGMA foreign_key_list
             fks = []
-            cur.execute(f"PRAGMA foreign_key_list({table});")
+            cur.execute(f'PRAGMA foreign_key_list("{table}");')
             for fk_row in cur.fetchall():
                 # fk_row = (id, seq, table, from, to, on_update, on_delete, match)
                 fks.append((fk_row[3], fk_row[2], fk_row[4]))
