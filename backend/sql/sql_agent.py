@@ -72,8 +72,16 @@ def _normalize_sql(raw_text: str) -> str | None:
 
 
 def _extract_table_names(schema_context: str) -> list[str]:
-    """Extract table names from schema context lines."""
-    names = re.findall(r"Table\s+([A-Za-z_][A-Za-z0-9_]*)\s+with\s+columns", schema_context)
+    """Extract table names from schema context lines.
+
+    Handles two formats:
+      - "Table X with columns ..."  (from SchemaInfo.to_embedding_texts)
+      - "Table: X | Columns: ..."  (from spider_eval load_schema_map)
+    """
+    names = re.findall(
+        r"Table[:\s]+([A-Za-z_][A-Za-z0-9_]*)\s*(?:with\s+columns|\|)",
+        schema_context,
+    )
     deduped: list[str] = []
     seen: set[str] = set()
     for name in names:
@@ -362,40 +370,68 @@ def run_table_rag_pipeline(
     # 1. Check Semantic Cache
     cache = _get_sql_cache()
     _debug(f"\n[TableRAG Pipeline] Analyzing query: {query!r}")
-    
-    _t0 = time.time()
-    cache_result = cache.check_cache_hit(query, threshold=0.85)
-    _t_cache = time.time() - _t0
-    _debug(f"[Timer] Cache Check took {_t_cache:.3f}s")
+    cache_result = cache.check_cache_hit(query, threshold=config.SQL_CACHE_HIT_THRESHOLD)
 
     if cache_result["hit"]:
         cached_sql = cache_result["sql"]
         original_question = cache_result.get("question", query)
         cached_schema = cache_result.get("schema") or ""
+        score = cache_result.get("score", 0.0)
         _debug(f"[TableRAG Pipeline] ⚡ CACHE HIT: Cached SQL -> {cached_sql}")
 
-        # Ensure we always have schema context for the refiner.
-        # If the cache entry has no schema, retrieve it fresh now.
-        if not cached_schema.strip():
-            _debug("[TableRAG Pipeline] No schema in cache entry - retrieving fresh schema for refiner...")
+        refresh_mode = getattr(config, "SQL_CACHE_REFRESH_MODE", "threshold")
+        refresh_threshold = getattr(config, "SQL_CACHE_REFRESH_THRESHOLD", 0.95)
+
+        use_cached_only = False
+        if refresh_mode == "never":
+            use_cached_only = True
+        elif refresh_mode == "threshold" and score >= refresh_threshold:
+            use_cached_only = True
+
+        if use_cached_only and cached_schema.strip():
+            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} (Threshold: {refresh_threshold}, Mode: '{refresh_mode}'). Using strictly cached schema.")
+            combined_schema_lines = [line.strip() for line in cached_schema.split("\n") if line.strip()]
+            schema_context_for_refiner = "\n".join(combined_schema_lines)
+        else:
+            # Retrieve fresh schema based on the NEW query, because the user may want
+            # tables that differ from the original cached query.
+            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} (Threshold: {refresh_threshold}, Mode: '{refresh_mode}'). Retrieving fresh schema for the new query...")
             _ensure_schema_index_exists()
             _t0 = time.time()
-            cached_schema = "\n".join(retrieve_relevant_schema(query, top_k=top_k))
+            fresh_schema_rows = retrieve_relevant_schema(query, top_k=top_k)
             _debug(f"[Timer] TableRAG Schema Retrieval took {(time.time() - _t0):.3f}s")
+    
+            # Combine fresh schema with cached schema (if any) to ensure the LLM
+            # has context for both the new request and the original SQL.
+            combined_schema_lines = []
+            seen_lines = set()
+            
+            for row in fresh_schema_rows:
+                cleaned = row.strip()
+                if cleaned and cleaned not in seen_lines:
+                    combined_schema_lines.append(cleaned)
+                    seen_lines.add(cleaned)
+                    
+            if cached_schema:
+                for row in cached_schema.split("\n"):
+                    cleaned = row.strip()
+                    if cleaned and cleaned not in seen_lines:
+                        combined_schema_lines.append(cleaned)
+                        seen_lines.add(cleaned)
+                        
+            schema_context_for_refiner = "\n".join(combined_schema_lines)
 
         # --- LLM refinement on cache hit ---
         # Always send to the refiner so the LLM can make minimal adjustments
         # even when the cached question is nearly identical to the new one.
         _debug("[TableRAG Pipeline] Running LLM SQL refiner for cache hit...")
-        _t0 = time.time()
         refined_sql = _refine_sql_from_cache(
             new_question=query,
             original_question=original_question,
             cached_sql=cached_sql,
-            schema_context=cached_schema,
+            schema_context=schema_context_for_refiner,
             similar_queries=cache_result.get("similar_queries", []),
         )
-        _debug(f"[Timer] LLM Refiner took {(time.time() - _t0):.3f}s")
 
         if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
             _debug(f"[TableRAG Pipeline] Refiner adjusted SQL -> {refined_sql}")
@@ -407,7 +443,7 @@ def run_table_rag_pipeline(
             # Refiner failed — generate fresh SQL instead of blindly using
             # the cached SQL which may be wrong for this new query.
             _debug("[TableRAG Pipeline] Refiner failed - generating fresh SQL from schema...")
-            fresh_sql = _generate_sql(query, cached_schema)
+            fresh_sql = _generate_sql(query, schema_context_for_refiner)
             if fresh_sql:
                 _debug(f"[TableRAG Pipeline] Fresh SQL generated -> {fresh_sql}")
                 sql_to_execute = fresh_sql
@@ -428,7 +464,7 @@ def run_table_rag_pipeline(
             if getattr(config, "SQL_REACT_ENABLED", True):
                 _debug("[TableRAG Pipeline] Execution failed - escalating to ReAct agent as last resort...")
                 react_fn = _get_react_sql_agent()
-                react_result = react_fn(query, cached_schema)
+                react_result = react_fn(query, schema_context_for_refiner)
                 if react_result["sql"] or react_result["result"]:
                     sql_to_execute = react_result["sql"] or sql_to_execute
                     rows = react_result["result"]
@@ -438,7 +474,7 @@ def run_table_rag_pipeline(
         latency = time.time() - start_time
         _debug(f"[TableRAG Pipeline] Latency: {latency:.2f}s")
         return {
-            "schema_used": ["<from semantic cache>"],
+            "schema_used": combined_schema_lines,
             "sql": sql_to_execute,
             "result": rows,
             "error": error,
@@ -450,9 +486,7 @@ def run_table_rag_pipeline(
     _debug("[TableRAG Pipeline] AGENT PATH: Routing to TableRAG + LLM")
     
     _ensure_schema_index_exists()
-    _t0 = time.time()
     schema_rows: list[str] = retrieve_relevant_schema(query, top_k=top_k)
-    _debug(f"[Timer] TableRAG Schema Retrieval took {(time.time() - _t0):.3f}s")
 
     # Logging: which tables were selected
     table_names = _extract_table_names("\n".join(schema_rows))
@@ -473,9 +507,7 @@ def run_table_rag_pipeline(
     if getattr(config, "SQL_REACT_ENABLED", True):
         _debug("[TableRAG Pipeline] Running ReAct agent with schema context...")
         react_fn = _get_react_sql_agent()
-        _t0 = time.time()
         agent_result = react_fn(query, schema_context)
-        _debug(f"[Timer] ReAct Agent took {(time.time() - _t0):.3f}s")
 
         # Fallback: ReAct returned neither SQL nor rows → use single-pass agent
         if not agent_result["sql"] and not agent_result["result"]:
@@ -488,9 +520,7 @@ def run_table_rag_pipeline(
             used_react = True
     else:
         # ReAct disabled — use the original single-pass SQL agent
-        _t0 = time.time()
         agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
-        _debug(f"[Timer] Single-pass SQL Agent took {(time.time() - _t0):.3f}s")
 
     # Logging: generated SQL
     _debug(f"[TableRAG Pipeline] Generated SQL: {agent_result['sql']}")

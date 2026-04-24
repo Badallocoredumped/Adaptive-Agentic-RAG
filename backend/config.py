@@ -77,7 +77,8 @@ SQL_TOP_K = 30
 # SQL_SCHEMA_THRESHOLD (min cosine similarity score to include a schema table).
 # Tables below this score are dropped. The top-1 match is always kept as a
 # fallback so the schema context is never empty.
-SQL_SCHEMA_THRESHOLD: float = 0.7
+
+SQL_SCHEMA_THRESHOLD: float = 0
 
 
 # ============================================================================
@@ -242,6 +243,16 @@ SQL_OPENAI_MODEL = "gpt-4o-mini"
 SQL_GENERATE_TEMPERATURE = 0.0
 SQL_REFINE_TEMPERATURE = 0.0
 
+# Mode for retrieving fresh schema on a semantic cache hit:
+#   "always"    -> Always retrieve fresh schema for the new query.
+#   "threshold" -> Use cached schema if score >= threshold, otherwise retrieve.
+#   "never"     -> Never retrieve fresh schema, strictly use cached schema.
+SQL_CACHE_REFRESH_MODE = "threshold"
+
+# If SQL_CACHE_REFRESH_MODE is "threshold", this defines the minimum score
+# required to skip fresh schema retrieval and strictly use the cached schema.
+SQL_CACHE_REFRESH_THRESHOLD = 0.95
+
 # ============================================================================
 # Debug
 # ============================================================================
@@ -258,7 +269,8 @@ ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
 # ReAct agent settings
 # Set SQL_REACT_ENABLED=False to bypass the ReAct layer and use the single-pass agent directly.
 SQL_REACT_ENABLED = True
-SQL_REACT_MAX_ITERATIONS = 3  # max Thought/Action/Observation cycles per query
+SQL_REACT_MAX_ITERATIONS = 10  # max Thought/Action/Observation cycles per query
+SQL_CACHE_HIT_THRESHOLD: float = 0.85  # cosine similarity threshold for cache hit (RQ1 variable)
 
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"
 ROUTER_COMPLETION_ENDPOINT = "/completion"
