@@ -157,8 +157,8 @@ def _get_sqlite_schema() -> SchemaInfo:
         cur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
         tables = [row[0] for row in cur.fetchall()]
         for table in tables:
-            cur.execute(f'PRAGMA foreign_key_list("{table}");')
-            # PRAGMA row: (cid, name, type, notnull, dflt_value, pk)
+            cur.execute(f'PRAGMA table_info("{table}");')
+            # PRAGMA table_info row: (cid, name, type, notnull, dflt_value, pk)
             columns = []
             for row in cur.fetchall():
                 col_name = row[1]
@@ -212,6 +212,11 @@ def get_db_cursor(commit: bool = False) -> Generator[Any, None, None]:
 
 class PostgresDatabase(BaseDatabase):
     """PostgreSQL database implementation with connection pooling and introspection."""
+
+    def initialize_schema(self) -> None:
+        """Verify the PostgreSQL connection is reachable. Tables are pre-existing."""
+        conn = self.get_connection()
+        conn.close()
 
     def get_connection(self) -> psycopg2.extensions.connection:
         """Return a raw psycopg2 connection (caller must close it)."""

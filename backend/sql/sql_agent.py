@@ -74,13 +74,14 @@ def _normalize_sql(raw_text: str) -> str | None:
 def _extract_table_names(schema_context: str) -> list[str]:
     """Extract table names from schema context lines.
 
-    Handles two formats:
-      - "Table X with columns ..."  (from SchemaInfo.to_embedding_texts)
+    Handles formats:
+      - "Table: X\nColumns: ..."  (from _format_schema_context)
       - "Table: X | Columns: ..."  (from spider_eval load_schema_map)
     """
     names = re.findall(
-        r"Table[:\s]+([A-Za-z_][A-Za-z0-9_]*)\s*(?:with\s+columns|\|)",
+        r"^Table:\s+([A-Za-z_][A-Za-z0-9_]*)",
         schema_context,
+        re.MULTILINE,
     )
     deduped: list[str] = []
     seen: set[str] = set()
@@ -101,14 +102,15 @@ def _extract_table_names(schema_context: str) -> list[str]:
 def _ensure_schema_index_exists() -> None:
     """Build TableRAG schema index if it does not already exist or is stale."""
     index_path = config.INDEX_DIR / "schema.faiss"
-    texts_path = config.INDEX_DIR / "schema_texts.json"
-    if index_path.exists() and texts_path.exists():
+    meta_path  = config.INDEX_DIR / "schema_meta.json"
+    if index_path.exists() and meta_path.exists():
         import json
-        with open(texts_path, "r", encoding="utf-8") as f:
-            stored = json.load(f)
+        with open(meta_path, "r", encoding="utf-8") as f:
+            stored_meta = json.load(f)
+        stored_tables = {entry["table"] for entry in stored_meta}
         live_schema = get_live_schema()
-        if set(stored) == set(live_schema.to_embedding_texts()):
-            return  # schema unchanged (tables and columns match)
+        if stored_tables == set(live_schema.tables.keys()):
+            return  # schema unchanged
 
     schema_info = get_live_schema()
     if schema_info.tables:

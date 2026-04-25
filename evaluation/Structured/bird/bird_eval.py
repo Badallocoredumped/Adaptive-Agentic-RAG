@@ -50,7 +50,7 @@ sys.path.insert(0, str(project_root))
 from backend import config
 from backend.sql.react_agent import run_react_sql_agent
 from backend.sql.database import get_live_schema
-from backend.sql.table_rag import build_schema_index, retrieve_relevant_schema
+from backend.sql.table_rag import build_schema_index, retrieve_relevant_schema, format_full_schema
 from backend.sql.sql_agent import run_sql_agent
 from backend.sql import database as _db_module
 from langchain_openai import ChatOpenAI
@@ -194,34 +194,61 @@ def generate_predictions(args, stem: str):
         config.SQLITE_PATH = str(DB_ROOT / db_id / f"{db_id}.sqlite")
         _db_module._sqlite_local.conn = None
 
-        if args.ablation in ("tablerag_single_pass", "tablerag_react"):
-            info = get_live_schema()
+        # Always load the live SchemaInfo — used for FK expansion + formatting
+        info = get_live_schema()
+
+        if args.ablation in ("tablerag_single_pass", "tablerag_react", "tablerag_pruned_single_pass"):
             if info.tables:
                 build_schema_index(info)
 
-        full_schema = schema_map.get(db_id, "")
+        # full_schema: use the new LLM-readable formatter for ALL ablations
+        # (the old load_schema_map format had no sample values and was harder
+        # for the LLM to parse reliably)
+        if info.tables:
+            full_schema = format_full_schema(info)
+        else:
+            full_schema = schema_map.get(db_id, "")   # final fallback
 
         for orig_idx, entry in items:
             processed += 1
             question = entry["question"]
             evidence = entry.get("evidence", "") if args.use_evidence else ""
-            prompt_q = f"{question}\nHint: {evidence}" if evidence else question
+            prompt_q = f"{question}\\nHint: {evidence}" if evidence else question
             diff     = entry.get("difficulty", "?")
 
-            print(f"  [{processed}/{total}] ({diff}) {question[:75]}{'...' if len(question) > 75 else ''}")
+            print(f"  [{processed}/{total}] ({diff}) {question}")
 
             try:
                 if args.ablation == "full_single_pass":
                     sql = run_single_pass_baseline(question, full_schema, evidence)
 
                 elif args.ablation == "tablerag_single_pass":
-                    schema_list = retrieve_relevant_schema(prompt_q, top_k=config.SQL_TOP_K)
+                    # retrieve_relevant_schema() now returns a list[str] with ONE element:
+                    # the fully-formatted schema context.  "\n".join() still works.
+                    schema_list = retrieve_relevant_schema(
+                        prompt_q, top_k=config.SQL_TOP_K, schema_info=info
+                    )
                     schema_ctx  = "\n".join(schema_list) if schema_list else full_schema
                     result = run_sql_agent(query=prompt_q, schema_context=schema_ctx)
                     sql = clean_sql(result.get("sql", "SELECT 1"))
 
+                elif args.ablation == "tablerag_pruned_single_pass":
+                    # TableRAG pruning + the same single-pass LLM prompt as full_single_pass.
+                    # Isolates whether accuracy drop vs full_single_pass comes from pruning
+                    # or from run_sql_agent's different prompt.
+                    # Use len(info.tables) as top_k ceiling so --threshold 0 truly means
+                    # "all tables" without being cut off by the default SQL_TOP_K=4 limit.
+                    effective_top_k = len(info.tables) if args.threshold is not None else config.SQL_TOP_K
+                    schema_list = retrieve_relevant_schema(
+                        prompt_q, top_k=effective_top_k, schema_info=info
+                    )
+                    schema_ctx = "\n".join(schema_list) if schema_list else full_schema
+                    sql = run_single_pass_baseline(question, schema_ctx, evidence)
+
                 elif args.ablation == "tablerag_react":
-                    schema_list = retrieve_relevant_schema(prompt_q, top_k=config.SQL_TOP_K)
+                    schema_list = retrieve_relevant_schema(
+                        prompt_q, top_k=config.SQL_TOP_K, schema_info=info
+                    )
                     schema_ctx  = "\n".join(schema_list) if schema_list else full_schema
                     result = run_react_sql_agent(query=prompt_q, schema_context=schema_ctx)
                     raw    = result.get("sql")
@@ -291,7 +318,7 @@ Examples:
     )
     parser.add_argument(
         "--ablation",
-        choices=["full_single_pass", "tablerag_single_pass", "tablerag_react"],
+        choices=["full_single_pass", "tablerag_single_pass", "tablerag_pruned_single_pass", "tablerag_react"],
         required=True,
         help="Pipeline variant to run.",
     )
