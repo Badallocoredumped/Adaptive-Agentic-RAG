@@ -304,8 +304,19 @@ def retrieve_relevant_schema(
     selected_tables = sorted(selected_tables)
     _debug(f"[TableRAG] LLM-selected tables: {selected_tables}")
 
+    from backend.sql.join_path import compute_join_tree
+    
+    join_hint = ""
+    # Avoid massive hints if fallback selected all tables in a huge schema
+    if len(selected_tables) <= 20:
+        required_set, join_hint = compute_join_tree(schema_info, selected_tables)
+        expanded_tables = sorted(list(required_set))
+        if set(expanded_tables) != set(selected_tables):
+            _debug(f"[TableRAG] Graph expanded tables to include bridge tables: {expanded_tables}")
+            selected_tables = expanded_tables
+
     # ── Step 3: format and return ─────────────────────────────────────────
-    return [_format_schema_context(selected_tables, schema_info)]
+    return [_format_schema_context(selected_tables, schema_info, join_hint=join_hint)]
 
 
 # ---------------------------------------------------------------------------
@@ -487,6 +498,7 @@ def _parse_table_list(raw: str, all_tables: list[str]) -> list[str]:
 def _format_schema_context(
     table_names: list[str],
     schema_info: SchemaInfo | None,
+    join_hint: str = "",
 ) -> str:
     """Produce a clean, LLM-readable schema block for the selected tables.
 
@@ -563,6 +575,9 @@ def _format_schema_context(
         lines.append("Foreign Key Relationships:")
         lines.extend(unique_fk)
         lines.append("")
+
+    if join_hint:
+        lines.append(f"System Note: To connect these tables, you MUST use the following join path:\n{join_hint}\n")
 
     return "\n".join(lines)
 

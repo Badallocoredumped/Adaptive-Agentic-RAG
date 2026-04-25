@@ -176,6 +176,12 @@ def _build_system_prompt(max_iter: int) -> str:
     " 11. COMPLETE FILTER SET: every condition in the question must appear in WHERE.\n"
     "     Before finalizing, re-read the question and verify each constraint is present.\n"
     "     Missing even one filter (e.g. Charter Funding Type, StatusType) will fail.\n"
+    " 12. HANDLE NULL VALUES PROPERLY: Ensure proper handling of null values by including\n"
+    "     the IS NOT NULL condition in SQL queries, especially when using ORDER BY ... ASC\n"
+    "     or aggregate functions like MIN(). This is crucial to avoid errors and ensure accurate results.\n"
+    " 13. IMMEDIATE TERMINATION ON SUCCESS: If your execute_sql tool returns a SUCCESS\n"
+    "     observation and the data answers the user's question, you MUST immediately\n"
+    "     output the final SQL query. Do not perform any further analysis or tool calls.\n"
 )
 
 
@@ -239,11 +245,37 @@ def _make_execute_sql_tool() -> Tool:
             err = str(exc)
             if "no such column" in err:
                 bad_col = err.split("no such column:")[-1].strip().split("\n")[0]
+                
+                # Fuzzy column matcher
+                import difflib
+                from backend.sql.database import get_live_schema
+                
+                hint = ""
+                try:
+                    info = get_live_schema()
+                    all_cols = []
+                    for t in info.tables.values():
+                        for c in t.columns:
+                            all_cols.append(c.name)
+                    
+                    # Extract just the column name if it has an alias (e.g. "s.School Name" -> "School Name")
+                    just_col = bad_col.split(".")[-1].strip('"').strip("'")
+                    
+                    matches = difflib.get_close_matches(just_col, all_cols, n=3, cutoff=0.5)
+                    if matches:
+                        # Deduplicate matches while preserving order
+                        seen = set()
+                        unique_matches = [m for m in matches if not (m in seen or seen.add(m))]
+                        match_str = ", ".join(f"'{m}'" for m in unique_matches)
+                        hint = f"\nHINT: Did you mean one of these existing columns instead: {match_str}?"
+                except Exception:
+                    pass
+
                 return (
-                    f"ERROR: SQL execution failed: {err}\n"
-                    f"ACTION REQUIRED: column '{bad_col}' does not exist. "
+                    f"ACTION REQUIRED: column '{bad_col}' does not exist.{hint}\n"
                     "You MUST call schema_lookup now to get the exact column names "
-                    "before retrying. Do NOT guess or retry the same query."
+                    "before retrying. Do NOT guess or retry the same query.\n\n"
+                    f"Original Error: {err}"
                 )
             if "syntax error" in err:
                 return (
@@ -254,16 +286,26 @@ def _make_execute_sql_tool() -> Tool:
             return f"ERROR: SQL execution failed: {err}"
 
         if not rows:
+            from backend.sql.candidate_predicate import generate_candidate_predicates
+            hint = generate_candidate_predicates(sql)
+            if hint:
+                return f"SUCCESS: 0 row(s) returned.\n{hint}\n[]"
             return "SUCCESS: 0 row(s) returned.\n[]"
 
         truncated = rows[:_MAX_ROWS]
+        
+        has_nulls = any(val is None for row in truncated for val in row.values())
+        null_hint = ""
+        if has_nulls:
+            null_hint = "\nHINT: Some returned values are null. If you are using ORDER BY ... ASC or MIN(), you likely forgot to add 'WHERE column IS NOT NULL'."
+
         result_json = json.dumps(truncated, ensure_ascii=False, default=str)
         suffix = (
             f"\n(truncated: showing {_MAX_ROWS} of {len(rows)} total rows)"
             if len(rows) > _MAX_ROWS
             else ""
         )
-        return f"SUCCESS: {len(rows)} row(s) returned.\n{result_json}{suffix}"
+        return f"SUCCESS: {len(rows)} row(s) returned.{null_hint}\n{result_json}{suffix}"
 
     dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
     return Tool(
