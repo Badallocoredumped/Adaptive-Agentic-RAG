@@ -24,7 +24,15 @@ class Reranker:
         model = get_shared_cross_encoder()
 
         pairs = [[query, doc] for doc in documents]
-        scores = model.predict(pairs)
+        import numpy as np
+        scores = np.atleast_1d(model.predict(pairs)).tolist()
+
+        if getattr(config, "RAG_RERANK_DEBUG", False):
+            print(f"\n[RERANKER DEBUG] Query: {query!r}")
+            print(f"[RERANKER DEBUG] Chunks BEFORE reranking (pool size: {len(documents)}):")
+            for i, (doc, score) in enumerate(zip(documents, scores)):
+                preview = " ".join(doc.split())[:80]
+                print(f"  {i+1:>2}. {preview}... (score: {score:.4f})")
 
         doc_scores = [
             {"text": doc, "score": float(score)}
@@ -32,5 +40,11 @@ class Reranker:
         ]
 
         doc_scores.sort(key=lambda x: x["score"], reverse=True)
+
+        if getattr(config, "RAG_RERANK_DEBUG", False):
+            print(f"\n[RERANKER DEBUG] Top {top_k} AFTER reranking:")
+            for i, ds in enumerate(doc_scores[:top_k]):
+                preview = " ".join(ds['text'].split())[:80]
+                print(f"  {i+1:>2}. {preview}... (score: {ds['score']:.4f})")
 
         return doc_scores[:top_k]

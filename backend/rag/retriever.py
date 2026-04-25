@@ -94,16 +94,20 @@ class RagRetriever:
         else:
             faiss_results = self.vector_store.search_by_vector(query_vector, fetch_k)
 
-        # Deduplicate and map text -> metadata
+        # Deduplicate using normalized text, but retain original formatting for the reranker/LLM
         doc_map = {}
         text_to_score = {}
+        seen_normalized = set()
+        faiss_ranked = []
+        
         for doc, distance in faiss_results:
-            normalized_text = " ".join(doc.page_content.split())
-            if normalized_text not in doc_map:
-                doc_map[normalized_text] = doc
-                text_to_score[normalized_text] = 1.0 / (1.0 + float(distance))
+            norm = " ".join(doc.page_content.split())
+            if norm not in seen_normalized:
+                seen_normalized.add(norm)
+                doc_map[doc.page_content] = doc
+                text_to_score[doc.page_content] = 1.0 / (1.0 + float(distance))
+                faiss_ranked.append(doc.page_content)
 
-        faiss_ranked = list(doc_map.keys())
         _debug(f"[RAG Pipeline] FAISS returned {len(faiss_ranked)} unique chunks.")
 
         # ── Sparse BM25 retrieval + RRF fusion ───────────────────────────
@@ -113,9 +117,11 @@ class RagRetriever:
             bm25_ranked: list[str] = []
             for text, doc, _ in bm25_raw:
                 norm = " ".join(text.split())
-                if norm not in doc_map:
-                    doc_map[norm] = doc  # add BM25-only hits to the map
-                bm25_ranked.append(norm)
+                if norm not in seen_normalized:
+                    seen_normalized.add(norm)
+                    doc_map[doc.page_content] = doc
+                # We append the original page content to match RRF keys with faiss_ranked
+                bm25_ranked.append(doc.page_content)
 
             _debug(f"[RAG Hybrid] BM25 returned {len(bm25_ranked)} candidates. Applying RRF...")
             rrf_k = getattr(config, "RAG_RRF_K", 60)
@@ -125,13 +131,13 @@ class RagRetriever:
             documents_text = faiss_ranked
 
         # ── CrossEncoder reranking ────────────────────────────────────────
-        if config.RAG_ENABLE_SEMANTIC_RERANK:
+        reranker_model = getattr(config, "RAG_RERANKER_MODEL", "BAAI/bge-reranker-base")
+        if config.RAG_ENABLE_SEMANTIC_RERANK and reranker_model.lower() != "none":
             if self._reranker is None:
                 from backend.rag.reranker import Reranker
-                reranker_model = getattr(config, "RAG_RERANKER_MODEL", "BAAI/bge-reranker-base")
                 self._reranker = Reranker(model_name=reranker_model)
 
-            rerank_pool = getattr(config, "RAG_RERANK_POOL", 0)
+            rerank_pool = getattr(config, "RAG_RERANK_POOL", 25)
             candidates = documents_text[:rerank_pool] if rerank_pool > 0 else documents_text
             _debug(f"[RAG Pipeline] Reranking {len(candidates)} documents with {self._reranker.model_name}...")
             reranked = self._reranker.rerank(query, candidates, top_k=top_k)
