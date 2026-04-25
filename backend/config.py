@@ -83,7 +83,9 @@ SQL_SCHEMA_THRESHOLD: float = 0.7
 # ============================================================================
 # Reranker
 # ============================================================================
+# Options: "BAAI/bge-reranker-base" | "BAAI/bge-reranker-large" | "cross-encoder/ms-marco-MiniLM-L-6-v2" | "none"
 RAG_RERANKER_MODEL = "BAAI/bge-reranker-base"
+
 
 # ============================================================================
 # Retrieval
@@ -95,17 +97,19 @@ RAG_RERANKER_MODEL = "BAAI/bge-reranker-base"
 RAG_RETRIEVAL_MODE = "faiss"
 RAG_RRF_K = 60             # RRF constant -- only used when RAG_RETRIEVAL_MODE="hybrid"
 
-RAG_FETCH_MULTIPLIER = 20
+RAG_FETCH_MULTIPLIER = 10
 # Enables an extra semantic reranking pass over retrieved candidates.
 # In hybrid mode, reranking is applied after BM25+FAISS fusion and can increase latency.
 RAG_ENABLE_SEMANTIC_RERANK = True
+RAG_RERANK_POOL = 100      # Unpruned pool: matches FETCH_MULTIPLIER * K to prevent losing valid FAISS candidates
+RAG_RERANK_DEBUG = True    # Enable verbose reranker logging
 # FAISS-only thresholding hint: hybrid mode uses rank fusion, so this should be unset there.
 RAG_SCORE_THRESHOLD = 0.5
-RAG_MAX_CHUNKS = 8
+RAG_MAX_CHUNKS = 10
 RAG_PREVIEW_CHARS = 100
 
-CHUNK_SIZE = 1600
-CHUNK_OVERLAP = 250
+CHUNK_SIZE = 1000
+CHUNK_OVERLAP = 200
 CHUNKER_MODE = "recursive"
 VECTOR_DISTANCE_METRIC = "cosine"
 VECTOR_NORMALIZE_L2 = True
