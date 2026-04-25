@@ -90,13 +90,28 @@ def load_schema_map() -> dict:
         db_id  = db["db_id"]
         tables = db["table_names_original"]
         cols   = db["column_names_original"]
+        fks    = db.get("foreign_keys", [])
+        
+        # Create a mapping from global column index to "TableName.ColumnName"
+        col_map = {}
+        for i, (tbl_idx, col_name) in enumerate(cols):
+            if tbl_idx >= 0: # -1 is the '*' column, skip it
+                col_map[i] = f"{tables[tbl_idx]}.{col_name}"
+                
         lines  = []
         for i, tbl in enumerate(tables):
             tcols = [c[1] for c in cols if c[0] == i]
             lines.append(f"Table: {tbl} | Columns: {', '.join(tcols)}")
+            
+        # Append Explicit Foreign Key Relationships!
+        if fks:
+            lines.append("\nForeign Keys (Join Conditions):")
+            for fk_col1, fk_col2 in fks:
+                if fk_col1 in col_map and fk_col2 in col_map:
+                    lines.append(f"  {col_map[fk_col1]} = {col_map[fk_col2]}")
+                    
         schema_map[db_id] = "\n".join(lines)
     return schema_map
-
 
 def run_single_pass_baseline(question: str, schema: str, evidence: str = "") -> str:
     llm_kwargs: dict = {"model": config.SQL_OPENAI_MODEL, "temperature": 0.0, "api_key": config.LLM_API_KEY}
