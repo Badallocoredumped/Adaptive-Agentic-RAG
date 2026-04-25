@@ -74,13 +74,14 @@ def _normalize_sql(raw_text: str) -> str | None:
 def _extract_table_names(schema_context: str) -> list[str]:
     """Extract table names from schema context lines.
 
-    Handles two formats:
-      - "Table X with columns ..."  (from SchemaInfo.to_embedding_texts)
+    Handles formats:
+      - "Table: X\nColumns: ..."  (from _format_schema_context)
       - "Table: X | Columns: ..."  (from spider_eval load_schema_map)
     """
     names = re.findall(
-        r"Table[:\s]+([A-Za-z_][A-Za-z0-9_]*)\s*(?:with\s+columns|\|)",
+        r"^Table:\s+([A-Za-z_][A-Za-z0-9_]*)",
         schema_context,
+        re.MULTILINE,
     )
     deduped: list[str] = []
     seen: set[str] = set()
@@ -101,14 +102,15 @@ def _extract_table_names(schema_context: str) -> list[str]:
 def _ensure_schema_index_exists() -> None:
     """Build TableRAG schema index if it does not already exist or is stale."""
     index_path = config.INDEX_DIR / "schema.faiss"
-    texts_path = config.INDEX_DIR / "schema_texts.json"
-    if index_path.exists() and texts_path.exists():
+    meta_path  = config.INDEX_DIR / "schema_meta.json"
+    if index_path.exists() and meta_path.exists():
         import json
-        with open(texts_path, "r", encoding="utf-8") as f:
-            stored = json.load(f)
+        with open(meta_path, "r", encoding="utf-8") as f:
+            stored_meta = json.load(f)
+        stored_tables = {entry["table"] for entry in stored_meta}
         live_schema = get_live_schema()
-        if set(stored) == set(live_schema.to_embedding_texts()):
-            return  # schema unchanged (tables and columns match)
+        if stored_tables == set(live_schema.tables.keys()):
+            return  # schema unchanged
 
     schema_info = get_live_schema()
     if schema_info.tables:
@@ -153,10 +155,15 @@ def _get_openai_client() -> Any:
     global _openai_client
     with _openai_client_lock:
         if _openai_client is None:
-            import os
             from openai import OpenAI
-            api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-            _openai_client = OpenAI(api_key=api_key)
+            kwargs: dict = {
+                "api_key": config.LLM_API_KEY,
+                "timeout": 60.0,
+                "max_retries": 0,
+            }
+            if config.LLM_BASE_URL:
+                kwargs["base_url"] = config.LLM_BASE_URL
+            _openai_client = OpenAI(**kwargs)
     return _openai_client
 
 
@@ -483,44 +490,26 @@ def run_table_rag_pipeline(
         }
 
     # 2. RUN FULL PIPELINE (If Cache MISS)
-    _debug("[TableRAG Pipeline] AGENT PATH: Routing to TableRAG + LLM")
+    _debug("[TableRAG Pipeline] AGENT PATH: Routing to agent...")
     
     _ensure_schema_index_exists()
-    schema_rows: list[str] = retrieve_relevant_schema(query, top_k=top_k)
 
-    # Logging: which tables were selected
-    table_names = _extract_table_names("\n".join(schema_rows))
-    _debug(f"[TableRAG Pipeline] Retrieved schema rows ({len(schema_rows)}):")
-    for row in schema_rows:
-        _debug(f"  -> {row}")
-    _debug(f"[TableRAG Pipeline] Selected tables: {table_names}")
-
-    # Format into a single context string
-    schema_context = "\n".join(schema_rows)
-
-    # ── Step 3: Run ReAct agent (primary) ─────────────────────────────────
-    # The ReAct agent receives the original question + the TableRAG schema
-    # context and reasons iteratively (Thought → Action → Observation) to
-    # generate and verify its SQL.  The single-pass run_sql_agent() is kept
-    # as a fallback in case the ReAct layer produces nothing at all.
     used_react = False
     if getattr(config, "SQL_REACT_ENABLED", True):
-        _debug("[TableRAG Pipeline] Running ReAct agent with schema context...")
+        _debug("[TableRAG Pipeline] Running ReAct agent (ReAct will call TableRAG directly)...")
         react_fn = _get_react_sql_agent()
-        agent_result = react_fn(query, schema_context)
+        agent_result = react_fn(query, "")
+        schema_rows = []
 
-        # Fallback: ReAct returned neither SQL nor rows → use single-pass agent
         if not agent_result["sql"] and not agent_result["result"]:
-            _debug(
-                "[TableRAG Pipeline] ⚠️  ReAct agent produced no output — "
-                "falling back to single-pass agent..."
-            )
-            agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
+            _debug("[TableRAG Pipeline] ⚠️  ReAct agent produced no output — falling back to single-pass agent...")
+            schema_rows = retrieve_relevant_schema(query, top_k=top_k)
+            agent_result = run_sql_agent(query, schema_context="\n".join(schema_rows), top_k=top_k)
         else:
             used_react = True
     else:
-        # ReAct disabled — use the original single-pass SQL agent
-        agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
+        schema_rows = retrieve_relevant_schema(query, top_k=top_k)
+        agent_result = run_sql_agent(query, schema_context="\n".join(schema_rows), top_k=top_k)
 
     # Logging: generated SQL
     _debug(f"[TableRAG Pipeline] Generated SQL: {agent_result['sql']}")
@@ -532,7 +521,7 @@ def run_table_rag_pipeline(
         # 3. Add successful run to Cache
         if agent_result["sql"] and not agent_result["error"]:
             _debug("[TableRAG Pipeline] Saving successful query to cache...")
-            cache.add_to_cache(query, agent_result["sql"], schema_context)
+            cache.add_to_cache(query, agent_result["sql"], agent_result.get("schema_context", ""))
             cache.save_cache()
 
     latency = time.time() - start_time

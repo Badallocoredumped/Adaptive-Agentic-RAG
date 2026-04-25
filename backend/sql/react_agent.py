@@ -99,7 +99,7 @@ _SQL_EXTRACT_RE = re.compile(
 # The system message only needs to set context and rules.
 # ---------------------------------------------------------------------------
 
-def _build_system_prompt(schema_context: str, max_iter: int) -> str:
+def _build_system_prompt(max_iter: int) -> str:
     """Return a system message string with schema context and reasoning rules."""
     dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
     syntax_note = (
@@ -109,20 +109,18 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
     )
     return (
     f"You are an expert SQL analyst working with a {dialect} database.\n\n"
-    "TableRAG has already retrieved the following schema context relevant to this query.\n"
-    "Use this as your starting point — call schema_lookup if you need additional tables.\n\n"
-    f"{schema_context}\n\n"
+    "You do not have the database schema yet. Your very first action MUST be calling the schema_lookup tool with the user's full query to retrieve the necessary tables. You must call this tool before doing anything else.\n\n"
 
     "══════════════════════════════════════════════\n"
     "  MULTI-HOP REASONING — proceed hop by hop\n"
     "══════════════════════════════════════════════\n\n"
 
-    "  HOP 1 · UNDERSTAND THE QUESTION\n"
-    "    - Identify every table and column the question mentions or implies.\n"
+    "  HOP 1 · RETRIEVE SCHEMA AND UNDERSTAND THE QUESTION\n"
+    "    - Call schema_lookup with the user's question to get the schema.\n"
+    "    - Wait for the observation.\n"
+    "    - Identify every table and column the question mentions or implies based on the result.\n"
     "    - For each concept (e.g. 'charter funding type', 'school status', 'enrollment'),\n"
     "      confirm WHICH table and WHICH exact column name holds it — do not assume.\n"
-    "      If any table or column is absent from the schema context above,\n"
-    "      call schema_lookup with a descriptive topic BEFORE continuing.\n"
     "    - If the same concept could plausibly live in multiple tables\n"
     "      (e.g. funding type in both frpm AND schools), probe both:\n"
     "        SELECT * FROM <table> LIMIT 1;\n"
@@ -160,7 +158,8 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
     "  6. COLUMN QUOTING: names with spaces or special characters MUST use double quotes.\n"
     '     Example: `"FRPM Count (K-12)"`, `"Charter School (Y/N)"`.\n'
     "  7. UNKNOWN COLUMN: on 'no such column: X' — call schema_lookup immediately;\n"
-    "     do NOT retry the same broken query.\n"
+    "     do NOT retry the same broken query. If the error mentions a table alias (e.g. s.ColumnName), \n"
+    "     verify you are joining the correct table and using the correct alias (it might belong to f.ColumnName!).\n"
     "  8. NEVER HARDCODE DATA VALUES: never embed a specific row value (a count, an ID,\n"
     "     a CDSCode, a score) that you recall from training or saw in an earlier result\n"
     "     as a filter or lookup target. Always derive the target dynamically:\n"
@@ -177,6 +176,12 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
     " 11. COMPLETE FILTER SET: every condition in the question must appear in WHERE.\n"
     "     Before finalizing, re-read the question and verify each constraint is present.\n"
     "     Missing even one filter (e.g. Charter Funding Type, StatusType) will fail.\n"
+    " 12. HANDLE NULL VALUES PROPERLY: Ensure proper handling of null values by including\n"
+    "     the IS NOT NULL condition in SQL queries, especially when using ORDER BY ... ASC\n"
+    "     or aggregate functions like MIN(). This is crucial to avoid errors and ensure accurate results.\n"
+    " 13. IMMEDIATE TERMINATION ON SUCCESS: If your execute_sql tool returns a SUCCESS\n"
+    "     observation and the data answers the user's question, you MUST immediately\n"
+    "     output the final SQL query. Do not perform any further analysis or tool calls.\n"
 )
 
 
@@ -240,11 +245,37 @@ def _make_execute_sql_tool() -> Tool:
             err = str(exc)
             if "no such column" in err:
                 bad_col = err.split("no such column:")[-1].strip().split("\n")[0]
+                
+                # Fuzzy column matcher
+                import difflib
+                from backend.sql.database import get_live_schema
+                
+                hint = ""
+                try:
+                    info = get_live_schema()
+                    all_cols = []
+                    for t in info.tables.values():
+                        for c in t.columns:
+                            all_cols.append(c.name)
+                    
+                    # Extract just the column name if it has an alias (e.g. "s.School Name" -> "School Name")
+                    just_col = bad_col.split(".")[-1].strip('"').strip("'")
+                    
+                    matches = difflib.get_close_matches(just_col, all_cols, n=3, cutoff=0.5)
+                    if matches:
+                        # Deduplicate matches while preserving order
+                        seen = set()
+                        unique_matches = [m for m in matches if not (m in seen or seen.add(m))]
+                        match_str = ", ".join(f"'{m}'" for m in unique_matches)
+                        hint = f"\nHINT: Did you mean one of these existing columns instead: {match_str}?"
+                except Exception:
+                    pass
+
                 return (
-                    f"ERROR: SQL execution failed: {err}\n"
-                    f"ACTION REQUIRED: column '{bad_col}' does not exist. "
+                    f"ACTION REQUIRED: column '{bad_col}' does not exist.{hint}\n"
                     "You MUST call schema_lookup now to get the exact column names "
-                    "before retrying. Do NOT guess or retry the same query."
+                    "before retrying. Do NOT guess or retry the same query.\n\n"
+                    f"Original Error: {err}"
                 )
             if "syntax error" in err:
                 return (
@@ -255,16 +286,26 @@ def _make_execute_sql_tool() -> Tool:
             return f"ERROR: SQL execution failed: {err}"
 
         if not rows:
+            from backend.sql.candidate_predicate import generate_candidate_predicates
+            hint = generate_candidate_predicates(sql)
+            if hint:
+                return f"SUCCESS: 0 row(s) returned.\n{hint}\n[]"
             return "SUCCESS: 0 row(s) returned.\n[]"
 
         truncated = rows[:_MAX_ROWS]
+        
+        has_nulls = any(val is None for row in truncated for val in row.values())
+        null_hint = ""
+        if has_nulls:
+            null_hint = "\nHINT: Some returned values are null. If you are using ORDER BY ... ASC or MIN(), you likely forgot to add 'WHERE column IS NOT NULL'."
+
         result_json = json.dumps(truncated, ensure_ascii=False, default=str)
         suffix = (
             f"\n(truncated: showing {_MAX_ROWS} of {len(rows)} total rows)"
             if len(rows) > _MAX_ROWS
             else ""
         )
-        return f"SUCCESS: {len(rows)} row(s) returned.\n{result_json}{suffix}"
+        return f"SUCCESS: {len(rows)} row(s) returned.{null_hint}\n{result_json}{suffix}"
 
     dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
     return Tool(
@@ -292,6 +333,7 @@ def _make_schema_lookup_tool() -> Tool:
             # Lazy import: sql_agent is guaranteed to be loaded by the time
             # this tool function is invoked (it is the caller's module).
             from backend.sql.sql_agent import _ensure_schema_index_exists  # noqa: PLC0415
+            from backend.sql.table_rag import retrieve_relevant_schema
 
             _ensure_schema_index_exists()
             results = retrieve_relevant_schema(topic, top_k=config.SQL_TOP_K)
@@ -308,11 +350,8 @@ def _make_schema_lookup_tool() -> Tool:
         name="schema_lookup",
         func=schema_lookup,
         description=(
-            "Look up database tables and their columns relevant to a topic. "
-            "Input: a natural-language description of the data domain you need "
-            "(e.g. 'employee salaries', 'order amounts by city'). "
-            "Output: matching table/column lines from the schema index. "
-            "Use this ONLY when the initial schema context seems incomplete."
+            "Retrieves the database schema containing relevant tables and columns for a given topic. "
+            "You MUST call this tool FIRST with the user's full question to get the schema before doing anything else."
         ),
     )
 
@@ -330,12 +369,16 @@ def _get_react_llm() -> ChatOpenAI:
     global _react_llm_instance
     with _react_llm_lock:
         if _react_llm_instance is None:
-            api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-            _react_llm_instance = ChatOpenAI(
-                model=config.SQL_OPENAI_MODEL,
-                temperature=0.0,
-                api_key=api_key,
-            )
+            llm_kwargs: dict = {
+                "model": config.SQL_OPENAI_MODEL,
+                "temperature": 0.0,
+                "api_key": config.LLM_API_KEY,
+                "timeout": 60.0,
+                "max_retries": 0,
+            }
+            if config.LLM_BASE_URL:
+                llm_kwargs["base_url"] = config.LLM_BASE_URL
+            _react_llm_instance = ChatOpenAI(**llm_kwargs)
     return _react_llm_instance
 
 
@@ -343,15 +386,8 @@ def _get_react_llm() -> ChatOpenAI:
 # Agent factory (public, exposed for testing / extension)
 # ---------------------------------------------------------------------------
 
-def build_react_agent(schema_context: str) -> CompiledStateGraph:
+def build_react_agent() -> CompiledStateGraph:
     """Construct a LangGraph ReAct agent (compiled graph).
-
-    The TableRAG schema_context is baked into the system prompt at build time
-    so the agent always reasons within the discovered schema boundary.
-
-    Args:
-        schema_context: Multi-line string produced by retrieve_relevant_schema(),
-                        e.g. "Table: orders | Columns: id, amount, status\\n..."
 
     Returns:
         A compiled LangGraph state graph invoked with
@@ -364,7 +400,7 @@ def build_react_agent(schema_context: str) -> CompiledStateGraph:
         _make_execute_sql_tool(),
     ]
 
-    system_prompt = _build_system_prompt(schema_context=schema_context, max_iter=max_iter)
+    system_prompt = _build_system_prompt(max_iter=max_iter)
     llm = _get_react_llm()
 
     return create_react_agent(model=llm, tools=tools, prompt=system_prompt)
@@ -416,18 +452,8 @@ def run_react_sql_agent(
     _debug(f"\n[ReAct Agent] Starting for query: {query!r}")
     logger.info("[ReAct Agent] query=%r", query)
 
-    # ── Print TableRAG schema context ────────────────────────────────────────
-    schema_lines = [l for l in schema_context.splitlines() if l.strip()]
-    from backend.sql.sql_agent import _extract_table_names  # noqa: PLC0415
-    table_names = _extract_table_names(schema_context)
-    label = "(full schema fallback)" if _retry else "(TableRAG)"
-    print(f"\n  📋 Schema {label} — tables: {table_names}")
-    for line in schema_lines:
-        if not line.startswith("---"):
-            print(f"       {line}")
-
     max_iter: int = getattr(config, "SQL_REACT_MAX_ITERATIONS", 6)
-    graph = build_react_agent(schema_context)
+    graph = build_react_agent()
 
     print(f"\n  💬 Human: {query}\n")
 
@@ -458,6 +484,7 @@ def run_react_sql_agent(
             "result": [],
             "error": f"ReAct agent graph failed: {exc}",
             "schema_context": schema_context,
+            "react_steps": sum(1 for msg in all_messages if isinstance(msg, AIMessage) and getattr(msg, "tool_calls", None) and any(tc.get("name") == "schema_lookup" for tc in getattr(msg, "tool_calls", []))),
         }
 
     # ── Extract final SQL from collected messages ────────────────────────────
@@ -590,4 +617,5 @@ def run_react_sql_agent(
         "result": final_rows,
         "error": final_error,
         "schema_context": schema_context,
+        "react_steps": sum(1 for msg in all_messages if isinstance(msg, AIMessage)),
     }
