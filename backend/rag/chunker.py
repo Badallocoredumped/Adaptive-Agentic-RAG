@@ -32,6 +32,9 @@ class TextChunker:
         self.chunk_overlap = chunk_overlap
         self.mode = mode
 
+    def _make_chunk(self, next_id: int, text: str, source: str, metadata: dict) -> Chunk:
+        return Chunk(chunk_id=next_id, text=text, source=source, metadata=dict(metadata))
+
     def chunk_documents(self, documents: list[Document]) -> list[Chunk]:
         """Split each document into overlapped chunks while preserving source metadata."""
         if self.mode == "recursive":
@@ -42,16 +45,9 @@ class TextChunker:
 
         for doc in documents:
             for text_part, start in self._split_text(doc.text):
-                chunk_metadata = dict(doc.metadata)
-                chunk_metadata["start_char"] = start
-                chunks.append(
-                    Chunk(
-                        chunk_id=next_id,
-                        text=text_part,
-                        source=doc.source,
-                        metadata=chunk_metadata,
-                    )
-                )
+                meta = dict(doc.metadata)
+                meta["start_char"] = start
+                chunks.append(self._make_chunk(next_id, text_part, doc.source, meta))
                 next_id += 1
 
         return chunks
@@ -91,16 +87,7 @@ class TextChunker:
                 text_part = part.strip()
                 if not text_part:
                     continue
-
-                chunk_metadata = dict(doc.metadata)
-                chunks.append(
-                    Chunk(
-                        chunk_id=next_id,
-                        text=text_part,
-                        source=doc.source,
-                        metadata=chunk_metadata,
-                    )
-                )
+                chunks.append(self._make_chunk(next_id, text_part, doc.source, doc.metadata))
                 next_id += 1
 
         return chunks

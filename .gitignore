@@ -16,3 +16,9 @@ evaluation/Structured/database/
 evaluation/Structured/database/
 evaluation/Structured/bird/dev_databases/
 evaluation/Structured/bird/dev_databases/
+evaluation/Structured/bird/dev_databases/
+
+# Unstructured evaluation outputs
+evaluation/Unstructured/results/
+evaluation/Unstructured/results/emir_results_ragbench/
+evaluation/Unstructured/ragbench_index_*/

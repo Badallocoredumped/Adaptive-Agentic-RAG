@@ -5,9 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 
 from backend import config
+from backend.rag.utils import tokenize
 
 
 @dataclass
@@ -86,9 +87,7 @@ class DocumentLoader:
                 return domain
                 
         # Fallback to content-based keyword matching (first 1000 chars)
-        import re
-        text_lower = text[:1000].lower()
-        tokens = set(re.findall(r"\b\w+\b", text_lower))
+        tokens = set(tokenize(text[:1000]))
         
         best_domain = "general"
         best_hits = 0
