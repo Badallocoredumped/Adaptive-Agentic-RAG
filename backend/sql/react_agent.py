@@ -331,6 +331,8 @@ def _get_react_llm() -> ChatOpenAI:
                 "model": config.SQL_OPENAI_MODEL,
                 "temperature": 0.0,
                 "api_key": config.LLM_API_KEY,
+                "timeout": 60.0,
+                "max_retries": 0,
             }
             if config.LLM_BASE_URL:
                 llm_kwargs["base_url"] = config.LLM_BASE_URL

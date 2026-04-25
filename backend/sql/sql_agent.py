@@ -156,7 +156,11 @@ def _get_openai_client() -> Any:
     with _openai_client_lock:
         if _openai_client is None:
             from openai import OpenAI
-            kwargs: dict = {"api_key": config.LLM_API_KEY}
+            kwargs: dict = {
+                "api_key": config.LLM_API_KEY,
+                "timeout": 60.0,
+                "max_retries": 0,
+            }
             if config.LLM_BASE_URL:
                 kwargs["base_url"] = config.LLM_BASE_URL
             _openai_client = OpenAI(**kwargs)
@@ -517,7 +521,7 @@ def run_table_rag_pipeline(
         # 3. Add successful run to Cache
         if agent_result["sql"] and not agent_result["error"]:
             _debug("[TableRAG Pipeline] Saving successful query to cache...")
-            cache.add_to_cache(query, agent_result["sql"], schema_context)
+            cache.add_to_cache(query, agent_result["sql"], agent_result.get("schema_context", ""))
             cache.save_cache()
 
     latency = time.time() - start_time

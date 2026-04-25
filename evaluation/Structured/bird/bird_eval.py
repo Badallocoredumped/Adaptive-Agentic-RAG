@@ -140,6 +140,10 @@ def make_stem(ablation: str, use_evidence: bool, difficulty: str, limit, thresho
         parts.append(f"thr{threshold}")
     if limit:
         parts.append(f"limit{limit}")
+    if start is not None:
+        parts.append(f"start{start}")
+    if end is not None:
+        parts.append(f"end{end}")
     return "_".join(parts)
 
 
@@ -164,7 +168,11 @@ def generate_predictions(args, stem: str):
         queries = [q for q in queries if q.get("difficulty") == args.difficulty]
         print(f"After difficulty filter: {len(queries)} questions")
 
-    if args.limit:
+    if args.start is not None or args.end is not None:
+        start_idx = args.start or 0
+        end_idx = args.end or len(queries)
+        queries = queries[start_idx:end_idx]
+    elif args.limit:
         queries = queries[:args.limit]
 
     total = len(queries)
@@ -390,13 +398,25 @@ Examples:
         action="store_true",
         help="Skip prediction generation; score the existing predictions file.",
     )
+    parser.add_argument(
+        "--start",
+        type=int,
+        default=None,
+        help="Start index for processing questions.",
+    )
+    parser.add_argument(
+        "--end",
+        type=int,
+        default=None,
+        help="End index for processing questions.",
+    )
 
     args = parser.parse_args()
 
     if args.top_k is not None:
         config.SQL_TOP_K = args.top_k
 
-    stem             = make_stem(args.ablation, args.use_evidence, args.difficulty, args.limit, args.threshold)
+    stem             = make_stem(args.ablation, args.use_evidence, args.difficulty, args.limit, args.threshold, args.start, args.end)
     predictions_path = OUTPUT_DIR / f"predictions_bird_{stem}.json"
     gold_path        = OUTPUT_DIR / f"gold_bird_{stem}.sql"
 
