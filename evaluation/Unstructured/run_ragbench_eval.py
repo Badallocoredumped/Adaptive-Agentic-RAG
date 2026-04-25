@@ -385,7 +385,7 @@ with open(EVAL_PATH, encoding="utf-8") as f:
     eval_set = json.load(f)
 
 # Limit to 50 questions per config
-eval_set = eval_set[:3]
+eval_set = eval_set[:50]
 
 print(f"[EVAL] Running {len(eval_set)} questions through ragbench_{cfg_name}...\n")
 
