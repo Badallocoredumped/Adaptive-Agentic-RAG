@@ -1,0 +1,5 @@
+[
+  "Table Friend with columns student_id (int), friend_id (int) \u2014 foreign keys: friend_id \u2192 Highschooler(ID), student_id \u2192 Highschooler(ID)",
+  "Table Highschooler with columns ID (int), name (text), grade (int)",
+  "Table Likes with columns student_id (int), liked_id (int) \u2014 foreign keys: student_id \u2192 Highschooler(ID), liked_id \u2192 Highschooler(ID)"
+]

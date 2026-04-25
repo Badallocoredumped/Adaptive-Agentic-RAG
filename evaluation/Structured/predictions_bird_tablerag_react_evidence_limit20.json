@@ -1,0 +1,22 @@
+[
+  "SELECT MAX(\"Percent (%) Eligible Free (K-12)\") AS Highest_Eligible_Free_Rate FROM frpm WHERE \"County Name\" = 'Alameda'\t----- bird -----\tcalifornia_schools",
+  "SELECT 1\t----- bird -----\tcalifornia_schools",
+  "SELECT s.\"Zip\"  FROM frpm f  JOIN schools s ON f.CDSCode = s.CDSCode  WHERE f.\"Charter School (Y/N)\" = 1 AND f.\"County Name\" = 'Fresno County Office of Education'\t----- bird -----\tcalifornia_schools",
+  "SELECT s.\"MailStreet\", s.\"MailCity\", s.\"MailState\", s.\"MailZip\"  FROM frpm f  JOIN schools s ON f.CDSCode = s.CDSCode  ORDER BY f.\"FRPM Count (K-12)\" DESC  LIMIT 1\t----- bird -----\tcalifornia_schools",
+  "SELECT s.Phone  FROM frpm f  JOIN schools s ON f.CDSCode = s.CDSCode  WHERE f.\"Charter School (Y/N)\" = 1  AND s.OpenDate > '2000-01-01'\t----- bird -----\tcalifornia_schools",
+  "SELECT COUNT(*)  FROM satscores ss  JOIN schools s ON ss.cds = s.CDSCode  WHERE ss.AvgScrMath > 400 AND s.Virtual = 'F'\t----- bird -----\tcalifornia_schools",
+  "SELECT s.School, s.City, s.State  FROM schools s  JOIN satscores ss ON s.CDSCode = ss.cds  WHERE ss.NumTstTakr > 500 AND s.Magnet = 1\t----- bird -----\tcalifornia_schools",
+  "SELECT s.Phone  FROM satscores ss  JOIN schools s ON ss.cds = s.CDSCode  WHERE ss.NumGE1500 > 0  ORDER BY ss.NumTstTakr DESC  LIMIT 1\t----- bird -----\tcalifornia_schools",
+  "SELECT SUM(NumTstTakr) AS total_test_takers FROM satscores ss JOIN frpm f ON ss.cds = f.CDSCode WHERE f.\"FRPM Count (K-12)\" = 4419.0\t----- bird -----\tcalifornia_schools",
+  "SELECT COUNT(DISTINCT s.CDSCode)  FROM satscores ss  JOIN schools s ON ss.cds = s.CDSCode  WHERE ss.AvgScrMath > 560 AND s.FundingType = 'Charter'\t----- bird -----\tcalifornia_schools",
+  "SELECT f.\"FRPM Count (Ages 5-17)\"  FROM satscores s  JOIN frpm f ON s.cds = f.CDSCode  ORDER BY s.AvgScrRead DESC  LIMIT 1\t----- bird -----\tcalifornia_schools",
+  "SELECT CDSCode FROM frpm WHERE \"Enrollment (K-12)\" + \"Enrollment (Ages 5-17)\" > 500\t----- bird -----\tcalifornia_schools",
+  "SELECT MAX((\"Free Meal Count (Ages 5-17)\" / \"Enrollment (Ages 5-17)\")) AS Highest_Eligible_Free_Rate FROM satscores ss JOIN frpm f ON ss.cds = f.CDSCode WHERE (ss.NumGE1500 * 1.0 / ss.NumTstTakr) > 0.3\t----- bird -----\tcalifornia_schools",
+  "SELECT s.Phone FROM satscores ss JOIN schools s ON ss.cds = s.CDSCode ORDER BY (ss.NumGE1500 * 1.0 / ss.NumTstTakr) DESC LIMIT 3\t----- bird -----\tcalifornia_schools",
+  "SELECT NCESSchool FROM schools WHERE CDSCode IN (SELECT CDSCode FROM frpm) LIMIT 5\t----- bird -----\tcalifornia_schools",
+  "SELECT f.\"District Name\", AVG(s.AvgScrRead) AS AvgReadingScore  FROM satscores s  JOIN frpm f ON s.cds = f.CDSCode  GROUP BY f.\"District Name\"  ORDER BY AvgReadingScore DESC  LIMIT 1\t----- bird -----\tcalifornia_schools",
+  "SELECT COUNT(*)  FROM satscores s  JOIN schools sch ON s.cds = sch.CDSCode  WHERE sch.County = 'Alameda' AND s.NumTstTakr < 100\t----- bird -----\tcalifornia_schools",
+  "SELECT s.\"CharterNum\", ss.AvgScrWrite  FROM satscores ss  JOIN schools s ON ss.cds = s.CDSCode  WHERE ss.AvgScrWrite > 499 AND s.\"CharterNum\" IS NOT NULL  ORDER BY ss.AvgScrWrite DESC\t----- bird -----\tcalifornia_schools",
+  "SELECT * FROM schools s JOIN satscores ss ON s.CDSCode = ss.cds WHERE s.County = 'Fresno' AND s.FundingType = 'Directly Funded' AND ss.NumTstTakr <= 250\t----- bird -----\tcalifornia_schools",
+  "SELECT s.Phone FROM satscores ss JOIN schools s ON ss.cds = s.CDSCode ORDER BY ss.AvgScrMath DESC LIMIT 1\t----- bird -----\tcalifornia_schools"
+]

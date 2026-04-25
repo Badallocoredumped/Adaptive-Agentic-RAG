@@ -1,0 +1,10 @@
+[
+  "Table Breeds with columns breed_code (varchar(10)), breed_name (varchar(80))",
+  "Table Charges with columns charge_id (integer), charge_type (varchar(10)), charge_amount (decimal(19,4))",
+  "Table Dogs with columns dog_id (integer), owner_id (integer), abandoned_yn (varchar(1)), breed_code (varchar(10)), size_code (varchar(10)), name (varchar(50)), age (varchar(20)), date_of_birth (datetime), gender (varchar(1)), weight (varchar(20)), date_arrived (datetime), date_adopted (datetime), date_departed (datetime) \u2014 foreign keys: owner_id \u2192 Owners(owner_id), owner_id \u2192 Owners(owner_id), size_code \u2192 Sizes(size_code), breed_code \u2192 Breeds(breed_code)",
+  "Table Owners with columns owner_id (integer), first_name (varchar(50)), last_name (varchar(50)), street (varchar(50)), city (varchar(50)), state (varchar(20)), zip_code (varchar(20)), email_address (varchar(50)), home_phone (varchar(20)), cell_number (varchar(20))",
+  "Table Professionals with columns professional_id (integer), role_code (varchar(10)), first_name (varchar(50)), street (varchar(50)), city (varchar(50)), state (varchar(20)), zip_code (varchar(20)), last_name (varchar(50)), email_address (varchar(50)), home_phone (varchar(20)), cell_number (varchar(20))",
+  "Table Sizes with columns size_code (varchar(10)), size_description (varchar(80))",
+  "Table Treatment_Types with columns treatment_type_code (varchar(10)), treatment_type_description (varchar(80))",
+  "Table Treatments with columns treatment_id (integer), dog_id (integer), professional_id (integer), treatment_type_code (varchar(10)), date_of_treatment (datetime), cost_of_treatment (decimal(19,4)) \u2014 foreign keys: dog_id \u2192 Dogs(dog_id), professional_id \u2192 Professionals(professional_id), treatment_type_code \u2192 Treatment_Types(treatment_type_code)"
+]

@@ -1,7 +1,7 @@
 [
-  "Table: Other_Available_Features | Columns: feature_id, feature_type_code, feature_name, feature_description",
-  "Table: Other_Property_Features | Columns: property_id, feature_id, property_feature_description",
-  "Table: Properties | Columns: property_id, property_type_code, date_on_market, date_sold, property_name, property_address, room_count, vendor_requested_price, buyer_offered_price, agreed_selling_price, apt_feature_1, apt_feature_2, apt_feature_3, fld_feature_1, fld_feature_2, fld_feature_3, hse_feature_1, hse_feature_2, hse_feature_3, oth_feature_1, oth_feature_2, oth_feature_3, shp_feature_1, shp_feature_2, shp_feature_3, other_property_details",
-  "Table: Ref_Feature_Types | Columns: feature_type_code, feature_type_name",
-  "Table: Ref_Property_Types | Columns: property_type_code, property_type_description"
+  "Table Other_Available_Features with columns feature_id (integer), feature_type_code (varchar(20)), feature_name (varchar(80)), feature_description (varchar(80)) \u2014 foreign keys: feature_type_code \u2192 Ref_Feature_Types(feature_type_code)",
+  "Table Other_Property_Features with columns property_id (integer), feature_id (integer), property_feature_description (varchar(80)) \u2014 foreign keys: property_id \u2192 Properties(property_id), feature_id \u2192 Other_Available_Features(feature_id)",
+  "Table Properties with columns property_id (integer), property_type_code (varchar(20)), date_on_market (datetime), date_sold (datetime), property_name (varchar(80)), property_address (varchar(255)), room_count (integer), vendor_requested_price (decimal(19,4)), buyer_offered_price (decimal(19,4)), agreed_selling_price (decimal(19,4)), apt_feature_1 (varchar(255)), apt_feature_2 (varchar(255)), apt_feature_3 (varchar(255)), fld_feature_1 (varchar(255)), fld_feature_2 (varchar(255)), fld_feature_3 (varchar(255)), hse_feature_1 (varchar(255)), hse_feature_2 (varchar(255)), hse_feature_3 (varchar(255)), oth_feature_1 (varchar(255)), oth_feature_2 (varchar(255)), oth_feature_3 (varchar(255)), shp_feature_1 (varchar(255)), shp_feature_2 (varchar(255)), shp_feature_3 (varchar(255)), other_property_details (varchar(255)) \u2014 foreign keys: property_type_code \u2192 Ref_Property_Types(property_type_code)",
+  "Table Ref_Feature_Types with columns feature_type_code (varchar(20)), feature_type_name (varchar(80))",
+  "Table Ref_Property_Types with columns property_type_code (varchar(20)), property_type_description (varchar(80))"
 ]

@@ -72,8 +72,17 @@ def _normalize_sql(raw_text: str) -> str | None:
 
 
 def _extract_table_names(schema_context: str) -> list[str]:
-    """Extract table names from schema context lines."""
-    names = re.findall(r"Table\s+([A-Za-z_][A-Za-z0-9_]*)\s+with\s+columns", schema_context)
+    """Extract table names from schema context lines.
+
+    Handles formats:
+      - "Table: X\nColumns: ..."  (from _format_schema_context)
+      - "Table: X | Columns: ..."  (from spider_eval load_schema_map)
+    """
+    names = re.findall(
+        r"^Table:\s+([A-Za-z_][A-Za-z0-9_]*)",
+        schema_context,
+        re.MULTILINE,
+    )
     deduped: list[str] = []
     seen: set[str] = set()
     for name in names:
@@ -93,14 +102,15 @@ def _extract_table_names(schema_context: str) -> list[str]:
 def _ensure_schema_index_exists() -> None:
     """Build TableRAG schema index if it does not already exist or is stale."""
     index_path = config.INDEX_DIR / "schema.faiss"
-    texts_path = config.INDEX_DIR / "schema_texts.json"
-    if index_path.exists() and texts_path.exists():
+    meta_path  = config.INDEX_DIR / "schema_meta.json"
+    if index_path.exists() and meta_path.exists():
         import json
-        with open(texts_path, "r", encoding="utf-8") as f:
-            stored = json.load(f)
+        with open(meta_path, "r", encoding="utf-8") as f:
+            stored_meta = json.load(f)
+        stored_tables = {entry["table"] for entry in stored_meta}
         live_schema = get_live_schema()
-        if set(stored) == set(live_schema.to_embedding_texts()):
-            return  # schema unchanged (tables and columns match)
+        if stored_tables == set(live_schema.tables.keys()):
+            return  # schema unchanged
 
     schema_info = get_live_schema()
     if schema_info.tables:
@@ -121,37 +131,19 @@ def _resolve_schema_context(query: str, schema_context: str | None, top_k: int) 
 # Few-shot examples used to guide the cache-hit SQL refiner
 # ---------------------------------------------------------------------------
 
-_REFINE_FEW_SHOT_EXAMPLES = [
-    {
-        "original_question": "What is the total revenue from all orders?",
-        "cached_sql": "SELECT SUM(amount) AS total_revenue FROM orders;",
-        "new_question": "What is the total revenue from completed orders?",
-        "refined_sql": "SELECT SUM(amount) AS total_revenue FROM orders WHERE status = 'completed';",
-    },
-    {
-        "original_question": "Show me the top 3 cities by number of customers.",
-        "cached_sql": "SELECT city, COUNT(id) AS customer_count FROM customers GROUP BY city ORDER BY customer_count DESC LIMIT 3;",
-        "new_question": "Show me the top 5 cities by number of customers.",
-        "refined_sql": "SELECT city, COUNT(id) AS customer_count FROM customers GROUP BY city ORDER BY customer_count DESC LIMIT 5;",
-    },
-    {
-        "original_question": "What is the average salary per department?",
-        "cached_sql": "SELECT d.name, AVG(e.salary) AS avg_salary FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name;",
-        "new_question": "What is the maximum salary per department?",
-        "refined_sql": "SELECT d.name, MAX(e.salary) AS max_salary FROM employees e JOIN departments d ON e.department_id = d.id GROUP BY d.name;",
-    },
-]
-
-
-def _build_refine_few_shot_block() -> str:
-    """Format the few-shot examples into a prompt block."""
+def _build_refine_few_shot_block(similar_queries: list[dict[str, Any]] | None) -> str:
+    """Format dynamic few-shot examples into a prompt block."""
+    if not similar_queries:
+        return "No similar queries available."
+        
     lines = []
-    for ex in _REFINE_FEW_SHOT_EXAMPLES:
-        lines.append(f"Original question: {ex['original_question']}")
-        lines.append(f"Cached SQL:        {ex['cached_sql']}")
-        lines.append(f"New question:      {ex['new_question']}")
-        lines.append(f"Refined SQL:       {ex['refined_sql']}")
-        lines.append("")
+    for ex in similar_queries:
+        q = ex.get("question", "")
+        s = ex.get("sql", "")
+        if q and s:
+            lines.append(f"Question: {q}")
+            lines.append(f"SQL:      {s}")
+            lines.append("")
     return "\n".join(lines).strip()
 
 
@@ -163,10 +155,11 @@ def _get_openai_client() -> Any:
     global _openai_client
     with _openai_client_lock:
         if _openai_client is None:
-            import os
             from openai import OpenAI
-            api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-            _openai_client = OpenAI(api_key=api_key)
+            kwargs: dict = {"api_key": config.LLM_API_KEY}
+            if config.LLM_BASE_URL:
+                kwargs["base_url"] = config.LLM_BASE_URL
+            _openai_client = OpenAI(**kwargs)
     return _openai_client
 
 
@@ -175,6 +168,7 @@ def _refine_sql_from_cache(
     original_question: str,
     cached_sql: str,
     schema_context: str,
+    similar_queries: list[dict[str, Any]] | None = None,
 ) -> str | None:
     """Use OpenAI with few-shot examples to make small adjustments to a cached SQL.
 
@@ -185,7 +179,7 @@ def _refine_sql_from_cache(
     """
     client = _get_openai_client()
 
-    few_shot_block = _build_refine_few_shot_block()
+    few_shot_block = _build_refine_few_shot_block(similar_queries)
 
     dialect = "SQLite" if config.SQLITE_PATH else "PostgreSQL"
     system_prompt = (
@@ -205,7 +199,7 @@ def _refine_sql_from_cache(
     )
 
     user_prompt = (
-        f"Here are examples of how to refine cached SQL:\n\n"
+        f"Here are some other valid queries from our system to help you understand the database patterns:\n\n"
         f"{few_shot_block}\n\n"
         "---\n\n"
         f"Now refine the following:\n"
@@ -379,20 +373,56 @@ def run_table_rag_pipeline(
     # 1. Check Semantic Cache
     cache = _get_sql_cache()
     _debug(f"\n[TableRAG Pipeline] Analyzing query: {query!r}")
-    cache_result = cache.check_cache_hit(query, threshold=0.85)
+    cache_result = cache.check_cache_hit(query, threshold=config.SQL_CACHE_HIT_THRESHOLD)
 
     if cache_result["hit"]:
         cached_sql = cache_result["sql"]
         original_question = cache_result.get("question", query)
         cached_schema = cache_result.get("schema") or ""
+        score = cache_result.get("score", 0.0)
         _debug(f"[TableRAG Pipeline] ⚡ CACHE HIT: Cached SQL -> {cached_sql}")
 
-        # Ensure we always have schema context for the refiner.
-        # If the cache entry has no schema, retrieve it fresh now.
-        if not cached_schema.strip():
-            _debug("[TableRAG Pipeline] No schema in cache entry - retrieving fresh schema for refiner...")
+        refresh_mode = getattr(config, "SQL_CACHE_REFRESH_MODE", "threshold")
+        refresh_threshold = getattr(config, "SQL_CACHE_REFRESH_THRESHOLD", 0.95)
+
+        use_cached_only = False
+        if refresh_mode == "never":
+            use_cached_only = True
+        elif refresh_mode == "threshold" and score >= refresh_threshold:
+            use_cached_only = True
+
+        if use_cached_only and cached_schema.strip():
+            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} (Threshold: {refresh_threshold}, Mode: '{refresh_mode}'). Using strictly cached schema.")
+            combined_schema_lines = [line.strip() for line in cached_schema.split("\n") if line.strip()]
+            schema_context_for_refiner = "\n".join(combined_schema_lines)
+        else:
+            # Retrieve fresh schema based on the NEW query, because the user may want
+            # tables that differ from the original cached query.
+            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} (Threshold: {refresh_threshold}, Mode: '{refresh_mode}'). Retrieving fresh schema for the new query...")
             _ensure_schema_index_exists()
-            cached_schema = "\n".join(retrieve_relevant_schema(query, top_k=top_k))
+            _t0 = time.time()
+            fresh_schema_rows = retrieve_relevant_schema(query, top_k=top_k)
+            _debug(f"[Timer] TableRAG Schema Retrieval took {(time.time() - _t0):.3f}s")
+    
+            # Combine fresh schema with cached schema (if any) to ensure the LLM
+            # has context for both the new request and the original SQL.
+            combined_schema_lines = []
+            seen_lines = set()
+            
+            for row in fresh_schema_rows:
+                cleaned = row.strip()
+                if cleaned and cleaned not in seen_lines:
+                    combined_schema_lines.append(cleaned)
+                    seen_lines.add(cleaned)
+                    
+            if cached_schema:
+                for row in cached_schema.split("\n"):
+                    cleaned = row.strip()
+                    if cleaned and cleaned not in seen_lines:
+                        combined_schema_lines.append(cleaned)
+                        seen_lines.add(cleaned)
+                        
+            schema_context_for_refiner = "\n".join(combined_schema_lines)
 
         # --- LLM refinement on cache hit ---
         # Always send to the refiner so the LLM can make minimal adjustments
@@ -402,7 +432,8 @@ def run_table_rag_pipeline(
             new_question=query,
             original_question=original_question,
             cached_sql=cached_sql,
-            schema_context=cached_schema,
+            schema_context=schema_context_for_refiner,
+            similar_queries=cache_result.get("similar_queries", []),
         )
 
         if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
@@ -415,7 +446,7 @@ def run_table_rag_pipeline(
             # Refiner failed — generate fresh SQL instead of blindly using
             # the cached SQL which may be wrong for this new query.
             _debug("[TableRAG Pipeline] Refiner failed - generating fresh SQL from schema...")
-            fresh_sql = _generate_sql(query, cached_schema)
+            fresh_sql = _generate_sql(query, schema_context_for_refiner)
             if fresh_sql:
                 _debug(f"[TableRAG Pipeline] Fresh SQL generated -> {fresh_sql}")
                 sql_to_execute = fresh_sql
@@ -436,7 +467,7 @@ def run_table_rag_pipeline(
             if getattr(config, "SQL_REACT_ENABLED", True):
                 _debug("[TableRAG Pipeline] Execution failed - escalating to ReAct agent as last resort...")
                 react_fn = _get_react_sql_agent()
-                react_result = react_fn(query, cached_schema)
+                react_result = react_fn(query, schema_context_for_refiner)
                 if react_result["sql"] or react_result["result"]:
                     sql_to_execute = react_result["sql"] or sql_to_execute
                     rows = react_result["result"]
@@ -446,7 +477,7 @@ def run_table_rag_pipeline(
         latency = time.time() - start_time
         _debug(f"[TableRAG Pipeline] Latency: {latency:.2f}s")
         return {
-            "schema_used": ["<from semantic cache>"],
+            "schema_used": combined_schema_lines,
             "sql": sql_to_execute,
             "result": rows,
             "error": error,

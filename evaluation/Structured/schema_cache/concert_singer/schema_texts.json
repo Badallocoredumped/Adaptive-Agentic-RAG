@@ -1,6 +1,6 @@
 [
-  "Table: concert | Columns: concert_ID, concert_Name, Theme, Stadium_ID, Year",
-  "Table: singer | Columns: Singer_ID, Name, Country, Song_Name, Song_release_year, Age, Is_male",
-  "Table: singer_in_concert | Columns: concert_ID, Singer_ID",
-  "Table: stadium | Columns: Stadium_ID, Location, Name, Capacity, Highest, Lowest, Average"
+  "Table concert with columns concert_ID (int), concert_Name (text), Theme (text), Stadium_ID (text), Year (text) \u2014 foreign keys: Stadium_ID \u2192 stadium(Stadium_ID)",
+  "Table singer with columns Singer_ID (int), Name (text), Country (text), Song_Name (text), Song_release_year (text), Age (int), Is_male (bool)",
+  "Table singer_in_concert with columns concert_ID (int), Singer_ID (text) \u2014 foreign keys: Singer_ID \u2192 singer(Singer_ID), concert_ID \u2192 concert(concert_ID)",
+  "Table stadium with columns Stadium_ID (int), Location (text), Name (text), Capacity (int), Highest (int), Lowest (int), Average (int)"
 ]

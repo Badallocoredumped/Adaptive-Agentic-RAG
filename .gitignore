@@ -13,3 +13,5 @@ __pycache__/
 
 # Spider benchmark databases — kept locally only (too large for git)
 evaluation/Structured/database/
+evaluation/Structured/database/
+evaluation/Structured/bird/dev_databases/

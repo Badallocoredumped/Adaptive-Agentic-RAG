@@ -1,0 +1,5 @@
+[
+  "Table course with columns Course_ID (int), Staring_Date (text), Course (text)",
+  "Table course_arrange with columns Course_ID (int), Teacher_ID (int), Grade (int) \u2014 foreign keys: Teacher_ID \u2192 teacher(Teacher_ID), Course_ID \u2192 course(Course_ID)",
+  "Table teacher with columns Teacher_ID (int), Name (text), Age (text), Hometown (text)"
+]

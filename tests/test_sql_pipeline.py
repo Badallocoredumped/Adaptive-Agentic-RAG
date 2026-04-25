@@ -160,6 +160,76 @@ def test_react_agent_no_output_falls_back_to_single_pass(monkeypatch, isolated_s
     assert res["sql"] == MOCK_SQL, "Fallback agent should have produced SQL."
 
 
+@pytest.mark.unit
+def test_cache_hit_above_threshold_uses_cached_schema(mock_react_agent, monkeypatch):
+    """If cache score >= refresh threshold, it should NOT call retrieve_relevant_schema."""
+    retrieval_called = False
+    def mock_retrieve(*args, **kwargs):
+        nonlocal retrieval_called
+        retrieval_called = True
+        return ["Table: new_table"]
+        
+    monkeypatch.setattr("backend.sql.sql_agent.retrieve_relevant_schema", mock_retrieve)
+    
+    # Mock cache to return a high score
+    class DummyCache:
+        def check_cache_hit(self, query, threshold=0.85):
+            return {
+                "hit": True,
+                "sql": MOCK_SQL,
+                "score": 0.99,
+                "schema": "Table: cached_table",
+                "question": query,
+            }
+    monkeypatch.setattr("backend.sql.sql_agent._get_sql_cache", lambda: DummyCache())
+    
+    # Ensure config refresh threshold is set to 0.95
+    import backend.config as config
+    monkeypatch.setattr(config, "SQL_CACHE_REFRESH_THRESHOLD", 0.95)
+    monkeypatch.setattr(config, "SQL_CACHE_REFRESH_MODE", "threshold")
+    
+    res = run_table_rag_pipeline(TEST_QUERY)
+    
+    assert res["path"] == "fast"
+    assert not retrieval_called, "Should not retrieve fresh schema when score is high"
+    assert res["schema_used"] == ["Table: cached_table"]
+
+
+@pytest.mark.unit
+def test_cache_hit_below_threshold_retrieves_schema(mock_react_agent, monkeypatch):
+    """If cache score < refresh threshold, it MUST call retrieve_relevant_schema."""
+    retrieval_called = False
+    def mock_retrieve(*args, **kwargs):
+        nonlocal retrieval_called
+        retrieval_called = True
+        return ["Table: new_table"]
+        
+    monkeypatch.setattr("backend.sql.sql_agent.retrieve_relevant_schema", mock_retrieve)
+    
+    # Mock cache to return a low score
+    class DummyCache:
+        def check_cache_hit(self, query, threshold=0.85):
+            return {
+                "hit": True,
+                "sql": MOCK_SQL,
+                "score": 0.88,  # > 0.85 hit threshold, but < 0.95 refresh threshold
+                "schema": "Table: cached_table",
+                "question": query,
+            }
+    monkeypatch.setattr("backend.sql.sql_agent._get_sql_cache", lambda: DummyCache())
+    
+    import backend.config as config
+    monkeypatch.setattr(config, "SQL_CACHE_REFRESH_THRESHOLD", 0.95)
+    monkeypatch.setattr(config, "SQL_CACHE_REFRESH_MODE", "threshold")
+    
+    res = run_table_rag_pipeline(TEST_QUERY)
+    
+    assert res["path"] == "fast"
+    assert retrieval_called, "Should retrieve fresh schema when score is below refresh threshold"
+    assert "Table: new_table" in res["schema_used"]
+    assert "Table: cached_table" in res["schema_used"]
+
+
 # ── SQLCache unit tests ───────────────────────────────────────────────────────
 
 @pytest.mark.unit

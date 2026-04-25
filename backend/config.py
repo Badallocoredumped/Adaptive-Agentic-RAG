@@ -77,7 +77,8 @@ SQL_TOP_K = 30
 # SQL_SCHEMA_THRESHOLD (min cosine similarity score to include a schema table).
 # Tables below this score are dropped. The top-1 match is always kept as a
 # fallback so the schema context is never empty.
-SQL_SCHEMA_THRESHOLD: float = 0.7
+
+SQL_SCHEMA_THRESHOLD: float = 0
 
 
 # ============================================================================
@@ -231,10 +232,29 @@ SEMANTIC_ROUTER_HYBRID_MARGIN: float = 0.015
 # OpenAI settings for SQL generation & refinement
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # set in .env
 
+# ============================================================================
+# LLM Provider
+# ============================================================================
+# Set LLM_PROVIDER=ollama in .env (or environment) to use the Ollama endpoint.
+# Set LLM_PROVIDER=openai (default) to use the OpenAI API.
+LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "openai")
+
+# Ollama server address — WITHOUT trailing /v1 (it is appended automatically).
+OLLAMA_SERVER: str = os.getenv("OLLAMA_SERVER", "http://81.214.35.48:11434")
+OLLAMA_MODEL: str  = os.getenv("OLLAMA_MODEL",  "qwen2.5-coder:14b-instruct-q4_K_M")
+OLLAMA_API_KEY: str = os.getenv("OLLAMA_API_KEY", "ollama")
+
+# Effective LLM settings used by all agents (SQL, ReAct, Router, Synthesizer).
+# Override any individual variable via environment if needed.
+LLM_MODEL: str   = OLLAMA_MODEL if LLM_PROVIDER == "ollama" else os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+LLM_BASE_URL: str = f"{OLLAMA_SERVER.rstrip('/')}/v1" if LLM_PROVIDER == "ollama" else ""
+LLM_API_KEY: str  = OLLAMA_API_KEY if LLM_PROVIDER == "ollama" else OPENAI_API_KEY
+
 ROUTER_LLM_TEMPERATURE = 0.0
-ROUTER_MODEL = os.getenv("ROUTER_MODEL", "gpt-4o-mini")
-ROUTER_BASE_URL = os.getenv("ROUTER_BASE_URL", "") # Empty uses default OpenAI endpoints
-ROUTER_API_KEY = os.getenv("ROUTER_API_KEY", OPENAI_API_KEY)
+ROUTER_MODEL   = os.getenv("ROUTER_MODEL",   LLM_MODEL)
+# ROUTER_BASE_URL is used WITHOUT /v1 — the router appends /v1 itself.
+ROUTER_BASE_URL = os.getenv("ROUTER_BASE_URL", OLLAMA_SERVER if LLM_PROVIDER == "ollama" else "")
+ROUTER_API_KEY  = os.getenv("ROUTER_API_KEY",  LLM_API_KEY)
 
 SYNTHESIS_MODEL = ROUTER_MODEL
 SYNTHESIS_TEMPERATURE = 0.0
@@ -242,9 +262,19 @@ SYNTHESIS_TEMPERATURE = 0.0
 # ============================================================================
 # SQL
 # ============================================================================
-SQL_OPENAI_MODEL = "gpt-4o-mini"
+SQL_OPENAI_MODEL = LLM_MODEL
 SQL_GENERATE_TEMPERATURE = 0.0
 SQL_REFINE_TEMPERATURE = 0.0
+
+# Mode for retrieving fresh schema on a semantic cache hit:
+#   "always"    -> Always retrieve fresh schema for the new query.
+#   "threshold" -> Use cached schema if score >= threshold, otherwise retrieve.
+#   "never"     -> Never retrieve fresh schema, strictly use cached schema.
+SQL_CACHE_REFRESH_MODE = "threshold"
+
+# If SQL_CACHE_REFRESH_MODE is "threshold", this defines the minimum score
+# required to skip fresh schema retrieval and strictly use the cached schema.
+SQL_CACHE_REFRESH_THRESHOLD = 0.95
 
 # ============================================================================
 # Debug
@@ -262,7 +292,8 @@ ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
 # ReAct agent settings
 # Set SQL_REACT_ENABLED=False to bypass the ReAct layer and use the single-pass agent directly.
 SQL_REACT_ENABLED = True
-SQL_REACT_MAX_ITERATIONS = 3  # max Thought/Action/Observation cycles per query
+SQL_REACT_MAX_ITERATIONS = 10  # max Thought/Action/Observation cycles per query
+SQL_CACHE_HIT_THRESHOLD: float = 0.85  # cosine similarity threshold for cache hit (RQ1 variable)
 
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"
 ROUTER_COMPLETION_ENDPOINT = "/completion"

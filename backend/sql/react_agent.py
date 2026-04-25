@@ -62,7 +62,7 @@ def _print_msg(step: int, msg: Any) -> None:
             for tc in msg.tool_calls:
                 raw = next(iter(tc.get("args", {}).values()), "")
                 print(f"  🔧 [{step}] TOOL CALL → {tc['name']}")
-                print(f"       Input: {_trunc(str(raw), 120)}")
+                print(f"       Input: {raw}")
         else:
             content = msg.content or ""
             if content.strip():
@@ -108,22 +108,76 @@ def _build_system_prompt(schema_context: str, max_iter: int) -> str:
         else "Use standard PostgreSQL syntax."
     )
     return (
-        f"You are an expert SQL analyst working with a {dialect} database.\n\n"
-        "TableRAG has already retrieved the following schema context relevant to this query.\n"
-        "This is the AUTHORITATIVE list of tables and columns you may use:\n\n"
-        f"{schema_context}\n\n"
-        "STRICT RULES — follow these without exception:\n"
-        "  1. Only reference tables and columns that appear in the schema context above.\n"
-        "  2. Do NOT invent, assume, or guess tables or columns that are not listed.\n"
-        "  3. Write only SELECT or WITH (read-only) queries — never INSERT, UPDATE, DELETE.\n"
-        f"  4. {syntax_note}\n"
-        "  5. If you think more tables might be needed, call schema_lookup FIRST to verify.\n"
-        "  6. WRITE COMPLETE QUERIES. Use JOINs to connect tables. Do NOT write exploratory step-by-step queries just to look up intermediate IDs.\n"
-        "  7. SELECT ONLY the columns the question asks for. Do NOT add helper/informational columns (e.g. COUNT, rank, or intermediate IDs) unless the question explicitly requests them.\n"
-        "  8. Always call execute_sql to test your SQL before reporting the final answer.\n"
-        "  9. If execute_sql returns an error, read the error message, fix the SQL, and retry.\n"
-        f"       You have up to {max_iter} tool-calling rounds — use them wisely.\n"
-    )
+    f"You are an expert SQL analyst working with a {dialect} database.\n\n"
+    "TableRAG has already retrieved the following schema context relevant to this query.\n"
+    "Use this as your starting point — call schema_lookup if you need additional tables.\n\n"
+    f"{schema_context}\n\n"
+
+    "══════════════════════════════════════════════\n"
+    "  MULTI-HOP REASONING — proceed hop by hop\n"
+    "══════════════════════════════════════════════\n\n"
+
+    "  HOP 1 · UNDERSTAND THE QUESTION\n"
+    "    - Identify every table and column the question mentions or implies.\n"
+    "    - For each concept (e.g. 'charter funding type', 'school status', 'enrollment'),\n"
+    "      confirm WHICH table and WHICH exact column name holds it — do not assume.\n"
+    "      If any table or column is absent from the schema context above,\n"
+    "      call schema_lookup with a descriptive topic BEFORE continuing.\n"
+    "    - If the same concept could plausibly live in multiple tables\n"
+    "      (e.g. funding type in both frpm AND schools), probe both:\n"
+    "        SELECT * FROM <table> LIMIT 1;\n"
+    "      and confirm the right source before using it.\n\n"
+
+    "  HOP 2 · EXPLORE UNCERTAIN VALUES\n"
+    "    - For every string filter (county name, category, status code, etc.)\n"
+    "      run a small probe query to confirm the exact stored value:\n"
+    "        SELECT DISTINCT <column> FROM <table> LIMIT 10;\n"
+    "    - If a JOIN key is unclear, probe both sides of the join.\n"
+    "    - DIRECTIONAL FILTERS: if the question says 'A is greater than B by N',\n"
+    "      that means (A - B) > N, NOT ABS(A - B) > N.\n"
+    "      Only use ABS() when the question explicitly says 'difference' without direction.\n"
+    "    - Only move to HOP 3 once you know the exact values to use.\n\n"
+
+    "  HOP 3 · BUILD AND VERIFY THE FINAL QUERY\n"
+    "    - Write the complete SELECT query using only confirmed tables,\n"
+    "      columns, and values discovered in the previous hops.\n"
+    "    - Execute it with execute_sql.\n"
+    "    - If it errors: read the message, fix the specific problem, retry.\n"
+    "    - If it returns 0 rows: revisit your filter values from HOP 2.\n\n"
+
+    f"You have up to {max_iter} tool-calling rounds — spread them across all hops.\n\n"
+
+    "══════════════════════════════════════════════\n"
+    "  STRICT RULES\n"
+    "══════════════════════════════════════════════\n"
+    "  1. Only reference tables/columns confirmed to exist (schema context or schema_lookup).\n"
+    "  2. Read-only queries only — never INSERT, UPDATE, or DELETE.\n"
+    f"  3. {syntax_note}\n"
+    "  4. SELECT ONLY the columns the question asks for — no extra helper columns,\n"
+    "     no extra address fields, no extra identifiers beyond what is asked.\n"
+    "  5. ALIAS CONSISTENCY: every alias in FROM/JOIN must be used exactly as written.\n"
+    "     Example: `FROM satscores ss JOIN frpm f` → use `ss.col` and `f.col`, never `s.col`.\n"
+    "  6. COLUMN QUOTING: names with spaces or special characters MUST use double quotes.\n"
+    '     Example: `"FRPM Count (K-12)"`, `"Charter School (Y/N)"`.\n'
+    "  7. UNKNOWN COLUMN: on 'no such column: X' — call schema_lookup immediately;\n"
+    "     do NOT retry the same broken query.\n"
+    "  8. NEVER HARDCODE DATA VALUES: never embed a specific row value (a count, an ID,\n"
+    "     a CDSCode, a score) that you recall from training or saw in an earlier result\n"
+    "     as a filter or lookup target. Always derive the target dynamically:\n"
+    "       WRONG: WHERE \"FRPM Count (K-12)\" = 4419\n"
+    "       WRONG: WHERE CDSCode = '01611760135244'\n"
+    "       RIGHT: WHERE CDSCode = (SELECT CDSCode FROM frpm ORDER BY \"FRPM Count (K-12)\" DESC LIMIT 1)\n"
+    "  9. TOP-N AND MAX MUST BE DYNAMIC: when the question asks for the school/district\n"
+    "     with the highest or lowest value, always use ORDER BY ... DESC/ASC LIMIT N\n"
+    "     or a subquery — never a hardcoded WHERE clause with a constant.\n"
+    " 10. AGGREGATION SCOPE: match the aggregation level to the question exactly.\n"
+    "     'The school with the highest X' → ORDER BY school-level X, LIMIT 1.\n"
+    "     'The district with the highest average X' → GROUP BY district, ORDER BY AVG(X).\n"
+    "     Do not substitute one for the other.\n"
+    " 11. COMPLETE FILTER SET: every condition in the question must appear in WHERE.\n"
+    "     Before finalizing, re-read the question and verify each constraint is present.\n"
+    "     Missing even one filter (e.g. Charter Funding Type, StatusType) will fail.\n"
+)
 
 
 # ---------------------------------------------------------------------------
@@ -183,7 +237,22 @@ def _make_execute_sql_tool() -> Tool:
         try:
             rows = _raw_execute_sql(sql)
         except RuntimeError as exc:
-            return f"ERROR: {exc}"
+            err = str(exc)
+            if "no such column" in err:
+                bad_col = err.split("no such column:")[-1].strip().split("\n")[0]
+                return (
+                    f"ERROR: SQL execution failed: {err}\n"
+                    f"ACTION REQUIRED: column '{bad_col}' does not exist. "
+                    "You MUST call schema_lookup now to get the exact column names "
+                    "before retrying. Do NOT guess or retry the same query."
+                )
+            if "syntax error" in err:
+                return (
+                    f"ERROR: SQL execution failed: {err}\n"
+                    "HINT: Check for unquoted column names containing spaces or "
+                    'special characters — wrap them in double quotes, e.g. "Column Name (unit)".'
+                )
+            return f"ERROR: SQL execution failed: {err}"
 
         if not rows:
             return "SUCCESS: 0 row(s) returned.\n[]"
@@ -261,12 +330,14 @@ def _get_react_llm() -> ChatOpenAI:
     global _react_llm_instance
     with _react_llm_lock:
         if _react_llm_instance is None:
-            api_key = os.environ.get("OPENAI_API_KEY", config.OPENAI_API_KEY)
-            _react_llm_instance = ChatOpenAI(
-                model=config.SQL_OPENAI_MODEL,
-                temperature=0.0,
-                api_key=api_key,
-            )
+            llm_kwargs: dict = {
+                "model": config.SQL_OPENAI_MODEL,
+                "temperature": 0.0,
+                "api_key": config.LLM_API_KEY,
+            }
+            if config.LLM_BASE_URL:
+                llm_kwargs["base_url"] = config.LLM_BASE_URL
+            _react_llm_instance = ChatOpenAI(**llm_kwargs)
     return _react_llm_instance
 
 
@@ -288,7 +359,7 @@ def build_react_agent(schema_context: str) -> CompiledStateGraph:
         A compiled LangGraph state graph invoked with
         .invoke({"messages": [("human", query)]}).
     """
-    max_iter: int = getattr(config, "SQL_REACT_MAX_ITERATIONS", 6)
+    max_iter: int = getattr(config, "SQL_REACT_MAX_ITERATIONS", 10)
 
     tools = [
         _make_schema_lookup_tool(),
@@ -305,9 +376,26 @@ def build_react_agent(schema_context: str) -> CompiledStateGraph:
 # Public entry point
 # ---------------------------------------------------------------------------
 
+def _get_full_schema_context() -> str:
+    """Return every schema text stored in the FAISS index (or live DB schema)."""
+    from backend.sql.table_rag import _SCHEMA_TEXTS_PATH  # noqa: PLC0415
+
+    if _SCHEMA_TEXTS_PATH.exists():
+        with _SCHEMA_TEXTS_PATH.open("r", encoding="utf-8") as _f:
+            texts: list[str] = json.load(_f)
+        return "\n".join(texts)
+
+    # Fallback when index has not been built yet
+    from backend.sql.database import get_live_schema  # noqa: PLC0415
+
+    return "\n".join(get_live_schema().to_embedding_texts())
+
+
 def run_react_sql_agent(
     query: str,
     schema_context: str,
+    *,
+    _retry: bool = False,
 ) -> dict[str, Any]:
     """Run the ReAct agent to answer *query* using the TableRAG *schema_context*.
 
@@ -329,6 +417,16 @@ def run_react_sql_agent(
     """
     _debug(f"\n[ReAct Agent] Starting for query: {query!r}")
     logger.info("[ReAct Agent] query=%r", query)
+
+    # ── Print TableRAG schema context ────────────────────────────────────────
+    schema_lines = [l for l in schema_context.splitlines() if l.strip()]
+    from backend.sql.sql_agent import _extract_table_names  # noqa: PLC0415
+    table_names = _extract_table_names(schema_context)
+    label = "(full schema fallback)" if _retry else "(TableRAG)"
+    print(f"\n  📋 Schema {label} — tables: {table_names}")
+    for line in schema_lines:
+        if not line.startswith("---"):
+            print(f"       {line}")
 
     max_iter: int = getattr(config, "SQL_REACT_MAX_ITERATIONS", 6)
     graph = build_react_agent(schema_context)
@@ -409,6 +507,7 @@ def run_react_sql_agent(
         candidate_sql = _extract_and_normalise_sql(raw_input) or raw_input.strip()
         if observation.startswith("SUCCESS"):
             fallback_sql = candidate_sql
+            final_error = None  # Agent recovered from earlier errors
             if "[" not in observation:
                 fallback_rows = []
             else:
@@ -445,11 +544,48 @@ def run_react_sql_agent(
                 final_sql = fallback_sql
                 final_rows = fallback_rows
 
-    print(f"  📌 Final SQL : {_trunc(final_sql or 'None', 120)}")
+    print(f"  📌 Final SQL : {final_sql or 'None'}")
     print(f"  📊 Rows      : {len(final_rows)}")
     if final_error:
         print(f"  ⚠️  Error     : {_trunc(final_error, 120)}")
     print()
+
+    # ── Error-based retry with full schema ──────────────────────────────────
+    # The agent always starts with TableRAG schema.  If execute_sql returned
+    # ERROR on 4+ calls the partial schema is likely missing relevant tables;
+    # fetch the complete DB schema and re-run once so the agent has full context.
+    if not _retry:
+        error_count = sum(
+            1
+            for msg in all_messages
+            if isinstance(msg, ToolMessage)
+            and tool_call_map.get(msg.tool_call_id, ("", ""))[0] == "execute_sql"
+            and (
+                msg.content if isinstance(msg.content, str) else str(msg.content)
+            ).startswith("ERROR")
+        )
+        if error_count >= 4:
+            logger.info(
+                "[ReAct Agent] %d execute_sql errors — fetching full schema and retrying",
+                error_count,
+            )
+            print(
+                f"\n  🔄 [{error_count}x SQL errors] Fetching full DB schema and re-running...\n"
+            )
+            try:
+                full_schema = _get_full_schema_context()
+                augmented_schema = (
+                    f"{schema_context}\n\n"
+                    "--- FULL DATABASE SCHEMA (added after repeated SQL errors; use this to find the correct tables/columns) ---\n"
+                    f"{full_schema}"
+                )
+                retry_result = run_react_sql_agent(
+                    query, augmented_schema, _retry=True
+                )
+                if retry_result["result"] or retry_result["sql"]:
+                    return retry_result
+            except Exception as exc:
+                logger.warning("[ReAct Agent] Full-schema retry failed: %s", exc)
 
     return {
         "sql": final_sql,

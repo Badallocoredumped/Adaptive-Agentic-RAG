@@ -1,0 +1,8 @@
+start calculate EX
+                     simple               moderate             challenging          total               
+count                54                   30                   5                    89                  
+======================================    EX   =====================================
+EX                   31.48                3.33                 0.00                 20.22               
+===========================================================================================
+Finished EX evaluation for EX on Mini Dev set
+

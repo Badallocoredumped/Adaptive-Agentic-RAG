@@ -1,0 +1,16 @@
+start calculate EX
+                     simple               moderate             challenging          total               
+count                925                  464                  145                  1534                
+======================================    EX   =====================================
+EX                   35.68                13.58                11.72                26.73               
+===========================================================================================
+Finished EX evaluation for EX on Mini Dev set
+
+start calculate EX
+                     simple               moderate             challenging          total               
+count                925                  464                  145                  1534                
+======================================    EX   =====================================
+EX                   38.49                14.66                15.17                29.07               
+===========================================================================================
+Finished EX evaluation for EX on Mini Dev set
+

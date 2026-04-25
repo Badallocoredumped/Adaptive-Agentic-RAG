@@ -1,6 +1,6 @@
 [
-  "Table: Documents | Columns: Document_ID, Template_ID, Document_Name, Document_Description, Other_Details",
-  "Table: Paragraphs | Columns: Paragraph_ID, Document_ID, Paragraph_Text, Other_Details",
-  "Table: Ref_Template_Types | Columns: Template_Type_Code, Template_Type_Description",
-  "Table: Templates | Columns: Template_ID, Version_Number, Template_Type_Code, Date_Effective_From, Date_Effective_To, Template_Details"
+  "Table Documents with columns Document_ID (integer), Template_ID (integer), Document_Name (varchar(255)), Document_Description (varchar(255)), Other_Details (varchar(255)) \u2014 foreign keys: Template_ID \u2192 Templates(Template_ID)",
+  "Table Paragraphs with columns Paragraph_ID (integer), Document_ID (integer), Paragraph_Text (varchar(255)), Other_Details (varchar(255)) \u2014 foreign keys: Document_ID \u2192 Documents(Document_ID)",
+  "Table Ref_Template_Types with columns Template_Type_Code (char(15)), Template_Type_Description (varchar(255))",
+  "Table Templates with columns Template_ID (integer), Version_Number (integer), Template_Type_Code (char(15)), Date_Effective_From (datetime), Date_Effective_To (datetime), Template_Details (varchar(255)) \u2014 foreign keys: Template_Type_Code \u2192 Ref_Template_Types(Template_Type_Code)"
 ]

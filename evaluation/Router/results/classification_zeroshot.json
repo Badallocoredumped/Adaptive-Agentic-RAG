@@ -1,79 +1,79 @@
 {
   "router": "zeroshot",
   "metrics": {
-    "n_cases": 120,
+    "n_cases": 240,
     "n_errors": 0,
-    "accuracy": 0.975,
-    "macro_precision": 0.9752,
-    "macro_recall": 0.975,
-    "macro_f1": 0.975,
-    "weighted_f1": 0.975,
-    "cohen_kappa": 0.9625,
-    "mcc": 0.9626,
+    "accuracy": 0.9458,
+    "macro_precision": 0.9469,
+    "macro_recall": 0.9458,
+    "macro_f1": 0.9454,
+    "weighted_f1": 0.9454,
+    "cohen_kappa": 0.9187,
+    "mcc": 0.9197,
     "per_class": {
       "sql": {
         "label": "sql",
-        "tp": 39,
-        "fp": 2,
-        "fn": 1,
-        "support": 40,
-        "precision": 0.9512,
-        "recall": 0.975,
-        "f1": 0.963
+        "tp": 71,
+        "fp": 4,
+        "fn": 9,
+        "support": 80,
+        "precision": 0.9467,
+        "recall": 0.8875,
+        "f1": 0.9161
       },
       "text": {
         "label": "text",
-        "tp": 38,
-        "fp": 1,
-        "fn": 2,
-        "support": 40,
+        "tp": 76,
+        "fp": 2,
+        "fn": 4,
+        "support": 80,
         "precision": 0.9744,
         "recall": 0.95,
         "f1": 0.962
       },
       "hybrid": {
         "label": "hybrid",
-        "tp": 40,
-        "fp": 0,
+        "tp": 80,
+        "fp": 7,
         "fn": 0,
-        "support": 40,
-        "precision": 1.0,
+        "support": 80,
+        "precision": 0.9195,
         "recall": 1.0,
-        "f1": 1.0
+        "f1": 0.9581
       }
     },
     "confusion_matrix": {
       "sql": {
-        "sql": 39,
-        "text": 1,
-        "hybrid": 0
+        "sql": 71,
+        "text": 2,
+        "hybrid": 7
       },
       "text": {
-        "sql": 2,
-        "text": 38,
+        "sql": 4,
+        "text": 76,
         "hybrid": 0
       },
       "hybrid": {
         "sql": 0,
         "text": 0,
-        "hybrid": 40
+        "hybrid": 80
       }
     },
     "by_difficulty": {
       "easy": {
-        "n": 60,
-        "correct": 60,
+        "n": 90,
+        "correct": 90,
         "accuracy": 1.0
       },
       "medium": {
-        "n": 35,
-        "correct": 33,
-        "accuracy": 0.9429
+        "n": 65,
+        "correct": 60,
+        "accuracy": 0.9231
       },
       "hard": {
-        "n": 25,
-        "correct": 24,
-        "accuracy": 0.96
+        "n": 85,
+        "correct": 77,
+        "accuracy": 0.9059
       }
     }
   },
@@ -252,7 +252,7 @@
       "difficulty": "medium",
       "subtasks": [
         {
-          "sub_query": "Show total sales broken down by sales representative for Q3",
+          "sub_query": "Show total sales for Q3 broken down by sales representative",
           "route": "sql"
         }
       ],
@@ -642,7 +642,7 @@
       "difficulty": "hard",
       "subtasks": [
         {
-          "sub_query": "Find the departments that have consistently exceeded their budget for headcount.",
+          "sub_query": "What are the budget and headcount figures for each department?",
           "route": "sql"
         }
       ],
@@ -657,7 +657,7 @@
       "difficulty": "hard",
       "subtasks": [
         {
-          "sub_query": "Identify the product lines and their gross margin trends over time.",
+          "sub_query": "Identify the product lines and their gross margin trends over the last year.",
           "route": "sql"
         }
       ],
@@ -766,7 +766,7 @@
       "difficulty": "easy",
       "subtasks": [
         {
-          "sub_query": "Provide a summary of the strategic roadmap presented in the deck.",
+          "sub_query": "Summarize the strategic roadmap presented in the deck.",
           "route": "text"
         }
       ],
@@ -826,7 +826,7 @@
       "difficulty": "medium",
       "subtasks": [
         {
-          "sub_query": "Explain the total cost breakdown discussed in the proposal document.",
+          "sub_query": "Can you provide a detailed explanation of the total cost breakdown from the proposal document?",
           "route": "text"
         }
       ],
@@ -1040,7 +1040,7 @@
       "difficulty": "easy",
       "subtasks": [
         {
-          "sub_query": "What information does the context file provide about the product vision?",
+          "sub_query": "What information does the context file provide regarding the product vision?",
           "route": "text"
         }
       ],
@@ -1104,7 +1104,7 @@
       "difficulty": "easy",
       "subtasks": [
         {
-          "sub_query": "Explain the incident response procedures documented in the security playbook.",
+          "sub_query": "Can you provide an overview of the incident response procedures in the security playbook?",
           "route": "text"
         }
       ],
@@ -1234,13 +1234,13 @@
       "id": "text_37",
       "query": "What does the report say about average transaction processing delays?",
       "expected": "text",
-      "predicted": "text",
-      "correct": true,
+      "predicted": "sql",
+      "correct": false,
       "difficulty": "medium",
       "subtasks": [
         {
-          "sub_query": "What does the report say about average transaction processing delays?",
-          "route": "text"
+          "sub_query": "What is the average transaction processing delay according to the report?",
+          "route": "sql"
         }
       ],
       "error": null
@@ -1356,11 +1356,11 @@
       "difficulty": "easy",
       "subtasks": [
         {
-          "sub_query": "Show the average order value per segment",
+          "sub_query": "What is the average order value per segment?",
           "route": "sql"
         },
         {
-          "sub_query": "Describe the segmentation policy",
+          "sub_query": "Can you describe the segmentation policy?",
           "route": "text"
         }
       ],
@@ -1432,11 +1432,11 @@
       "difficulty": "easy",
       "subtasks": [
         {
-          "sub_query": "Provide a summary of user counts from the database.",
+          "sub_query": "Show a database summary of user counts.",
           "route": "sql"
         },
         {
-          "sub_query": "Give the context from the onboarding file.",
+          "sub_query": "Provide the context from the onboarding file.",
           "route": "text"
         }
       ],
@@ -1489,7 +1489,7 @@
       "difficulty": "medium",
       "subtasks": [
         {
-          "sub_query": "Show the average transaction value by channel.",
+          "sub_query": "What is the average transaction value by channel?",
           "route": "sql"
         },
         {
@@ -1850,11 +1850,11 @@
       "difficulty": "medium",
       "subtasks": [
         {
-          "sub_query": "Show employee headcount trends by business unit",
+          "sub_query": "Show the trends of employee headcount by business unit.",
           "route": "sql"
         },
         {
-          "sub_query": "Explain the restructuring plan outlined in the reorganization document",
+          "sub_query": "Explain the restructuring plan outlined in the reorganization document.",
           "route": "text"
         }
       ],
@@ -1907,11 +1907,11 @@
       "difficulty": "medium",
       "subtasks": [
         {
-          "sub_query": "Summarize the vendor performance report",
+          "sub_query": "Summarize the vendor performance report.",
           "route": "text"
         },
         {
-          "sub_query": "Show which vendors had the most delivery delays",
+          "sub_query": "Show which vendors had the most delivery delays.",
           "route": "sql"
         }
       ],
@@ -2025,7 +2025,7 @@
           "route": "sql"
         },
         {
-          "sub_query": "Summarize the campaign optimization framework from the marketing document.",
+          "sub_query": "Can you summarize the campaign optimization framework from the marketing document?",
           "route": "text"
         }
       ],
@@ -2045,6 +2045,2030 @@
         },
         {
           "sub_query": "What retail strategy is described in the expansion document?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_41",
+      "query": "What is the count of failed payment transactions processed last week?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the count of failed payment transactions processed last week?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_42",
+      "query": "Show the total revenue generated by affiliate partners in Q2.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the total revenue generated by affiliate partners in Q2?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_43",
+      "query": "What is the average session duration for users on mobile devices?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the average session duration for users on mobile devices?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_44",
+      "query": "How many orders are currently pending fulfillment in the warehouse system?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "How many orders are currently pending fulfillment in the warehouse system?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_45",
+      "query": "What is the sum of all marketing budget allocations for this fiscal year?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the sum of all marketing budget allocations for this fiscal year?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_46",
+      "query": "List all customer segments with more than five hundred active accounts.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "List all customer segments with more than five hundred active accounts.",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_47",
+      "query": "What is the avg deal size for enterprise customers signed this quarter?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the average deal size for enterprise customers signed this quarter?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_48",
+      "query": "How many database records were updated during the last batch migration?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "How many database records were updated during the last batch migration?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_49",
+      "query": "What is the total count of API calls made per service endpoint today?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the total count of API calls made per service endpoint today?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_50",
+      "query": "Show the average basket size for repeat customers versus first-time buyers.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the average basket size for repeat customers?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What is the average basket size for first-time buyers?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_51",
+      "query": "Which product lines have the highest average return rate this quarter?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What are the product lines and their return rates for this quarter?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_52",
+      "query": "What is the average contract value for public-sector customers this year?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What is the average contract value for public-sector customers this year?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_53",
+      "query": "Which store branches are hitting the overall revenue target this month?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Which store branches are hitting the overall revenue target this month?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_54",
+      "query": "What fraction of total orders shipped internationally in the last quarter?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What is the total number of orders shipped internationally in the last quarter?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_55",
+      "query": "How has the average ticket resolution time changed month over month?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What is the average ticket resolution time for each month?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_56",
+      "query": "Which sales representatives are generating the highest average deal value?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What is the average deal value for each sales representative?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_57",
+      "query": "What is the quarterly trend in total subscription revenue by pricing tier?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What is the total subscription revenue by pricing tier for each quarter?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_58",
+      "query": "Show the monthly breakdown of orders placed via mobile versus desktop.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Show the monthly breakdown of orders placed via mobile.",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Show the monthly breakdown of orders placed via desktop.",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_59",
+      "query": "Which product categories drive the most revenue during promotional periods?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What are the product categories available?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What is the revenue generated during promotional periods?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Can you provide insights on which product categories perform best during promotions?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_60",
+      "query": "How many new accounts were activated per acquisition channel last quarter?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "How many new accounts were activated per acquisition channel last quarter?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_61",
+      "query": "Which subscription plans have the highest voluntary downgrade frequency?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the subscription plans available?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What is the voluntary downgrade frequency for each subscription plan?",
+          "route": "text"
+        },
+        {
+          "sub_query": "Which subscription plans have the highest voluntary downgrade frequency?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_62",
+      "query": "What is the month-over-month growth rate in new user signups?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the month-over-month growth rate in new user signups?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_63",
+      "query": "Identify the onboarding steps with the highest user drop-off rate.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the onboarding steps and their corresponding user drop-off rates?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_64",
+      "query": "Which product bundles are most frequently added to cart but never purchased?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Find the product bundles that are frequently added to cart but not purchased.",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_65",
+      "query": "How does churn probability vary across geographic regions?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the churn probability for different geographic regions?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_66",
+      "query": "Which acquisition channels produce accounts with the highest lifetime value?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the different acquisition channels used?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What is the lifetime value of accounts from each acquisition channel?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Which acquisition channels have the highest lifetime value?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_67",
+      "query": "What is the funnel conversion rate at each stage of the sales process?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the funnel conversion rate at each stage of the sales process?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_68",
+      "query": "Which feature combinations correlate most strongly with long-term user retention?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the feature combinations used in the product?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "How is long-term user retention defined and measured?",
+          "route": "text"
+        },
+        {
+          "sub_query": "Can you provide data on user retention rates over time?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What statistical methods can be used to analyze the correlation between features and user retention?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_69",
+      "query": "Identify accounts that show early warning signals of churn within the next 30 days.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Identify accounts that show early warning signals of churn within the next 30 days.",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_70",
+      "query": "Which contract segments show the highest upsell conversion rates?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the upsell conversion rates for different contract segments?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_71",
+      "query": "How does the support ticket escalation rate differ across subscription tiers?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the support ticket escalation rate for each subscription tier?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_72",
+      "query": "Which operational workflows have the highest failure rate in production?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the operational workflows in production?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Which operational workflows have the highest failure rates?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_73",
+      "query": "What is the correlation between NPS score and contract renewal probability?",
+      "expected": "sql",
+      "predicted": "text",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the correlation between NPS score and contract renewal probability?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_74",
+      "query": "Identify the top-performing user cohorts by first-year spending trajectory.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Identify the top-performing user cohorts based on their first-year spending trajectory.",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_75",
+      "query": "How do purchase frequencies differ across demographic segments?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the purchase frequencies for different demographic segments?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_76",
+      "query": "What are the seasonal volatility patterns in shipment volumes by product category?",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the seasonal volatility patterns in shipment volumes?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_77",
+      "query": "Which supply chain bottlenecks most frequently cause downstream delivery failures?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the common supply chain bottlenecks?",
+          "route": "text"
+        },
+        {
+          "sub_query": "How often do these bottlenecks lead to downstream delivery failures?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_78",
+      "query": "Map the distribution of support resolution times across incident severity levels.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the support resolution times for different incident severity levels?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_79",
+      "query": "Which cross-sell offers generate the highest incremental attach rate per interaction?",
+      "expected": "sql",
+      "predicted": "hybrid",
+      "correct": false,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the cross-sell offers available?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "How is the incremental attach rate calculated for each offer?",
+          "route": "text"
+        },
+        {
+          "sub_query": "What is the interaction data for each cross-sell offer?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Can you provide insights on which offers have the highest incremental attach rate?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sql_80",
+      "query": "Identify the geographic clusters with the highest concentration of high-value accounts.",
+      "expected": "sql",
+      "predicted": "sql",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Find the geographic areas with the highest number of high-value accounts.",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_41",
+      "query": "What does the employee handbook document state about expense reimbursement procedures?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What does the employee handbook say about expense reimbursement procedures?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_42",
+      "query": "Summarize the key takeaways from the product strategy report.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "Summarize the key takeaways from the product strategy report.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_43",
+      "query": "Explain what the onboarding guide file says about account setup steps.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "Explain the account setup steps mentioned in the onboarding guide file.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_44",
+      "query": "What context does the risk assessment document provide about cybersecurity threats?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What information does the risk assessment document provide about cybersecurity threats?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_45",
+      "query": "What does the PDF say about environmental compliance requirements?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What does the PDF say about environmental compliance requirements?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_46",
+      "query": "Give me a summary of the vendor evaluation criteria outlined in the procurement policy.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "Provide a summary of the vendor evaluation criteria in the procurement policy.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_47",
+      "query": "What does the technical specification text describe about API rate limits?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What does the technical specification text describe about API rate limits?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_48",
+      "query": "Explain the escalation procedures outlined in the incident management policy document.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "Explain the escalation procedures outlined in the incident management policy document.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_49",
+      "query": "Summarize the competitive landscape section from the market analysis report.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "Summarize the competitive landscape section from the market analysis report.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_50",
+      "query": "What does the context file describe about the company's core values?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What does the context file say about the company's core values?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_51",
+      "query": "What does the report say about average salary benchmarks for engineering roles?",
+      "expected": "text",
+      "predicted": "sql",
+      "correct": false,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What does the report say about average salary benchmarks for engineering roles?",
+          "route": "sql"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_52",
+      "query": "Explain the total addressable market narrative described in the investor document.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Explain the total addressable market narrative described in the investor document.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_53",
+      "query": "What customer use cases are documented in the product requirements file?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What customer use cases are documented in the product requirements file?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_54",
+      "query": "Summarize the revenue growth narrative from the CEO's annual letter.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Summarize the revenue growth narrative from the CEO's annual letter.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_55",
+      "query": "What does the context file say about order processing best practices?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What does the context file say about order processing best practices?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_56",
+      "query": "Explain the database schema design rationale described in the architecture document.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Explain the database schema design rationale described in the architecture document.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_57",
+      "query": "What does the policy report recommend about average team size for product squads?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What does the policy report recommend about average team size for product squads?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_58",
+      "query": "What customer segments are described as strategic priorities in the go-to-market document?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What customer segments are described as strategic priorities in the go-to-market document?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_59",
+      "query": "Summarize the total scope of work outlined in the digital transformation strategy file.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Summarize the total scope of work outlined in the digital transformation strategy file.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_60",
+      "query": "What does the annual report text describe about order management challenges?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What does the annual report say about order management challenges?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_61",
+      "query": "What is the company's stance on responsible AI development practices?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the company's stance on responsible AI development practices?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_62",
+      "query": "Describe the leadership principles that guide executive decision-making at this organization.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the leadership principles that guide executive decision-making at this organization?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_63",
+      "query": "What were the main lessons learned from the product launch in Southeast Asia?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What were the main lessons learned from the product launch in Southeast Asia?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_64",
+      "query": "What drove the organizational redesign initiated in early 2024?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What were the reasons behind the organizational redesign?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_65",
+      "query": "What does the company believe about the future of hybrid work arrangements?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the company's perspective on the future of hybrid work arrangements?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_66",
+      "query": "Describe the key tenets of the engineering culture at this organization.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the key tenets of the engineering culture at this organization?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_67",
+      "query": "What were the primary drivers behind the company's strategic pivot to a platform model?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What were the primary drivers behind the company's strategic pivot to a platform model?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_68",
+      "query": "What guiding principles shape the company's approach to mergers and acquisitions?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the guiding principles of the company's approach to mergers and acquisitions?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_69",
+      "query": "How does the company articulate its brand identity to newly hired employees?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What materials or resources does the company provide to new employees to explain its brand identity?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_70",
+      "query": "What strategic priorities were emphasized at the most recent all-hands meeting?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What were the strategic priorities discussed at the most recent all-hands meeting?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_71",
+      "query": "Describe the methodology used in the latest competitive benchmarking study.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the methodology used in the latest competitive benchmarking study?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_72",
+      "query": "What is the company's official position on open-source software contributions?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the company's official position on open-source software contributions?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_73",
+      "query": "What were the main findings from the recent employee engagement survey?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What were the main findings from the recent employee engagement survey?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_74",
+      "query": "What reasoning led to the recent changes in the performance review cadence?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the recent changes in the performance review cadence?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_75",
+      "query": "What does the company say about aligning individual goals with organizational objectives?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What does the company say about aligning individual goals with organizational objectives?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_76",
+      "query": "Describe the approval workflow for budget exceptions above the executive threshold.",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Explain the approval workflow for budget exceptions above the executive threshold.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_77",
+      "query": "What principles underpin the company's data governance and stewardship framework?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the principles of the company's data governance framework?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_78",
+      "query": "What strategic insight led to the launch of the new professional services line?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What was the strategic insight behind the launch of the new professional services line?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_79",
+      "query": "What factors influenced the decision to expand operations into the European market?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the key factors that influenced the decision to expand operations into the European market?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "text_80",
+      "query": "What does the company believe distinguishes its culture from competitors?",
+      "expected": "text",
+      "predicted": "text",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the key elements of the company's culture?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_41",
+      "query": "How many orders were shipped this week and what does the logistics policy say about delivery timelines?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "How many orders were shipped this week?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the logistics policy say about delivery timelines?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_42",
+      "query": "What is the total revenue by product category and can you summarize the pricing strategy from the document?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the total revenue by product category?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Can you summarize the pricing strategy from the document?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_43",
+      "query": "Count the number of active subscriptions and explain the subscription terms from the policy file.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "Count the number of active subscriptions",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Explain the subscription terms from the policy file",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_44",
+      "query": "Show the average deal size by sales region and summarize the regional strategy report.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the average deal size by sales region?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Can you summarize the regional strategy report?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_45",
+      "query": "List all customer accounts above one million in ARR and describe the enterprise tier from the contract document.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "List all customer accounts that have an annual recurring revenue above one million.",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Describe the enterprise tier from the contract document.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_46",
+      "query": "What is the sum of support costs by department and what does the cost management policy say?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the sum of support costs by department?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the cost management policy say?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_47",
+      "query": "Show revenue by customer segment and explain what the segmentation framework document describes.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "Show revenue by customer segment",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Explain what the segmentation framework document describes",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_48",
+      "query": "How many database entries have been archived and what does the data retention policy file specify?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "How many database entries have been archived?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the data retention policy file specify?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_49",
+      "query": "What is the avg order fulfillment rate and summarize the fulfillment standards from the operations report?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "What is the average order fulfillment rate?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Summarize the fulfillment standards from the operations report.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_50",
+      "query": "Show total sales volume per channel and give me context from the go-to-market strategy file.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "easy",
+      "subtasks": [
+        {
+          "sub_query": "Show total sales volume per channel",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Provide context from the go-to-market strategy file",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_51",
+      "query": "Which product lines showed the highest growth last quarter and what does the innovation strategy document recommend?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Which product lines showed the highest growth last quarter?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the innovation strategy document recommend?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_52",
+      "query": "How many contracts are expiring in the next 60 days and what renewal process is described in the policy?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "How many contracts are expiring in the next 60 days?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What renewal process is described in the policy?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_53",
+      "query": "Which teams are most over budget and what does the financial governance report recommend?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Which teams are most over budget?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the financial governance report recommend?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_54",
+      "query": "Show monthly subscription cancellation rates and what does the retention playbook document say?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What are the monthly subscription cancellation rates?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the retention playbook document say?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_55",
+      "query": "Which service categories have the highest average incident rate and what does the SLA text specify about remediation?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What are the service categories with the highest average incident rate?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the SLA text specify about remediation?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_56",
+      "query": "What are the top customer complaints by volume and how does the support policy address resolution timelines?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What are the top customer complaints by volume?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "How does the support policy address resolution timelines?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_57",
+      "query": "How has revenue trended per channel this year and summarize the channel strategy from the operations report?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What is the revenue trend per channel for this year?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Can you summarize the channel strategy from the operations report?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_58",
+      "query": "Which account tiers have the fastest order-to-delivery times and what does the fulfillment policy state?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "What are the account tiers with the fastest order-to-delivery times?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the fulfillment policy state?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_59",
+      "query": "How has average purchase frequency changed by segment and what do the CRM guidelines in the handbook describe?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "How has average purchase frequency changed by segment?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What do the CRM guidelines in the handbook describe?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_60",
+      "query": "Which vendors have the most total late deliveries and what does the vendor escalation process document describe?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "medium",
+      "subtasks": [
+        {
+          "sub_query": "Which vendors have the most total late deliveries?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the vendor escalation process document describe?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_61",
+      "query": "Which geographic territories are outperforming their forecasts and what acquisition strategy is outlined in the growth playbook?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Which geographic territories are outperforming their forecasts?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What acquisition strategy is outlined in the growth playbook?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_62",
+      "query": "Which engineering teams have the lowest incident rates and what does the reliability engineering handbook describe?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the incident rates for the engineering teams?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the reliability engineering handbook describe?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_63",
+      "query": "Show how retention correlates with onboarding completion rates and what the onboarding guide recommends.",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Show the correlation between retention and onboarding completion rates.",
+          "route": "sql"
+        },
+        {
+          "sub_query": "Provide the recommendations from the onboarding guide.",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_64",
+      "query": "Which subscription plans have the best upgrade paths and what do the product tier guidelines say about eligibility?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the subscription plans and their upgrade paths?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What do the product tier guidelines say about eligibility?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_65",
+      "query": "Which campaigns are driving the most qualified leads and what demand generation tactics are described in the marketing brief?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Which campaigns are driving the most qualified leads?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What demand generation tactics are described in the marketing brief?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_66",
+      "query": "Which user cohorts show the strongest long-term engagement and what product philosophy guides feature prioritization?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Which user cohorts show the strongest long-term engagement?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What product philosophy guides feature prioritization?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_67",
+      "query": "What are the highest-risk compliance gaps and what remediation steps are recommended in the audit framework?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the highest-risk compliance gaps in the audit framework?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What remediation steps are recommended in the audit framework?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_68",
+      "query": "Which sales territories have the most untapped potential and what territory management approach is described in the field guide?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Which sales territories have the most untapped potential?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What territory management approach is described in the field guide?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_69",
+      "query": "Identify which partner integrations generate the most downstream value and what partnership terms are outlined in the collaboration agreement?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Identify which partner integrations generate the most downstream value.",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What partnership terms are outlined in the collaboration agreement?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_70",
+      "query": "Which SKUs have the lowest sell-through rates seasonally and what merchandising strategy is described in the brand playbook?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the SKUs with the lowest sell-through rates seasonally?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What merchandising strategy is described in the brand playbook?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_71",
+      "query": "Which markets have the highest price elasticity and what pricing strategy principles are articulated in the go-to-market brief?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Which markets have the highest price elasticity?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What pricing strategy principles are articulated in the go-to-market brief?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_72",
+      "query": "Identify employees with the most cross-functional project contributions and what collaboration framework does the culture guide describe?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Identify employees with the most cross-functional project contributions",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What collaboration framework does the culture guide describe?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_73",
+      "query": "Which service offerings have the lowest profitability and what does the portfolio strategy manual recommend about rationalization?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the service offerings with the lowest profitability?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the portfolio strategy manual recommend about rationalization?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_74",
+      "query": "Which regions have the most inconsistent lead response times and what sales process standards are described in the handbook?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Which regions have the most inconsistent lead response times?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What sales process standards are described in the handbook?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_75",
+      "query": "What is the adoption distribution across feature tiers and what product vision guides the roadmap planning process?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the adoption distribution across feature tiers?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What product vision guides the roadmap planning process?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_76",
+      "query": "Which subsidiaries are underperforming on growth metrics and what global expansion principles are described in the corporate strategy?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Which subsidiaries are underperforming on growth metrics?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What global expansion principles are described in the corporate strategy?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_77",
+      "query": "Identify accounts with declining health scores and what intervention strategies does the customer success playbook outline?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Identify accounts with declining health scores",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What intervention strategies does the customer success playbook outline?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_78",
+      "query": "Which locations have the highest operational costs and what efficiency principles are recommended in the lean operations guide?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "Which locations have the highest operational costs?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What efficiency principles are recommended in the lean operations guide?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_79",
+      "query": "Which customer journeys have the most friction points and what UX principles are described in the design system guide?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What are the customer journeys that have the most friction points?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What UX principles are described in the design system guide?",
+          "route": "text"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "hybrid_80",
+      "query": "Map the overlap between high-LTV accounts and educational content engagement, and what does the content strategy framework recommend for this segment?",
+      "expected": "hybrid",
+      "predicted": "hybrid",
+      "correct": true,
+      "difficulty": "hard",
+      "subtasks": [
+        {
+          "sub_query": "What is the overlap between high-LTV accounts and educational content engagement?",
+          "route": "sql"
+        },
+        {
+          "sub_query": "What does the content strategy framework recommend for high-LTV accounts?",
           "route": "text"
         }
       ],

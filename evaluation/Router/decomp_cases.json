@@ -1,5 +1,5 @@
 {
-  "description": "10 complex mixed-intent queries for evaluating decompose_with_zeroshot. Each case defines quality criteria the decomposition must satisfy.",
+  "description": "50 complex mixed-intent queries for evaluating decompose_with_zeroshot. Each case defines quality criteria the decomposition must satisfy.",
   "quality_axes": {
     "route_validity": "Every sub-task route must be 'sql' or 'text' (never 'hybrid' or other).",
     "atomicity": "Each sub-task should address a single intent; no sub-task should mix sql+text signals.",
@@ -266,6 +266,396 @@
       "atomicity_check": {
         "sql_subtask_should_contain": ["headcount", "reduction", "departments", "staffing"],
         "text_subtask_should_contain": ["restructuring", "severance", "announcement"]
+      }
+    },
+    {
+      "id": "decomp_21",
+      "query": "Which marketing campaigns generated the most leads last quarter and what does the brand guidelines document say about approved messaging channels?",
+      "description": "Campaign lead ranking (SQL) + brand guidelines document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["marketing campaigns", "leads", "brand guidelines", "messaging channels"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["campaigns", "leads", "most"],
+        "text_subtask_should_contain": ["brand guidelines", "messaging", "channels"]
+      }
+    },
+    {
+      "id": "decomp_22",
+      "query": "What is the average NPS score by customer tier this quarter and what does the customer experience strategy document say about improving detractor outcomes?",
+      "description": "AVG grouped by customer tier (SQL) + customer experience strategy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["NPS score", "customer tier", "customer experience strategy", "detractor"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["NPS", "customer tier", "average"],
+        "text_subtask_should_contain": ["customer experience", "detractor", "strategy"]
+      }
+    },
+    {
+      "id": "decomp_23",
+      "query": "What was the refund rate for each product category in Q1 and what does the returns policy document specify about the conditions for a full refund?",
+      "description": "Refund rate by category (SQL) + returns policy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["refund rate", "product category", "returns policy", "full refund conditions"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["refund rate", "product category"],
+        "text_subtask_should_contain": ["returns policy", "full refund", "conditions"]
+      }
+    },
+    {
+      "id": "decomp_24",
+      "query": "How has the monthly churn rate changed for each subscription tier over the past year and what does the retention strategy guide recommend for reducing voluntary churn?",
+      "description": "Time-series churn rate by tier (SQL) + retention strategy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["churn rate", "subscription tier", "retention strategy", "voluntary churn"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["churn rate", "subscription tier", "monthly"],
+        "text_subtask_should_contain": ["retention strategy", "voluntary churn", "guide"]
+      }
+    },
+    {
+      "id": "decomp_25",
+      "query": "How many leads were generated per acquisition channel last month, what does the sales playbook describe about lead qualification criteria, and what was the lead-to-opportunity conversion rate by channel?",
+      "description": "Three intents: lead count by channel (SQL), sales playbook document lookup (text), conversion rate by channel (SQL). Tests 3-way split.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["leads", "acquisition channel", "sales playbook", "qualification criteria", "conversion rate"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["leads", "channel", "conversion rate"],
+        "text_subtask_should_contain": ["sales playbook", "qualification", "criteria"]
+      }
+    },
+    {
+      "id": "decomp_26",
+      "query": "How many shipments were delivered late last month and what does the carrier SLA document specify about penalty clauses for late delivery?",
+      "description": "Late delivery COUNT (SQL) + carrier SLA document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["shipments", "delivered late", "carrier SLA", "penalty clauses"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["shipments", "late", "delivered"],
+        "text_subtask_should_contain": ["carrier SLA", "penalty", "late delivery"]
+      }
+    },
+    {
+      "id": "decomp_27",
+      "query": "Which ten products had the highest unit sales volume this quarter and what does the product roadmap document describe about planned enhancements for those product lines?",
+      "description": "TOP-10 ranking by unit sales (SQL) + product roadmap document lookup (text). The phrase 'those product lines' intentionally cross-references both intents.",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["products", "unit sales volume", "product roadmap", "planned enhancements"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["products", "unit sales", "highest"],
+        "text_subtask_should_contain": ["product roadmap", "enhancements", "planned"]
+      }
+    },
+    {
+      "id": "decomp_28",
+      "query": "What fraction of employees completed the mandatory compliance training this year, what does the L&D policy document say about training completion deadlines, and which departments have the lowest completion rates?",
+      "description": "Three intents: completion rate (SQL), L&D policy document lookup (text), department ranking (SQL). Tests 3-way split in an HR context.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["employees", "compliance training", "L&D policy", "deadlines", "departments", "completion rates"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["employees", "training", "completion", "departments"],
+        "text_subtask_should_contain": ["L&D policy", "deadlines", "mandatory"]
+      }
+    },
+    {
+      "id": "decomp_29",
+      "query": "How many software licenses are currently unassigned in the asset management system and what does the software procurement policy say about license utilization thresholds?",
+      "description": "Unassigned license COUNT (SQL) + software procurement policy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["software licenses", "unassigned", "asset management", "procurement policy", "utilization thresholds"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["licenses", "unassigned", "asset management"],
+        "text_subtask_should_contain": ["procurement policy", "utilization", "threshold"]
+      }
+    },
+    {
+      "id": "decomp_30",
+      "query": "How many P1 incidents were opened and resolved each month this year and what does the incident response playbook describe about post-mortem requirements for P1 events?",
+      "description": "Monthly P1 incident COUNT (SQL) + incident response playbook document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["P1 incidents", "monthly", "incident response playbook", "post-mortem"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["P1 incidents", "monthly", "opened", "resolved"],
+        "text_subtask_should_contain": ["incident response playbook", "post-mortem", "P1"]
+      }
+    },
+    {
+      "id": "decomp_31",
+      "query": "What was the total revenue generated through each partner channel last quarter and what does the channel partner agreement document specify about revenue sharing arrangements?",
+      "description": "Revenue aggregation by partner channel (SQL) + channel partner agreement document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["revenue", "partner channel", "channel partner agreement", "revenue sharing"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["revenue", "partner channel", "total"],
+        "text_subtask_should_contain": ["channel partner agreement", "revenue sharing", "arrangements"]
+      }
+    },
+    {
+      "id": "decomp_32",
+      "query": "How many bugs were logged per severity level in the last sprint and what does the quality assurance policy document define as the acceptable defect density threshold?",
+      "description": "Bug COUNT by severity (SQL) + QA policy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["bugs", "severity level", "sprint", "quality assurance policy", "defect density"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["bugs", "severity", "sprint"],
+        "text_subtask_should_contain": ["quality assurance policy", "defect density", "threshold"]
+      }
+    },
+    {
+      "id": "decomp_33",
+      "query": "How many trial accounts are currently active, what does the product pitch deck describe about key value propositions, and what percentage of trials converted to paid plans last quarter?",
+      "description": "Three intents: active trial COUNT (SQL), pitch deck document lookup (text), conversion rate (SQL). Tests 3-way split in a SaaS context.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["trial accounts", "active", "product pitch deck", "value propositions", "converted", "paid plans"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["trial accounts", "active", "converted", "paid plans"],
+        "text_subtask_should_contain": ["pitch deck", "value propositions", "product"]
+      }
+    },
+    {
+      "id": "decomp_34",
+      "query": "What is the average cost per hire for each department this year and what does the talent acquisition policy document say about constraints on using external recruiting agencies?",
+      "description": "AVG cost-per-hire by department (SQL) + talent acquisition policy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["cost per hire", "department", "talent acquisition policy", "external recruiting agencies"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["cost per hire", "department", "average"],
+        "text_subtask_should_contain": ["talent acquisition policy", "recruiting agencies", "external"]
+      }
+    },
+    {
+      "id": "decomp_35",
+      "query": "What is the average uptime percentage per server cluster over the last quarter and what does the disaster recovery plan describe about RTO and RPO targets?",
+      "description": "AVG uptime by cluster (SQL) + disaster recovery plan document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["uptime", "server cluster", "disaster recovery plan", "RTO", "RPO"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["uptime", "server cluster", "average"],
+        "text_subtask_should_contain": ["disaster recovery", "RTO", "RPO", "targets"]
+      }
+    },
+    {
+      "id": "decomp_36",
+      "query": "What is the customer acquisition cost broken down by pricing tier and what does the pricing strategy document describe about tier eligibility and positioning?",
+      "description": "CAC by pricing tier (SQL) + pricing strategy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["customer acquisition cost", "pricing tier", "pricing strategy document", "eligibility", "positioning"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["acquisition cost", "pricing tier"],
+        "text_subtask_should_contain": ["pricing strategy", "eligibility", "positioning"]
+      }
+    },
+    {
+      "id": "decomp_37",
+      "query": "How many contracts are up for renewal in the next 90 days, what does the contract renewal procedure document specify about required notice periods, and which accounts are at the highest risk of not renewing?",
+      "description": "Three intents: upcoming renewals COUNT (SQL), renewal procedure document (text), at-risk account ranking (SQL). Tests 3-way split.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["contracts", "renewal", "90 days", "renewal procedure", "notice periods", "at-risk accounts"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["contracts", "renewal", "90 days", "at-risk"],
+        "text_subtask_should_contain": ["renewal procedure", "notice period", "document"]
+      }
+    },
+    {
+      "id": "decomp_38",
+      "query": "What was the defect rate per production line over the last six months and what does the quality management policy say about mandatory corrective actions when defect rates exceed thresholds?",
+      "description": "Defect rate time-series (SQL) + quality management policy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["defect rate", "production line", "quality management policy", "corrective actions", "thresholds"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["defect rate", "production line", "months"],
+        "text_subtask_should_contain": ["quality management policy", "corrective actions", "threshold"]
+      }
+    },
+    {
+      "id": "decomp_39",
+      "query": "How has social media engagement (likes, shares, comments) trended per platform over the last quarter and what does the social media content strategy document say about optimal posting frequency?",
+      "description": "Engagement trend by platform (SQL) + content strategy document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["social media engagement", "platform", "content strategy", "posting frequency"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["social media", "engagement", "platform", "trend"],
+        "text_subtask_should_contain": ["content strategy", "posting frequency", "document"]
+      }
+    },
+    {
+      "id": "decomp_40",
+      "query": "What is the cross-sell attach rate by product bundle this quarter and what does the sales enablement guide describe about recommended cross-sell conversation scripts?",
+      "description": "Attach rate by bundle (SQL) + sales enablement document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["cross-sell", "attach rate", "product bundle", "sales enablement guide", "conversation scripts"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["cross-sell", "attach rate", "product bundle"],
+        "text_subtask_should_contain": ["sales enablement", "conversation scripts", "guide"]
+      }
+    },
+    {
+      "id": "decomp_41",
+      "query": "How many expense reports were flagged as out-of-policy last quarter, what does the expense reimbursement policy document specify about non-compliant submissions, and who were the top five employees by total flagged expense amount?",
+      "description": "Three intents: out-of-policy COUNT (SQL), expense policy document (text), top spenders ranking (SQL). Sensitive HR/finance context.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["expense reports", "out-of-policy", "expense reimbursement policy", "non-compliant", "employees", "flagged amount"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["expense reports", "out-of-policy", "employees", "flagged"],
+        "text_subtask_should_contain": ["expense reimbursement policy", "non-compliant", "submissions"]
+      }
+    },
+    {
+      "id": "decomp_42",
+      "query": "How many partner deal registrations were submitted and approved per region last quarter and what does the partner program agreement document say about deal registration exclusivity rules?",
+      "description": "Deal registration COUNT by region (SQL) + partner program agreement document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["deal registrations", "region", "partner program agreement", "exclusivity"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["deal registrations", "region", "approved"],
+        "text_subtask_should_contain": ["partner program agreement", "exclusivity", "rules"]
+      }
+    },
+    {
+      "id": "decomp_43",
+      "query": "What is the average number of days to close a deal for each sales representative this year and what does the sales methodology document describe about the stages that typically cause the longest delays?",
+      "description": "AVG days-to-close by rep (SQL) + sales methodology document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["days to close", "sales representative", "sales methodology", "delays", "stages"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["days to close", "sales representative", "average"],
+        "text_subtask_should_contain": ["sales methodology", "stages", "delays"]
+      }
+    },
+    {
+      "id": "decomp_44",
+      "query": "What percentage of active users have enabled the new dashboard feature since rollout and what do the release notes describe about the feature's intended use cases and known limitations?",
+      "description": "Feature adoption rate (SQL) + release notes document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["active users", "dashboard feature", "adoption", "release notes", "use cases", "limitations"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["users", "dashboard feature", "enabled", "percentage"],
+        "text_subtask_should_contain": ["release notes", "use cases", "limitations"]
+      }
+    },
+    {
+      "id": "decomp_45",
+      "query": "How are customers distributed across bronze, silver, gold, and platinum tiers and what does the loyalty program document specify about the spending thresholds required to qualify for each tier?",
+      "description": "Customer count by loyalty tier (SQL) + loyalty program document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["customers", "bronze", "silver", "gold", "platinum", "loyalty program", "spending thresholds"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["customers", "tier", "distribution"],
+        "text_subtask_should_contain": ["loyalty program", "spending thresholds", "qualify"]
+      }
+    },
+    {
+      "id": "decomp_46",
+      "query": "What is our market share by region for the last two fiscal years, what does the competitive intelligence report say about key differentiators versus our top three competitors, and how has quarterly revenue growth compared to overall market growth rates?",
+      "description": "Three intents: market share by region (SQL), competitive intelligence document (text), revenue growth comparison (SQL). Tests 3-way split with wide analytical scope.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["market share", "region", "competitive intelligence", "differentiators", "revenue growth", "market growth"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["market share", "region", "revenue growth"],
+        "text_subtask_should_contain": ["competitive intelligence", "differentiators", "competitors"]
+      }
+    },
+    {
+      "id": "decomp_47",
+      "query": "How many SLA breaches occurred per service tier last month and what does the service level agreement document specify about customer credits for each breach category?",
+      "description": "SLA breach COUNT by tier (SQL) + service level agreement document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["SLA breaches", "service tier", "service level agreement", "customer credits"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["SLA breaches", "service tier", "count"],
+        "text_subtask_should_contain": ["service level agreement", "customer credits", "breach category"]
+      }
+    },
+    {
+      "id": "decomp_48",
+      "query": "What is the inventory turnover rate per product category for the last two quarters and what does the supply chain management guide describe about reorder point calculations?",
+      "description": "Inventory turnover rate by category (SQL) + supply chain guide document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["inventory turnover rate", "product category", "supply chain management", "reorder point"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["inventory turnover", "product category", "rate"],
+        "text_subtask_should_contain": ["supply chain management", "reorder point", "guide"]
+      }
+    },
+    {
+      "id": "decomp_49",
+      "query": "Which API endpoints have the highest error rate over the last 30 days and what does the technical runbook document say about remediation steps for the most common failure modes?",
+      "description": "Error rate ranking by endpoint (SQL) + technical runbook document lookup (text).",
+      "min_subtasks": 2,
+      "max_subtasks": 2,
+      "expected_routes": ["sql", "text"],
+      "key_concepts": ["API endpoints", "error rate", "technical runbook", "remediation", "failure modes"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["API endpoints", "error rate", "highest"],
+        "text_subtask_should_contain": ["technical runbook", "remediation", "failure modes"]
+      }
+    },
+    {
+      "id": "decomp_50",
+      "query": "What does the trial-to-paid conversion funnel look like for each pricing plan this quarter, what does the onboarding playbook say about the activation milestones that most strongly predict conversion, and what is the total revenue attributable to trials that converted in the last 90 days?",
+      "description": "Three intents: funnel breakdown by plan (SQL), onboarding playbook document (text), converted-trial revenue (SQL). Tests 3-way split in a growth analytics context.",
+      "min_subtasks": 2,
+      "max_subtasks": 4,
+      "expected_routes": ["sql", "text", "sql"],
+      "key_concepts": ["trial-to-paid", "pricing plan", "onboarding playbook", "activation milestones", "conversion", "revenue"],
+      "atomicity_check": {
+        "sql_subtask_should_contain": ["trial-to-paid", "pricing plan", "revenue", "converted"],
+        "text_subtask_should_contain": ["onboarding playbook", "activation milestones", "predict conversion"]
       }
     }
   ]
