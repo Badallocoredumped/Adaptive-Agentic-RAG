@@ -73,12 +73,12 @@ E5_PASSAGE_PREFIX = "passage: "
 # RAG_TOP_K (number of retrieved text chunks passed into synthesis)
 RAG_TOP_K = 5
 # SQL_TOP_K (max schema tables retrieved by TableRAG)
-SQL_TOP_K = 30
+SQL_TOP_K = 10
 # SQL_SCHEMA_THRESHOLD (min cosine similarity score to include a schema table).
 # Tables below this score are dropped. The top-1 match is always kept as a
 # fallback so the schema context is never empty.
 
-SQL_SCHEMA_THRESHOLD: float = 0
+SQL_SCHEMA_THRESHOLD: float = None
 
 
 # ============================================================================
@@ -288,7 +288,7 @@ ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
 # ReAct agent settings
 # Set SQL_REACT_ENABLED=False to bypass the ReAct layer and use the single-pass agent directly.
 SQL_REACT_ENABLED = True
-SQL_REACT_MAX_ITERATIONS = 10  # max Thought/Action/Observation cycles per query
+SQL_REACT_MAX_ITERATIONS = 3  # max Thought/Action/Observation cycles per query
 SQL_CACHE_HIT_THRESHOLD: float = 0.85  # cosine similarity threshold for cache hit (RQ1 variable)
 
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"

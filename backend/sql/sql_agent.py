@@ -486,44 +486,26 @@ def run_table_rag_pipeline(
         }
 
     # 2. RUN FULL PIPELINE (If Cache MISS)
-    _debug("[TableRAG Pipeline] AGENT PATH: Routing to TableRAG + LLM")
+    _debug("[TableRAG Pipeline] AGENT PATH: Routing to agent...")
     
     _ensure_schema_index_exists()
-    schema_rows: list[str] = retrieve_relevant_schema(query, top_k=top_k)
 
-    # Logging: which tables were selected
-    table_names = _extract_table_names("\n".join(schema_rows))
-    _debug(f"[TableRAG Pipeline] Retrieved schema rows ({len(schema_rows)}):")
-    for row in schema_rows:
-        _debug(f"  -> {row}")
-    _debug(f"[TableRAG Pipeline] Selected tables: {table_names}")
-
-    # Format into a single context string
-    schema_context = "\n".join(schema_rows)
-
-    # ── Step 3: Run ReAct agent (primary) ─────────────────────────────────
-    # The ReAct agent receives the original question + the TableRAG schema
-    # context and reasons iteratively (Thought → Action → Observation) to
-    # generate and verify its SQL.  The single-pass run_sql_agent() is kept
-    # as a fallback in case the ReAct layer produces nothing at all.
     used_react = False
     if getattr(config, "SQL_REACT_ENABLED", True):
-        _debug("[TableRAG Pipeline] Running ReAct agent with schema context...")
+        _debug("[TableRAG Pipeline] Running ReAct agent (ReAct will call TableRAG directly)...")
         react_fn = _get_react_sql_agent()
-        agent_result = react_fn(query, schema_context)
+        agent_result = react_fn(query, "")
+        schema_rows = []
 
-        # Fallback: ReAct returned neither SQL nor rows → use single-pass agent
         if not agent_result["sql"] and not agent_result["result"]:
-            _debug(
-                "[TableRAG Pipeline] ⚠️  ReAct agent produced no output — "
-                "falling back to single-pass agent..."
-            )
-            agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
+            _debug("[TableRAG Pipeline] ⚠️  ReAct agent produced no output — falling back to single-pass agent...")
+            schema_rows = retrieve_relevant_schema(query, top_k=top_k)
+            agent_result = run_sql_agent(query, schema_context="\n".join(schema_rows), top_k=top_k)
         else:
             used_react = True
     else:
-        # ReAct disabled — use the original single-pass SQL agent
-        agent_result = run_sql_agent(query, schema_context=schema_context, top_k=top_k)
+        schema_rows = retrieve_relevant_schema(query, top_k=top_k)
+        agent_result = run_sql_agent(query, schema_context="\n".join(schema_rows), top_k=top_k)
 
     # Logging: generated SQL
     _debug(f"[TableRAG Pipeline] Generated SQL: {agent_result['sql']}")

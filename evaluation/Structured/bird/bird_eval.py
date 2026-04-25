@@ -184,6 +184,7 @@ def generate_predictions(args, stem: str):
         by_db[q["db_id"]].append((idx, q))
 
     results = ["SELECT 1"] * total
+    react_hops = [None] * total
     saved_threshold = config.SQL_SCHEMA_THRESHOLD
     config.SQL_SCHEMA_THRESHOLD = args.threshold  # None disables threshold; explicit value enables it
 
@@ -216,7 +217,8 @@ def generate_predictions(args, stem: str):
             prompt_q = f"{question}\\nHint: {evidence}" if evidence else question
             diff     = entry.get("difficulty", "?")
 
-            print(f"  [{processed}/{total}] ({diff}) {question}")
+            safe_q = question.encode("ascii", "ignore").decode("ascii")
+            print(f"  [{processed}/{total}] ({diff}) {safe_q}")
 
             try:
                 if args.ablation == "full_single_pass":
@@ -246,13 +248,17 @@ def generate_predictions(args, stem: str):
                     sql = run_single_pass_baseline(question, schema_ctx, evidence)
 
                 elif args.ablation == "tablerag_react":
-                    schema_list = retrieve_relevant_schema(
-                        prompt_q, top_k=config.SQL_TOP_K, schema_info=info
-                    )
-                    schema_ctx  = "\n".join(schema_list) if schema_list else full_schema
-                    result = run_react_sql_agent(query=prompt_q, schema_context=schema_ctx)
+                    result = run_react_sql_agent(query=prompt_q, schema_context="")
                     raw    = result.get("sql")
                     sql    = clean_sql(raw) if raw else "SELECT 1"
+                    hops   = result.get("react_steps", 0)
+                    react_hops[orig_idx] = {
+                        "question": question,
+                        "db_id": entry["db_id"],
+                        "difficulty": diff,
+                        "hops": hops,
+                        "sql": sql
+                    }
 
             except Exception as e:
                 print(f"    -> Error: {e}")
@@ -269,6 +275,29 @@ def generate_predictions(args, stem: str):
     ]
     with open(predictions_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
+
+    if args.ablation == "tablerag_react":
+        hops_path = OUTPUT_DIR / f"hops_bird_{stem}.json"
+        with open(hops_path, "w", encoding="utf-8") as f:
+            json.dump([h for h in react_hops if h is not None], f, indent=2, ensure_ascii=False)
+        
+        valid_hops = [h["hops"] for h in react_hops if h is not None]
+        if valid_hops:
+            from collections import Counter
+            hop_counts = Counter(valid_hops)
+            
+            avg_hops = sum(valid_hops) / len(valid_hops)
+            max_hops = max(valid_hops)
+            min_hops = min(valid_hops)
+            print(f"\n--- HOP STATISTICS ---")
+            print(f"Total tracking: {len(valid_hops)} agents")
+            print(f"Average Hops: {avg_hops:.2f}")
+            print(f"Max Hops    : {max_hops}")
+            print(f"Min Hops    : {min_hops}")
+            print("\nHop Distribution:")
+            for h in sorted(hop_counts.keys()):
+                print(f"  {h} hop{'s' if h > 1 else ''} : {hop_counts[h]}")
+            print(f"----------------------")
 
     print(f"\nPredictions saved : {predictions_path.name}")
     print(f"Gold SQL saved    : {gold_path.name}")

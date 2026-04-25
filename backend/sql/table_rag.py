@@ -1,53 +1,52 @@
-"""TableRAG: semantic schema pruning for SQL generation.
+"""TableRAG: LLM-based schema selection for SQL generation.
 
 Architecture
 ------------
-The index stores THREE granularities of text per table so that the
-embedding space can match queries from very different angles:
+Schema selection is the task of deciding which tables from a database are
+relevant to a natural-language query before handing off to the SQL agent.
 
-  1. TABLE-LEVEL  — table name + all column names (broad structural signal)
-  2. COLUMN-LEVEL — one entry per column: "table.column — description"
-                    (fine-grained column-name matching)
-  3. VALUE-LEVEL  — sampled distinct cell values per column
-                    (domain/entity matching, e.g. "Germany", "FRPM")
+Previous approach (embedding similarity) fails for same-domain databases
+because all tables score similarly — the embedding model cannot bridge the
+gap between natural language ("test takers", "excellence rate") and
+abbreviated column identifiers (NumTstTakr, NumGE1500).
 
-After FAISS retrieval the scoring is aggregated at the TABLE level (a
-table's score = max score of any of its chunks) so a single highly
-relevant column or cell value can surface its whole table.
+Current approach: LLM-as-Schema-Selector
+-----------------------------------------
+Aligned with CHESS (Talaei et al., 2024) and XiYan-SQL, the selection is
+done by a single LLM call that receives:
 
-FK expansion (score-gated)
---------------------------
-Once the top-K tables are selected, FK-connected neighbours are only
-pulled in when they pass at least one of three gates:
+  1. The full compact schema  — all table names + column names + types +
+     sample values + FK relationships, formatted to be token-efficient.
+  2. The user query.
 
-  GATE 1 — BOTH ENDS RELEVANT  (neighbour score >= FK_INCLUDE_THRESHOLD)
-  GATE 2 — BRIDGE TABLE  (neighbour's own FKs touch 2+ selected tables)
-  GATE 3 — SMALL LOOKUP TABLE  (<=FK_LOOKUP_MAX_COLS cols, score >= FK_LOOKUP_THRESHOLD)
+The LLM responds with a JSON list of relevant table names. Because the LLM
+has world knowledge, it can:
+  - Decode abbreviations: NumTstTakr → number of test takers
+  - Understand paraphrases: "excellence rate" → NumGE1500
+  - Infer joins: "female customers with credit cards" → client + card + disp
+  - Handle same-domain databases: all banking tables scored equally before;
+    now the LLM reads the columns and makes an informed decision.
 
-Tables that fail all three gates are silently dropped — they are FK
-neighbours in the schema but irrelevant to this query.
+FAISS index
+-----------
+The FAISS index (build_schema_index / schema.faiss) is kept for backward
+compatibility with the SQL golden-query cache (SQLCache) and the
+schema_lookup tool in the ReAct agent. It is no longer used for the primary
+schema selection path.
 
 Output format
 -------------
-`retrieve_relevant_schema()` now returns a SINGLE formatted string
-(not a list of raw embedding texts) that reads naturally for an LLM:
+`retrieve_relevant_schema()` returns a list with ONE element: the full
+formatted schema string for the selected tables, ready for the SQL agent.
 
     ### Database Schema (relevant tables only)
 
     Table: orders
     Columns:
-      - id          INTEGER   PK
-      - customer_id INTEGER   FK → customers(id)
+      - id          INTEGER
+      - customer_id INTEGER   [FK → customers(id)]
       - status      TEXT
-      - amount      REAL
     Sample values for status: 'pending', 'shipped', 'cancelled'
-
-    Table: customers
-    Columns:
-      - id   INTEGER  PK
-      - name TEXT
-      - country TEXT
-    Sample values for country: 'Germany', 'France', 'USA'
 
     Foreign Key Relationships:
       orders.customer_id → customers.id
@@ -83,19 +82,6 @@ _SKIP_VALUE_COLS = re.compile(
     r"(^id$|_id$|_key$|_code$|uuid|hash|token|password|timestamp|created|updated)",
     re.IGNORECASE,
 )
-
-# ---------------------------------------------------------------------------
-# FK expansion thresholds (tunable via config overrides)
-# ---------------------------------------------------------------------------
-
-# Gate 1: minimum score for a FK neighbour to be included on its own merit
-FK_INCLUDE_THRESHOLD: float = getattr(config, "FK_INCLUDE_THRESHOLD", 0.30)
-
-# Gate 3: minimum score for a small lookup/dimension table to be included
-FK_LOOKUP_THRESHOLD: float = getattr(config, "FK_LOOKUP_THRESHOLD", 0.20)
-
-# Gate 3: max column count for a table to qualify as a "lookup/dimension table"
-FK_LOOKUP_MAX_COLS: int = getattr(config, "FK_LOOKUP_MAX_COLS", 5)
 
 # ---------------------------------------------------------------------------
 # Debug helper
@@ -245,8 +231,31 @@ def get_schema_texts(schema_info: SchemaInfo) -> list[str]:
     return schema_info.to_embedding_texts()
 
 
+def search_schema_index(query: str, top_k: int = 5) -> list[str]:
+    """Retrieve relevant schema chunks directly from the FAISS index."""
+    if not _SCHEMA_INDEX_PATH.exists() or not _SCHEMA_META_PATH.exists():
+        return []
+        
+    try:
+        index = faiss.read_index(config.win_short_path(_SCHEMA_INDEX_PATH))
+        with _SCHEMA_META_PATH.open("r", encoding="utf-8") as f:
+            meta = json.load(f)
+            
+        vector = _embed_texts([query], is_query=True)
+        distances, indices = index.search(vector, top_k)
+        
+        results = []
+        for idx in indices[0]:
+            if 0 <= int(idx) < len(meta):
+                results.append(meta[int(idx)]["text"])
+        return results
+    except Exception as exc:
+        _debug(f"[TableRAG] FAISS search failed: {exc}")
+        return []
+
+
 # ---------------------------------------------------------------------------
-# Retrieve + score + FK-expand + format
+# Retrieve + LLM-select + format
 # ---------------------------------------------------------------------------
 
 def retrieve_relevant_schema(
@@ -256,180 +265,219 @@ def retrieve_relevant_schema(
 ) -> list[str]:
     """Return a list with ONE element: the formatted schema context string.
 
-    The single-element list keeps the call-site API identical to the old
-    version (callers do ``'\n'.join(retrieve_relevant_schema(...))``) while
-    the content is now a rich, LLM-friendly block.
+    Uses a single LLM call to select relevant tables from the full schema.
+    Falls back to the full schema if the LLM call fails for any reason.
 
     Args:
         query:       Natural-language question to answer.
-        top_k:       Maximum number of *tables* to include (not chunks).
-        schema_info: Optional live SchemaInfo used for FK expansion and
-                     formatting.  If None, loaded from the live DB.
+        top_k:       Soft upper bound on tables passed to the LLM selector.
+                     The LLM may return fewer; this only caps the compact
+                     schema fed into the prompt (not the output).
+        schema_info: Live SchemaInfo object.  If None, loaded from the DB.
     """
-    if not _SCHEMA_INDEX_PATH.exists() or not _SCHEMA_META_PATH.exists():
-        # Graceful fallback when index has not been built yet
-        if schema_info is None:
-            from backend.sql.database import get_live_schema
-            schema_info = get_live_schema()
-        return [_format_schema_context(list(schema_info.tables.keys()), schema_info)]
-
-    index = faiss.read_index(config.win_short_path(_SCHEMA_INDEX_PATH))
-    with _SCHEMA_META_PATH.open("r", encoding="utf-8") as f:
-        meta: list[dict] = json.load(f)
-
-    if not meta:
-        return []
-
-    # ── Step 1: embed query and retrieve candidates ───────────────────────
-    # Retrieve more candidates than needed (×4) so aggregation has room to work
-    candidate_k = min(max(top_k * 4, 20), len(meta))
-    query_vector = _embed_texts([query], is_query=True)
-    scores, indices = index.search(query_vector, candidate_k)
-
-    # ── Step 2: aggregate scores to TABLE level (max-pool) ────────────────
-    table_scores: dict[str, float] = {}
-    for score, idx in zip(scores[0], indices[0]):
-        if idx < 0 or idx >= len(meta):
-            continue
-        table_name = meta[idx]["table"]
-        table_scores[table_name] = max(table_scores.get(table_name, -1.0), float(score))
-
-    if not table_scores:
-        return []
-
-    # ── Step 3: rank tables and pick top-k ───────────────────────────────
-    ranked = sorted(table_scores.items(), key=lambda x: x[1], reverse=True)
-
-    threshold: float | None = getattr(config, "SQL_SCHEMA_THRESHOLD", None)
-    selected_tables: list[str] = []
-    for i, (tname, tscore) in enumerate(ranked):
-        if i == 0:
-            selected_tables.append(tname)  # always keep the best match
-            continue
-        if len(selected_tables) >= top_k:
-            break
-        if threshold is not None and tscore < threshold:
-            break
-        selected_tables.append(tname)
-
-    print(f"[TableRAG] Scores (threshold={threshold}, top_k={top_k}):")
-    for tname, tscore in ranked:
-        status = "PASS" if tname in selected_tables else "FAIL"
-        print(f"  [{status}] {tname:<40} score={tscore:.4f}")
-    print(f"[TableRAG] Selected: {selected_tables}")
-
-    # ── Step 4: FK expansion ──────────────────────────────────────────────
     if schema_info is None:
         try:
             from backend.sql.database import get_live_schema
             schema_info = get_live_schema()
-        except Exception:
-            schema_info = None
+        except Exception as exc:
+            _debug(f"[TableRAG] Could not load live schema: {exc}")
+            return []
 
-    if schema_info is not None:
-        selected_tables = _expand_with_fk_tables(selected_tables, schema_info, table_scores)
-        print(f"[TableRAG] After FK expansion:   {selected_tables}")
+    all_tables = list(schema_info.tables.keys())
 
-    # Sort alphabetically so table order is deterministic and consistent with
-    # format_full_schema — avoids "lost in the middle" LLM degradation from
-    # relevance-score ordering placing the most query-relevant table mid-schema.
+    # If the database is tiny (≤ 3 tables), skip the LLM call — just return all.
+    if len(all_tables) <= 3:
+        _debug(f"[TableRAG] ≤3 tables — returning full schema without LLM call.")
+        return [_format_schema_context(sorted(all_tables), schema_info)]
+
+    # ── Step 1: build compact schema for the selector prompt ─────────────
+    compact = _build_compact_schema(schema_info)
+
+    # ── Step 2: call LLM to select relevant tables ────────────────────────
+    selected_tables = _llm_select_tables(query, compact, all_tables)
+
+    if not selected_tables:
+        # LLM returned nothing parseable — fall back to full schema
+        _debug("[TableRAG] LLM selector returned empty — falling back to full schema.")
+        selected_tables = all_tables
+
     selected_tables = sorted(selected_tables)
-    _debug(f"[TableRAG] Final order (sorted):         {selected_tables}")
+    _debug(f"[TableRAG] LLM-selected tables: {selected_tables}")
 
-    # ── Step 5: format output ─────────────────────────────────────────────
-    formatted = _format_schema_context(selected_tables, schema_info)
-    return [formatted]
+    # ── Step 3: format and return ─────────────────────────────────────────
+    return [_format_schema_context(selected_tables, schema_info)]
 
 
 # ---------------------------------------------------------------------------
-# FK expansion helper
+# Compact schema builder  (input to the LLM selector prompt)
 # ---------------------------------------------------------------------------
 
-def _expand_with_fk_tables(
-    selected: list[str],
-    schema_info: SchemaInfo,
-    table_scores: dict[str, float],
-) -> list[str]:
-    """Selectively add FK-connected tables using three relevance gates.
+def _build_compact_schema(schema_info: SchemaInfo) -> str:
+    """Build a token-efficient schema string for the LLM selector prompt.
 
-    A FK neighbour is included only when it passes at least one gate:
+    Format per table (one line per table, columns inline):
+        table_name (col1: TYPE, col2: TYPE, ...) [FK: col → other_table.col, ...]
+        Sample values — col: 'val1', 'val2'; col2: 'val1'
 
-    GATE 1 — BOTH ENDS RELEVANT
-        The neighbour's similarity score >= FK_INCLUDE_THRESHOLD.
-        Both anchor and partner scored well independently.
-
-    GATE 2 — BRIDGE TABLE
-        The neighbour's own FKs touch 2+ already-selected tables
-        (classic many-to-many bridge, e.g. order_items → orders + products).
-        Included regardless of its own score.
-
-    GATE 3 — SMALL LOOKUP / DIMENSION TABLE
-        The neighbour has <= FK_LOOKUP_MAX_COLS columns AND a modest score
-        >= FK_LOOKUP_THRESHOLD.  Tiny reference tables (status codes,
-        category labels) are cheap and often critical for value matching.
-
-    Tables that fail all three gates are silently dropped.
+    This is intentionally more compact than _format_schema_context so that
+    large schemas (50+ tables) fit in a single prompt.
     """
-    selected_set = set(selected)
-    additions: list[str] = []
+    lines: list[str] = []
 
-    # Pre-build reverse-FK map: ref_table → set of tables pointing to it
-    reverse_fk: dict[str, set[str]] = {}
     for tname, tinfo in schema_info.tables.items():
-        for _lc, ref_table, _rc in tinfo.foreign_keys:
-            reverse_fk.setdefault(ref_table, set()).add(tname)
+        # Column summary
+        col_parts = []
+        fk_map = {fk[0]: (fk[1], fk[2]) for fk in tinfo.foreign_keys}
+        for col in tinfo.columns:
+            entry = f"{col.name}: {col.data_type.upper()}"
+            if col.name in fk_map:
+                ref_t, ref_c = fk_map[col.name]
+                entry += f" →{ref_t}.{ref_c}"
+            col_parts.append(entry)
 
-    def _passes_gates(neighbour: str, anchor: str) -> bool:
-        n_info = schema_info.tables.get(neighbour)
-        if n_info is None:
-            return False
+        fk_str = ""
+        if tinfo.foreign_keys:
+            fk_parts = [
+                f"{lc}→{rt}.{rc}"
+                for lc, rt, rc in tinfo.foreign_keys
+            ]
+            fk_str = f"  [FK: {', '.join(fk_parts)}]"
 
-        n_score = table_scores.get(neighbour, 0.0)
+        lines.append(f"Table {tname}: {', '.join(col_parts)}{fk_str}")
 
-        # Gate 1: neighbour has strong independent relevance
-        if n_score >= FK_INCLUDE_THRESHOLD:
-            return True
-
-        # Gate 2: neighbour is a bridge between two already-selected tables
-        neighbour_fk_targets = {ref for _lc, ref, _rc in n_info.foreign_keys}
-        if len(neighbour_fk_targets & selected_set) >= 2:
-            return True
-        # Also: anchor points to neighbour AND neighbour points to another selected table
-        anchor_fk_targets = {
-            ref for _lc, ref, _rc in
-            (schema_info.tables[anchor].foreign_keys if anchor in schema_info.tables else [])
-        }
-        if neighbour in anchor_fk_targets and len(neighbour_fk_targets & selected_set) >= 1:
-            return True
-
-        # Gate 3: small lookup/dimension table with modest score
-        if len(n_info.columns) <= FK_LOOKUP_MAX_COLS and n_score >= FK_LOOKUP_THRESHOLD:
-            return True
-
-        return False
-
-    # Outgoing FKs: selected table → neighbour
-    for anchor in list(selected_set):
-        anchor_info = schema_info.tables.get(anchor)
-        if not anchor_info:
-            continue
-        for _lc, ref_table, _rc in anchor_info.foreign_keys:
-            if ref_table in selected_set:
+        # Sample values (up to 3 per non-id text/numeric column, max 4 cols)
+        sampled = 0
+        val_parts: list[str] = []
+        for col in tinfo.columns:
+            if sampled >= 4:
+                break
+            if _SKIP_VALUE_COLS.search(col.name):
                 continue
-            if _passes_gates(ref_table, anchor):
-                selected_set.add(ref_table)
-                additions.append(ref_table)
+            vals = _sample_column_values(tname, col.name, n=3)
+            if vals:
+                val_parts.append(f"{col.name}: {', '.join(repr(v) for v in vals)}")
+                sampled += 1
+        if val_parts:
+            lines.append(f"  Values — {'; '.join(val_parts)}")
 
-    # Incoming FKs: neighbour → selected table (reverse direction)
-    for anchor in list(selected_set):
-        for neighbour in list(reverse_fk.get(anchor, set())):
-            if neighbour in selected_set:
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# LLM selector call
+# ---------------------------------------------------------------------------
+
+_SELECTOR_SYSTEM_PROMPT = """\
+You are a database schema expert. Given a user question and a database schema, \
+identify which tables are needed to answer the question.
+
+Rules:
+- Include ALL tables that contain columns needed for SELECT, WHERE, JOIN, GROUP BY, or ORDER BY.
+- Include join/bridge tables that connect two relevant tables even if they have no direct column match.
+- Do NOT include tables that are completely unrelated to the question.
+- Respond ONLY with a valid JSON array of table name strings, e.g. ["orders", "customers"].
+- No explanation, no markdown fences, just the raw JSON array.\
+"""
+
+_SELECTOR_USER_TEMPLATE = """\
+Question: {query}
+
+Database schema:
+{compact_schema}
+
+Which tables are needed? Respond with a JSON array of table names only.\
+"""
+
+
+def _llm_select_tables(
+    query: str,
+    compact_schema: str,
+    all_tables: list[str],
+) -> list[str]:
+    """Call the LLM to select relevant tables. Returns [] on any failure."""
+    try:
+        from openai import OpenAI  # noqa: PLC0415
+
+        api_key  = getattr(config, "OPENAI_API_KEY", "") or ""
+        base_url = getattr(config, "LLM_BASE_URL", "") or ""
+        model    = getattr(config, "SQL_OPENAI_MODEL", "gpt-4o-mini")
+
+        client_kwargs: dict = {"api_key": api_key}
+        if base_url:
+            client_kwargs["base_url"] = base_url
+
+        client = OpenAI(**client_kwargs)
+
+        user_msg = _SELECTOR_USER_TEMPLATE.format(
+            query=query,
+            compact_schema=compact_schema,
+        )
+
+        response = client.chat.completions.create(
+            model=model,
+            temperature=0.0,
+            messages=[
+                {"role": "system", "content": _SELECTOR_SYSTEM_PROMPT},
+                {"role": "user",   "content": user_msg},
+            ],
+        )
+
+        raw = (response.choices[0].message.content or "").strip()
+        _debug(f"[TableRAG] LLM selector raw response: {raw!r}")
+        return _parse_table_list(raw, all_tables)
+
+    except Exception as exc:
+        _debug(f"[TableRAG] LLM selector call failed: {exc}")
+        return []
+
+
+def _parse_table_list(raw: str, all_tables: list[str]) -> list[str]:
+    """Parse the LLM's JSON array response into a validated list of table names.
+
+    Accepts:
+      - Clean JSON array:   ["orders", "customers"]
+      - With markdown:      ```json\n["orders"]\n```
+      - Single table:       "orders"  (rare fallback)
+
+    Any name not in all_tables is silently dropped. Returns [] if nothing valid.
+    """
+    # Strip markdown fences if present
+    text = raw.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```[a-zA-Z]*\s*", "", text)
+        text = re.sub(r"\s*```$", "", text.strip())
+        text = text.strip()
+
+    valid_set = {t.lower(): t for t in all_tables}
+
+    # Try JSON parse first
+    try:
+        parsed = json.loads(text)
+        if isinstance(parsed, list):
+            result = []
+            for item in parsed:
+                name = str(item).strip()
+                canonical = valid_set.get(name.lower())
+                if canonical:
+                    result.append(canonical)
+            return result
+    except (json.JSONDecodeError, ValueError):
+        pass
+
+    # Fallback: extract quoted strings or bare words that match table names
+    candidates = re.findall(r'"([^"]+)"|\'([^\']+)\'|(\b\w+\b)', text)
+    result = []
+    seen: set[str] = set()
+    for groups in candidates:
+        for name in groups:
+            if not name:
                 continue
-            if _passes_gates(neighbour, anchor):
-                selected_set.add(neighbour)
-                additions.append(neighbour)
+            canonical = valid_set.get(name.lower())
+            if canonical and canonical not in seen:
+                result.append(canonical)
+                seen.add(canonical)
 
-    return selected + additions
+    return result
 
 
 # ---------------------------------------------------------------------------
