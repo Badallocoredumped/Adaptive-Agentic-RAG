@@ -41,6 +41,7 @@ load_dotenv(override=True)  # loads .env, overriding any pre-existing system env
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 INDEX_DIR = DATA_DIR / "index"
+INGEST_DIR = DATA_DIR / "ingest"
 INDEX_PATH = INDEX_DIR / "faiss.index"
 METADATA_PATH = INDEX_DIR / "chunk_metadata.json"
 
@@ -96,6 +97,7 @@ RAG_RERANKER_MODEL = "BAAI/bge-reranker-base"
 RAG_RETRIEVAL_MODE = "faiss"
 RAG_RRF_K = 60             # RRF constant -- only used when RAG_RETRIEVAL_MODE="hybrid"
 
+RAG_FETCH_K = 0               # 0 = use RAG_FETCH_MULTIPLIER × RAG_TOP_K
 RAG_FETCH_MULTIPLIER = 10
 # Enables an extra semantic reranking pass over retrieved candidates.
 # In hybrid mode, reranking is applied after BM25+FAISS fusion and can increase latency.

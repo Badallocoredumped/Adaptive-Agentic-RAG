@@ -348,5 +348,15 @@
     "question": "Show portfolio funding accounts with current balance and portfolio value",
     "sql": "SELECT c.full_name, p.name AS portfolio, p.total_value, a.account_number, a.balance AS funding_account_balance FROM portfolios p JOIN customers c ON p.customer_id = c.id JOIN accounts a ON p.funding_account_id = a.id WHERE p.is_active = 1 ORDER BY p.total_value DESC LIMIT 20;",
     "schema": null
+  },
+  {
+    "question": "What is the average transaction amount for customers located in Giza?",
+    "sql": "SELECT AVG(orders.amount) AS average_transaction_amount\nFROM customers\nJOIN orders ON customers.id = orders.customer_id\nWHERE customers.city = 'Giza';",
+    "schema": ""
+  },
+  {
+    "question": "How many open support tickets are there?",
+    "sql": "SELECT COUNT(*) AS open_ticket_count FROM support_tickets WHERE status = 'open';",
+    "schema": ""
   }
 ]

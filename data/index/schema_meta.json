@@ -1,0 +1,727 @@
+[
+  {
+    "table": "account_types",
+    "level": "table",
+    "text": "Table account_types contains columns: id, name, interest_rate, min_balance, description."
+  },
+  {
+    "table": "account_types",
+    "level": "column",
+    "text": "Column id in table account_types stores integer data."
+  },
+  {
+    "table": "account_types",
+    "level": "column",
+    "text": "Column name in table account_types stores text data."
+  },
+  {
+    "table": "account_types",
+    "level": "column",
+    "text": "Column interest_rate in table account_types stores double precision data."
+  },
+  {
+    "table": "account_types",
+    "level": "column",
+    "text": "Column min_balance in table account_types stores double precision data."
+  },
+  {
+    "table": "account_types",
+    "level": "column",
+    "text": "Column description in table account_types stores text data."
+  },
+  {
+    "table": "accounts",
+    "level": "table",
+    "text": "Table accounts contains columns: id, customer_id, account_type_id, account_number, balance, currency, status, opened_date, last_activity."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column id in table accounts stores integer data."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column customer_id in table accounts stores integer data."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column account_type_id in table accounts stores integer data."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column account_number in table accounts stores text data."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column balance in table accounts stores double precision data."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column currency in table accounts stores text data."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column status in table accounts stores text data."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column opened_date in table accounts stores text data."
+  },
+  {
+    "table": "accounts",
+    "level": "column",
+    "text": "Column last_activity in table accounts stores text data."
+  },
+  {
+    "table": "assets",
+    "level": "table",
+    "text": "Table assets contains columns: id, symbol, name, asset_class, sector, currency, listed_exchange."
+  },
+  {
+    "table": "assets",
+    "level": "column",
+    "text": "Column id in table assets stores integer data."
+  },
+  {
+    "table": "assets",
+    "level": "column",
+    "text": "Column symbol in table assets stores text data."
+  },
+  {
+    "table": "assets",
+    "level": "column",
+    "text": "Column name in table assets stores text data."
+  },
+  {
+    "table": "assets",
+    "level": "column",
+    "text": "Column asset_class in table assets stores text data."
+  },
+  {
+    "table": "assets",
+    "level": "column",
+    "text": "Column sector in table assets stores text data."
+  },
+  {
+    "table": "assets",
+    "level": "column",
+    "text": "Column currency in table assets stores text data."
+  },
+  {
+    "table": "assets",
+    "level": "column",
+    "text": "Column listed_exchange in table assets stores text data."
+  },
+  {
+    "table": "branches",
+    "level": "table",
+    "text": "Table branches contains columns: id, name, city, address, opened_date."
+  },
+  {
+    "table": "branches",
+    "level": "column",
+    "text": "Column id in table branches stores integer data."
+  },
+  {
+    "table": "branches",
+    "level": "column",
+    "text": "Column name in table branches stores text data."
+  },
+  {
+    "table": "branches",
+    "level": "column",
+    "text": "Column city in table branches stores text data."
+  },
+  {
+    "table": "branches",
+    "level": "column",
+    "text": "Column address in table branches stores text data."
+  },
+  {
+    "table": "branches",
+    "level": "column",
+    "text": "Column opened_date in table branches stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "table",
+    "text": "Table customers contains columns: id, full_name, email, phone, national_id, date_of_birth, nationality, city, branch_id, relationship_manager_id, joined_date, is_active."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column id in table customers stores integer data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column full_name in table customers stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column email in table customers stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column phone in table customers stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column national_id in table customers stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column date_of_birth in table customers stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column nationality in table customers stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column city in table customers stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column branch_id in table customers stores integer data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column relationship_manager_id in table customers stores integer data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column joined_date in table customers stores text data."
+  },
+  {
+    "table": "customers",
+    "level": "column",
+    "text": "Column is_active in table customers stores integer data."
+  },
+  {
+    "table": "employees",
+    "level": "table",
+    "text": "Table employees contains columns: id, full_name, role, branch_id, salary, hire_date, is_active."
+  },
+  {
+    "table": "employees",
+    "level": "column",
+    "text": "Column id in table employees stores integer data."
+  },
+  {
+    "table": "employees",
+    "level": "column",
+    "text": "Column full_name in table employees stores text data."
+  },
+  {
+    "table": "employees",
+    "level": "column",
+    "text": "Column role in table employees stores text data."
+  },
+  {
+    "table": "employees",
+    "level": "column",
+    "text": "Column branch_id in table employees stores integer data."
+  },
+  {
+    "table": "employees",
+    "level": "column",
+    "text": "Column salary in table employees stores double precision data."
+  },
+  {
+    "table": "employees",
+    "level": "column",
+    "text": "Column hire_date in table employees stores text data."
+  },
+  {
+    "table": "employees",
+    "level": "column",
+    "text": "Column is_active in table employees stores integer data."
+  },
+  {
+    "table": "kyc_records",
+    "level": "table",
+    "text": "Table kyc_records contains columns: id, customer_id, kyc_status, verification_date, expiry_date, document_type, verified_by, notes."
+  },
+  {
+    "table": "kyc_records",
+    "level": "column",
+    "text": "Column id in table kyc_records stores integer data."
+  },
+  {
+    "table": "kyc_records",
+    "level": "column",
+    "text": "Column customer_id in table kyc_records stores integer data."
+  },
+  {
+    "table": "kyc_records",
+    "level": "column",
+    "text": "Column kyc_status in table kyc_records stores text data."
+  },
+  {
+    "table": "kyc_records",
+    "level": "column",
+    "text": "Column verification_date in table kyc_records stores text data."
+  },
+  {
+    "table": "kyc_records",
+    "level": "column",
+    "text": "Column expiry_date in table kyc_records stores text data."
+  },
+  {
+    "table": "kyc_records",
+    "level": "column",
+    "text": "Column document_type in table kyc_records stores text data."
+  },
+  {
+    "table": "kyc_records",
+    "level": "column",
+    "text": "Column verified_by in table kyc_records stores text data."
+  },
+  {
+    "table": "kyc_records",
+    "level": "column",
+    "text": "Column notes in table kyc_records stores text data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "table",
+    "text": "Table loan_payments contains columns: id, loan_id, amount_paid, principal_portion, interest_portion, payment_date, payment_method, status, days_late."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column id in table loan_payments stores integer data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column loan_id in table loan_payments stores integer data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column amount_paid in table loan_payments stores double precision data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column principal_portion in table loan_payments stores double precision data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column interest_portion in table loan_payments stores double precision data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column payment_date in table loan_payments stores text data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column payment_method in table loan_payments stores text data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column status in table loan_payments stores text data."
+  },
+  {
+    "table": "loan_payments",
+    "level": "column",
+    "text": "Column days_late in table loan_payments stores integer data."
+  },
+  {
+    "table": "loan_types",
+    "level": "table",
+    "text": "Table loan_types contains columns: id, name, interest_rate, max_amount, max_tenure_months, description."
+  },
+  {
+    "table": "loan_types",
+    "level": "column",
+    "text": "Column id in table loan_types stores integer data."
+  },
+  {
+    "table": "loan_types",
+    "level": "column",
+    "text": "Column name in table loan_types stores text data."
+  },
+  {
+    "table": "loan_types",
+    "level": "column",
+    "text": "Column interest_rate in table loan_types stores double precision data."
+  },
+  {
+    "table": "loan_types",
+    "level": "column",
+    "text": "Column max_amount in table loan_types stores double precision data."
+  },
+  {
+    "table": "loan_types",
+    "level": "column",
+    "text": "Column max_tenure_months in table loan_types stores integer data."
+  },
+  {
+    "table": "loan_types",
+    "level": "column",
+    "text": "Column description in table loan_types stores text data."
+  },
+  {
+    "table": "loans",
+    "level": "table",
+    "text": "Table loans contains columns: id, customer_id, loan_type_id, branch_id, disbursement_account_id, principal, outstanding_balance, interest_rate, tenure_months, monthly_installment, disbursement_date, maturity_date, status, collateral."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column id in table loans stores integer data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column customer_id in table loans stores integer data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column loan_type_id in table loans stores integer data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column branch_id in table loans stores integer data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column disbursement_account_id in table loans stores integer data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column principal in table loans stores double precision data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column outstanding_balance in table loans stores double precision data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column interest_rate in table loans stores double precision data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column tenure_months in table loans stores integer data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column monthly_installment in table loans stores double precision data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column disbursement_date in table loans stores text data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column maturity_date in table loans stores text data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column status in table loans stores text data."
+  },
+  {
+    "table": "loans",
+    "level": "column",
+    "text": "Column collateral in table loans stores text data."
+  },
+  {
+    "table": "market_prices",
+    "level": "table",
+    "text": "Table market_prices contains columns: id, asset_id, price, price_date, change_pct, volume."
+  },
+  {
+    "table": "market_prices",
+    "level": "column",
+    "text": "Column id in table market_prices stores integer data."
+  },
+  {
+    "table": "market_prices",
+    "level": "column",
+    "text": "Column asset_id in table market_prices stores integer data."
+  },
+  {
+    "table": "market_prices",
+    "level": "column",
+    "text": "Column price in table market_prices stores double precision data."
+  },
+  {
+    "table": "market_prices",
+    "level": "column",
+    "text": "Column price_date in table market_prices stores text data."
+  },
+  {
+    "table": "market_prices",
+    "level": "column",
+    "text": "Column change_pct in table market_prices stores double precision data."
+  },
+  {
+    "table": "market_prices",
+    "level": "column",
+    "text": "Column volume in table market_prices stores integer data."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "table",
+    "text": "Table portfolio_holdings contains columns: id, portfolio_id, asset_id, quantity, avg_buy_price, current_value, unrealized_pnl, purchase_date."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "column",
+    "text": "Column id in table portfolio_holdings stores integer data."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "column",
+    "text": "Column portfolio_id in table portfolio_holdings stores integer data."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "column",
+    "text": "Column asset_id in table portfolio_holdings stores integer data."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "column",
+    "text": "Column quantity in table portfolio_holdings stores double precision data."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "column",
+    "text": "Column avg_buy_price in table portfolio_holdings stores double precision data."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "column",
+    "text": "Column current_value in table portfolio_holdings stores double precision data."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "column",
+    "text": "Column unrealized_pnl in table portfolio_holdings stores double precision data."
+  },
+  {
+    "table": "portfolio_holdings",
+    "level": "column",
+    "text": "Column purchase_date in table portfolio_holdings stores text data."
+  },
+  {
+    "table": "portfolios",
+    "level": "table",
+    "text": "Table portfolios contains columns: id, customer_id, funding_account_id, name, risk_profile, inception_date, total_value, currency, is_active."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column id in table portfolios stores integer data."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column customer_id in table portfolios stores integer data."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column funding_account_id in table portfolios stores integer data."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column name in table portfolios stores text data."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column risk_profile in table portfolios stores text data."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column inception_date in table portfolios stores text data."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column total_value in table portfolios stores double precision data."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column currency in table portfolios stores text data."
+  },
+  {
+    "table": "portfolios",
+    "level": "column",
+    "text": "Column is_active in table portfolios stores integer data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "table",
+    "text": "Table risk_assessments contains columns: id, customer_id, loan_id, assessment_date, credit_score, risk_tier, debt_to_income, default_probability, assessment_notes."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column id in table risk_assessments stores integer data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column customer_id in table risk_assessments stores integer data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column loan_id in table risk_assessments stores integer data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column assessment_date in table risk_assessments stores text data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column credit_score in table risk_assessments stores integer data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column risk_tier in table risk_assessments stores text data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column debt_to_income in table risk_assessments stores double precision data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column default_probability in table risk_assessments stores double precision data."
+  },
+  {
+    "table": "risk_assessments",
+    "level": "column",
+    "text": "Column assessment_notes in table risk_assessments stores text data."
+  },
+  {
+    "table": "transaction_categories",
+    "level": "table",
+    "text": "Table transaction_categories contains columns: id, name, type."
+  },
+  {
+    "table": "transaction_categories",
+    "level": "column",
+    "text": "Column id in table transaction_categories stores integer data."
+  },
+  {
+    "table": "transaction_categories",
+    "level": "column",
+    "text": "Column name in table transaction_categories stores text data."
+  },
+  {
+    "table": "transaction_categories",
+    "level": "column",
+    "text": "Column type in table transaction_categories stores text data."
+  },
+  {
+    "table": "transactions",
+    "level": "table",
+    "text": "Table transactions contains columns: id, account_id, category_id, loan_id, amount, direction, balance_after, description, channel, reference_no, transaction_date, status."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column id in table transactions stores integer data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column account_id in table transactions stores integer data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column category_id in table transactions stores integer data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column loan_id in table transactions stores integer data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column amount in table transactions stores double precision data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column direction in table transactions stores text data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column balance_after in table transactions stores double precision data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column description in table transactions stores text data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column channel in table transactions stores text data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column reference_no in table transactions stores text data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column transaction_date in table transactions stores text data."
+  },
+  {
+    "table": "transactions",
+    "level": "column",
+    "text": "Column status in table transactions stores text data."
+  }
+]

@@ -32,6 +32,7 @@ class SynthesisResult:
     reason: str | None = None
     question: str | None = None
     sources: list[str] = field(default_factory=list)
+    conflicts: list[str] = field(default_factory=list)
     latency: float = 0.0
 
 
@@ -88,6 +89,12 @@ class ResponseSynthesizer:
                 route,
                 exc,
             )
+            fallback_sources = self._collect_evidence_sources(
+                sql_result=sql_result,
+                rag_result=normalized_rag,
+                subtask_results=normalized_subtasks,
+            )
+            self.last_result = SynthesisResult(sources=fallback_sources)
             return self._format_fallback(
                 user_query=user_query,
                 route=route,
@@ -152,9 +159,11 @@ class ResponseSynthesizer:
 
         cited_sources = self._extract_inline_sources(raw_content)
         sources = self._finalize_sources(cited_sources, evidence_sources)
+        conflicts = self._extract_conflicts(raw_content)
         return SynthesisResult(
             answer=raw_content,
             sources=sources,
+            conflicts=conflicts,
             latency=latency,
         )
 
@@ -174,26 +183,33 @@ class ResponseSynthesizer:
     @staticmethod
     def _build_system_prompt(source_mode: str) -> str:
         """Return a system prompt tailored to the evidence sources actually available."""
+        # Clarification is a TRUE LAST RESORT — only when evidence is completely absent.
         clarification_rule = (
-            'If evidence is insufficient to answer confidently, output ONLY this exact JSON '
-            '(nothing else): '
+            "Only output the clarification JSON when evidence is COMPLETELY ABSENT "
+            "(zero SQL rows, a hard database error, AND no text chunks at all). "
+            "If ANY evidence is present — even partial — always attempt an answer from it. "
+            "When you must request clarification, output ONLY this exact JSON (nothing else): "
             '{{"needs_clarification": true, "reason": "<why>", "question": "<what to ask the user>"}}.'
         )
         no_fences_rule = "Do not output markdown code fences."
+        conflict_rule = (
+            "When SQL and text evidence give different values for the same fact: "
+            "(a) mark the conflict with the inline tag [CONFLICT: <one-line description>]; "
+            "(b) prefer SQL for numerical/quantitative facts and text for qualitative context; "
+            "(c) if neither source is clearly authoritative, surface both values with the conflict tag."
+        )
 
         if source_mode == "sql_only":
             return (
                 "You are the final synthesis agent for an Adaptive Agentic RAG system.\n"
-                "The user's query was answered exclusively through a SQL database query. "
-                "No text document chunks were retrieved.\n\n"
+                "The user's query was answered exclusively through a SQL database query.\n\n"
                 "Rules:\n"
                 "1. Express the SQL results in clear, natural language. "
                 "Present numbers, counts, and row values directly from the provided rows.\n"
                 "2. Ground every claim strictly in the provided SQL rows. Never invent values.\n"
                 "3. Cite the database table(s) used inline: [source: <table_name>].\n"
-                "4. If the SQL result contains an error or returned zero rows: explain what happened "
-                "concisely, then ask for clarification using the JSON format in rule 5. "
-                "Do NOT try to answer from general knowledge.\n"
+                "4. If the SQL result has an error but rows are still present, answer from the rows "
+                "and note the error. If zero rows and a hard error, explain briefly and use rule 5.\n"
                 f"5. {clarification_rule}\n"
                 f"6. {no_fences_rule}"
             )
@@ -201,14 +217,13 @@ class ResponseSynthesizer:
         if source_mode == "text_only":
             return (
                 "You are the final synthesis agent for an Adaptive Agentic RAG system.\n"
-                "The user's query was answered exclusively through retrieved text document chunks. "
-                "No database query was executed.\n\n"
+                "The user's query was answered exclusively through retrieved text document chunks.\n\n"
                 "Rules:\n"
                 "1. Answer in clear, concise natural language based only on the provided text chunks.\n"
                 "2. Ground every claim strictly in the text evidence. Never invent facts.\n"
                 "3. Cite document sources inline: [source: <filename>].\n"
-                "4. If the retrieved chunks are empty or do not contain enough information to answer, "
-                "do NOT speculate. Use the JSON format in rule 5 instead.\n"
+                "4. If chunks are present but only partially address the query, answer what you can "
+                "and note what is not covered — do NOT refuse to answer.\n"
                 f"5. {clarification_rule}\n"
                 f"6. {no_fences_rule}"
             )
@@ -223,21 +238,37 @@ class ResponseSynthesizer:
                 f"3. {no_fences_rule}"
             )
 
-        # "hybrid" and "decompose" — both sources may be present
+        if source_mode == "hybrid":
+            return (
+                "You are the final synthesis agent for an Adaptive Agentic RAG system.\n"
+                "Your job is to answer the original query by cross-examining SQL database results "
+                "with retrieved text document chunks.\n\n"
+                "Rules:\n"
+                "1. Answer in clear, concise natural language.\n"
+                "2. Ground every claim strictly in the provided evidence. Never invent facts.\n"
+                "3. Cite sources inline: [source: <filename_or_table>].\n"
+                f"4. {conflict_rule}\n"
+                "5. If a SQL result has an error, note it and rely on text evidence for that part "
+                "if available.\n"
+                f"6. {clarification_rule}\n"
+                f"7. {no_fences_rule}"
+            )
+
+        # "decompose" — payload contains subtask_results[], each with sub_query + optional
+        # sql_result and rag_chunks. Synthesize all sub-tasks into one coherent answer.
         return (
             "You are the final synthesis agent for an Adaptive Agentic RAG system.\n"
-            "Your job is to answer the original query by combining SQL database results "
-            "with retrieved text document chunks.\n\n"
+            "The original query was decomposed into sub-tasks; each sub-task was routed to the "
+            "SQL pipeline, the text retrieval pipeline, or both. "
+            "The payload contains a 'subtask_results' array — each entry has a 'sub_query', "
+            "an optional 'sql_result', and optional 'rag_chunks'.\n\n"
             "Rules:\n"
-            "1. Answer in clear, concise natural language.\n"
+            "1. Synthesize ALL sub-task results into one coherent answer to the original query.\n"
             "2. Ground every claim strictly in the provided evidence. Never invent facts.\n"
-            "3. Cite sources inline whenever you reference evidence: [source: <filename_or_table>].\n"
-            "4. When SQL and text evidence contradict each other on the same fact: "
-            "prefer SQL for numerical/quantitative facts (counts, sums, averages, dates); "
-            "prefer text chunks for qualitative context (descriptions, policies, sentiment). "
-            "Always note the discrepancy explicitly.\n"
-            "5. If a SQL result contains an error, note it and rely on text evidence for that sub-query "
-            "if available, or ask for clarification.\n"
+            "3. Cite sources inline: [source: <filename_or_table>].\n"
+            f"4. {conflict_rule}\n"
+            "5. If a sub-task produced no evidence, skip it or note the gap — do not let one "
+            "empty sub-task block an answer that the other sub-tasks can fully support.\n"
             f"6. {clarification_rule}\n"
             f"7. {no_fences_rule}"
         )
@@ -333,6 +364,20 @@ class ResponseSynthesizer:
         return normalized
 
     @staticmethod
+    def _coerce_row(row: Any) -> Any:
+        """Recursively convert non-JSON-serializable DB types (Decimal, date, etc.) to primitives."""
+        import decimal, datetime
+        if isinstance(row, dict):
+            return {k: ResponseSynthesizer._coerce_row(v) for k, v in row.items()}
+        if isinstance(row, (list, tuple)):
+            return [ResponseSynthesizer._coerce_row(v) for v in row]
+        if isinstance(row, decimal.Decimal):
+            return float(row)
+        if isinstance(row, (datetime.date, datetime.datetime)):
+            return row.isoformat()
+        return row
+
+    @staticmethod
     def _to_sql_payload(sql_result: dict | None) -> dict[str, Any] | None:
         if not sql_result:
             return None
@@ -346,7 +391,7 @@ class ResponseSynthesizer:
 
         return {
             "sql": sql_text,
-            "rows": rows,
+            "rows": [ResponseSynthesizer._coerce_row(r) for r in rows],
             "path": sql_result.get("path"),
             "latency": sql_result.get("latency"),
             "schema_used": sql_result.get("schema_used", []),
@@ -453,11 +498,17 @@ class ResponseSynthesizer:
         matches = re.findall(r"\[source:\s*([^\]]+)\]", text, flags=re.IGNORECASE)
         extracted: list[str] = []
         for raw in matches:
-            for part in raw.split(","):
-                clean = part.strip()
+            # Split on commas or semicolons; strip any stray "source:" prefix fragments
+            for part in re.split(r"[,;]", raw):
+                clean = re.sub(r"(?i)^source:\s*", "", part).strip()
                 if clean:
                     extracted.append(clean)
         return extracted
+
+    @staticmethod
+    def _extract_conflicts(text: str) -> list[str]:
+        matches = re.findall(r"\[CONFLICT:\s*([^\]]+)\]", text, flags=re.IGNORECASE)
+        return [m.strip() for m in matches if m.strip()]
 
     @staticmethod
     def _finalize_sources(cited_sources: list[str], evidence_sources: list[str]) -> list[str]:
@@ -555,6 +606,10 @@ class ResponseSynthesizer:
 
         answer = result.answer.strip() or "No answer generated."
         lines = [answer]
+        if result.conflicts:
+            lines.append("Conflicts detected:")
+            for c in result.conflicts:
+                lines.append(f"  ! {c}")
         lines.append("Sources: " + (", ".join(result.sources) if result.sources else "none"))
         lines.append(f"Synthesis latency: {result.latency:.3f}s")
         return "\n".join(lines)

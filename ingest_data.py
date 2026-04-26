@@ -41,7 +41,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--data-dir",
-        default=str(config.DATA_DIR),
+        default=str(config.INGEST_DIR),
         help="Directory to scan recursively for .pdf/.txt/.md files.",
     )
     args = parser.parse_args()
