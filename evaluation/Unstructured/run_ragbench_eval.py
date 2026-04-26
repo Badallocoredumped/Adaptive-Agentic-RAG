@@ -34,36 +34,8 @@ import os
 import sys
 import json
 import time
+from collections import defaultdict
 from pathlib import Path
-
-# Baseline: LLM only, no retrieval
-"""     "BASE_NO_RAG": dict(retrieval_mode="none", reranker=False, top_k=0, chunk_size=500),
-"""    
-# K-Scaling Experiments
-"""     "RAG_K3": dict(retrieval_mode="faiss", reranker=False, top_k=3, chunk_size=500),
-"RAG_K5": dict(retrieval_mode="faiss", reranker=False, top_k=5, chunk_size=500), """
-
-""" "RAG_K10": dict(retrieval_mode="faiss", reranker=False, top_k=10, chunk_size=500), """
-
-""" # Chunk Density Experiment
-"RAG_K5_C250": dict(retrieval_mode="faiss", reranker=False, top_k=5, chunk_size=250), """
-
-""" # Baseline
-"RAG_K5_FAISS": dict(retrieval_mode="faiss", reranker=False, top_k=5, chunk_size=500),
-
-# Core reranker comparison
-"RAG_K5_BGE_BASE": dict(retrieval_mode="faiss", reranker=True, reranker_model="BAAI/bge-reranker-base", top_k=5, chunk_size=500),
-"RAG_K5_BGE_LARGE": dict(retrieval_mode="faiss", reranker=True, reranker_model="BAAI/bge-reranker-large", top_k=5, chunk_size=500),
-
-# Pool size
-"RAG_K5_BGE_BASE_POOL10": dict(retrieval_mode="faiss", reranker=True, reranker_model="BAAI/bge-reranker-base", top_k=5, chunk_size=500, rerank_pool=10),
-"RAG_K5_BGE_BASE_POOL20": dict(retrieval_mode="faiss", reranker=True, reranker_model="BAAI/bge-reranker-base", top_k=5, chunk_size=500, rerank_pool=20),
-
-# Chunk size CONTINUE
-"RAG_K5_BGE_BASE_C250": dict(retrieval_mode="faiss", reranker=True, reranker_model="BAAI/bge-reranker-base", top_k=5, chunk_size=250),
-
-# Stress test CONTINUE
-"RAG_K10_BGE_BASE": dict(retrieval_mode="faiss", reranker=True, reranker_model="BAAI/bge-reranker-base", top_k=10, chunk_size=500), """
 
 
 # ── Config table ──────────────────────────────────────────────────────────────
@@ -169,7 +141,6 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # ── Apply config overrides BEFORE importing pipeline modules ──────────────────
 import backend.config as config
 
-from collections import defaultdict as _defaultdict
 
 def _expand_with_adjacent_chunks(retriever_obj, retrieved_chunks: list[dict]) -> list[dict]:
     """Append sibling chunks (±1 position by chunk_id) for every retrieved source.
@@ -182,9 +153,8 @@ def _expand_with_adjacent_chunks(retriever_obj, retrieved_chunks: list[dict]) ->
     if store is None:
         return retrieved_chunks
 
-    # Map source -> sorted list of all docs in docstore for that source
     hit_sources = {c.get("source", "") for c in retrieved_chunks}
-    source_doc_map: dict = _defaultdict(list)
+    source_doc_map: dict = defaultdict(list)
     for doc in store.docstore._dict.values():
         src = doc.metadata.get("source", "")
         if src in hit_sources:
@@ -193,9 +163,8 @@ def _expand_with_adjacent_chunks(retriever_obj, retrieved_chunks: list[dict]) ->
     for src in source_doc_map:
         source_doc_map[src].sort(key=lambda d: d.metadata.get("chunk_id", 0))
 
-    # Collect neighbor chunks not already in the retrieved set
     retrieved_texts = {c["text"] for c in retrieved_chunks}
-    retrieved_cids_by_source: dict = _defaultdict(set)
+    retrieved_cids_by_source: dict = defaultdict(set)
     for c in retrieved_chunks:
         cid = c.get("chunk_id")
         if cid is not None:
@@ -221,6 +190,24 @@ def _expand_with_adjacent_chunks(retriever_obj, retrieved_chunks: list[dict]) ->
                         retrieved_texts.add(neighbor.page_content)
 
     return retrieved_chunks + extra
+
+
+def _compute_gold_hit_strict(chunks: list[dict], gold_ids: set, ground_truth: str) -> bool:
+    """Return True if any retrieved chunk from a gold passage has >10% word overlap with ground truth.
+
+    Filters out header/title chunks that match by ID but contain no answer content,
+    preventing them from inflating FALSE_ABSTENTION counts.
+    """
+    gt_words = set(ground_truth.lower().split())
+    for chunk in chunks:
+        if chunk.get("source", "") not in gold_ids:
+            continue
+        chunk_words = set(chunk["text"].lower().split())
+        overlap = len(gt_words & chunk_words) / max(len(gt_words), 1)
+        if overlap > 0.10:
+            return True
+    return False
+
 
 IS_NO_RAG = cfg["retrieval_mode"] == "none"   # True for LLM_ONLY — skip all retrieval machinery
 
@@ -406,19 +393,9 @@ for i, item in enumerate(eval_set):
     gold_hit = any(src in gold_ids for src in retrieved_sources) if gold_ids else None
 
     # FIX C — Strict gold hit: retrieved AND content overlaps with ground truth (>10% word overlap).
-    # Filters out marginal header/title chunks that match by ID but contain no answer content,
-    # preventing them from inflating FALSE_ABSTENTION counts.
     gold_hit_strict: bool | None = None
     if gold_ids and not IS_NO_RAG:
-        gold_hit_strict = False
-        _gt_words = set(item["ground_truth"].lower().split())
-        for _chunk in chunks:
-            if _chunk.get("source", "") in gold_ids:
-                _chunk_words = set(_chunk["text"].lower().split())
-                _overlap     = len(_gt_words & _chunk_words) / max(len(_gt_words), 1)
-                if _overlap > 0.10:
-                    gold_hit_strict = True
-                    break
+        gold_hit_strict = _compute_gold_hit_strict(chunks, gold_ids, item["ground_truth"])
 
     # Also check substring match against ground truth (paragraph-level)
     gt_lower = item["ground_truth"].lower()
@@ -437,7 +414,6 @@ for i, item in enumerate(eval_set):
         expanded_contexts = []
         context_str       = ""  # LLM_ONLY: no context provided
 
-    
     try:
         if IS_NO_RAG:
             prompt_text = LLM_ONLY_PROMPT.format(question=item["question"])
@@ -494,8 +470,7 @@ not_found_adj    = sum(1 for r in answerable if "not found" in r["answer"].lower
 not_found_rate_adjusted = not_found_adj / len(answerable) if answerable else 0.0
 
 # Per-subset breakdown
-from collections import defaultdict
-by_subset = _defaultdict(list)
+by_subset: dict = defaultdict(list)
 for r in valid:
     by_subset[r["subset"]].append(r)
 

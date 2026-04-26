@@ -14,7 +14,7 @@ from langchain_core.documents import Document as LCDocument
 class FAISSVectorStore:
     """Manages a LangChain FAISS vector store and local persistence."""
 
-    def __init__(self, index_path: str, metadata_path: str, embeddings=None) -> None:
+    def __init__(self, index_path: str, metadata_path: str, embeddings: Any | None = None) -> None:
         self.index_path = Path(index_path)
         self.metadata_path = Path(metadata_path)
         self.embeddings = embeddings
@@ -71,21 +71,19 @@ class FAISSVectorStore:
 
         self.store.add_documents(documents)
 
+    def _run_search(
+        self, method_name: str, k: int, metadata_filter: dict[str, Any] | None, **kwargs
+    ) -> list[tuple[LCDocument, float]]:
+        fn = getattr(self.store, method_name)
+        return fn(k=k, filter=metadata_filter, **kwargs) if metadata_filter else fn(k=k, **kwargs)
+
     def search(
         self, query: str, top_k: int, metadata_filter: dict[str, Any] | None = None
     ) -> list[tuple[LCDocument, float]]:
         """Return top-k similar documents and FAISS distance scores."""
         if self.store is None:
             return []
-
-        if metadata_filter:
-            return self.store.similarity_search_with_score(
-                query=query,
-                k=top_k,
-                filter=metadata_filter,
-            )
-
-        return self.store.similarity_search_with_score(query=query, k=top_k)
+        return self._run_search("similarity_search_with_score", top_k, metadata_filter, query=query)
 
     def search_by_vector(
         self, embedding: list[float], top_k: int,
@@ -94,13 +92,5 @@ class FAISSVectorStore:
         """Search using a pre-computed embedding vector (avoids re-embedding)."""
         if self.store is None:
             return []
-
-        if metadata_filter:
-            return self.store.similarity_search_with_score_by_vector(
-                embedding=embedding, k=top_k, filter=metadata_filter,
-            )
-
-        return self.store.similarity_search_with_score_by_vector(
-            embedding=embedding, k=top_k,
-        )
+        return self._run_search("similarity_search_with_score_by_vector", top_k, metadata_filter, embedding=embedding)
 
