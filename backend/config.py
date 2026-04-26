@@ -294,6 +294,7 @@ ROUTER_DECOMPOSE_MAX_SUBTASKS = 4
 SQL_REACT_ENABLED = True
 SQL_REACT_MAX_ITERATIONS = 3  # max Thought/Action/Observation cycles per query
 SQL_CACHE_HIT_THRESHOLD: float = 0.85  # cosine similarity threshold for cache hit (RQ1 variable)
+SQL_CACHE_SKIP_REFINER_THRESHOLD: float = 0.98  # Score above which the LLM refiner is skipped (Fast Track)
 
 ROUTER_CHAT_ENDPOINT = "/v1/chat/completions"
 ROUTER_COMPLETION_ENDPOINT = "/completion"
