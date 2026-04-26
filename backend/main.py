@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
@@ -28,7 +29,7 @@ class AdaptiveAgenticRAGSystem:
     """Coordinates router, TableRAG SQL pipeline, RAG pipeline, and final synthesis."""
 
     def __init__(self) -> None:
-        self._executor = ThreadPoolExecutor(max_workers=3)
+        self._executor = ThreadPoolExecutor(max_workers=config.ROUTER_DECOMPOSE_MAX_SUBTASKS)
         self.router = QueryRouter()
         self.loader = DocumentLoader()
         self.chunker = TextChunker(
@@ -53,7 +54,7 @@ class AdaptiveAgenticRAGSystem:
 
     @staticmethod
     def _debug(message: str) -> None:
-        if getattr(config, "DEBUG_LOGGING", False):
+        if config.DEBUG_LOGGING:
             print(f"[MAIN DEBUG] {message}")
 
     def ingest_documents(self, paths: list[str]) -> int:
@@ -67,7 +68,6 @@ class AdaptiveAgenticRAGSystem:
     def _run_sql_pipeline(query: str) -> dict:
         """Run the TableRAG SQL pipeline and adapt the result for the synthesizer."""
         pipeline_result = run_table_rag_pipeline(query)
-
         return {
             "ok": not bool(pipeline_result.get("error")),
             "query": pipeline_result["sql"] or "n/a",
@@ -80,17 +80,9 @@ class AdaptiveAgenticRAGSystem:
         }
 
     def run_query(self, user_query: str) -> str:
-        """End-to-end query flow: route -> execute source pipelines -> synthesize answer.
-
-        Routing modes (ROUTER_MODE)
-        ---------------------------
-        decompose : LLM decomposes query into routed sub-tasks (project default).
-        llm       : Local LLM classifies the whole query into a single route.
-        keyword   : Rule-based keyword matching into a single route (fallback).
-        """
+        """End-to-end query flow: route -> execute source pipelines -> synthesize answer."""
         self._debug(f"run_query() mode={config.ROUTER_MODE}, query={user_query!r}")
 
-        # --- decompose: LLM decomposition into multiple routed sub-tasks ---
         if config.ROUTER_MODE == "decompose":
             sub_tasks = self.router.decompose_with_zeroshot(user_query)
             subtask_results = self._execute_subtasks(sub_tasks)
@@ -105,12 +97,11 @@ class AdaptiveAgenticRAGSystem:
                 subtask_results=subtask_results,
             )
 
-        # --- single-route modes ---
         if config.ROUTER_MODE == "llm":
             route = self.router.route_with_llm(user_query)
         elif config.ROUTER_MODE == "semantic":
             route = self.router.route_with_semantic(user_query)
-        else:  # "keyword" or any unrecognised value
+        else:
             route = self.router.route(user_query)
 
         self._debug(f"run_query() single route={route}")
@@ -119,15 +110,16 @@ class AdaptiveAgenticRAGSystem:
         rag_result: list[dict] | None = None
 
         if route == "hybrid":
-            self._debug(f"run_query() executing BOTH pipelines concurrently for query={user_query!r}")
-            # Run sequentially to avoid nested pool starvation
-            sql_result = self._run_sql_pipeline(user_query)
-            rag_result = self.retriever.retrieve(user_query, top_k=config.RAG_TOP_K)
+            sql_future = self._executor.submit(self._run_sql_pipeline, user_query)
+            rag_future = self._executor.submit(
+                self.retriever.retrieve, user_query, top_k=config.RAG_TOP_K
+            )
+            sql_result = sql_future.result()
+            rag_result = rag_future.result()
         else:
             if route == "sql":
                 self._debug(f"run_query() executing TableRAG SQL pipeline for query={user_query!r}")
                 sql_result = self._run_sql_pipeline(user_query)
-
             if route == "text":
                 self._debug(f"run_query() executing RAG pipeline for query={user_query!r}")
                 rag_result = self.retriever.retrieve(user_query, top_k=config.RAG_TOP_K)
@@ -141,7 +133,6 @@ class AdaptiveAgenticRAGSystem:
 
     def _execute_subtasks(self, sub_tasks: list[SubTask]) -> list[dict]:
         """Run each decomposed sub-task on its assigned pipeline(s) concurrently."""
-        outputs: list[dict] = []
 
         def run_task(task: SubTask) -> dict:
             sql_res: dict | None = None
@@ -149,16 +140,15 @@ class AdaptiveAgenticRAGSystem:
             self._debug(f"_execute_subtasks() dispatch route={task.route}, sub_query={task.sub_query!r}")
 
             if task.route == "hybrid":
-                self._debug("_execute_subtasks() -> Executing TableRAG and RAG pipeline concurrently")
-                # Run sequentially to avoid nested pool starvation
+                # Sequential: this thread is already on the shared executor, so spawning
+                # additional futures here would risk pool exhaustion with small max_workers.
                 sql_res = self._run_sql_pipeline(task.sub_query)
                 rag_res = self.retriever.retrieve(task.sub_query, top_k=config.RAG_TOP_K)
             else:
-                if task.route in {"sql"}:
+                if task.route == "sql":
                     self._debug("_execute_subtasks() -> TableRAG SQL pipeline")
                     sql_res = self._run_sql_pipeline(task.sub_query)
-
-                if task.route in {"text"}:
+                if task.route == "text":
                     self._debug("_execute_subtasks() -> RAG pipeline")
                     rag_res = self.retriever.retrieve(task.sub_query, top_k=config.RAG_TOP_K)
 
@@ -196,86 +186,48 @@ def run_query(user_query: str) -> str:
     system = build_system()
     return system.run_query(user_query)
 
+
 if __name__ == "__main__":
-    import json
-    
     print("Building system...")
     system = build_system()
 
-    def print_result(result):
+    def print_result(result: str) -> None:
         print(f"\nRaw return value:\n{result}")
-        
-        # Check for clarification request (whether it is a JSON string or dict/object)
-        is_clarification = False
-        if isinstance(result, str):
-            if "Clarification required." in result:
-                is_clarification = True
-            else:
-                try:
-                    parsed = json.loads(result)
-                    if isinstance(parsed, dict) and "needs_clarification" in parsed:
-                        is_clarification = parsed.get("needs_clarification", False)
-                except json.JSONDecodeError:
-                    pass
-        elif isinstance(result, dict) and "needs_clarification" in result:
-            is_clarification = result.get("needs_clarification", False)
-        elif hasattr(result, "needs_clarification"):
-            is_clarification = getattr(result, "needs_clarification")
+        last = system.synthesizer.last_result
+        if last:
+            print(f"Is clarification request? {last.needs_clarification}")
+            print(f"Synthesis latency: {last.latency:.3f}s")
 
-        print(f"Is clarification request? {is_clarification}")
-        
-        # Extract latency if available on the object or dict
-        if hasattr(result, "latency"):
-            print(f"Synthesis latency: {result.latency:.3f}s")
-        elif hasattr(result, "synthesis_latency"):
-            print(f"Synthesis latency: {result.synthesis_latency:.3f}s")
-        elif isinstance(result, dict) and "latency" in result:
-            print(f"Synthesis latency: {result['latency']:.3f}s")
-
-    # ── Full Pipeline Performance Test ─────────────────────────────────────────
     print("\n" + "=" * 80)
     print("TESTING ALL PIPELINES: SQL, RAG, and HYBRID (Decompose Mode)")
     print("=" * 80)
     config.ROUTER_MODE = "decompose"
 
     test_queries = [
-        # SQL-focused queries
-        ("SQL 1 (Basic)", "Count the total number of orders in the database."),
+        ("SQL 1 (Basic)",   "Count the total number of orders in the database."),
         ("SQL 2 (Complex)", "What is the average transaction amount for customers located in Giza?"),
-        
-        # RAG-focused queries
-        ("RAG 1 (Policy)", "What is the company policy on remote work and vacation days?"),
+        ("RAG 1 (Policy)",  "What is the company policy on remote work and vacation days?"),
         ("RAG 2 (Support)", "How do I request a hardware upgrade or new laptop?"),
-
-        # Hybrid-focused queries (requires both DB data and text-based policy)
-        ("Hybrid 1", "How many support tickets are currently open, and what is the SLA for resolving them?"),
-        ("Hybrid 2", "What is the average order amount for customers in Cairo, and what are the shipping terms for those orders?")
+        ("Hybrid 1",        "How many support tickets are currently open, and what is the SLA for resolving them?"),
+        ("Hybrid 2",        "What is the average order amount for customers in Cairo, and what are the shipping terms for those orders?"),
     ]
 
-    import time
     total_latency = 0.0
 
     for i, (label, query) in enumerate(test_queries, 1):
         print(f"\n--- Test {i}: {label} ---")
         print(f"Query: {query!r}")
-        
-        start_time = time.perf_counter()
+        start = time.perf_counter()
         try:
             res = system.run_query(query)
-            end_time = time.perf_counter()
-            duration = end_time - start_time
-            total_latency += duration
-            
             print_result(res)
-            print(f"End-to-End Latency: {duration:.3f}s")
         except Exception as e:
             print(f"Error during execution: {e}")
+        finally:
+            duration = time.perf_counter() - start
+            total_latency += duration
+            print(f"End-to-End Latency: {duration:.3f}s")
 
     print("\n" + "=" * 80)
     print(f"TOTAL TEST SUITE LATENCY: {total_latency:.3f}s")
     print("=" * 80)
-    
-    print("\nRestoring standard decompose mode...")
-    config.ROUTER_MODE = "decompose"
-
-
