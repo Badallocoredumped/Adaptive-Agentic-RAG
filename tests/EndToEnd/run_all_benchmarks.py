@@ -186,16 +186,38 @@ def build_final_report(summaries: dict) -> dict:
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(description="Run all RAG benchmarks")
-    parser.add_argument("--rq1-only",  action="store_true")
-    parser.add_argument("--rq2-only",  action="store_true")
-    parser.add_argument("--rq3-only",  action="store_true")
-    parser.add_argument("--fi-only",   action="store_true")
-    parser.add_argument("--skip-rq1",  action="store_true")
-    parser.add_argument("--dry-run",   action="store_true")
+    parser.add_argument("--rq1-only",     action="store_true")
+    parser.add_argument("--rq2-only",     action="store_true")
+    parser.add_argument("--rq3-only",     action="store_true")
+    parser.add_argument("--fi-only",      action="store_true")
+    parser.add_argument("--skip-rq1",     action="store_true")
+    parser.add_argument("--dry-run",      action="store_true")
+    parser.add_argument("--report-only",  action="store_true",
+                        help="Build final_report.json from existing summary files (no queries run)")
     args = parser.parse_args()
 
     if args.dry_run:
         dry_run()
+        return
+
+    if args.report_only:
+        summaries = {}
+        for rq, fname in (("RQ1", "rq1_summary.json"), ("RQ2", "rq2_summary.json"),
+                          ("RQ3", "rq3_summary.json"), ("FI",  "fi_summary.json")):
+            p = RESULTS_DIR / fname
+            if p.exists():
+                summaries[rq] = json.loads(p.read_text(encoding="utf-8"))
+                print(f"  Loaded {fname}")
+            else:
+                print(f"  Skipping {fname} (not found)")
+        report = build_final_report(summaries)
+        report["total_runtime_minutes"] = 0
+        report_path = RESULTS_DIR / "final_report.json"
+        report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"\n  Final report → {report_path}")
+        for k, v in report["thesis_table"].items():
+            if v is not None:
+                print(f"  {k:<35}  {v}")
         return
 
     summaries = {}

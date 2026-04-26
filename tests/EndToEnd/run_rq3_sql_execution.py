@@ -113,9 +113,10 @@ def run_all(queries: list[dict]) -> list[dict]:
             ok_f = "✓" if full["executed_ok"]   else "✗"
             print(f"       Pruned: {ok_p} {pruned['latency_ms']:.0f}ms  |  "
                   f"Full schema: {ok_f} {full['latency_ms']:.0f}ms")
-            if pruned["pruning_recall"] is not None:
-                print(f"       Pruning recall={pruned['pruning_recall']:.0%}  "
-                      f"precision={pruned['pruning_precision']:.0%}")
+            if pruned["pruning_recall"] is not None or pruned["pruning_precision"] is not None:
+                rec_str  = f"{pruned['pruning_recall']:.0%}"    if pruned["pruning_recall"]    is not None else "N/A"
+                prec_str = f"{pruned['pruning_precision']:.0%}" if pruned["pruning_precision"] is not None else "N/A"
+                print(f"       Pruning recall={rec_str}  precision={prec_str}")
             if pruned["error"]:
                 print(f"       ERROR (pruned): {pruned['error']}")
             if full["error"]:

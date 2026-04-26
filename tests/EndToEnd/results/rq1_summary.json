@@ -1,0 +1,38 @@
+{
+  "rq": "RQ1 — Latency Differential",
+  "run_timestamp": "2026-04-26T20:22:01.100713",
+  "cold_query_count": 30,
+  "warm_query_count": 30,
+  "reasoning_track": {
+    "count": 30,
+    "mean": 9859.05,
+    "median": 8183.18,
+    "p95": 17898.24,
+    "min": 3005.04,
+    "max": 22615.64,
+    "sql_errors": 0
+  },
+  "fast_track_all_warm": {
+    "count": 30,
+    "mean": 11828.88,
+    "median": 8600.6,
+    "p95": 25423.15,
+    "min": 4348.92,
+    "max": 29852.82
+  },
+  "fast_track_hits_only": {
+    "count": 26,
+    "mean": 11801.43,
+    "median": 7894.47,
+    "p95": 25423.15,
+    "min": 4348.92,
+    "max": 29852.82,
+    "cache_hit_count": 26,
+    "cache_hit_rate": 0.8667,
+    "sql_errors": 1
+  },
+  "speedup_factor": 0.8354,
+  "passes_rq1_threshold": false,
+  "rq1_threshold": "speedup ≥ 1.4×",
+  "verdict": "✗ FAIL — only 0.84× speedup (threshold ≥ 1.4×)"
+}

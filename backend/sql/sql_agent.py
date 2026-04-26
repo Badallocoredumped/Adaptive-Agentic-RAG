@@ -382,61 +382,34 @@ def run_table_rag_pipeline(
     if cache_result["hit"]:
         cached_sql = cache_result["sql"]
         original_question = cache_result.get("question", query)
-        cached_schema = cache_result.get("schema") or ""
         score = cache_result.get("score", 0.0)
-        _debug(f"[TableRAG Pipeline] ⚡ CACHE HIT: Cached SQL -> {cached_sql}")
+        _debug(f"[TableRAG Pipeline] ⚡ CACHE HIT: score={score:.4f} | Cached SQL -> {cached_sql}")
 
-        refresh_mode = getattr(config, "SQL_CACHE_REFRESH_MODE", "threshold")
-        refresh_threshold = getattr(config, "SQL_CACHE_REFRESH_THRESHOLD", 0.95)
+        skip_refiner_threshold = getattr(config, "SQL_CACHE_SKIP_REFINER_THRESHOLD", 0.98)
 
-        use_cached_only = False
-        if refresh_mode == "never":
-            use_cached_only = True
-        elif refresh_mode == "threshold" and score >= refresh_threshold:
-            use_cached_only = True
-
-        if use_cached_only and cached_schema.strip():
-            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} (Threshold: {refresh_threshold}, Mode: '{refresh_mode}'). Using strictly cached schema.")
-            combined_schema_lines = [line.strip() for line in cached_schema.split("\n") if line.strip()]
-            schema_context_for_refiner = "\n".join(combined_schema_lines)
+        if score >= skip_refiner_threshold:
+            # True fast track: cached SQL is close enough — no LLM calls needed.
+            _debug(f"[TableRAG Pipeline] Score {score:.4f} >= {skip_refiner_threshold}. Skipping refiner (Fast Track).")
+            sql_to_execute = cached_sql
+            combined_schema_lines = []
+            schema_context_for_refiner = ""
         else:
-            # Retrieve fresh schema based on the NEW query, because the user may want
-            # tables that differ from the original cached query.
-            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} (Threshold: {refresh_threshold}, Mode: '{refresh_mode}'). Retrieving fresh schema for the new query...")
+            # Retrieve a compact, query-specific fresh schema for the refiner.
+            # We intentionally do NOT mix in the stored cached schema: the ReAct
+            # agent accumulates multiple schema_lookup observations into
+            # schema_context, which can be 5–15 k tokens for complex queries.
+            # Passing that blob to the refiner bloats its prompt far beyond what
+            # individual ReAct steps process, making cache hits slower than misses.
+            _debug(f"[TableRAG Pipeline] Score {score:.4f} < {skip_refiner_threshold}. Retrieving fresh schema for refiner...")
             _ensure_schema_index_exists()
             _t0 = time.time()
             fresh_schema_rows = retrieve_relevant_schema(query, top_k=top_k)
             _debug(f"[Timer] TableRAG Schema Retrieval took {(time.time() - _t0):.3f}s")
-    
-            # Combine fresh schema with cached schema (if any) to ensure the LLM
-            # has context for both the new request and the original SQL.
-            combined_schema_lines = []
-            seen_lines = set()
-            
-            for row in fresh_schema_rows:
-                cleaned = row.strip()
-                if cleaned and cleaned not in seen_lines:
-                    combined_schema_lines.append(cleaned)
-                    seen_lines.add(cleaned)
-                    
-            if cached_schema:
-                for row in cached_schema.split("\n"):
-                    cleaned = row.strip()
-                    if cleaned and cleaned not in seen_lines:
-                        combined_schema_lines.append(cleaned)
-                        seen_lines.add(cleaned)
-                        
+
+            combined_schema_lines = [row.strip() for row in fresh_schema_rows if row.strip()]
             schema_context_for_refiner = "\n".join(combined_schema_lines)
 
-        # --- LLM refinement on cache hit ---
-        skip_refiner_threshold = getattr(config, "SQL_CACHE_SKIP_REFINER_THRESHOLD", 0.98)
-        if score >= skip_refiner_threshold:
-            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} >= {skip_refiner_threshold}. Skipping refiner (Fast Track).")
-            refined_sql = cached_sql
-        else:
-            # Send to the refiner so the LLM can make minimal adjustments
-            # even when the cached question is nearly identical to the new one.
-            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} < {skip_refiner_threshold}. Running LLM SQL refiner...")
+            _debug(f"[TableRAG Pipeline] Running LLM SQL refiner...")
             refined_sql = _refine_sql_from_cache(
                 new_question=query,
                 original_question=original_question,
@@ -445,24 +418,23 @@ def run_table_rag_pipeline(
                 similar_queries=cache_result.get("similar_queries", []),
             )
 
-        if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
-            _debug(f"[TableRAG Pipeline] Refiner adjusted SQL -> {refined_sql}")
-            sql_to_execute = refined_sql
-        elif refined_sql:
-            _debug("[TableRAG Pipeline] Refiner kept cached SQL unchanged.")
-            sql_to_execute = cached_sql
-        else:
-            # Refiner failed — generate fresh SQL instead of blindly using
-            # the cached SQL which may be wrong for this new query.
-            _debug("[TableRAG Pipeline] Refiner failed - generating fresh SQL from schema...")
-            fresh_sql = _generate_sql(query, schema_context_for_refiner)
-            if fresh_sql:
-                _debug(f"[TableRAG Pipeline] Fresh SQL generated -> {fresh_sql}")
-                sql_to_execute = fresh_sql
-            else:
-                _debug("[TableRAG Pipeline] Fresh generation also failed - using cached SQL as-is.")
+            if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
+                _debug(f"[TableRAG Pipeline] Refiner adjusted SQL -> {refined_sql}")
+                sql_to_execute = refined_sql
+            elif refined_sql:
+                _debug("[TableRAG Pipeline] Refiner kept cached SQL unchanged.")
                 sql_to_execute = cached_sql
+            else:
+                _debug("[TableRAG Pipeline] Refiner failed - generating fresh SQL from schema...")
+                fresh_sql = _generate_sql(query, schema_context_for_refiner)
+                if fresh_sql:
+                    _debug(f"[TableRAG Pipeline] Fresh SQL generated -> {fresh_sql}")
+                    sql_to_execute = fresh_sql
+                else:
+                    _debug("[TableRAG Pipeline] Fresh generation also failed - using cached SQL as-is.")
+                    sql_to_execute = cached_sql
 
+        path_label = "fast"
         try:
             rows = _execute_sql(sql_to_execute)
             error = None
@@ -471,8 +443,8 @@ def run_table_rag_pipeline(
             error = str(e)
             _debug(f"[TableRAG Pipeline] SQL execution failed: {error}")
 
-            # ── ReAct fallback: only reached when execution fails ──────────
-            # LLM refinement already ran above; this is a true last resort.
+            # ReAct fallback: only reached when execution fails.
+            # Track this so the benchmark doesn't count it as a fast-track hit.
             if getattr(config, "SQL_REACT_ENABLED", True):
                 _debug("[TableRAG Pipeline] Execution failed - escalating to ReAct agent as last resort...")
                 react_fn = _get_react_sql_agent()
@@ -481,6 +453,7 @@ def run_table_rag_pipeline(
                     sql_to_execute = react_result["sql"] or sql_to_execute
                     rows = react_result["result"]
                     error = react_result["error"]
+                    path_label = "react"
                     _debug(f"[TableRAG Pipeline] ReAct agent recovered: sql={sql_to_execute!r}")
 
         latency = time.time() - start_time
@@ -490,7 +463,7 @@ def run_table_rag_pipeline(
             "sql": sql_to_execute,
             "result": rows,
             "error": error,
-            "path": "fast",
+            "path": path_label,
             "latency": latency
         }
 
@@ -525,10 +498,15 @@ def run_table_rag_pipeline(
     else:
         _debug(f"[TableRAG Pipeline] Rows returned: {len(agent_result['result'])}")
 
-        # 3. Add successful run to Cache
+        # 3. Add successful run to Cache.
+        # Store empty schema: the ReAct agent accumulates every schema_lookup
+        # observation into schema_context (can reach 5–15 k tokens for complex
+        # queries). Passing that blob to the cache hit refiner was the root cause
+        # of hits being slower than misses. The hit path now always retrieves a
+        # compact fresh schema via retrieve_relevant_schema instead.
         if agent_result["sql"] and not agent_result["error"]:
             _debug("[TableRAG Pipeline] Saving successful query to cache...")
-            cache.add_to_cache(query, agent_result["sql"], agent_result.get("schema_context", ""))
+            cache.add_to_cache(query, agent_result["sql"], "")
             cache.save_cache()
 
     latency = time.time() - start_time

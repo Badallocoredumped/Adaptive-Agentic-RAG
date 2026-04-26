@@ -1,0 +1,326 @@
+{
+  "project": "Adaptive Agentic RAG Framework",
+  "run_timestamp": "2026-04-26T20:37:47.125463",
+  "summaries": {
+    "RQ1": {
+      "rq": "RQ1 — Latency Differential",
+      "run_timestamp": "2026-04-26T20:22:01.100713",
+      "cold_query_count": 30,
+      "warm_query_count": 30,
+      "reasoning_track": {
+        "count": 30,
+        "mean": 9859.05,
+        "median": 8183.18,
+        "p95": 17898.24,
+        "min": 3005.04,
+        "max": 22615.64,
+        "sql_errors": 0
+      },
+      "fast_track_all_warm": {
+        "count": 30,
+        "mean": 11828.88,
+        "median": 8600.6,
+        "p95": 25423.15,
+        "min": 4348.92,
+        "max": 29852.82
+      },
+      "fast_track_hits_only": {
+        "count": 26,
+        "mean": 11801.43,
+        "median": 7894.47,
+        "p95": 25423.15,
+        "min": 4348.92,
+        "max": 29852.82,
+        "cache_hit_count": 26,
+        "cache_hit_rate": 0.8667,
+        "sql_errors": 1
+      },
+      "speedup_factor": 0.8354,
+      "passes_rq1_threshold": false,
+      "rq1_threshold": "speedup ≥ 1.4×",
+      "verdict": "✗ FAIL — only 0.84× speedup (threshold ≥ 1.4×)"
+    },
+    "RQ2": {
+      "rq": "RQ2 — Router Classification Accuracy",
+      "run_timestamp": "2026-04-26T19:20:47.655453",
+      "total_queries": 90,
+      "total_correct": 75,
+      "overall_accuracy": 0.8333,
+      "target_accuracy": 0.8,
+      "passes_threshold": true,
+      "verdict": "✓ PASS — 83.3% accuracy (75/90)",
+      "per_class_accuracy": {
+        "sql": {
+          "total": 30,
+          "correct": 30,
+          "accuracy": 1.0
+        },
+        "text": {
+          "total": 30,
+          "correct": 16,
+          "accuracy": 0.5333
+        },
+        "hybrid": {
+          "total": 30,
+          "correct": 29,
+          "accuracy": 0.9667
+        }
+      },
+      "confusion_matrix": {
+        "sql": {
+          "sql": 30,
+          "text": 0,
+          "hybrid": 0,
+          "other": 0
+        },
+        "text": {
+          "sql": 9,
+          "text": 16,
+          "hybrid": 5,
+          "other": 0
+        },
+        "hybrid": {
+          "sql": 1,
+          "text": 0,
+          "hybrid": 29,
+          "other": 0
+        }
+      },
+      "misclassified": [
+        {
+          "qid": "TXT-001",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-004",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-005",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-006",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-007",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-008",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-011",
+          "truth": "text",
+          "predicted": "hybrid"
+        },
+        {
+          "qid": "TXT-013",
+          "truth": "text",
+          "predicted": "hybrid"
+        },
+        {
+          "qid": "TXT-014",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-016",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-017",
+          "truth": "text",
+          "predicted": "sql"
+        },
+        {
+          "qid": "TXT-018",
+          "truth": "text",
+          "predicted": "hybrid"
+        },
+        {
+          "qid": "TXT-019",
+          "truth": "text",
+          "predicted": "hybrid"
+        },
+        {
+          "qid": "TXT-020",
+          "truth": "text",
+          "predicted": "hybrid"
+        },
+        {
+          "qid": "HYB-007",
+          "truth": "hybrid",
+          "predicted": "sql"
+        }
+      ],
+      "avg_latency_ms": 16558.35
+    },
+    "RQ3": {
+      "rq": "RQ3 — SQL Execution Success Rate",
+      "run_timestamp": "2026-04-26T20:09:13.500457",
+      "total_queries": 60,
+      "overall": {
+        "pruned_schema": {
+          "ok": 56,
+          "total": 60,
+          "rate": 0.9333
+        },
+        "full_schema": {
+          "ok": 56,
+          "total": 60,
+          "rate": 0.9333
+        },
+        "improvement": 0.0
+      },
+      "by_complexity": {
+        "simple": {
+          "pruned": {
+            "ok": 10,
+            "total": 10,
+            "rate": 1.0
+          },
+          "full": {
+            "ok": 10,
+            "total": 10,
+            "rate": 1.0
+          }
+        },
+        "medium": {
+          "pruned": {
+            "ok": 10,
+            "total": 10,
+            "rate": 1.0
+          },
+          "full": {
+            "ok": 10,
+            "total": 10,
+            "rate": 1.0
+          }
+        },
+        "complex": {
+          "pruned": {
+            "ok": 36,
+            "total": 40,
+            "rate": 0.9
+          },
+          "full": {
+            "ok": 36,
+            "total": 40,
+            "rate": 0.9
+          }
+        }
+      },
+      "by_sheet": {
+        "SQL": {
+          "pruned": {
+            "ok": 29,
+            "total": 30,
+            "rate": 0.9667
+          },
+          "full": {
+            "ok": 29,
+            "total": 30,
+            "rate": 0.9667
+          }
+        },
+        "CSQL": {
+          "pruned": {
+            "ok": 27,
+            "total": 30,
+            "rate": 0.9
+          },
+          "full": {
+            "ok": 27,
+            "total": 30,
+            "rate": 0.9
+          }
+        }
+      },
+      "tablerag_pruning_quality": {
+        "avg_precision": 0.5333,
+        "avg_recall": 0.1667,
+        "note": "recall = fraction of needed tables kept; precision = fraction of kept tables that were needed"
+      },
+      "passes_rq3_threshold": true,
+      "verdict": "✓ PASS — pruned 93.3% ≥ full 93.3%"
+    },
+    "FI": {
+      "rq": "Functional Integration — E2E Hybrid Flows",
+      "run_timestamp": "2026-04-26T20:33:19.966891",
+      "total_queries": 30,
+      "target_e2e_flows": 5,
+      "e2e_success": {
+        "ok": 23,
+        "total": 30,
+        "rate": 0.7667
+      },
+      "router_accuracy": {
+        "ok": 29,
+        "total": 30,
+        "rate": 0.9667
+      },
+      "sql_success_rate": {
+        "ok": 24,
+        "total": 30,
+        "rate": 0.8
+      },
+      "pdf_retrieval_rate": {
+        "ok": 29,
+        "total": 30,
+        "rate": 0.9667
+      },
+      "source_accuracy": {
+        "ok": 25,
+        "total": 30,
+        "rate": 0.8333
+      },
+      "failure_breakdown": {
+        "wrong_route": 1,
+        "sql_failed": 6,
+        "no_pdf_chunks": 1,
+        "wrong_pdf_source": 5
+      },
+      "passes_threshold": true,
+      "avg_latency_ms": 18492.87,
+      "verdict": "✓ PASS — 23/30 successful E2E flows (target ≥ 5)",
+      "note": "answer_correct field is None — run review_hybrid_answers.py or manually set it in fi_results.json after reviewing responses."
+    }
+  },
+  "thesis_table": {
+    "rq1_speedup_factor": 0.8354,
+    "rq1_cache_hit_rate": 0.8667,
+    "rq1_reasoning_avg_ms": 9859.05,
+    "rq1_fast_track_avg_ms": 11801.43,
+    "rq1_passes": false,
+    "rq2_overall_accuracy": 0.8333,
+    "rq2_sql_accuracy": 1.0,
+    "rq2_text_accuracy": 0.5333,
+    "rq2_hybrid_accuracy": 0.9667,
+    "rq2_passes": true,
+    "rq3_pruned_success_rate": 0.9333,
+    "rq3_full_success_rate": 0.9333,
+    "rq3_improvement": 0.0,
+    "rq3_pruning_recall": 0.1667,
+    "rq3_pruning_precision": 0.5333,
+    "rq3_passes": true,
+    "fi_e2e_success_count": 23,
+    "fi_e2e_success_rate": 0.7667,
+    "fi_router_accuracy": 0.9667,
+    "fi_sql_success_rate": 0.8,
+    "fi_pdf_retrieval_rate": 0.9667,
+    "fi_source_accuracy": 0.8333,
+    "fi_passes": true
+  },
+  "all_pass": false,
+  "total_runtime_minutes": 0
+}

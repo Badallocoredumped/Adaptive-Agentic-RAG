@@ -1,0 +1,41 @@
+{
+  "rq": "Functional Integration — E2E Hybrid Flows",
+  "run_timestamp": "2026-04-26T20:33:19.966891",
+  "total_queries": 30,
+  "target_e2e_flows": 5,
+  "e2e_success": {
+    "ok": 23,
+    "total": 30,
+    "rate": 0.7667
+  },
+  "router_accuracy": {
+    "ok": 29,
+    "total": 30,
+    "rate": 0.9667
+  },
+  "sql_success_rate": {
+    "ok": 24,
+    "total": 30,
+    "rate": 0.8
+  },
+  "pdf_retrieval_rate": {
+    "ok": 29,
+    "total": 30,
+    "rate": 0.9667
+  },
+  "source_accuracy": {
+    "ok": 25,
+    "total": 30,
+    "rate": 0.8333
+  },
+  "failure_breakdown": {
+    "wrong_route": 1,
+    "sql_failed": 6,
+    "no_pdf_chunks": 1,
+    "wrong_pdf_source": 5
+  },
+  "passes_threshold": true,
+  "avg_latency_ms": 18492.87,
+  "verdict": "✓ PASS — 23/30 successful E2E flows (target ≥ 5)",
+  "note": "answer_correct field is None — run review_hybrid_answers.py or manually set it in fi_results.json after reviewing responses."
+}

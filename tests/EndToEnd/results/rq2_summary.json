@@ -1,0 +1,125 @@
+{
+  "rq": "RQ2 — Router Classification Accuracy",
+  "run_timestamp": "2026-04-26T19:20:47.655453",
+  "total_queries": 90,
+  "total_correct": 75,
+  "overall_accuracy": 0.8333,
+  "target_accuracy": 0.8,
+  "passes_threshold": true,
+  "verdict": "✓ PASS — 83.3% accuracy (75/90)",
+  "per_class_accuracy": {
+    "sql": {
+      "total": 30,
+      "correct": 30,
+      "accuracy": 1.0
+    },
+    "text": {
+      "total": 30,
+      "correct": 16,
+      "accuracy": 0.5333
+    },
+    "hybrid": {
+      "total": 30,
+      "correct": 29,
+      "accuracy": 0.9667
+    }
+  },
+  "confusion_matrix": {
+    "sql": {
+      "sql": 30,
+      "text": 0,
+      "hybrid": 0,
+      "other": 0
+    },
+    "text": {
+      "sql": 9,
+      "text": 16,
+      "hybrid": 5,
+      "other": 0
+    },
+    "hybrid": {
+      "sql": 1,
+      "text": 0,
+      "hybrid": 29,
+      "other": 0
+    }
+  },
+  "misclassified": [
+    {
+      "qid": "TXT-001",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-004",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-005",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-006",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-007",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-008",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-011",
+      "truth": "text",
+      "predicted": "hybrid"
+    },
+    {
+      "qid": "TXT-013",
+      "truth": "text",
+      "predicted": "hybrid"
+    },
+    {
+      "qid": "TXT-014",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-016",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-017",
+      "truth": "text",
+      "predicted": "sql"
+    },
+    {
+      "qid": "TXT-018",
+      "truth": "text",
+      "predicted": "hybrid"
+    },
+    {
+      "qid": "TXT-019",
+      "truth": "text",
+      "predicted": "hybrid"
+    },
+    {
+      "qid": "TXT-020",
+      "truth": "text",
+      "predicted": "hybrid"
+    },
+    {
+      "qid": "HYB-007",
+      "truth": "hybrid",
+      "predicted": "sql"
+    }
+  ],
+  "avg_latency_ms": 16558.35
+}

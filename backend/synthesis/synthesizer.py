@@ -52,7 +52,7 @@ class ResponseSynthesizer:
                 "model": config.SYNTHESIS_MODEL,
                 "temperature": config.SYNTHESIS_TEMPERATURE,
                 "api_key": config.LLM_API_KEY,
-                "timeout": config.ROUTER_TIMEOUT_SECONDS,
+                "timeout": config.SYNTHESIS_TIMEOUT_SECONDS,
             }
             if config.LLM_BASE_URL:
                 llm_kwargs["base_url"] = config.LLM_BASE_URL

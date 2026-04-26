@@ -1,0 +1,89 @@
+{
+  "rq": "RQ3 — SQL Execution Success Rate",
+  "run_timestamp": "2026-04-26T20:09:13.500457",
+  "total_queries": 60,
+  "overall": {
+    "pruned_schema": {
+      "ok": 56,
+      "total": 60,
+      "rate": 0.9333
+    },
+    "full_schema": {
+      "ok": 56,
+      "total": 60,
+      "rate": 0.9333
+    },
+    "improvement": 0.0
+  },
+  "by_complexity": {
+    "simple": {
+      "pruned": {
+        "ok": 10,
+        "total": 10,
+        "rate": 1.0
+      },
+      "full": {
+        "ok": 10,
+        "total": 10,
+        "rate": 1.0
+      }
+    },
+    "medium": {
+      "pruned": {
+        "ok": 10,
+        "total": 10,
+        "rate": 1.0
+      },
+      "full": {
+        "ok": 10,
+        "total": 10,
+        "rate": 1.0
+      }
+    },
+    "complex": {
+      "pruned": {
+        "ok": 36,
+        "total": 40,
+        "rate": 0.9
+      },
+      "full": {
+        "ok": 36,
+        "total": 40,
+        "rate": 0.9
+      }
+    }
+  },
+  "by_sheet": {
+    "SQL": {
+      "pruned": {
+        "ok": 29,
+        "total": 30,
+        "rate": 0.9667
+      },
+      "full": {
+        "ok": 29,
+        "total": 30,
+        "rate": 0.9667
+      }
+    },
+    "CSQL": {
+      "pruned": {
+        "ok": 27,
+        "total": 30,
+        "rate": 0.9
+      },
+      "full": {
+        "ok": 27,
+        "total": 30,
+        "rate": 0.9
+      }
+    }
+  },
+  "tablerag_pruning_quality": {
+    "avg_precision": 0.5333,
+    "avg_recall": 0.1667,
+    "note": "recall = fraction of needed tables kept; precision = fraction of kept tables that were needed"
+  },
+  "passes_rq3_threshold": true,
+  "verdict": "✓ PASS — pruned 93.3% ≥ full 93.3%"
+}
