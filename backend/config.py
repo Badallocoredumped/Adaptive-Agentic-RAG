@@ -71,7 +71,7 @@ E5_QUERY_PREFIX = "query: "
 E5_PASSAGE_PREFIX = "passage: "
 
 # RAG_TOP_K (number of retrieved text chunks passed into synthesis)
-RAG_TOP_K = 5
+RAG_TOP_K = 15  # matches RAG_K15_BGE_BASE_C1000_POOL25 — best ablation config
 # SQL_TOP_K (max schema tables retrieved by TableRAG)
 SQL_TOP_K = 30
 # SQL_SCHEMA_THRESHOLD (min cosine similarity score to include a schema table).
@@ -102,7 +102,7 @@ RAG_FETCH_MULTIPLIER = 10
 # Enables an extra semantic reranking pass over retrieved candidates.
 # In hybrid mode, reranking is applied after BM25+FAISS fusion and can increase latency.
 RAG_ENABLE_SEMANTIC_RERANK = True
-RAG_RERANK_POOL = 100      # Unpruned pool: matches FETCH_MULTIPLIER * K to prevent losing valid FAISS candidates
+RAG_RERANK_POOL = 25       # matches RAG_K15_BGE_BASE_C1000_POOL25 — top-25 candidates fed to cross-encoder
 RAG_RERANK_DEBUG = True    # Enable verbose reranker logging
 # FAISS-only thresholding hint: hybrid mode uses rank fusion, so this should be unset there.
 RAG_SCORE_THRESHOLD = 0.5
