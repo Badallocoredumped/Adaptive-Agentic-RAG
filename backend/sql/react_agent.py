@@ -518,6 +518,7 @@ def run_react_sql_agent(
     # Priority 2: last successful execute_sql call (kept as fallback)
     fallback_sql: str | None = None
     fallback_rows: list[dict] = []
+    used_schema_context = schema_context
 
     for msg in all_messages:
         if not isinstance(msg, ToolMessage):
@@ -526,9 +527,19 @@ def run_react_sql_agent(
         if call_id not in tool_call_map:
             continue
         tool_name, raw_input = tool_call_map[call_id]
+        
+        observation = msg.content if isinstance(msg.content, str) else str(msg.content)
+        
+        if tool_name == "schema_lookup":
+            if observation and not observation.startswith("No additional schema found") and "Schema lookup failed" not in observation:
+                if not used_schema_context.strip():
+                    used_schema_context = observation
+                elif observation not in used_schema_context:
+                    used_schema_context += f"\n\n{observation}"
+            continue
+
         if tool_name != "execute_sql":
             continue
-        observation = msg.content if isinstance(msg.content, str) else str(msg.content)
         candidate_sql = _extract_and_normalise_sql(raw_input) or raw_input.strip()
         if observation.startswith("SUCCESS"):
             fallback_sql = candidate_sql
@@ -616,6 +627,6 @@ def run_react_sql_agent(
         "sql": final_sql,
         "result": final_rows,
         "error": final_error,
-        "schema_context": schema_context,
+        "schema_context": used_schema_context,
         "react_steps": sum(1 for msg in all_messages if isinstance(msg, AIMessage)),
     }

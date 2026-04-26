@@ -429,16 +429,21 @@ def run_table_rag_pipeline(
             schema_context_for_refiner = "\n".join(combined_schema_lines)
 
         # --- LLM refinement on cache hit ---
-        # Always send to the refiner so the LLM can make minimal adjustments
-        # even when the cached question is nearly identical to the new one.
-        _debug("[TableRAG Pipeline] Running LLM SQL refiner for cache hit...")
-        refined_sql = _refine_sql_from_cache(
-            new_question=query,
-            original_question=original_question,
-            cached_sql=cached_sql,
-            schema_context=schema_context_for_refiner,
-            similar_queries=cache_result.get("similar_queries", []),
-        )
+        skip_refiner_threshold = getattr(config, "SQL_CACHE_SKIP_REFINER_THRESHOLD", 0.98)
+        if score >= skip_refiner_threshold:
+            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} >= {skip_refiner_threshold}. Skipping refiner (Fast Track).")
+            refined_sql = cached_sql
+        else:
+            # Send to the refiner so the LLM can make minimal adjustments
+            # even when the cached question is nearly identical to the new one.
+            _debug(f"[TableRAG Pipeline] Cache score {score:.4f} < {skip_refiner_threshold}. Running LLM SQL refiner...")
+            refined_sql = _refine_sql_from_cache(
+                new_question=query,
+                original_question=original_question,
+                cached_sql=cached_sql,
+                schema_context=schema_context_for_refiner,
+                similar_queries=cache_result.get("similar_queries", []),
+            )
 
         if refined_sql and refined_sql.strip().upper() != cached_sql.strip().upper():
             _debug(f"[TableRAG Pipeline] Refiner adjusted SQL -> {refined_sql}")
@@ -507,6 +512,8 @@ def run_table_rag_pipeline(
             agent_result = run_sql_agent(query, schema_context="\n".join(schema_rows), top_k=top_k)
         else:
             used_react = True
+            if agent_result.get("schema_context"):
+                schema_rows = [agent_result["schema_context"]]
     else:
         schema_rows = retrieve_relevant_schema(query, top_k=top_k)
         agent_result = run_sql_agent(query, schema_context="\n".join(schema_rows), top_k=top_k)
