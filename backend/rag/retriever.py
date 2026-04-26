@@ -2,20 +2,16 @@
 
 from __future__ import annotations
 
-import re
 from collections import defaultdict
 
 from backend import config
 from backend.rag.bm25_index import BM25Index
 from backend.rag.chunker import Chunk
 from backend.rag.embedder import SentenceTransformerEmbedder
+from backend.rag.reranker import Reranker
+from backend.rag.utils import tokenize
 from backend.rag.vector_store import FAISSVectorStore
 from langchain_core.documents import Document as LCDocument
-
-
-def _debug(message: str) -> None:
-    if getattr(config, "DEBUG_LOGGING", False):
-        print(message)
 
 
 class RagRetriever:
@@ -24,8 +20,13 @@ class RagRetriever:
     def __init__(self, embedder: SentenceTransformerEmbedder, vector_store: FAISSVectorStore) -> None:
         self.embedder = embedder
         self.vector_store = vector_store
-        self._reranker = None
+        self._reranker: Reranker | None = None
         self._bm25: BM25Index | None = None
+
+    @staticmethod
+    def _debug(message: str) -> None:
+        if config.DEBUG_LOGGING:
+            print(message)
 
     def index_chunks(self, chunks: list[Chunk]) -> None:
         """Convert chunks to LangChain documents and add them to the vector store."""
@@ -59,7 +60,7 @@ class RagRetriever:
             return self._bm25
 
         all_docs = list(store.docstore._dict.values())
-        _debug(f"[RAG Hybrid] Building BM25 index over {len(all_docs)} corpus documents...")
+        self._debug(f"[RAG Hybrid] Building BM25 index over {len(all_docs)} corpus documents...")
         bm25 = BM25Index()
         bm25.build(all_docs)
         self._bm25 = bm25
@@ -74,92 +75,94 @@ class RagRetriever:
                 scores[text] += 1.0 / (k + rank + 1)
         return sorted(scores, key=lambda t: scores[t], reverse=True)
 
-    def retrieve(self, query: str, top_k: int = 5) -> list[dict]:
-        """Return top-k relevant chunks using FAISS + optional BM25 hybrid search, then CrossEncoder reranking."""
-        fetch_k = max(top_k * config.RAG_FETCH_MULTIPLIER, 10)
-        query_domain = self._infer_query_domain(query)
-        query_vector = self.vector_store.embeddings.embed_query(query)
-
-        _debug(f"\n[RAG Pipeline] Query: {query!r}")
-        _debug(f"[RAG Pipeline] Fetching top {fetch_k} documents from FAISS...")
-
-        # ── Dense FAISS retrieval ─────────────────────────────────────────
+    def _fetch_faiss_candidates(
+        self, query_vector: list[float], fetch_k: int, query_domain: str | None
+    ) -> tuple[list[str], dict, dict, set]:
+        """FAISS vector search + deduplication. Returns (ranked_texts, doc_map, text_to_score, seen)."""
         if query_domain:
-            faiss_results = self.vector_store.search_by_vector(
+            results = self.vector_store.search_by_vector(
                 query_vector, fetch_k, metadata_filter={"domain": query_domain},
             )
-            if len(faiss_results) < fetch_k:
-                faiss_results = self.vector_store.search_by_vector(query_vector, fetch_k)
+            if len(results) < fetch_k:
+                results = self.vector_store.search_by_vector(query_vector, fetch_k)
         else:
-            faiss_results = self.vector_store.search_by_vector(query_vector, fetch_k)
+            results = self.vector_store.search_by_vector(query_vector, fetch_k)
 
-        # Deduplicate and map text -> metadata
-        doc_map = {}
-        text_to_score = {}
-        for doc, distance in faiss_results:
-            normalized_text = " ".join(doc.page_content.split())
-            if normalized_text not in doc_map:
-                doc_map[normalized_text] = doc
-                text_to_score[normalized_text] = 1.0 / (1.0 + float(distance))
+        doc_map: dict = {}
+        text_to_score: dict = {}
+        seen_normalized: set = set()
+        ranked: list[str] = []
 
-        faiss_ranked = list(doc_map.keys())
-        _debug(f"[RAG Pipeline] FAISS returned {len(faiss_ranked)} unique chunks.")
+        for doc, distance in results:
+            norm = " ".join(doc.page_content.split())
+            if norm not in seen_normalized:
+                seen_normalized.add(norm)
+                doc_map[doc.page_content] = doc
+                text_to_score[doc.page_content] = 1.0 / (1.0 + float(distance))
+                ranked.append(doc.page_content)
 
-        # ── Sparse BM25 retrieval + RRF fusion ───────────────────────────
-        retrieval_mode = getattr(config, "RAG_RETRIEVAL_MODE", "faiss")
-        if retrieval_mode == "hybrid":
-            bm25_raw = self._get_bm25().search(query, top_k=fetch_k)
-            bm25_ranked: list[str] = []
-            for text, doc, _ in bm25_raw:
-                norm = " ".join(text.split())
-                if norm not in doc_map:
-                    doc_map[norm] = doc  # add BM25-only hits to the map
-                bm25_ranked.append(norm)
+        self._debug(f"[RAG Pipeline] FAISS returned {len(ranked)} unique chunks.")
+        return ranked, doc_map, text_to_score, seen_normalized
 
-            _debug(f"[RAG Hybrid] BM25 returned {len(bm25_ranked)} candidates. Applying RRF...")
-            rrf_k = getattr(config, "RAG_RRF_K", 60)
-            fused = self._rrf([faiss_ranked, bm25_ranked], k=rrf_k)
-            documents_text = fused[:fetch_k]
-        else:
-            documents_text = faiss_ranked
+    def _fuse_bm25(
+        self,
+        query: str,
+        fetch_k: int,
+        faiss_ranked: list[str],
+        doc_map: dict,
+        seen_normalized: set,
+    ) -> list[str]:
+        """BM25 search + RRF fusion with FAISS results. Returns fused ranked text list."""
+        bm25_raw = self._get_bm25().search(query, top_k=fetch_k)
+        bm25_ranked: list[str] = []
+        for text, doc, _ in bm25_raw:
+            norm = " ".join(text.split())
+            if norm not in seen_normalized:
+                seen_normalized.add(norm)
+                doc_map[doc.page_content] = doc
+            bm25_ranked.append(doc.page_content)
 
-        # ── CrossEncoder reranking ────────────────────────────────────────
-        if config.RAG_ENABLE_SEMANTIC_RERANK:
+        self._debug(f"[RAG Hybrid] BM25 returned {len(bm25_ranked)} candidates. Applying RRF...")
+        fused = self._rrf([faiss_ranked, bm25_ranked], k=config.RAG_RRF_K)
+        return fused[:fetch_k]
+
+    def _apply_reranking(
+        self,
+        query: str,
+        documents_text: list[str],
+        top_k: int,
+        text_to_score: dict,
+        retrieval_mode: str,
+    ) -> list[dict]:
+        """Apply cross-encoder reranking or threshold fallback. Returns list[{text, score}]."""
+        if config.RAG_ENABLE_SEMANTIC_RERANK and config.RAG_RERANKER_MODEL.lower() != "none":
             if self._reranker is None:
-                from backend.rag.reranker import Reranker
-                reranker_model = getattr(config, "RAG_RERANKER_MODEL", "BAAI/bge-reranker-base")
-                self._reranker = Reranker(model_name=reranker_model)
+                self._reranker = Reranker(model_name=config.RAG_RERANKER_MODEL)
+            candidates = documents_text[:config.RAG_RERANK_POOL] if config.RAG_RERANK_POOL > 0 else documents_text
+            self._debug(f"[RAG Pipeline] Reranking {len(candidates)} documents with {self._reranker.model_name}...")
+            return self._reranker.rerank(query, candidates, top_k=top_k)
 
-            _debug(f"[RAG Pipeline] Reranking {len(documents_text)} documents with {self._reranker.model_name}...")
-            reranked = self._reranker.rerank(query, documents_text, top_k=top_k)
-        else:
-            max_chunks = getattr(config, "RAG_MAX_CHUNKS", 8)
-            limit = min(top_k, max_chunks)
-            reranked = []
+        limit = min(top_k, config.RAG_MAX_CHUNKS)
 
-            if retrieval_mode == "hybrid":
-                _debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Hybrid mode bypasses score thresholding. Taking top {limit}.")
-                # Fused results are already sorted by RRF. We just return the top entries.
-                for text in documents_text[:limit]:
-                    reranked.append({"text": text, "score": text_to_score.get(text, 0.0)})
-            else:
-                score_threshold = getattr(config, "RAG_SCORE_THRESHOLD", 0.5)
-                _debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Applying dense threshold (Threshold: {score_threshold}, Max: {limit}).")
-                
-                for text in documents_text:
-                    score = text_to_score.get(text, 0.0)
-                    if score >= score_threshold:
-                        reranked.append({"text": text, "score": score})
-                        if len(reranked) >= limit:
-                            break
+        if retrieval_mode == "hybrid":
+            self._debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Hybrid mode bypasses score thresholding. Taking top {limit}.")
+            return [{"text": t, "score": text_to_score.get(t, 0.0)} for t in documents_text[:limit]]
 
-                # Fallback if nothing met threshold
-                if not reranked and documents_text:
-                    _debug(f"[RAG Pipeline] No chunks passed threshold, falling back to top {limit}.")
-                    for text in documents_text[:limit]:
-                        reranked.append({"text": text, "score": text_to_score.get(text, 0.0)})
-        
-        _debug(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
+        self._debug(f"[RAG Pipeline] Semantic Reranking is DISABLED. Applying dense threshold (Threshold: {config.RAG_SCORE_THRESHOLD}, Max: {limit}).")
+        reranked = [
+            {"text": t, "score": s}
+            for t in documents_text
+            if (s := text_to_score.get(t, 0.0)) >= config.RAG_SCORE_THRESHOLD
+        ][:limit]
+
+        if not reranked and documents_text:
+            self._debug(f"[RAG Pipeline] No chunks passed threshold, falling back to top {limit}.")
+            reranked = [{"text": t, "score": text_to_score.get(t, 0.0)} for t in documents_text[:limit]]
+
+        return reranked
+
+    def _build_payload(self, reranked: list[dict], doc_map: dict) -> list[dict]:
+        """Format reranked results into the final output structure."""
         payload: list[dict] = []
         for i, res in enumerate(reranked, 1):
             text = res["text"]
@@ -168,9 +171,7 @@ class RagRetriever:
             metadata = dict(doc.metadata)
             chunk_id = metadata.pop("chunk_id", None)
             source = metadata.get("source", "unknown")
-
-            _debug(f"  -> Rank {i} | CrossEncoder Score: {score:.4f} | Source: {source}")
-
+            self._debug(f"  -> Rank {i} | Score: {score:.4f} | Source: {source}")
             payload.append({
                 "chunk_id": chunk_id,
                 "text": doc.page_content,
@@ -178,13 +179,36 @@ class RagRetriever:
                 "score": round(score, 4),
                 "metadata": metadata,
             })
-
         return payload
+
+    def retrieve(self, query: str, top_k: int = 5) -> list[dict]:
+        """Return top-k relevant chunks using FAISS + optional BM25 hybrid search, then CrossEncoder reranking."""
+        fetch_k = config.RAG_FETCH_K if config.RAG_FETCH_K > 0 else max(top_k * config.RAG_FETCH_MULTIPLIER, 10)
+        query_domain = self._infer_query_domain(query)
+        query_vector = self.vector_store.embeddings.embed_query(query)
+
+        self._debug(f"\n[RAG Pipeline] Query: {query!r}")
+        self._debug(f"[RAG Pipeline] Fetching top {fetch_k} documents from FAISS...")
+
+        faiss_ranked, doc_map, text_to_score, seen_normalized = self._fetch_faiss_candidates(
+            query_vector, fetch_k, query_domain
+        )
+
+        retrieval_mode = config.RAG_RETRIEVAL_MODE
+        if retrieval_mode == "hybrid":
+            documents_text = self._fuse_bm25(query, fetch_k, faiss_ranked, doc_map, seen_normalized)
+        else:
+            documents_text = faiss_ranked
+
+        reranked = self._apply_reranking(query, documents_text, top_k, text_to_score, retrieval_mode)
+
+        self._debug(f"\n[RAG Pipeline] --- Top {top_k} Results ---")
+        return self._build_payload(reranked, doc_map)
 
     @staticmethod
     def _infer_query_domain(query: str) -> str | None:
-        """Infer domain based on keyword overlap."""
-        tokens = set(re.findall(r"\b\w+\b", query.lower()))
+        """Infer domain based on keyword overlap with configured domain keywords."""
+        tokens = set(tokenize(query))
         best_domain: str | None = None
         best_hits = 0
 

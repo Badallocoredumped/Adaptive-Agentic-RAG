@@ -56,5 +56,5 @@ def get_shared_cross_encoder() -> CrossEncoder:
         if _ce_instance is None:
             from sentence_transformers import CrossEncoder as _CE
 
-            _ce_instance = _CE(config.RAG_RERANKER_MODEL)
+            _ce_instance = _CE(config.RAG_RERANKER_MODEL, max_length=512)
     return _ce_instance

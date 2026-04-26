@@ -108,6 +108,8 @@ class AdaptiveAgenticRAGSystem:
         # --- single-route modes ---
         if config.ROUTER_MODE == "llm":
             route = self.router.route_with_llm(user_query)
+        elif config.ROUTER_MODE == "semantic":
+            route = self.router.route_with_semantic(user_query)
         else:  # "keyword" or any unrecognised value
             route = self.router.route(user_query)
 

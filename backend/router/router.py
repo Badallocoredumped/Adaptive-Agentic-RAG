@@ -7,12 +7,17 @@ import importlib
 from functools import lru_cache
 import json
 import re
+import threading
 from typing import Any
 
 from langchain_core.prompts import ChatPromptTemplate
 import requests
 
 from backend import config
+
+# Lazily-built cache of seed embeddings for the semantic router.
+_semantic_seed_embeddings: dict[str, list] | None = None
+_semantic_seed_lock = threading.Lock()
 
 
 @dataclass
@@ -76,6 +81,87 @@ class QueryRouter:
             )
 
         return self.route(query)
+
+    def route_with_semantic(self, query: str) -> str:
+        """Route by cosine similarity of query embedding to per-route seed clusters.
+
+        Uses the same intfloat/multilingual-e5-base model already loaded for RAG
+        retrieval — no additional model download or LLM call required.
+        Falls back to keyword routing if numpy is unavailable.
+        """
+        try:
+            import numpy as np
+        except ImportError:
+            self._debug("route_with_semantic() numpy unavailable, falling back to keyword route()")
+            return self.route(query)
+
+        from backend.models import get_shared_hf_embeddings
+        from backend.rag.embedder import PrefixAwareEmbeddings
+
+        seed_vecs = self._get_or_build_seed_embeddings()
+
+        base = get_shared_hf_embeddings()
+        embedder = PrefixAwareEmbeddings(base, config.EMBEDDING_MODEL_NAME)
+
+        q_vec = np.array(embedder.embed_query(query), dtype=float)
+        q_norm = q_vec / (np.linalg.norm(q_vec) + 1e-10)
+
+        scores: dict[str, float] = {}
+        for route_name, vecs in seed_vecs.items():
+            mat = np.array(vecs, dtype=float)
+            row_norms = np.linalg.norm(mat, axis=1, keepdims=True)
+            mat_norm = mat / (row_norms + 1e-10)
+            scores[route_name] = float(np.max(mat_norm @ q_norm))
+
+        self._debug(f"route_with_semantic() scores={scores!r}, query={query!r}")
+
+        ranked = sorted(scores, key=scores.__getitem__, reverse=True)
+        best = ranked[0]
+
+        if len(ranked) >= 2:
+            margin = scores[ranked[0]] - scores[ranked[1]]
+            if margin < config.SEMANTIC_ROUTER_HYBRID_MARGIN:
+                self._debug(
+                    f"route_with_semantic() margin={margin:.4f} < "
+                    f"{config.SEMANTIC_ROUTER_HYBRID_MARGIN}, selecting hybrid"
+                )
+                return "hybrid"
+
+        self._debug(f"route_with_semantic() selected={best!r}")
+        return best
+
+    @staticmethod
+    def _get_or_build_seed_embeddings() -> dict[str, list]:
+        """Build and cache per-route seed embeddings (thread-safe, one-time cost)."""
+        global _semantic_seed_embeddings
+        with _semantic_seed_lock:
+            if _semantic_seed_embeddings is not None:
+                return _semantic_seed_embeddings
+
+            from backend.models import get_shared_hf_embeddings
+
+            base = get_shared_hf_embeddings()
+            e5_enabled = config.E5_PREFIX_ENABLED and "e5" in config.EMBEDDING_MODEL_NAME.lower()
+            prefix = config.E5_QUERY_PREFIX if e5_enabled else ""
+
+            sql_seeds = config.SEMANTIC_ROUTER_SQL_SEEDS
+            text_seeds = config.SEMANTIC_ROUTER_TEXT_SEEDS
+            all_seeds = sql_seeds + text_seeds
+
+            def _apply_prefix(text: str) -> str:
+                if prefix and not text.lower().startswith(prefix.strip().lower()):
+                    return f"{prefix}{text}"
+                return text
+
+            prefixed = [_apply_prefix(s) for s in all_seeds]
+            all_vecs = base.embed_documents(prefixed)
+
+            n_sql = len(sql_seeds)
+            _semantic_seed_embeddings = {
+                "sql": all_vecs[:n_sql],
+                "text": all_vecs[n_sql:],
+            }
+        return _semantic_seed_embeddings
 
     def decompose(self, query: str) -> list[SubTask]:
         """Fallback decomposition: keep one sub-task using rule routing."""
