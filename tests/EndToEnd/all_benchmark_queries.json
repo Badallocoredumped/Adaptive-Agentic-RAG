@@ -1,0 +1,1322 @@
+[
+    {
+        "qid": "SQL-001",
+        "query": "How many active customers does NileFinance currently have, and what is their average account balance across all account types?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT COUNT(DISTINCT c.id) AS active_customers, ROUND(AVG(a.balance),2) AS avg_balance FROM customers c JOIN accounts a ON a.customer_id=c.id WHERE c.is_active=1;",
+        "expected_tables": "customers, accounts",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-002",
+        "query": "What are the names and interest rates of all five account types offered by NileFinance?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT name, interest_rate FROM account_types ORDER BY name;",
+        "expected_tables": "account_types",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-003",
+        "query": "List all 8 branches with their city and the date they were opened.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT name, city, opened_date FROM branches ORDER BY opened_date;",
+        "expected_tables": "branches",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-004",
+        "query": "How many customers in the database are Egyptian nationals?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT COUNT(*) AS egyptian_customers FROM customers WHERE nationality='Egyptian';",
+        "expected_tables": "customers",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-005",
+        "query": "What is the total number of transactions per status (completed, failed, reversed, pending)?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT status, COUNT(*) AS cnt FROM transactions GROUP BY status ORDER BY cnt DESC;",
+        "expected_tables": "transactions",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-006",
+        "query": "How many employees are currently active in each role across all branches?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT role, COUNT(*) AS cnt FROM employees WHERE is_active=1 GROUP BY role ORDER BY cnt DESC;",
+        "expected_tables": "employees",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-007",
+        "query": "What is the distribution of KYC statuses (approved, pending, rejected, expired) across all customers?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT kyc_status, COUNT(*) AS cnt FROM kyc_records GROUP BY kyc_status ORDER BY cnt DESC;",
+        "expected_tables": "kyc_records",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-008",
+        "query": "How many loans exist per status (active, closed, defaulted, restructured)?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT status, COUNT(*) AS cnt FROM loans GROUP BY status ORDER BY cnt DESC;",
+        "expected_tables": "loans",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-009",
+        "query": "What is the total number of portfolio holdings per asset class (Equity, Bond, ETF, MutualFund, GoldCertificate)?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.asset_class, COUNT(ph.id) AS holdings FROM portfolio_holdings ph JOIN assets a ON ph.asset_id=a.id GROUP BY a.asset_class ORDER BY holdings DESC;",
+        "expected_tables": "portfolio_holdings, assets",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-010",
+        "query": "List all assets traded on EGX along with their sector and asset class.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT symbol, name, asset_class, sector FROM assets WHERE listed_exchange='EGX' ORDER BY symbol;",
+        "expected_tables": "assets",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-011",
+        "query": "List the top 5 branches by total outstanding loan balance, showing branch name and the sum.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, ROUND(SUM(l.outstanding_balance),2) AS total_outstanding FROM loans l JOIN branches b ON l.branch_id=b.id GROUP BY b.id,b.name ORDER BY total_outstanding DESC LIMIT 5;",
+        "expected_tables": "loans, branches",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-012",
+        "query": "Show the monthly total transaction volume for completed transactions in 2024, grouped by month.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT STRFTIME('%Y-%m',transaction_date) AS month, ROUND(SUM(amount),2) AS total FROM transactions WHERE status='completed' AND STRFTIME('%Y',transaction_date)='2024' GROUP BY month ORDER BY month;",
+        "expected_tables": "transactions",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-013",
+        "query": "What is the distribution of loan statuses across all loan types? Show counts per type-status combination.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT lt.name AS loan_type, l.status, COUNT(*) AS cnt FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id GROUP BY lt.name,l.status ORDER BY lt.name,l.status;",
+        "expected_tables": "loans, loan_types",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-014",
+        "query": "Find all customers whose debt-to-income ratio exceeds 0.60. Return their name, credit score, risk tier, and DTI.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, r.credit_score, r.risk_tier, r.debt_to_income FROM risk_assessments r JOIN customers c ON r.customer_id=c.id WHERE r.debt_to_income>0.60 ORDER BY r.debt_to_income DESC;",
+        "expected_tables": "risk_assessments, customers",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-015",
+        "query": "What are the top 3 best-performing assets by average price change percentage? Show symbol, name, and avg change.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.symbol, a.name, ROUND(AVG(mp.change_pct),4) AS avg_change FROM market_prices mp JOIN assets a ON mp.asset_id=a.id GROUP BY a.id,a.symbol,a.name ORDER BY avg_change DESC LIMIT 3;",
+        "expected_tables": "market_prices, assets",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-016",
+        "query": "List all Conservative portfolios with total_value above EGP 1,000,000. Show portfolio name, customer name, and total value.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT p.name, c.full_name, ROUND(p.total_value,2) AS total_value FROM portfolios p JOIN customers c ON p.customer_id=c.id WHERE p.total_value>1000000 AND p.risk_profile='Conservative' ORDER BY p.total_value DESC;",
+        "expected_tables": "portfolios, customers",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-017",
+        "query": "Show total amount disbursed per loan type and the average interest rate charged for each.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT lt.name AS loan_type, ROUND(SUM(l.principal),2) AS total_disbursed, ROUND(AVG(l.interest_rate),2) AS avg_rate FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id GROUP BY lt.name ORDER BY total_disbursed DESC;",
+        "expected_tables": "loans, loan_types",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-018",
+        "query": "What is the average, minimum, and maximum credit score per risk tier?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT risk_tier, ROUND(AVG(credit_score),1) AS avg_score, MIN(credit_score) AS min_score, MAX(credit_score) AS max_score FROM risk_assessments GROUP BY risk_tier ORDER BY avg_score DESC;",
+        "expected_tables": "risk_assessments",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-019",
+        "query": "List the top 5 customers by total account balance (sum across all their active accounts in EGP).",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(a.balance),2) AS total_balance FROM accounts a JOIN customers c ON a.customer_id=c.id WHERE a.status='active' AND a.currency='EGP' GROUP BY c.id,c.full_name ORDER BY total_balance DESC LIMIT 5;",
+        "expected_tables": "accounts, customers",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-020",
+        "query": "How many transactions were processed per channel in 2024? Include total amount per channel.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT channel, COUNT(*) AS tx_count, ROUND(SUM(amount),2) AS total_amount FROM transactions WHERE STRFTIME('%Y',transaction_date)='2024' AND status='completed' GROUP BY channel ORDER BY tx_count DESC;",
+        "expected_tables": "transactions",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-021",
+        "query": "Which customers have both a defaulted loan and an expired KYC record? Return their name, national ID, and branch.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, c.national_id, b.name AS branch FROM customers c JOIN loans l ON l.customer_id=c.id JOIN kyc_records k ON k.customer_id=c.id JOIN branches b ON c.branch_id=b.id WHERE l.status='defaulted' AND k.kyc_status='expired';",
+        "expected_tables": "customers, loans, kyc_records, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-022",
+        "query": "How many loan payments were made late per loan type? Include average days late for each type.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT lt.name, COUNT(lp.id) AS late_payments, ROUND(AVG(lp.days_late),1) AS avg_days_late FROM loan_payments lp JOIN loans l ON lp.loan_id=l.id JOIN loan_types lt ON l.loan_type_id=lt.id WHERE lp.days_late>0 GROUP BY lt.name ORDER BY late_payments DESC;",
+        "expected_tables": "loan_payments, loans, loan_types",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-023",
+        "query": "For each branch, show number of active employees per role as a pivot: tellers, loan officers, managers, investment analysts, risk analysts.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, SUM(CASE WHEN e.role='Teller' THEN 1 ELSE 0 END) tellers, SUM(CASE WHEN e.role='Loan Officer' THEN 1 ELSE 0 END) loan_officers, SUM(CASE WHEN e.role='Branch Manager' THEN 1 ELSE 0 END) managers, SUM(CASE WHEN e.role='Investment Analyst' THEN 1 ELSE 0 END) inv_analysts, SUM(CASE WHEN e.role='Risk Analyst' THEN 1 ELSE 0 END) risk_analysts FROM employees e JOIN branches b ON e.branch_id=b.id WHERE e.is_active=1 GROUP BY b.name ORDER BY b.name;",
+        "expected_tables": "employees, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-024",
+        "query": "For each customer with an active loan and active portfolio, show name, total outstanding debt, portfolio value, and net position.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(DISTINCT l.outstanding_balance),2) AS total_debt, ROUND(SUM(DISTINCT p.total_value),2) AS total_portfolio, ROUND(SUM(DISTINCT p.total_value)-SUM(DISTINCT l.outstanding_balance),2) AS net_position FROM customers c JOIN loans l ON l.customer_id=c.id JOIN portfolios p ON p.customer_id=c.id WHERE l.status='active' AND p.is_active=1 GROUP BY c.id,c.full_name ORDER BY net_position DESC;",
+        "expected_tables": "customers, loans, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-025",
+        "query": "Which branches have a loan default rate above 20%? Show branch name, total loans, defaulted count, and default rate %.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, COUNT(l.id) AS total_loans, SUM(CASE WHEN l.status='defaulted' THEN 1 ELSE 0 END) AS defaulted, ROUND(100.0*SUM(CASE WHEN l.status='defaulted' THEN 1 ELSE 0 END)/COUNT(l.id),2) AS default_rate_pct FROM loans l JOIN branches b ON l.branch_id=b.id GROUP BY b.id,b.name HAVING default_rate_pct>20 ORDER BY default_rate_pct DESC;",
+        "expected_tables": "loans, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-026",
+        "query": "Calculate unrealized P&L percentage for each asset class across all active portfolios. Show asset class, total current value, cost basis, and P&L %.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.asset_class, ROUND(SUM(ph.current_value),2) AS current_val, ROUND(SUM(ph.quantity*ph.avg_buy_price),2) AS cost_basis, ROUND(100.0*(SUM(ph.current_value)-SUM(ph.quantity*ph.avg_buy_price))/NULLIF(SUM(ph.quantity*ph.avg_buy_price),0),2) AS pnl_pct FROM portfolio_holdings ph JOIN assets a ON ph.asset_id=a.id JOIN portfolios p ON ph.portfolio_id=p.id WHERE p.is_active=1 GROUP BY a.asset_class ORDER BY pnl_pct DESC;",
+        "expected_tables": "portfolio_holdings, assets, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-027",
+        "query": "List the top 10 customers by total transaction volume (all completed transactions). Include branch, tx count, and total volume.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, b.name AS branch, COUNT(t.id) AS tx_count, ROUND(SUM(t.amount),2) AS total_volume FROM transactions t JOIN accounts a ON t.account_id=a.id JOIN customers c ON a.customer_id=c.id JOIN branches b ON c.branch_id=b.id WHERE t.status='completed' GROUP BY c.id,c.full_name,b.name ORDER BY total_volume DESC LIMIT 10;",
+        "expected_tables": "transactions, accounts, customers, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-028",
+        "query": "Identify customers with more than 3 late loan payments who are in the Very High risk tier. Show name, late payment count, avg days late, and relationship manager.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, e.full_name AS rm, COUNT(lp.id) AS late_count, ROUND(AVG(lp.days_late),1) AS avg_days_late, r.risk_tier FROM customers c JOIN loans l ON l.customer_id=c.id JOIN loan_payments lp ON lp.loan_id=l.id JOIN risk_assessments r ON r.customer_id=c.id JOIN employees e ON c.relationship_manager_id=e.id WHERE lp.days_late>0 AND r.risk_tier='Very High' GROUP BY c.id,c.full_name,e.full_name,r.risk_tier HAVING COUNT(lp.id)>3 ORDER BY late_count DESC;",
+        "expected_tables": "customers, loans, loan_payments, risk_assessments, employees",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-029",
+        "query": "Find customers holding accounts in more than one currency. List their name, currencies held, and total balance per currency.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, a.currency, ROUND(SUM(a.balance),2) AS total_balance FROM accounts a JOIN customers c ON a.customer_id=c.id WHERE a.status='active' GROUP BY c.id,c.full_name,a.currency HAVING c.id IN (SELECT customer_id FROM accounts WHERE status='active' GROUP BY customer_id HAVING COUNT(DISTINCT currency)>1) ORDER BY c.full_name,a.currency;",
+        "expected_tables": "accounts, customers",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "SQL-030",
+        "query": "Produce a credit risk summary per branch: customer count, avg credit score, count per risk tier (Low/Medium/High/Very High), and avg default probability.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, COUNT(DISTINCT c.id) AS customers, ROUND(AVG(r.credit_score),1) AS avg_score, SUM(CASE WHEN r.risk_tier='Low' THEN 1 ELSE 0 END) low_risk, SUM(CASE WHEN r.risk_tier='Medium' THEN 1 ELSE 0 END) medium_risk, SUM(CASE WHEN r.risk_tier='High' THEN 1 ELSE 0 END) high_risk, SUM(CASE WHEN r.risk_tier='Very High' THEN 1 ELSE 0 END) very_high_risk, ROUND(AVG(r.default_probability),4) AS avg_default_prob FROM risk_assessments r JOIN customers c ON r.customer_id=c.id JOIN branches b ON c.branch_id=b.id GROUP BY b.id,b.name ORDER BY avg_default_prob DESC;",
+        "expected_tables": "risk_assessments, customers, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1, RQ3"
+    },
+    {
+        "qid": "TXT-001",
+        "query": "What are NileFinance's Standard CDD requirements for new customers according to the AML/KYC policy?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "aml_kyc_compliance_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-002",
+        "query": "What transaction monitoring thresholds trigger a Suspicious Activity Report (SAR) at NileFinance?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "aml_kyc_compliance_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-003",
+        "query": "What is the process for filing a SAR with the EFIU, and how long must supporting documentation be retained?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "aml_kyc_compliance_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-004",
+        "query": "Which customer categories require Enhanced Due Diligence (EDD) at NileFinance?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "aml_kyc_compliance_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-005",
+        "query": "What are the maximum loan amounts and base interest rates for each loan product offered by NileFinance?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-006",
+        "query": "What is the maximum permissible debt-to-income ratio for personal loans and mortgage loans per NileFinance credit policy?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-007",
+        "query": "What collateral is required for each loan product type in the NileFinance catalogue?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-008",
+        "query": "What are the interest rates, minimum balances, and fee structures for each NileFinance retail account type?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "retail_banking_product_guide.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-009",
+        "query": "What is the NileFinance account dormancy policy \u2014 when is an account flagged, restricted, and escheated?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "digital_banking_and_payments_terms.pdf, retail_banking_product_guide.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-010",
+        "query": "Explain the three portfolio risk profiles (Conservative, Moderate, Aggressive) and their permitted asset allocation ranges.",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "investment_products_guide.pdf, asset_management_framework.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-011",
+        "query": "What are the portfolio management fee tiers at NileFinance and when are performance fees triggered?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "investment_products_guide.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-012",
+        "query": "What investment suitability factors are evaluated in the Investment Suitability Questionnaire (ISQ)?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "investment_products_guide.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-013",
+        "query": "What minimum combined balance qualifies a customer for NileFinance Premium wealth management, and what benefits do they receive?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "premium_wealth_management.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-014",
+        "query": "What are the transaction channel limits (single transaction, daily, monthly) for NileFinance Mobile App, Online Portal, and ATM?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "digital_banking_and_payments_terms.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-015",
+        "query": "What are the dispute resolution timelines for ATM disputes, unauthorised card transactions, and merchant disputes at NileFinance?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "transaction_operations_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-016",
+        "query": "What are the salary grade bands and typical branch staffing ratios per role at NileFinance?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "employee_conduct_and_hr_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-017",
+        "query": "What are NileFinance employee leave entitlements \u2014 annual, sick, maternity, and Hajj leave policies?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "employee_conduct_and_hr_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-018",
+        "query": "What are the debit card product options, annual fees, and lost-card liability rules at NileFinance?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "digital_banking_and_payments_terms.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-019",
+        "query": "What are the NilePay instant payment limits and the domestic ACH and RTGS transfer fees and cutoff times?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "transaction_operations_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-020",
+        "query": "What are NileFinance's branch operating hours, teller hierarchy, and branch-to-head-office transfer procedures per the branch operations manual?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "branch_operations_manual.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-021",
+        "query": "What are the key principles for sound stress testing practices outlined in Basel Committee document bcbs155?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "bcbs155.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-022",
+        "query": "What are the Basel III LCR and NSFR liquidity standards, and what is their purpose according to bcbs189?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "bcbs189.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-023",
+        "query": "What principles does the Basel Committee outline for the sound management of operational risk in bcbs195?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "bcbs195.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-024",
+        "query": "What is the Basel Committee guidance on credit risk and accounting for expected credit losses (ECL) from document d350?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "d350.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-025",
+        "query": "What are the FATF recommendations for AML measures in financial inclusion programs according to the FATF guidance document?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "Guidance-Financial-Inclusion -Anti-Money-Laundering-Terrorist-Financing-Measures.pdf.coredownload.pdf.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-026",
+        "query": "What risk-based approach does the FATF recommend for the securities sector according to the RBA-Securities-Sector document?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "RBA-Securities-Sector.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-027",
+        "query": "What institutional arrangements does the IMF Fintech Note (ftnea2023004) recommend for fintech regulation and supervisory monitoring?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "ftnea2023004.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-028",
+        "query": "What does the NileFinance digital cybersecurity policy say about zero-trust architecture and information security principles?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "digital_cybersecurity_policy.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-029",
+        "query": "What are the SME and Business loan origination requirements and interest rates stated in the corporate and SME banking guide?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "corporate_sme_banking_guide.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "TXT-030",
+        "query": "What are the Basel Committee principles for managing credit risk as outlined in document d595 (April 2025)?",
+        "ground_truth_route": "text",
+        "expected_pdf_sources": "d595.pdf",
+        "rq_target": "RQ2"
+    },
+    {
+        "qid": "HYB-001",
+        "query": "Which active customers have a pending KYC status, and what does NileFinance policy say must happen before any loan can be disbursed to them?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, c.national_id, c.city, k.kyc_status FROM customers c JOIN kyc_records k ON k.customer_id=c.id WHERE c.is_active=1 AND k.kyc_status='pending';",
+        "expected_tables": "customers, kyc_records",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf, aml_kyc_compliance_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-002",
+        "query": "How many customers have a debt-to-income ratio above 40%? Show their details and explain what the credit policy mandates for such cases.",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, r.debt_to_income, r.risk_tier, r.credit_score FROM risk_assessments r JOIN customers c ON r.customer_id=c.id WHERE r.debt_to_income>0.40 ORDER BY r.debt_to_income DESC;",
+        "expected_tables": "risk_assessments, customers",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-003",
+        "query": "List all Conservative portfolios that hold Equity assets. What is the maximum permitted equity allocation per the investment framework, and do these portfolios comply?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT p.name, c.full_name, a.symbol, ph.current_value FROM portfolios p JOIN portfolio_holdings ph ON ph.portfolio_id=p.id JOIN assets a ON ph.asset_id=a.id JOIN customers c ON p.customer_id=c.id WHERE p.risk_profile='Conservative' AND a.asset_class='Equity';",
+        "expected_tables": "portfolios, portfolio_holdings, assets, customers",
+        "expected_pdf_sources": "investment_products_guide.pdf, asset_management_framework.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-004",
+        "query": "Show all debit transactions above EGP 50,000. What does the AML policy say about large cash transactions at this threshold?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT t.reference_no, t.amount, t.transaction_date, t.channel, a.account_number FROM transactions t JOIN accounts a ON t.account_id=a.id WHERE t.direction='debit' AND t.amount>50000 ORDER BY t.transaction_date DESC LIMIT 20;",
+        "expected_tables": "transactions, accounts",
+        "expected_pdf_sources": "aml_kyc_compliance_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-005",
+        "query": "Which SME loans were disbursed to accounts not belonging to the borrowing customer? Why is this a policy violation per the corporate banking guide?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT l.id, c.full_name, lt.name AS loan_type, a.account_number, ac.customer_id AS account_owner FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id JOIN customers c ON l.customer_id=c.id JOIN accounts a ON l.disbursement_account_id=a.id JOIN accounts ac ON ac.id=l.disbursement_account_id WHERE lt.name='SME Loan' AND ac.customer_id!=l.customer_id;",
+        "expected_tables": "loans, loan_types, customers, accounts",
+        "expected_pdf_sources": "corporate_sme_banking_guide.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-006",
+        "query": "What is the average credit score of Very High risk tier customers, and what do Basel credit risk principles say about managing such borrowers?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT risk_tier, ROUND(AVG(credit_score),1) AS avg_score, ROUND(AVG(default_probability),4) AS avg_default_prob, COUNT(*) AS cnt FROM risk_assessments WHERE risk_tier='Very High' GROUP BY risk_tier;",
+        "expected_tables": "risk_assessments",
+        "expected_pdf_sources": "d595.pdf, d350.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-007",
+        "query": "List employees paid above the top of their salary grade band per the HR policy. Show branch, role, name, and salary.",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT b.name, e.role, e.full_name, e.salary FROM employees e JOIN branches b ON e.branch_id=b.id WHERE e.is_active=1 AND ((e.role='Teller' AND e.salary>15000) OR (e.role='Loan Officer' AND e.salary>22000) OR (e.role='Branch Manager' AND e.salary>45000) OR (e.role='Investment Analyst' AND e.salary>35000) OR (e.role='Risk Analyst' AND e.salary>32000)) ORDER BY b.name,e.role;",
+        "expected_tables": "employees, branches",
+        "expected_pdf_sources": "employee_conduct_and_hr_policy.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-008",
+        "query": "Which customers have expired KYC and active investment portfolios? What does the investment products guide say happens to their trading activity?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, k.kyc_status, k.expiry_date, p.name AS portfolio, p.total_value FROM customers c JOIN kyc_records k ON k.customer_id=c.id JOIN portfolios p ON p.customer_id=c.id WHERE k.kyc_status='expired' AND p.is_active=1;",
+        "expected_tables": "customers, kyc_records, portfolios",
+        "expected_pdf_sources": "investment_products_guide.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-009",
+        "query": "Show the top 5 customers by total portfolio value. What management fee tier applies to each per the investment products fee schedule?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(p.total_value),2) AS total_portfolio FROM portfolios p JOIN customers c ON p.customer_id=c.id WHERE p.is_active=1 GROUP BY c.id,c.full_name ORDER BY total_portfolio DESC LIMIT 5;",
+        "expected_tables": "portfolios, customers",
+        "expected_pdf_sources": "investment_products_guide.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-010",
+        "query": "Count transactions per channel in 2024. What are the single transaction and daily limits for each channel per NileFinance digital banking terms?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT channel, COUNT(*) AS tx_count, ROUND(SUM(amount),2) AS total_amount FROM transactions WHERE status='completed' AND STRFTIME('%Y',transaction_date)='2024' GROUP BY channel ORDER BY tx_count DESC;",
+        "expected_tables": "transactions",
+        "expected_pdf_sources": "digital_banking_and_payments_terms.pdf, transaction_operations_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-011",
+        "query": "List all customers with rejected KYC records. What does the AML policy require the bank to do when KYC is rejected?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, c.national_id, k.document_type, k.notes, k.verification_date FROM customers c JOIN kyc_records k ON k.customer_id=c.id WHERE k.kyc_status='rejected';",
+        "expected_tables": "customers, kyc_records",
+        "expected_pdf_sources": "aml_kyc_compliance_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-012",
+        "query": "Which customers qualify for Premium wealth management status (combined EGP balance + portfolio \u2265 5,000,000)? What exclusive benefits does the premium policy entitle them to?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(DISTINCT a.balance)+SUM(DISTINCT p.total_value),2) AS total_rv FROM customers c LEFT JOIN accounts a ON a.customer_id=c.id AND a.status='active' AND a.currency='EGP' LEFT JOIN portfolios p ON p.customer_id=c.id AND p.is_active=1 GROUP BY c.id,c.full_name HAVING total_rv>=5000000 ORDER BY total_rv DESC;",
+        "expected_tables": "customers, accounts, portfolios",
+        "expected_pdf_sources": "premium_wealth_management.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-013",
+        "query": "Show all Mortgage loans with outstanding balance over EGP 2,000,000. What does the credit policy say about the collateral requirement for mortgage loans?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, l.principal, l.outstanding_balance, l.collateral, l.maturity_date FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id JOIN customers c ON l.customer_id=c.id WHERE lt.name='Mortgage Loan' AND l.outstanding_balance>2000000 ORDER BY l.outstanding_balance DESC;",
+        "expected_tables": "loans, loan_types, customers",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-014",
+        "query": "Which assets on EGX had a negative average price change in the recorded period? What does the asset management framework say about managing underperforming equities in client portfolios?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT a.symbol, a.name, ROUND(AVG(mp.change_pct),4) AS avg_change FROM market_prices mp JOIN assets a ON mp.asset_id=a.id WHERE a.listed_exchange='EGX' GROUP BY a.id,a.symbol,a.name HAVING AVG(mp.change_pct)<0 ORDER BY avg_change ASC;",
+        "expected_tables": "market_prices, assets",
+        "expected_pdf_sources": "asset_management_framework.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-015",
+        "query": "How many missed loan payments occurred per branch in 2024? What does the NileFinance credit policy say about recovery procedures for missed payments?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT b.name, COUNT(lp.id) AS missed_payments FROM loan_payments lp JOIN loans l ON lp.loan_id=l.id JOIN branches b ON l.branch_id=b.id WHERE lp.status='missed' AND STRFTIME('%Y',lp.payment_date)='2024' GROUP BY b.id,b.name ORDER BY missed_payments DESC;",
+        "expected_tables": "loan_payments, loans, branches",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-016",
+        "query": "Show all customers from Alexandria with active current accounts and their balances. What are the current account overdraft terms per the retail banking guide?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, a.account_number, a.balance, a.currency FROM customers c JOIN accounts a ON a.customer_id=c.id JOIN account_types at ON a.account_type_id=at.id WHERE c.city='Alexandria' AND at.name='Current Account' AND a.status='active' ORDER BY a.balance DESC;",
+        "expected_tables": "customers, accounts, account_types",
+        "expected_pdf_sources": "retail_banking_product_guide.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-017",
+        "query": "Which customers have Auto Loans with a Vehicle collateral that are currently active? What does the loan policy say about auto loan tenure and LTV limits?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, l.principal, l.outstanding_balance, l.tenure_months, l.interest_rate FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id JOIN customers c ON l.customer_id=c.id WHERE lt.name='Auto Loan' AND l.collateral='Vehicle' AND l.status='active';",
+        "expected_tables": "loans, loan_types, customers",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-018",
+        "query": "Which Cairo Main Branch customers have no active investment portfolio? What does the premium wealth management policy say about proactively offering investment products?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, c.city FROM customers c JOIN branches b ON c.branch_id=b.id WHERE b.name='Cairo Main Branch' AND c.is_active=1 AND c.id NOT IN (SELECT customer_id FROM portfolios WHERE is_active=1);",
+        "expected_tables": "customers, branches, portfolios",
+        "expected_pdf_sources": "premium_wealth_management.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-019",
+        "query": "Show total loan repayment amounts collected per month in 2024 via Mobile App. What are the Mobile App transaction limits per digital banking terms?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT STRFTIME('%Y-%m',lp.payment_date) AS month, ROUND(SUM(lp.amount_paid),2) AS total_collected FROM loan_payments lp WHERE lp.payment_method='Mobile App' AND STRFTIME('%Y',lp.payment_date)='2024' AND lp.status!='missed' GROUP BY month ORDER BY month;",
+        "expected_tables": "loan_payments",
+        "expected_pdf_sources": "digital_banking_and_payments_terms.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-020",
+        "query": "List all restructured loans and their customers. What does the credit policy say about the conditions under which a loan may be restructured?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, lt.name AS loan_type, l.principal, l.outstanding_balance, l.interest_rate, l.maturity_date FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id JOIN customers c ON l.customer_id=c.id WHERE l.status='restructured' ORDER BY l.outstanding_balance DESC;",
+        "expected_tables": "loans, loan_types, customers",
+        "expected_pdf_sources": "loan_products_and_credit_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-021",
+        "query": "How many customers have transactions that match the smurfing pattern (multiple transactions totalling \u2265 EGP 100,000 within a 5-day window)? What is the SAR filing requirement per the AML policy?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT a.customer_id, ROUND(SUM(t.amount),2) AS five_day_total, COUNT(t.id) AS tx_count FROM transactions t JOIN accounts a ON t.account_id=a.id WHERE t.status='completed' GROUP BY a.customer_id, STRFTIME('%Y-%W',t.transaction_date) HAVING five_day_total>=100000 AND tx_count>=3;",
+        "expected_tables": "transactions, accounts",
+        "expected_pdf_sources": "aml_kyc_compliance_policy.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-022",
+        "query": "Show all Fixed Deposit accounts opened in 2024 and their balances. What are the early withdrawal penalty rules for Fixed Deposits per the retail banking guide?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, a.account_number, a.balance, a.currency, a.opened_date FROM accounts a JOIN customers c ON a.customer_id=c.id JOIN account_types at ON a.account_type_id=at.id WHERE at.name='Fixed Deposit' AND STRFTIME('%Y',a.opened_date)='2024' ORDER BY a.balance DESC;",
+        "expected_tables": "accounts, customers, account_types",
+        "expected_pdf_sources": "retail_banking_product_guide.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-023",
+        "query": "Which Aggressive portfolios hold GoldCertificate assets? What is the permitted Gold/Alternatives allocation range for Aggressive profiles per the investment guide?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT p.name, c.full_name, a.symbol, ph.quantity, ph.current_value FROM portfolios p JOIN portfolio_holdings ph ON ph.portfolio_id=p.id JOIN assets a ON ph.asset_id=a.id JOIN customers c ON p.customer_id=c.id WHERE p.risk_profile='Aggressive' AND a.asset_class='GoldCertificate';",
+        "expected_tables": "portfolios, portfolio_holdings, assets, customers",
+        "expected_pdf_sources": "investment_products_guide.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-024",
+        "query": "How many Business Loans were originated at each branch in 2024? What does the corporate banking guide require for Business Loan origination at a branch?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT b.name, COUNT(l.id) AS business_loans, ROUND(SUM(l.principal),2) AS total_principal FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id JOIN branches b ON l.branch_id=b.id WHERE lt.name='Business Loan' AND STRFTIME('%Y',l.disbursement_date)='2024' GROUP BY b.id,b.name ORDER BY business_loans DESC;",
+        "expected_tables": "loans, loan_types, branches",
+        "expected_pdf_sources": "corporate_sme_banking_guide.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-025",
+        "query": "List all online transactions that were reversed. What does the transaction operations policy say about the reversal process and resolution timelines?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT t.reference_no, t.amount, t.transaction_date, t.description, a.account_number FROM transactions t JOIN accounts a ON t.account_id=a.id WHERE t.status='reversed' AND t.channel='Online' ORDER BY t.transaction_date DESC;",
+        "expected_tables": "transactions, accounts",
+        "expected_pdf_sources": "transaction_operations_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-026",
+        "query": "Which NASDAQ-listed assets in our portfolio holdings have the highest unrealized P&L? What does the investment products guide say about international equity investment minimums?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT a.symbol, a.name, ROUND(SUM(ph.unrealized_pnl),2) AS total_unrealized_pnl, ROUND(SUM(ph.current_value),2) AS total_current_value FROM portfolio_holdings ph JOIN assets a ON ph.asset_id=a.id WHERE a.listed_exchange='NASDAQ' GROUP BY a.id,a.symbol,a.name ORDER BY total_unrealized_pnl DESC LIMIT 5;",
+        "expected_tables": "portfolio_holdings, assets",
+        "expected_pdf_sources": "investment_products_guide.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-027",
+        "query": "Show customers whose accounts have been inactive (no transactions) for more than 12 months. What fees and restrictions does NileFinance apply to dormant accounts per policy?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, a.account_number, a.last_activity, a.balance FROM accounts a JOIN customers c ON a.customer_id=c.id WHERE a.status='active' AND DATE(a.last_activity)<DATE('now','-12 months') ORDER BY a.last_activity ASC;",
+        "expected_tables": "accounts, customers",
+        "expected_pdf_sources": "digital_banking_and_payments_terms.pdf, retail_banking_product_guide.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-028",
+        "query": "What is the average default probability per branch? What do the Basel ECL principles (d350) say about provisioning for expected credit losses?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT b.name, ROUND(AVG(r.default_probability),4) AS avg_default_prob, COUNT(r.id) AS assessed_loans FROM risk_assessments r JOIN loans l ON r.loan_id=l.id JOIN branches b ON l.branch_id=b.id GROUP BY b.id,b.name ORDER BY avg_default_prob DESC;",
+        "expected_tables": "risk_assessments, loans, branches",
+        "expected_pdf_sources": "d350.pdf",
+        "sql_complexity": "complex",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-029",
+        "query": "List Youth Account holders with a balance above EGP 10,000. What does the retail banking guide say about auto-upgrade rules for Youth Accounts?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, a.account_number, a.balance, c.date_of_birth FROM accounts a JOIN customers c ON a.customer_id=c.id JOIN account_types at ON a.account_type_id=at.id WHERE at.name='Youth Account' AND a.balance>10000 AND a.status='active' ORDER BY a.balance DESC;",
+        "expected_tables": "accounts, customers, account_types",
+        "expected_pdf_sources": "retail_banking_product_guide.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "HYB-030",
+        "query": "Show all customers assessed by Compliance Officers as their relationship manager. What does the AML policy require Compliance Officers to do when reviewing flagged transactions?",
+        "ground_truth_route": "hybrid",
+        "ground_truth_sql": "SELECT c.full_name, e.full_name AS compliance_officer, e.role, b.name AS branch FROM customers c JOIN employees e ON c.relationship_manager_id=e.id JOIN branches b ON c.branch_id=b.id WHERE e.role='Compliance Officer';",
+        "expected_tables": "customers, employees, branches",
+        "expected_pdf_sources": "aml_kyc_compliance_policy.pdf",
+        "sql_complexity": "medium",
+        "rq_target": "RQ2, FI"
+    },
+    {
+        "qid": "CACHE-001",
+        "query": "Give me the count of active customers and their mean account balance.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT COUNT(DISTINCT c.id) AS active_customers, ROUND(AVG(a.balance),2) AS avg_balance FROM customers c JOIN accounts a ON a.customer_id=c.id WHERE c.is_active=1;",
+        "expected_tables": "customers, accounts",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-002",
+        "query": "What are all the account types and their interest rates?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT name, interest_rate FROM account_types ORDER BY name;",
+        "expected_tables": "account_types",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-003",
+        "query": "Tell me the city and opening date of each NileFinance branch.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT name, city, opened_date FROM branches ORDER BY opened_date;",
+        "expected_tables": "branches",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-004",
+        "query": "How many of our customers hold Egyptian nationality?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT COUNT(*) AS egyptian_customers FROM customers WHERE nationality='Egyptian';",
+        "expected_tables": "customers",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-005",
+        "query": "Break down all transactions by their status \u2014 how many are completed, failed, reversed, or pending?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT status, COUNT(*) AS cnt FROM transactions GROUP BY status ORDER BY cnt DESC;",
+        "expected_tables": "transactions",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-006",
+        "query": "How many currently active staff members are there per job title?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT role, COUNT(*) AS cnt FROM employees WHERE is_active=1 GROUP BY role ORDER BY cnt DESC;",
+        "expected_tables": "employees",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-007",
+        "query": "What is the breakdown of customer verification statuses \u2014 how many are approved, pending, rejected, or expired?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT kyc_status, COUNT(*) AS cnt FROM kyc_records GROUP BY kyc_status ORDER BY cnt DESC;",
+        "expected_tables": "kyc_records",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-008",
+        "query": "How many loans are active, closed, defaulted, or restructured?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT status, COUNT(*) AS cnt FROM loans GROUP BY status ORDER BY cnt DESC;",
+        "expected_tables": "loans",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-009",
+        "query": "How many portfolio positions exist for each investment category?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.asset_class, COUNT(ph.id) AS holdings FROM portfolio_holdings ph JOIN assets a ON ph.asset_id=a.id GROUP BY a.asset_class ORDER BY holdings DESC;",
+        "expected_tables": "portfolio_holdings, assets",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-010",
+        "query": "What stocks or instruments are listed on the EGX exchange in our system?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT symbol, name, asset_class, sector FROM assets WHERE listed_exchange='EGX' ORDER BY symbol;",
+        "expected_tables": "assets",
+        "sql_complexity": "simple",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-011",
+        "query": "Rank the branches from highest to lowest by the total amount still owed on their loans. Show the top 5.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, ROUND(SUM(l.outstanding_balance),2) AS total_outstanding FROM loans l JOIN branches b ON l.branch_id=b.id GROUP BY b.id,b.name ORDER BY total_outstanding DESC LIMIT 5;",
+        "expected_tables": "loans, branches",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-012",
+        "query": "Aggregate the total value of completed payments each month throughout 2024.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT STRFTIME('%Y-%m',transaction_date) AS month, ROUND(SUM(amount),2) AS total FROM transactions WHERE status='completed' AND STRFTIME('%Y',transaction_date)='2024' GROUP BY month ORDER BY month;",
+        "expected_tables": "transactions",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-013",
+        "query": "Per loan product category, what is the count of loans in each repayment status?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT lt.name AS loan_type, l.status, COUNT(*) AS cnt FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id GROUP BY lt.name,l.status ORDER BY lt.name,l.status;",
+        "expected_tables": "loans, loan_types",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-014",
+        "query": "Which borrowers have a debt-to-income ratio over 60%? Show credit score and risk tier.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, r.credit_score, r.risk_tier, r.debt_to_income FROM risk_assessments r JOIN customers c ON r.customer_id=c.id WHERE r.debt_to_income>0.60 ORDER BY r.debt_to_income DESC;",
+        "expected_tables": "risk_assessments, customers",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-015",
+        "query": "Which three securities in our market data have the best average daily return?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.symbol, a.name, ROUND(AVG(mp.change_pct),4) AS avg_change FROM market_prices mp JOIN assets a ON mp.asset_id=a.id GROUP BY a.id,a.symbol,a.name ORDER BY avg_change DESC LIMIT 3;",
+        "expected_tables": "market_prices, assets",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-016",
+        "query": "Show Conservative investment portfolios worth over one million EGP along with the customer names.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT p.name, c.full_name, ROUND(p.total_value,2) AS total_value FROM portfolios p JOIN customers c ON p.customer_id=c.id WHERE p.total_value>1000000 AND p.risk_profile='Conservative' ORDER BY p.total_value DESC;",
+        "expected_tables": "portfolios, customers",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-017",
+        "query": "What is the total principal disbursed and average rate for each loan product type?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT lt.name, ROUND(SUM(l.principal),2) AS total_disbursed, ROUND(AVG(l.interest_rate),2) AS avg_rate FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id GROUP BY lt.name ORDER BY total_disbursed DESC;",
+        "expected_tables": "loans, loan_types",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-018",
+        "query": "What is the average, min, and max credit score for each risk category?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT risk_tier, ROUND(AVG(credit_score),1) AS avg_score, MIN(credit_score) AS min_score, MAX(credit_score) AS max_score FROM risk_assessments GROUP BY risk_tier ORDER BY avg_score DESC;",
+        "expected_tables": "risk_assessments",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-019",
+        "query": "Who are the top 5 customers by total EGP account balance?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(a.balance),2) AS total_balance FROM accounts a JOIN customers c ON a.customer_id=c.id WHERE a.status='active' AND a.currency='EGP' GROUP BY c.id,c.full_name ORDER BY total_balance DESC LIMIT 5;",
+        "expected_tables": "accounts, customers",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-020",
+        "query": "How many completed transactions were processed per channel in 2024 and what was the total volume?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT channel, COUNT(*) AS tx_count, ROUND(SUM(amount),2) AS total_amount FROM transactions WHERE STRFTIME('%Y',transaction_date)='2024' AND status='completed' GROUP BY channel ORDER BY tx_count DESC;",
+        "expected_tables": "transactions",
+        "sql_complexity": "medium",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-021",
+        "query": "Find me customers who have a loan in default and whose KYC has also lapsed. Include their branch.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, c.national_id, b.name AS branch FROM customers c JOIN loans l ON l.customer_id=c.id JOIN kyc_records k ON k.customer_id=c.id JOIN branches b ON c.branch_id=b.id WHERE l.status='defaulted' AND k.kyc_status='expired';",
+        "expected_tables": "customers, loans, kyc_records, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-022",
+        "query": "Per loan product category, how many repayments were overdue and what was the typical number of days overdue?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT lt.name, COUNT(lp.id) AS late_payments, ROUND(AVG(lp.days_late),1) AS avg_days_late FROM loan_payments lp JOIN loans l ON lp.loan_id=l.id JOIN loan_types lt ON l.loan_type_id=lt.id WHERE lp.days_late>0 GROUP BY lt.name ORDER BY late_payments DESC;",
+        "expected_tables": "loan_payments, loans, loan_types",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-023",
+        "query": "For every branch, how many staff are there per job role?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, SUM(CASE WHEN e.role='Teller' THEN 1 ELSE 0 END) tellers, SUM(CASE WHEN e.role='Loan Officer' THEN 1 ELSE 0 END) loan_officers, SUM(CASE WHEN e.role='Branch Manager' THEN 1 ELSE 0 END) managers, SUM(CASE WHEN e.role='Investment Analyst' THEN 1 ELSE 0 END) inv_analysts, SUM(CASE WHEN e.role='Risk Analyst' THEN 1 ELSE 0 END) risk_analysts FROM employees e JOIN branches b ON e.branch_id=b.id WHERE e.is_active=1 GROUP BY b.name ORDER BY b.name;",
+        "expected_tables": "employees, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-024",
+        "query": "For customers with both an active loan and active portfolio, what is their net financial position?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(DISTINCT l.outstanding_balance),2) AS total_debt, ROUND(SUM(DISTINCT p.total_value),2) AS total_portfolio, ROUND(SUM(DISTINCT p.total_value)-SUM(DISTINCT l.outstanding_balance),2) AS net_position FROM customers c JOIN loans l ON l.customer_id=c.id JOIN portfolios p ON p.customer_id=c.id WHERE l.status='active' AND p.is_active=1 GROUP BY c.id,c.full_name ORDER BY net_position DESC;",
+        "expected_tables": "customers, loans, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-025",
+        "query": "Which branches are experiencing a loan default rate higher than 20%?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, COUNT(l.id) AS total_loans, SUM(CASE WHEN l.status='defaulted' THEN 1 ELSE 0 END) AS defaulted, ROUND(100.0*SUM(CASE WHEN l.status='defaulted' THEN 1 ELSE 0 END)/COUNT(l.id),2) AS default_rate_pct FROM loans l JOIN branches b ON l.branch_id=b.id GROUP BY b.id,b.name HAVING default_rate_pct>20 ORDER BY default_rate_pct DESC;",
+        "expected_tables": "loans, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-026",
+        "query": "What is the unrealized profit or loss percentage per investment category across active portfolios?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.asset_class, ROUND(SUM(ph.current_value),2) AS current_val, ROUND(SUM(ph.quantity*ph.avg_buy_price),2) AS cost_basis, ROUND(100.0*(SUM(ph.current_value)-SUM(ph.quantity*ph.avg_buy_price))/NULLIF(SUM(ph.quantity*ph.avg_buy_price),0),2) AS pnl_pct FROM portfolio_holdings ph JOIN assets a ON ph.asset_id=a.id JOIN portfolios p ON ph.portfolio_id=p.id WHERE p.is_active=1 GROUP BY a.asset_class ORDER BY pnl_pct DESC;",
+        "expected_tables": "portfolio_holdings, assets, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-027",
+        "query": "Who are the 10 highest-volume transaction customers and which branch do they belong to?",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, b.name AS branch, COUNT(t.id) AS tx_count, ROUND(SUM(t.amount),2) AS total_volume FROM transactions t JOIN accounts a ON t.account_id=a.id JOIN customers c ON a.customer_id=c.id JOIN branches b ON c.branch_id=b.id WHERE t.status='completed' GROUP BY c.id,c.full_name,b.name ORDER BY total_volume DESC LIMIT 10;",
+        "expected_tables": "transactions, accounts, customers, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-028",
+        "query": "Show me customers in the Very High risk tier who missed more than 3 repayments and their assigned relationship manager.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, e.full_name AS rm, COUNT(lp.id) AS late_count, ROUND(AVG(lp.days_late),1) AS avg_days_late, r.risk_tier FROM customers c JOIN loans l ON l.customer_id=c.id JOIN loan_payments lp ON lp.loan_id=l.id JOIN risk_assessments r ON r.customer_id=c.id JOIN employees e ON c.relationship_manager_id=e.id WHERE lp.days_late>0 AND r.risk_tier='Very High' GROUP BY c.id,c.full_name,e.full_name,r.risk_tier HAVING COUNT(lp.id)>3 ORDER BY late_count DESC;",
+        "expected_tables": "customers, loans, loan_payments, risk_assessments, employees",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-029",
+        "query": "Find customers holding accounts in multiple currencies and show their balance per currency.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, a.currency, ROUND(SUM(a.balance),2) AS total_balance FROM accounts a JOIN customers c ON a.customer_id=c.id WHERE a.status='active' GROUP BY c.id,c.full_name,a.currency HAVING c.id IN (SELECT customer_id FROM accounts WHERE status='active' GROUP BY customer_id HAVING COUNT(DISTINCT currency)>1) ORDER BY c.full_name,a.currency;",
+        "expected_tables": "accounts, customers",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CACHE-030",
+        "query": "Give me a full credit risk summary for each branch \u2014 customer count, mean score, risk tier breakdown, and average default probability.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, COUNT(DISTINCT c.id) AS customers, ROUND(AVG(r.credit_score),1) AS avg_score, SUM(CASE WHEN r.risk_tier='Low' THEN 1 ELSE 0 END) low_risk, SUM(CASE WHEN r.risk_tier='Medium' THEN 1 ELSE 0 END) medium_risk, SUM(CASE WHEN r.risk_tier='High' THEN 1 ELSE 0 END) high_risk, SUM(CASE WHEN r.risk_tier='Very High' THEN 1 ELSE 0 END) very_high_risk, ROUND(AVG(r.default_probability),4) AS avg_default_prob FROM risk_assessments r JOIN customers c ON r.customer_id=c.id JOIN branches b ON c.branch_id=b.id GROUP BY b.id,b.name ORDER BY avg_default_prob DESC;",
+        "expected_tables": "risk_assessments, customers, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ1"
+    },
+    {
+        "qid": "CSQL-001",
+        "query": "For each customer with both an active loan and active portfolio, show name, total outstanding debt, total portfolio value, and net position (portfolio minus debt).",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(DISTINCT l.outstanding_balance),2) AS total_debt, ROUND(SUM(DISTINCT p.total_value),2) AS total_portfolio, ROUND(SUM(DISTINCT p.total_value)-SUM(DISTINCT l.outstanding_balance),2) AS net_position FROM customers c JOIN loans l ON l.customer_id=c.id JOIN portfolios p ON p.customer_id=c.id WHERE l.status='active' AND p.is_active=1 GROUP BY c.id,c.full_name ORDER BY net_position DESC;",
+        "expected_tables": "customers, loans, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-002",
+        "query": "Identify customers with more than 3 late loan payments who are in the Very High risk tier. Show name, late count, avg days late, and relationship manager.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, e.full_name AS rm, COUNT(lp.id) AS late_count, ROUND(AVG(lp.days_late),1) AS avg_days_late FROM customers c JOIN loans l ON l.customer_id=c.id JOIN loan_payments lp ON lp.loan_id=l.id JOIN risk_assessments r ON r.customer_id=c.id JOIN employees e ON c.relationship_manager_id=e.id WHERE lp.days_late>0 AND r.risk_tier='Very High' GROUP BY c.id,c.full_name,e.full_name HAVING COUNT(lp.id)>3 ORDER BY late_count DESC;",
+        "expected_tables": "customers, loans, loan_payments, risk_assessments, employees",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-003",
+        "query": "Calculate unrealized P&L percentage per asset class across all active portfolios. Show asset class, total current value, total cost basis, and P&L %.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.asset_class, ROUND(SUM(ph.current_value),2) AS current_val, ROUND(SUM(ph.quantity*ph.avg_buy_price),2) AS cost_basis, ROUND(100.0*(SUM(ph.current_value)-SUM(ph.quantity*ph.avg_buy_price))/NULLIF(SUM(ph.quantity*ph.avg_buy_price),0),2) AS pnl_pct FROM portfolio_holdings ph JOIN assets a ON ph.asset_id=a.id JOIN portfolios p ON ph.portfolio_id=p.id WHERE p.is_active=1 GROUP BY a.asset_class ORDER BY pnl_pct DESC;",
+        "expected_tables": "portfolio_holdings, assets, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-004",
+        "query": "Which branches have a loan default rate above 20%? Show branch, total loans, defaulted count, and default rate %.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, COUNT(l.id) AS total_loans, SUM(CASE WHEN l.status='defaulted' THEN 1 ELSE 0 END) AS defaulted, ROUND(100.0*SUM(CASE WHEN l.status='defaulted' THEN 1 ELSE 0 END)/COUNT(l.id),2) AS default_rate_pct FROM loans l JOIN branches b ON l.branch_id=b.id GROUP BY b.id,b.name HAVING default_rate_pct>20 ORDER BY default_rate_pct DESC;",
+        "expected_tables": "loans, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-005",
+        "query": "Find customers holding accounts in more than one currency. Show name, currencies, and total balance per currency.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, a.currency, ROUND(SUM(a.balance),2) AS total_balance FROM accounts a JOIN customers c ON a.customer_id=c.id WHERE a.status='active' GROUP BY c.id,c.full_name,a.currency HAVING c.id IN (SELECT customer_id FROM accounts WHERE status='active' GROUP BY customer_id HAVING COUNT(DISTINCT currency)>1) ORDER BY c.full_name,a.currency;",
+        "expected_tables": "accounts, customers",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-006",
+        "query": "Produce a full credit risk summary per branch: customer count, avg credit score, count per tier (Low/Medium/High/Very High), and avg default probability.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, COUNT(DISTINCT c.id) AS customers, ROUND(AVG(r.credit_score),1) AS avg_score, SUM(CASE WHEN r.risk_tier='Low' THEN 1 ELSE 0 END) low_risk, SUM(CASE WHEN r.risk_tier='Medium' THEN 1 ELSE 0 END) medium_risk, SUM(CASE WHEN r.risk_tier='High' THEN 1 ELSE 0 END) high_risk, SUM(CASE WHEN r.risk_tier='Very High' THEN 1 ELSE 0 END) very_high_risk, ROUND(AVG(r.default_probability),4) AS avg_default_prob FROM risk_assessments r JOIN customers c ON r.customer_id=c.id JOIN branches b ON c.branch_id=b.id GROUP BY b.id,b.name ORDER BY avg_default_prob DESC;",
+        "expected_tables": "risk_assessments, customers, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-007",
+        "query": "For each Loan Officer, show how many active loans they manage, total principal, and average interest rate.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT e.full_name, b.name AS branch, COUNT(l.id) AS active_loans, ROUND(SUM(l.principal),2) AS total_principal, ROUND(AVG(l.interest_rate),2) AS avg_rate FROM loans l JOIN customers c ON l.customer_id=c.id JOIN employees e ON c.relationship_manager_id=e.id JOIN branches b ON e.branch_id=b.id WHERE e.role='Loan Officer' AND l.status='active' GROUP BY e.id,e.full_name,b.name ORDER BY total_principal DESC;",
+        "expected_tables": "loans, customers, employees, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-008",
+        "query": "Show assets whose average market price change was negative over all recorded periods, ranked worst to best.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.symbol, a.name, a.asset_class, ROUND(AVG(mp.change_pct),4) AS avg_change FROM market_prices mp JOIN assets a ON mp.asset_id=a.id GROUP BY a.id,a.symbol,a.name,a.asset_class HAVING AVG(mp.change_pct)<0 ORDER BY avg_change ASC;",
+        "expected_tables": "market_prices, assets",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-009",
+        "query": "List the top 10 customers by total completed transaction volume, including branch and tx count.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, b.name AS branch, COUNT(t.id) AS tx_count, ROUND(SUM(t.amount),2) AS total_volume FROM transactions t JOIN accounts a ON t.account_id=a.id JOIN customers c ON a.customer_id=c.id JOIN branches b ON c.branch_id=b.id WHERE t.status='completed' GROUP BY c.id,c.full_name,b.name ORDER BY total_volume DESC LIMIT 10;",
+        "expected_tables": "transactions, accounts, customers, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-010",
+        "query": "Identify customers who qualify for Premium wealth management (combined EGP account balance + portfolio value \u2265 EGP 5,000,000). Show relationship value.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(DISTINCT a.balance),2) AS acct_balance, ROUND(SUM(DISTINCT p.total_value),2) AS portfolio_value, ROUND(SUM(DISTINCT a.balance)+SUM(DISTINCT p.total_value),2) AS total_rv FROM customers c LEFT JOIN accounts a ON a.customer_id=c.id AND a.status='active' AND a.currency='EGP' LEFT JOIN portfolios p ON p.customer_id=c.id AND p.is_active=1 GROUP BY c.id,c.full_name HAVING total_rv>=5000000 ORDER BY total_rv DESC;",
+        "expected_tables": "customers, accounts, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-011",
+        "query": "For each transaction category, show total transaction count, total volume, and percentage share of overall transaction volume.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT tc.name, COUNT(t.id) AS cnt, ROUND(SUM(t.amount),2) AS total_vol, ROUND(100.0*SUM(t.amount)/(SELECT SUM(amount) FROM transactions WHERE status='completed'),2) AS pct_share FROM transactions t JOIN transaction_categories tc ON t.category_id=tc.id WHERE t.status='completed' GROUP BY tc.name ORDER BY total_vol DESC;",
+        "expected_tables": "transactions, transaction_categories",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-012",
+        "query": "Show the monthly principal vs interest breakdown of all loan repayments in 2024 across the entire portfolio.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT STRFTIME('%Y-%m',payment_date) AS month, ROUND(SUM(principal_portion),2) AS total_principal, ROUND(SUM(interest_portion),2) AS total_interest, ROUND(SUM(amount_paid),2) AS total_collected FROM loan_payments WHERE STRFTIME('%Y',payment_date)='2024' AND status!='missed' GROUP BY month ORDER BY month;",
+        "expected_tables": "loan_payments",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-013",
+        "query": "For each branch, show the number of customers with no active loans, no active accounts, and no active portfolios simultaneously (fully dormant customers).",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, COUNT(c.id) AS dormant_customers FROM customers c JOIN branches b ON c.branch_id=b.id WHERE c.is_active=1 AND c.id NOT IN (SELECT customer_id FROM loans WHERE status='active') AND c.id NOT IN (SELECT customer_id FROM accounts WHERE status='active') AND c.id NOT IN (SELECT customer_id FROM portfolios WHERE is_active=1) GROUP BY b.id,b.name ORDER BY dormant_customers DESC;",
+        "expected_tables": "customers, branches, loans, accounts, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-014",
+        "query": "Compute the weighted average interest rate of the active loan book, weighted by outstanding balance, broken down by loan type.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT lt.name, ROUND(SUM(l.interest_rate*l.outstanding_balance)/NULLIF(SUM(l.outstanding_balance),0),4) AS weighted_avg_rate, ROUND(SUM(l.outstanding_balance),2) AS total_outstanding FROM loans l JOIN loan_types lt ON l.loan_type_id=lt.id WHERE l.status='active' GROUP BY lt.name ORDER BY total_outstanding DESC;",
+        "expected_tables": "loans, loan_types",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-015",
+        "query": "List all customers who have made a Salary Credit transaction but do not have an active savings or premium savings account \u2014 potential cross-sell opportunity.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT DISTINCT c.full_name, c.city FROM customers c JOIN accounts a ON a.customer_id=c.id JOIN transactions t ON t.account_id=a.id JOIN transaction_categories tc ON t.category_id=tc.id WHERE tc.name='Salary Credit' AND c.id NOT IN (SELECT ac.customer_id FROM accounts ac JOIN account_types aty ON ac.account_type_id=aty.id WHERE aty.name IN ('Savings Account','Premium Savings') AND ac.status='active');",
+        "expected_tables": "customers, accounts, transactions, transaction_categories, account_types",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-016",
+        "query": "For each Investment Analyst, show the total portfolio value they manage and the average portfolio performance (total unrealized P&L / total cost basis).",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT e.full_name AS analyst, ROUND(SUM(p.total_value),2) AS total_aum, ROUND(100.0*SUM(ph.unrealized_pnl)/NULLIF(SUM(ph.quantity*ph.avg_buy_price),0),2) AS avg_pnl_pct FROM employees e JOIN customers c ON c.relationship_manager_id=e.id JOIN portfolios p ON p.customer_id=c.id JOIN portfolio_holdings ph ON ph.portfolio_id=p.id WHERE e.role='Investment Analyst' AND p.is_active=1 GROUP BY e.id,e.full_name ORDER BY total_aum DESC;",
+        "expected_tables": "employees, customers, portfolios, portfolio_holdings",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-017",
+        "query": "Show all customers whose total debit transactions in the last recorded month exceed EGP 200,000, ranked by total debit amount.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, ROUND(SUM(t.amount),2) AS total_debit FROM transactions t JOIN accounts a ON t.account_id=a.id JOIN customers c ON a.customer_id=c.id WHERE t.direction='debit' AND t.status='completed' AND STRFTIME('%Y-%m',t.transaction_date)=(SELECT MAX(STRFTIME('%Y-%m',transaction_date)) FROM transactions) GROUP BY c.id,c.full_name HAVING SUM(t.amount)>200000 ORDER BY total_debit DESC;",
+        "expected_tables": "transactions, accounts, customers",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-018",
+        "query": "For each asset, show price on the first and last recorded date, total price change, and total trading volume across all recorded days.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.symbol, a.name, MIN(mp.price_date) AS first_date, MAX(mp.price_date) AS last_date, ROUND(MIN(CASE WHEN mp.price_date=(SELECT MIN(price_date) FROM market_prices mp2 WHERE mp2.asset_id=a.id) THEN mp.price END),4) AS first_price, ROUND(MAX(CASE WHEN mp.price_date=(SELECT MAX(price_date) FROM market_prices mp2 WHERE mp2.asset_id=a.id) THEN mp.price END),4) AS last_price, SUM(mp.volume) AS total_volume FROM market_prices mp JOIN assets a ON mp.asset_id=a.id GROUP BY a.id,a.symbol,a.name ORDER BY a.symbol;",
+        "expected_tables": "market_prices, assets",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-019",
+        "query": "Find all customers with more than one loan of different types currently active. Show customer name, loan types, and total outstanding across all loans.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, GROUP_CONCAT(DISTINCT lt.name) AS loan_types, COUNT(l.id) AS loan_count, ROUND(SUM(l.outstanding_balance),2) AS total_outstanding FROM customers c JOIN loans l ON l.customer_id=c.id JOIN loan_types lt ON l.loan_type_id=lt.id WHERE l.status='active' GROUP BY c.id,c.full_name HAVING COUNT(DISTINCT l.loan_type_id)>1 ORDER BY total_outstanding DESC;",
+        "expected_tables": "customers, loans, loan_types",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-020",
+        "query": "Show the repayment performance per loan officer: total loans managed, % on-time payments, % late payments, % missed payments.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT e.full_name AS loan_officer, COUNT(DISTINCT l.id) AS total_loans, ROUND(100.0*SUM(CASE WHEN lp.status='on_time' THEN 1 ELSE 0 END)/NULLIF(COUNT(lp.id),0),2) AS pct_on_time, ROUND(100.0*SUM(CASE WHEN lp.status='late' THEN 1 ELSE 0 END)/NULLIF(COUNT(lp.id),0),2) AS pct_late, ROUND(100.0*SUM(CASE WHEN lp.status='missed' THEN 1 ELSE 0 END)/NULLIF(COUNT(lp.id),0),2) AS pct_missed FROM employees e JOIN customers c ON c.relationship_manager_id=e.id JOIN loans l ON l.customer_id=c.id JOIN loan_payments lp ON lp.loan_id=l.id WHERE e.role='Loan Officer' GROUP BY e.id,e.full_name ORDER BY pct_missed DESC;",
+        "expected_tables": "employees, customers, loans, loan_payments",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-021",
+        "query": "List all accounts opened in 2024 with a starting balance above EGP 50,000. Show account type, customer, branch, and current balance.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT at.name AS acct_type, c.full_name, b.name AS branch, a.account_number, a.balance FROM accounts a JOIN customers c ON a.customer_id=c.id JOIN account_types at ON a.account_type_id=at.id JOIN branches b ON c.branch_id=b.id WHERE STRFTIME('%Y',a.opened_date)='2024' AND a.balance>50000 ORDER BY a.balance DESC;",
+        "expected_tables": "accounts, customers, account_types, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-022",
+        "query": "For each branch, calculate the total interest income accrued from active loans (outstanding_balance \u00d7 interest_rate / 12 for one month).",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT b.name, ROUND(SUM(l.outstanding_balance*l.interest_rate/12),2) AS monthly_interest_income, COUNT(l.id) AS active_loans FROM loans l JOIN branches b ON l.branch_id=b.id WHERE l.status='active' GROUP BY b.id,b.name ORDER BY monthly_interest_income DESC;",
+        "expected_tables": "loans, branches",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-023",
+        "query": "Which customers have had their accounts frozen? Show their name, account number, account type, last activity date, and balance.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, a.account_number, at.name AS acct_type, a.last_activity, a.balance FROM accounts a JOIN customers c ON a.customer_id=c.id JOIN account_types at ON a.account_type_id=at.id WHERE a.status='frozen' ORDER BY a.balance DESC;",
+        "expected_tables": "accounts, customers, account_types",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-024",
+        "query": "Show top 5 assets by total portfolio holdings count across all active portfolios, with their current combined market value.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT a.symbol, a.name, a.asset_class, COUNT(ph.id) AS num_holdings, ROUND(SUM(ph.current_value),2) AS total_market_value FROM portfolio_holdings ph JOIN assets a ON ph.asset_id=a.id JOIN portfolios p ON ph.portfolio_id=p.id WHERE p.is_active=1 GROUP BY a.id,a.symbol,a.name,a.asset_class ORDER BY num_holdings DESC LIMIT 5;",
+        "expected_tables": "portfolio_holdings, assets, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-025",
+        "query": "Compute month-over-month transaction volume growth rate for completed transactions in 2024.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT month, total_vol, LAG(total_vol) OVER (ORDER BY month) AS prev_month_vol, ROUND(100.0*(total_vol-LAG(total_vol) OVER (ORDER BY month))/NULLIF(LAG(total_vol) OVER (ORDER BY month),0),2) AS mom_growth_pct FROM (SELECT STRFTIME('%Y-%m',transaction_date) AS month, ROUND(SUM(amount),2) AS total_vol FROM transactions WHERE status='completed' AND STRFTIME('%Y',transaction_date)='2024' GROUP BY month) ORDER BY month;",
+        "expected_tables": "transactions",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-026",
+        "query": "List all customers who joined in 2024 who already have at least one loan and at least one portfolio. Show their branch and product counts.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, b.name AS branch, COUNT(DISTINCT l.id) AS loan_count, COUNT(DISTINCT p.id) AS portfolio_count FROM customers c JOIN branches b ON c.branch_id=b.id JOIN loans l ON l.customer_id=c.id JOIN portfolios p ON p.customer_id=c.id WHERE STRFTIME('%Y',c.joined_date)='2024' GROUP BY c.id,c.full_name,b.name HAVING loan_count>=1 AND portfolio_count>=1;",
+        "expected_tables": "customers, branches, loans, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-027",
+        "query": "For each city, show the total outstanding loan balance, total account balance, and net lending position (loans minus deposits).",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.city, ROUND(SUM(DISTINCT l.outstanding_balance),2) AS total_loans, ROUND(SUM(DISTINCT a.balance),2) AS total_deposits, ROUND(SUM(DISTINCT l.outstanding_balance)-SUM(DISTINCT a.balance),2) AS net_lending FROM customers c LEFT JOIN loans l ON l.customer_id=c.id AND l.status='active' LEFT JOIN accounts a ON a.customer_id=c.id AND a.status='active' GROUP BY c.city ORDER BY net_lending DESC;",
+        "expected_tables": "customers, loans, accounts",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-028",
+        "query": "Show all customers verified by a KYC document type of 'Passport' whose verification is due to expire within the next 90 days.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, c.national_id, k.document_type, k.expiry_date, k.verified_by FROM customers c JOIN kyc_records k ON k.customer_id=c.id WHERE k.document_type='Passport' AND k.kyc_status='approved' AND DATE(k.expiry_date) BETWEEN DATE('now') AND DATE('now','+90 days') ORDER BY k.expiry_date ASC;",
+        "expected_tables": "customers, kyc_records",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-029",
+        "query": "For the Maadi Branch, produce a full customer 360 view: customer name, KYC status, number of accounts, total balance, active loans, and portfolio value.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT c.full_name, k.kyc_status, COUNT(DISTINCT a.id) AS acct_count, ROUND(SUM(DISTINCT a.balance),2) AS total_balance, COUNT(DISTINCT l.id) AS loan_count, ROUND(SUM(DISTINCT p.total_value),2) AS portfolio_value FROM customers c JOIN branches b ON c.branch_id=b.id LEFT JOIN kyc_records k ON k.customer_id=c.id LEFT JOIN accounts a ON a.customer_id=c.id AND a.status='active' LEFT JOIN loans l ON l.customer_id=c.id AND l.status='active' LEFT JOIN portfolios p ON p.customer_id=c.id AND p.is_active=1 WHERE b.name='Maadi Branch' GROUP BY c.id,c.full_name,k.kyc_status ORDER BY total_balance DESC;",
+        "expected_tables": "customers, branches, kyc_records, accounts, loans, portfolios",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    },
+    {
+        "qid": "CSQL-030",
+        "query": "Show all assets that appear in portfolios with a Conservative risk profile but are classified as Equity \u2014 a potential compliance breach. Include portfolio name, customer, and holding value.",
+        "ground_truth_route": "sql",
+        "ground_truth_sql": "SELECT p.name AS portfolio, c.full_name AS customer, a.symbol, a.name AS asset_name, a.asset_class, ROUND(ph.current_value,2) AS holding_value FROM portfolios p JOIN portfolio_holdings ph ON ph.portfolio_id=p.id JOIN assets a ON ph.asset_id=a.id JOIN customers c ON p.customer_id=c.id WHERE p.risk_profile='Conservative' AND a.asset_class='Equity' AND p.is_active=1 ORDER BY ph.current_value DESC;",
+        "expected_tables": "portfolios, portfolio_holdings, assets, customers",
+        "sql_complexity": "complex",
+        "rq_target": "RQ3"
+    }
+]
