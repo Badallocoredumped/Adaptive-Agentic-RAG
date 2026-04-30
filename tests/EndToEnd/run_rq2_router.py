@@ -31,12 +31,31 @@ from datetime import datetime
 from collections import defaultdict
 
 sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from config import BENCHMARK_FILE, RESULTS_DIR, INTER_QUERY_DELAY_SEC, VERBOSE
 from system_adapter import call_system
 
 CLASSES = ["sql", "text", "hybrid"]
 TARGET_OVERALL_ACCURACY = 0.80   # 72/90
+
+ROUTER_ONLY = "--router-only" in sys.argv
+
+
+def _call_router_only(query: str) -> dict:
+    """Call the router directly — no SQL execution, no RAG retrieval, no synthesis."""
+    import time as _time
+    from backend.router.router import QueryRouter
+    router = QueryRouter()
+    t0 = _time.perf_counter()
+    try:
+        sub_tasks = router.decompose_with_zeroshot(query)
+        route = router.route_from_subtasks(sub_tasks)
+        latency_ms = (_time.perf_counter() - t0) * 1000
+        return {"router_decision": route, "latency_ms": latency_ms, "answer": None, "error": None}
+    except Exception as exc:
+        latency_ms = (_time.perf_counter() - t0) * 1000
+        return {"router_decision": None, "latency_ms": latency_ms, "answer": None, "error": str(exc)}
 
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -50,8 +69,9 @@ def run_classification(queries: list[dict]) -> list[dict]:
     results = []
     total = len(queries)
 
+    mode_label = "router-only" if ROUTER_ONLY else "full pipeline"
     print(f"\n{'='*70}")
-    print(f"  RQ2 Router Classification — {total} queries")
+    print(f"  RQ2 Router Classification — {total} queries  [{mode_label}]")
     print(f"{'='*70}")
 
     for idx, q in enumerate(queries, 1):
@@ -62,7 +82,7 @@ def run_classification(queries: list[dict]) -> list[dict]:
         if VERBOSE:
             print(f"\n[{idx:>2}/{total}] {qid} [{truth}]: {query[:65]}…")
 
-        response = call_system(query)
+        response = _call_router_only(query) if ROUTER_ONLY else call_system(query)
 
         predicted = (response["router_decision"] or "").strip().lower()
         correct   = predicted == truth
@@ -160,7 +180,8 @@ def build_summary(results: list[dict]) -> dict:
 
 def print_confusion_matrix(matrix: dict):
     print("\n  Confusion Matrix (rows=truth, cols=predicted):")
-    header = f"  {'truth \\ pred':>15}  " + "  ".join(f"{c:>8}" for c in CLASSES + ["other"])
+    label = "truth \\ pred"
+    header = f"  {label:>15}  " + "  ".join(f"{c:>8}" for c in CLASSES + ["other"])
     print(header)
     print("  " + "-" * (len(header) - 2))
     for truth in CLASSES:

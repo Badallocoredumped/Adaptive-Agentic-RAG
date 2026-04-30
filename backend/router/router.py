@@ -10,7 +10,6 @@ import re
 import threading
 from typing import Any
 
-from langchain_core.prompts import ChatPromptTemplate
 import requests
 
 from backend import config
@@ -18,6 +17,10 @@ from backend import config
 # Lazily-built cache of seed embeddings for the semantic router.
 _semantic_seed_embeddings: dict[str, list] | None = None
 _semantic_seed_lock = threading.Lock()
+
+# Lazily-fetched list of DB table names injected into the decompose prompt.
+_db_table_names: list[str] | None = None
+_db_table_names_lock = threading.Lock()
 
 
 @dataclass
@@ -179,26 +182,35 @@ class QueryRouter:
         self._debug(f"decompose_with_zeroshot() using chat class={chat_openai_cls.__module__}.{chat_openai_cls.__name__}")
 
         try:
-            prompt = ChatPromptTemplate.from_messages(
-                [
-                    (
-                        "system",
-                        "You are a decomposition and routing agent for a hybrid SQL + RAG system. "
-                        "Break the user query into meaningful sub-queries and assign one route for each. "
-                        "Allowed routes are exactly: sql, text. "
-                        "Return strict JSON only in this shape: "
-                        "[{{\"sub_query\": \"...\", \"route\": \"sql|text\"}}]. "
-                        "If the user asks for mixed intent, split into multiple sub-queries so each sub-query is either sql or text. "
-                        "The sub_query field must be a natural-language request, never raw SQL (no SELECT/INSERT/UPDATE/DELETE statements). "
-                        "Do not include markdown, comments, or extra keys.",
-                    ),
-                    (
-                        "human",
-                        "User query: {query}\n"
-                        "Max sub-tasks: {max_subtasks}\n"
-                        "If one sub-task is enough, return a one-item JSON list.",
-                    ),
-                ]
+            table_names = self._get_db_table_names()
+            tables_line = (
+                f"Database tables: {', '.join(table_names)}.\n\n"
+                if table_names else ""
+            )
+
+            system_content = (
+                "You are a decomposition and routing agent for a hybrid SQL + RAG system.\n"
+                "Break the user query into meaningful sub-queries and assign one route for each.\n"
+                "Allowed routes are exactly: sql, text.\n\n"
+                + tables_line +
+                "Route to sql only if the answer requires computing over actual records in the "
+                "database tables listed above (counts, sums, averages, filtering rows, looking up "
+                "specific entries).\n"
+                "Route to text if the answer is a written rule, policy, specification, limit, "
+                "procedure, or product description — even when the question sounds quantitative.\n"
+                "Key test: was this answer written down somewhere, or does it need to be computed "
+                "from data?\n\n"
+                'Return strict JSON only: [{"sub_query": "...", "route": "sql|text"}].\n'
+                "If mixed intent, split into multiple sub-queries so each is sql or text.\n"
+                "The sub_query must be a natural-language request, never raw SQL "
+                "(no SELECT/INSERT/UPDATE/DELETE).\n"
+                "No markdown, comments, or extra keys."
+            )
+
+            human_content = (
+                f"User query: {query}\n"
+                f"Max sub-tasks: {config.ROUTER_DECOMPOSE_MAX_SUBTASKS}\n"
+                "If one sub-task is enough, return a one-item JSON list."
             )
 
             llm_kwargs = {
@@ -212,13 +224,11 @@ class QueryRouter:
 
             llm = chat_openai_cls(**llm_kwargs)
 
-            chain = prompt | llm
-            response = chain.invoke(
-                {
-                    "query": query,
-                    "max_subtasks": str(config.ROUTER_DECOMPOSE_MAX_SUBTASKS),
-                }
-            )
+            from langchain_core.messages import HumanMessage, SystemMessage
+            response = llm.invoke([
+                SystemMessage(content=system_content),
+                HumanMessage(content=human_content),
+            ])
             self._debug(f"decompose_with_zeroshot() response type={type(response).__name__}")
             content = str(getattr(response, "content", ""))
             self._debug(f"decompose_with_zeroshot() raw LLM content={content!r}")
@@ -253,6 +263,31 @@ class QueryRouter:
             return "text"
         self._debug(f"route_from_subtasks() selected default: {self.default_route}")
         return self.default_route
+
+    @staticmethod
+    def _get_db_table_names() -> list[str]:
+        """Return DB table names for the router prompt (cached, no LLM call)."""
+        global _db_table_names
+        with _db_table_names_lock:
+            if _db_table_names is not None:
+                return _db_table_names
+            try:
+                from backend.sql.database import execute_query
+                if config.SQLITE_PATH:
+                    rows = execute_query(
+                        "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;"
+                    )
+                    _db_table_names = [r["name"] for r in rows]
+                else:
+                    rows = execute_query(
+                        "SELECT table_name FROM information_schema.tables "
+                        "WHERE table_schema='public' AND table_type='BASE TABLE' "
+                        "ORDER BY table_name;"
+                    )
+                    _db_table_names = [r["table_name"] for r in rows]
+            except Exception:
+                _db_table_names = []
+        return _db_table_names
 
     @staticmethod
     @lru_cache(maxsize=1)

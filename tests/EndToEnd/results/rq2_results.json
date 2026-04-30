@@ -5,10 +5,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 16372.297699999763,
+    "latency_ms": 6406.265300000086,
     "error": null,
-    "answer_snippet": "NileFinance currently has **337 active customers** [source: accounts]. However, the average account balance across all account types is reported as **null**, indicating that there may be no valid acco",
-    "timestamp": "2026-04-26T18:54:44.722087"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:34.324335"
   },
   {
     "qid": "SQL-002",
@@ -16,10 +16,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 5302.33419999422,
+    "latency_ms": 960.1362000685185,
     "error": null,
-    "answer_snippet": "NileFinance offers five account types along with their respective interest rates as follows:\n\n1. **Savings Account** - Interest Rate: 3.5%\n2. **Current Account** - Interest Rate: 0.0%\n3. **Fixed Depos",
-    "timestamp": "2026-04-26T18:54:51.025015"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:36.287871"
   },
   {
     "qid": "SQL-003",
@@ -27,10 +27,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 8175.353200000245,
+    "latency_ms": 920.3482000157237,
     "error": null,
-    "answer_snippet": "The following are the 8 branches, along with their respective cities and the dates they were opened:\n\n1. **Cairo Main Branch** - Cairo - Opened on March 10, 2005\n2. **Alexandria Corniche** - Alexandri",
-    "timestamp": "2026-04-26T18:55:00.201257"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:38.210964"
   },
   {
     "qid": "SQL-004",
@@ -38,10 +38,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 4304.3025999941165,
+    "latency_ms": 782.6856999890879,
     "error": null,
-    "answer_snippet": "There are 119 customers in the database who are Egyptian nationals, as indicated by the SQL query results [source: customers].\nSources: customers\nSynthesis latency: 1.066s",
-    "timestamp": "2026-04-26T18:55:05.506379"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:40.005661"
   },
   {
     "qid": "SQL-005",
@@ -49,10 +49,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 6227.2396000043955,
+    "latency_ms": 975.122999981977,
     "error": null,
-    "answer_snippet": "The total number of transactions per status is as follows:\n\n- **Completed**: 860 transactions, totaling $7,913,611.55\n- **Pending**: 70 transactions, totaling $702,714.09\n- **Failed**: 55 transactions",
-    "timestamp": "2026-04-26T18:55:12.734179"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:41.987261"
   },
   {
     "qid": "SQL-006",
@@ -60,10 +60,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 11901.597799995216,
+    "latency_ms": 831.8587999092415,
     "error": null,
-    "answer_snippet": "As of now, the active employee counts across various roles in all branches are as follows:\n\n- **Investment Analyst**: 7 employees\n- **Teller**: 19 employees\n- **Branch Manager**: 6 employees\n- **Risk ",
-    "timestamp": "2026-04-26T18:55:25.636202"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:43.833804"
   },
   {
     "qid": "SQL-007",
@@ -71,10 +71,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 6371.915399999125,
+    "latency_ms": 1327.4641999742016,
     "error": null,
-    "answer_snippet": "The distribution of KYC (Know Your Customer) statuses across all customers is as follows:\n\n- **Approved**: 144 customers\n- **Pending**: 28 customers\n- **Rejected**: 14 customers\n- **Expired**: 14 cust",
-    "timestamp": "2026-04-26T18:55:33.008769"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:46.165303"
   },
   {
     "qid": "SQL-008",
@@ -82,10 +82,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 5655.51399999822,
+    "latency_ms": 951.6754999058321,
     "error": null,
-    "answer_snippet": "As of the latest data, the distribution of loans by status is as follows:\n\n- **Active**: 86 loans\n- **Closed**: 49 loans\n- **Defaulted**: 28 loans\n- **Restructured**: 17 loans\n\nThis information is der",
-    "timestamp": "2026-04-26T18:55:39.664744"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:48.132818"
   },
   {
     "qid": "SQL-009",
@@ -93,10 +93,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 11640.558600003715,
+    "latency_ms": 1095.3445000341162,
     "error": null,
-    "answer_snippet": "The total number of portfolio holdings per asset class is as follows:\n\n- **Equity**: 206 holdings\n- **Bond**: 82 holdings\n- **ETF**: 52 holdings\n- **Mutual Fund**: 37 holdings\n- **Gold Certificate**: ",
-    "timestamp": "2026-04-26T18:55:52.305939"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:50.227133"
   },
   {
     "qid": "SQL-010",
@@ -104,10 +104,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 14723.163799993927,
+    "latency_ms": 899.6695999521762,
     "error": null,
-    "answer_snippet": "The following assets are traded on the Egyptian Exchange (EGX), along with their respective sectors and asset classes:\n\n1. **Commercial International Bank**\n   - Symbol: COMI\n   - Asset Class: Equity\n",
-    "timestamp": "2026-04-26T18:56:08.029418"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:52.138199"
   },
   {
     "qid": "SQL-011",
@@ -115,10 +115,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 7211.864700002479,
+    "latency_ms": 1191.2937000161037,
     "error": null,
-    "answer_snippet": "The top 5 branches by total outstanding loan balance are as follows:\n\n1. **Alexandria Corniche** - $16,783,414.03\n2. **New Cairo Branch** - $11,046,517.35\n3. **Luxor Branch** - $9,178,228.66\n4. **Aswa",
-    "timestamp": "2026-04-26T18:56:16.242064"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:54.341618"
   },
   {
     "qid": "SQL-012",
@@ -126,10 +126,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 8541.700200003106,
+    "latency_ms": 864.4745000638068,
     "error": null,
-    "answer_snippet": "The monthly total transaction volume for completed transactions in 2024, grouped by month, is as follows:\n\n- **January**: $330,826.76\n- **February**: $314,626.05\n- **March**: $307,296.88\n- **April**: ",
-    "timestamp": "2026-04-26T18:56:25.784553"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:56.210266"
   },
   {
     "qid": "SQL-013",
@@ -137,10 +137,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 9404.822800002876,
+    "latency_ms": 820.1083999592811,
     "error": null,
-    "answer_snippet": "The distribution of loan statuses across all loan types is as follows:\n\n- **Auto Loan**\n  - Active: 15\n  - Closed: 9\n  - Defaulted: 5\n  - Restructured: 3\n\n- **Business Loan**\n  - Active: 20\n  - Closed",
-    "timestamp": "2026-04-26T18:56:36.189757"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:43:58.031572"
   },
   {
     "qid": "SQL-014",
@@ -148,10 +148,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 22141.811499997857,
+    "latency_ms": 1877.1446999162436,
     "error": null,
-    "answer_snippet": "The following customers have a debt-to-income (DTI) ratio that exceeds 0.60, along with their respective credit scores and risk tiers:\n\n1. **Sara Gamal**: \n   - Credit Score: 307\n   - Risk Tier: Very ",
-    "timestamp": "2026-04-26T18:56:59.331935"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:00.919142"
   },
   {
     "qid": "SQL-015",
@@ -159,10 +159,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 11205.083300010301,
+    "latency_ms": 1960.4839999228716,
     "error": null,
-    "answer_snippet": "The top 3 best-performing assets by average price change percentage are:\n\n1. **Symbol**: SILV\n   - **Name**: Silver Certificate\n   - **Average Change Percentage**: 0.9007 (or 90.07%)\n\n2. **Symbol**: H",
-    "timestamp": "2026-04-26T18:57:11.537324"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:03.890378"
   },
   {
     "qid": "SQL-016",
@@ -170,10 +170,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 37055.197199995746,
+    "latency_ms": 1165.2961999643594,
     "error": null,
-    "answer_snippet": "The following Conservative portfolios have a total value exceeding EGP 1,000,000:\n\n1. **Income Portfolio 46**\n   - Customer Name: Rana Ramadan\n   - Total Value: EGP 1,071,083.22\n\n2. **Balanced Portfol",
-    "timestamp": "2026-04-26T18:57:49.593254"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:06.059564"
   },
   {
     "qid": "SQL-017",
@@ -181,10 +181,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 9971.55479999492,
+    "latency_ms": 1532.3896000627428,
     "error": null,
-    "answer_snippet": "The total amount disbursed per loan type and the average interest rate charged for each are as follows:\n\n1. **Mortgage Loan**\n   - Total Disbursed: $83,568,925.78\n   - Average Interest Rate: 12.81%\n\n2",
-    "timestamp": "2026-04-26T18:58:00.565472"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:08.595786"
   },
   {
     "qid": "SQL-018",
@@ -192,10 +192,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 8126.469400012866,
+    "latency_ms": 1604.1534999385476,
     "error": null,
-    "answer_snippet": "The analysis of credit scores per risk tier reveals the following statistics:\n\n1. **Average Credit Score**:\n   - Low: 785.11\n   - Medium: 650.84\n   - High: 552.28\n   - Very High: 378.16\n\n2. **Minimum ",
-    "timestamp": "2026-04-26T18:58:09.692847"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:11.206044"
   },
   {
     "qid": "SQL-019",
@@ -203,10 +203,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 7382.7087999961805,
+    "latency_ms": 918.1039999239147,
     "error": null,
-    "answer_snippet": "The top 5 customers by total account balance across all their active accounts in EGP are as follows:\n\n1. **Dina Ibrahim** - EGP 2,245,383.58\n2. **Ahmed Khalil** - EGP 1,395,884.78\n3. **Sherif Abdallah",
-    "timestamp": "2026-04-26T18:58:18.076585"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:13.129247"
   },
   {
     "qid": "SQL-020",
@@ -214,10 +214,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 7807.537300002878,
+    "latency_ms": 1520.1022000983357,
     "error": null,
-    "answer_snippet": "In 2024, the number of transactions processed per channel and the total amount for each channel are as follows:\n\n1. **Mobile**\n   - Transactions: 83\n   - Total Amount: $701,152.87\n\n2. **Branch**\n   - ",
-    "timestamp": "2026-04-26T18:58:26.884707"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:15.660726"
   },
   {
     "qid": "SQL-021",
@@ -225,10 +225,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 28553.88039999525,
+    "latency_ms": 1953.2172998879105,
     "error": null,
-    "answer_snippet": "The query aimed to identify customers who have both a defaulted loan and an expired KYC record. However, the SQL query for identifying customers with defaulted loans returned no results, indicating th",
-    "timestamp": "2026-04-26T18:58:56.439429"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:18.613593"
   },
   {
     "qid": "SQL-022",
@@ -236,10 +236,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 8458.978800001205,
+    "latency_ms": 1051.4077000552788,
     "error": null,
-    "answer_snippet": "The analysis of late loan payments by loan type reveals the following:\n\n1. **Number of Late Payments per Loan Type**:\n   - **Personal Loan**: 26 late payments\n   - **Mortgage Loan**: 23 late payments\n",
-    "timestamp": "2026-04-26T18:59:05.898907"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:20.669617"
   },
   {
     "qid": "SQL-023",
@@ -247,10 +247,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 14665.633099997649,
+    "latency_ms": 1147.1409999066964,
     "error": null,
-    "answer_snippet": "The SQL query to retrieve the number of active employees per role for each branch did not return any results. This indicates that there may be no active employees in the specified roles (tellers, loan",
-    "timestamp": "2026-04-26T18:59:21.565423"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:22.823375"
   },
   {
     "qid": "SQL-024",
@@ -258,10 +258,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 11556.241600002977,
+    "latency_ms": 1632.909300038591,
     "error": null,
-    "answer_snippet": "To provide the requested information for each customer with an active loan and active portfolio, we have the following results:\n\n1. **Customer Names**: The customers with active loans and active portf",
-    "timestamp": "2026-04-26T18:59:34.122413"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:25.462181"
   },
   {
     "qid": "SQL-025",
@@ -269,10 +269,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 8624.628000005032,
+    "latency_ms": 1188.6489000171423,
     "error": null,
-    "answer_snippet": "The branches with a loan default rate above 20% are as follows:\n\n1. **Mansoura Branch**\n   - Total Loans: 19\n   - Defaulted Count: 5\n   - Default Rate: 26.32%\n\n2. **Alexandria Corniche**\n   - Total Lo",
-    "timestamp": "2026-04-26T18:59:43.747521"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:27.660110"
   },
   {
     "qid": "SQL-026",
@@ -280,10 +280,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 18289.171900003566,
+    "latency_ms": 1133.1388000398874,
     "error": null,
-    "answer_snippet": "The unrealized P&L percentage for each asset class across all active portfolios is as follows:\n\n1. **Bond**\n   - Total Current Value: $21,068,592.60\n   - Cost Basis: $19,898,318.01\n   - P&L %: 5.88%\n\n",
-    "timestamp": "2026-04-26T19:00:03.037186"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:29.803509"
   },
   {
     "qid": "SQL-027",
@@ -291,10 +291,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 19688.076499995077,
+    "latency_ms": 1179.5261000515893,
     "error": null,
-    "answer_snippet": "The top 10 customers by total transaction volume, along with their respective branches and transaction counts, are as follows:\n\n1. **Dina Ibrahim**\n   - Branch: Maadi Branch\n   - Transaction Count: 21",
-    "timestamp": "2026-04-26T19:00:23.725976"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:31.990335"
   },
   {
     "qid": "SQL-028",
@@ -302,10 +302,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 10371.913999988465,
+    "latency_ms": 1150.4942000610754,
     "error": null,
-    "answer_snippet": "The query identified three customers who have more than three late loan payments and are classified in the \"Very High\" risk tier. Here are the details:\n\n1. **Wael Ramadan**\n   - Late Payment Count: 4\n",
-    "timestamp": "2026-04-26T19:00:35.098204"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:34.154977"
   },
   {
     "qid": "SQL-029",
@@ -313,10 +313,10 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 5895.094799998333,
+    "latency_ms": 1055.1075000548735,
     "error": null,
-    "answer_snippet": "The SQL query executed to find customers holding accounts in more than one currency returned no results. This means that there are currently no customers in the database who meet the criteria of holdi",
-    "timestamp": "2026-04-26T19:00:41.993720"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:36.216684"
   },
   {
     "qid": "SQL-030",
@@ -324,21 +324,21 @@
     "ground_truth_route": "sql",
     "predicted_route": "sql",
     "correct": true,
-    "latency_ms": 20561.270799997146,
+    "latency_ms": 2031.795100076124,
     "error": null,
-    "answer_snippet": "The credit risk summary per branch is as follows:\n\n1. **Alexandria Corniche**\n   - Customer Count: 18\n   - Average Credit Score: 604.26\n   - Risk Tier Counts: Low: 11, Medium: 5, High: 2, Very High: 9",
-    "timestamp": "2026-04-26T19:01:03.555610"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:39.258902"
   },
   {
     "qid": "TXT-001",
     "query": "What are NileFinance's Standard CDD requirements for new customers according to the AML/KYC policy?",
     "ground_truth_route": "text",
-    "predicted_route": "sql",
-    "correct": false,
-    "latency_ms": 9917.663999993238,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1096.778200007975,
     "error": null,
-    "answer_snippet": "Clarification required.\n{\"needs_clarification\": true, \"reason\": \"No evidence found regarding Standard CDD requirements.\", \"question\": \"Do you have access to the AML/KYC policy document or any other so",
-    "timestamp": "2026-04-26T19:01:14.473753"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:41.366837"
   },
   {
     "qid": "TXT-002",
@@ -346,10 +346,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 13476.404300003196,
+    "latency_ms": 2874.5327999349684,
     "error": null,
-    "answer_snippet": "At NileFinance, several transaction monitoring thresholds can trigger a Suspicious Activity Report (SAR). These thresholds are defined as follows:\n\n1. **Large Cash Deposit**: A single transaction of E",
-    "timestamp": "2026-04-26T19:01:28.950940"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:45.245750"
   },
   {
     "qid": "TXT-003",
@@ -357,21 +357,21 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 13949.746499987668,
+    "latency_ms": 1405.0909999059513,
     "error": null,
-    "answer_snippet": "To file a Suspicious Activity Report (SAR) with the Egyptian Financial Intelligence Unit (EFIU), a compliance officer must follow these steps:\n\n1. **Determine Suspicion**: The officer must first ident",
-    "timestamp": "2026-04-26T19:01:43.901229"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:47.664887"
   },
   {
     "qid": "TXT-004",
     "query": "Which customer categories require Enhanced Due Diligence (EDD) at NileFinance?",
     "ground_truth_route": "text",
-    "predicted_route": "sql",
-    "correct": false,
-    "latency_ms": 8420.353000008618,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1220.377300051041,
     "error": null,
-    "answer_snippet": "At NileFinance, the customer categories that require Enhanced Due Diligence (EDD) are identified based on the types of documents associated with their KYC (Know Your Customer) records. The following d",
-    "timestamp": "2026-04-26T19:01:53.322550"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:49.898470"
   },
   {
     "qid": "TXT-005",
@@ -379,43 +379,43 @@
     "ground_truth_route": "text",
     "predicted_route": "sql",
     "correct": false,
-    "latency_ms": 9406.423599997652,
+    "latency_ms": 1813.8436999870464,
     "error": null,
-    "answer_snippet": "NileFinance offers several loan products, each with specific maximum loan amounts and base interest rates. Here are the details:\n\n1. **Personal Loan**\n   - Maximum Loan Amount: 500,000\n   - Base Inter",
-    "timestamp": "2026-04-26T19:02:03.729583"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:52.716804"
   },
   {
     "qid": "TXT-006",
     "query": "What is the maximum permissible debt-to-income ratio for personal loans and mortgage loans per NileFinance credit policy?",
     "ground_truth_route": "text",
-    "predicted_route": "sql",
-    "correct": false,
-    "latency_ms": 26479.333700001007,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1653.9723000023514,
     "error": null,
-    "answer_snippet": "According to the NileFinance credit policy, the maximum permissible debt-to-income ratio for personal loans is 71.8% [source: SQL]. However, there is no available data regarding the maximum permissibl",
-    "timestamp": "2026-04-26T19:02:31.209698"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:55.386829"
   },
   {
     "qid": "TXT-007",
     "query": "What collateral is required for each loan product type in the NileFinance catalogue?",
     "ground_truth_route": "text",
-    "predicted_route": "sql",
-    "correct": false,
-    "latency_ms": 28286.562100009178,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 887.9616999765858,
     "error": null,
-    "answer_snippet": "The collateral required for each loan product type in the NileFinance catalogue is as follows:\n\n1. **Mortgage Loan**: \n   - Gold\n   - Property\n   - Vehicle\n   - Guarantor\n   - (Some entries have no sp",
-    "timestamp": "2026-04-26T19:03:00.496637"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:57.276494"
   },
   {
     "qid": "TXT-008",
     "query": "What are the interest rates, minimum balances, and fee structures for each NileFinance retail account type?",
     "ground_truth_route": "text",
-    "predicted_route": "sql",
-    "correct": false,
-    "latency_ms": 13233.337099998607,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1117.1180000528693,
     "error": null,
-    "answer_snippet": "NileFinance offers several retail account types, each with distinct interest rates, minimum balances, and fee structures. Here’s a summary of the key details:\n\n### Interest Rates\n- **Youth Account**: ",
-    "timestamp": "2026-04-26T19:03:14.730681"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:44:59.393362"
   },
   {
     "qid": "TXT-009",
@@ -423,10 +423,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 19683.144399998127,
+    "latency_ms": 2248.7524999305606,
     "error": null,
-    "answer_snippet": "The NileFinance account dormancy policy outlines the following stages for account status based on inactivity:\n\n1. **Flagged**: An account is flagged as **dormant** after **12 months** of inactivity. D",
-    "timestamp": "2026-04-26T19:03:35.414466"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:02.641416"
   },
   {
     "qid": "TXT-010",
@@ -434,21 +434,21 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 11594.636899986654,
+    "latency_ms": 1109.2848000116646,
     "error": null,
-    "answer_snippet": "The three portfolio risk profiles—Conservative, Moderate, and Aggressive—are designed to guide investors in asset allocation based on their risk tolerance and investment goals.\n\n1. **Conservative Prof",
-    "timestamp": "2026-04-26T19:03:48.009494"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:04.753410"
   },
   {
     "qid": "TXT-011",
     "query": "What are the portfolio management fee tiers at NileFinance and when are performance fees triggered?",
     "ground_truth_route": "text",
-    "predicted_route": "hybrid",
-    "correct": false,
-    "latency_ms": 10293.295099996612,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1141.431099968031,
     "error": null,
-    "answer_snippet": "NileFinance has a structured fee system for portfolio management that varies based on the portfolio value. Here are the details of the fee tiers:\n\n1. **Portfolio Value < 100,000 EGP**:\n   - **Annual M",
-    "timestamp": "2026-04-26T19:03:59.303391"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:06.906635"
   },
   {
     "qid": "TXT-012",
@@ -456,32 +456,32 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 8191.214599995874,
+    "latency_ms": 822.8850000305101,
     "error": null,
-    "answer_snippet": "The Investment Suitability Questionnaire (ISQ) evaluates various factors to determine the appropriateness of investment options for clients. However, the specific factors assessed in the ISQ were not ",
-    "timestamp": "2026-04-26T19:04:08.495251"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:08.733405"
   },
   {
     "qid": "TXT-013",
     "query": "What minimum combined balance qualifies a customer for NileFinance Premium wealth management, and what benefits do they receive?",
     "ground_truth_route": "text",
-    "predicted_route": "hybrid",
-    "correct": false,
-    "latency_ms": 11282.277599995723,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1522.1203999826685,
     "error": null,
-    "answer_snippet": "To qualify for NileFinance Premium wealth management, a customer must maintain a minimum combined balance of EGP 5,000,000 or its equivalent in USD [source: premium_wealth_management.pdf]. However, th",
-    "timestamp": "2026-04-26T19:04:20.778043"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:11.263474"
   },
   {
     "qid": "TXT-014",
     "query": "What are the transaction channel limits (single transaction, daily, monthly) for NileFinance Mobile App, Online Portal, and ATM?",
     "ground_truth_route": "text",
-    "predicted_route": "sql",
-    "correct": false,
-    "latency_ms": 9648.120099998778,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 2466.653999988921,
     "error": null,
-    "answer_snippet": "The transaction channel limits for the NileFinance Mobile App, Online Portal, and ATM are as follows:\n\n1. **NileFinance Mobile App**:\n   - Total Amount Transacted: $2,009,982.30\n   - Number of Transac",
-    "timestamp": "2026-04-26T19:04:31.426835"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:14.744966"
   },
   {
     "qid": "TXT-015",
@@ -489,65 +489,65 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 14155.692100001033,
+    "latency_ms": 1942.7030000369996,
     "error": null,
-    "answer_snippet": "NileFinance has established specific timelines for dispute resolution across various transaction types, as outlined in their Transaction Operations Policy.\n\n1. **ATM Disputes**: Customers can dispute ",
-    "timestamp": "2026-04-26T19:04:46.583056"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:17.695737"
   },
   {
     "qid": "TXT-016",
     "query": "What are the salary grade bands and typical branch staffing ratios per role at NileFinance?",
     "ground_truth_route": "text",
-    "predicted_route": "sql",
-    "correct": false,
-    "latency_ms": 7805.627800000366,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1662.5218000262976,
     "error": null,
-    "answer_snippet": "At NileFinance, the salary grade bands for active employees vary significantly, with salaries ranging from approximately $8,808 to $38,108. Here are some specific salary figures observed:\n\n- The lowes",
-    "timestamp": "2026-04-26T19:04:55.389242"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:20.365294"
   },
   {
     "qid": "TXT-017",
     "query": "What are NileFinance employee leave entitlements — annual, sick, maternity, and Hajj leave policies?",
     "ground_truth_route": "text",
-    "predicted_route": "sql",
-    "correct": false,
-    "latency_ms": 15595.161400007783,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 2014.9495000950992,
     "error": null,
-    "answer_snippet": "NileFinance employees have specific leave entitlements, which include annual leave and sick leave, but there is currently no available information regarding maternity leave and Hajj leave policies.\n\n1",
-    "timestamp": "2026-04-26T19:05:11.984724"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:23.392087"
   },
   {
     "qid": "TXT-018",
     "query": "What are the debit card product options, annual fees, and lost-card liability rules at NileFinance?",
     "ground_truth_route": "text",
-    "predicted_route": "hybrid",
-    "correct": false,
-    "latency_ms": 21710.514499995043,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1511.6870999336243,
     "error": null,
-    "answer_snippet": "NileFinance offers several debit card products, each with different annual fees and lost-card liability rules. Here are the details:\n\n### Debit Card Product Options and Annual Fees\n1. **Meeza Debit Ca",
-    "timestamp": "2026-04-26T19:05:34.696020"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:25.905683"
   },
   {
     "qid": "TXT-019",
     "query": "What are the NilePay instant payment limits and the domestic ACH and RTGS transfer fees and cutoff times?",
     "ground_truth_route": "text",
-    "predicted_route": "hybrid",
-    "correct": false,
-    "latency_ms": 28198.097000000416,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1605.9532000217587,
     "error": null,
-    "answer_snippet": "NilePay offers various transaction limits for its instant payment service, which operates 24/7. The limits are as follows:\n\n- **Mobile App**: \n  - Single Transaction: EGP 50,000\n  - Daily Limit: EGP 1",
-    "timestamp": "2026-04-26T19:06:03.894948"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:28.522178"
   },
   {
     "qid": "TXT-020",
     "query": "What are NileFinance's branch operating hours, teller hierarchy, and branch-to-head-office transfer procedures per the branch operations manual?",
     "ground_truth_route": "text",
-    "predicted_route": "hybrid",
-    "correct": false,
-    "latency_ms": 14107.88889999094,
+    "predicted_route": "text",
+    "correct": true,
+    "latency_ms": 1675.6829000078142,
     "error": null,
-    "answer_snippet": "NileFinance's branch operations encompass several key aspects, including branch operating hours, teller hierarchy, and procedures for transferring funds between branches and the head office.\n\n### Bran",
-    "timestamp": "2026-04-26T19:06:19.003386"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:31.208501"
   },
   {
     "qid": "TXT-021",
@@ -555,10 +555,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 14917.355699988548,
+    "latency_ms": 1150.7932998938486,
     "error": null,
-    "answer_snippet": "The Basel Committee document BCBS 155 outlines several key principles for sound stress testing practices and supervision. These principles aim to enhance the effectiveness of stress testing in banks a",
-    "timestamp": "2026-04-26T19:06:34.921234"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:33.363650"
   },
   {
     "qid": "TXT-022",
@@ -566,10 +566,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 13642.933700000867,
+    "latency_ms": 1424.5113000506535,
     "error": null,
-    "answer_snippet": "The Basel III liquidity standards, specifically the Liquidity Coverage Ratio (LCR) and the Net Stable Funding Ratio (NSFR), are designed to enhance the resilience of banks against liquidity risks. \n\n1",
-    "timestamp": "2026-04-26T19:06:49.564804"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:35.793647"
   },
   {
     "qid": "TXT-023",
@@ -577,10 +577,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 10705.702599996584,
+    "latency_ms": 1152.0026000216603,
     "error": null,
-    "answer_snippet": "The Basel Committee outlines several key principles for the sound management of operational risk in its document BCBS 195. These principles are designed to enhance the resilience of banks and ensure e",
-    "timestamp": "2026-04-26T19:07:01.271293"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:37.953395"
   },
   {
     "qid": "TXT-024",
@@ -588,10 +588,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 31427.06729999918,
+    "latency_ms": 1228.649799944833,
     "error": null,
-    "answer_snippet": "The Basel Committee on Banking Supervision provides comprehensive guidance on credit risk and accounting for expected credit losses (ECL) in its document from December 2015. \n\n### Guidance on Credit R",
-    "timestamp": "2026-04-26T19:07:33.698952"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:40.193626"
   },
   {
     "qid": "TXT-025",
@@ -599,10 +599,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 17021.78830000048,
+    "latency_ms": 7550.755299977027,
     "error": null,
-    "answer_snippet": "The FATF (Financial Action Task Force) has established several recommendations for Anti-Money Laundering (AML) measures that are particularly relevant to financial inclusion programs. These recommenda",
-    "timestamp": "2026-04-26T19:07:51.721151"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:48.758902"
   },
   {
     "qid": "TXT-026",
@@ -610,10 +610,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 9546.7423999944,
+    "latency_ms": 1071.06600003317,
     "error": null,
-    "answer_snippet": "The FATF recommends a risk-based approach (RBA) for the securities sector as a central element for effectively implementing its International Standards on Combating Money Laundering and the Financing ",
-    "timestamp": "2026-04-26T19:08:02.268316"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:50.841595"
   },
   {
     "qid": "TXT-027",
@@ -621,10 +621,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 16723.665299999993,
+    "latency_ms": 1000.3294999478385,
     "error": null,
-    "answer_snippet": "The IMF Fintech Note (ftnea2023004) recommends several institutional arrangements for fintech regulation and supervisory monitoring. Here are the key points:\n\n1. **Existing Supervisory Structures**: T",
-    "timestamp": "2026-04-26T19:08:19.992382"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:52.852291"
   },
   {
     "qid": "TXT-028",
@@ -632,10 +632,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 11892.648900000495,
+    "latency_ms": 1378.555699950084,
     "error": null,
-    "answer_snippet": "The NileFinance Digital Channels & Cybersecurity Policy outlines its approach to zero-trust architecture and information security principles as follows:\n\n1. **Zero-Trust Architecture**: The policy exp",
-    "timestamp": "2026-04-26T19:08:32.885575"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:55.235326"
   },
   {
     "qid": "TXT-029",
@@ -643,10 +643,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 19172.429799989914,
+    "latency_ms": 1732.1733999997377,
     "error": null,
-    "answer_snippet": "The corporate and SME banking guide outlines specific requirements and interest rates for both SME and Business loans offered by NileFinance.\n\n### SME Loan Requirements and Interest Rates\n- **Maximum ",
-    "timestamp": "2026-04-26T19:08:53.058665"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:57.978383"
   },
   {
     "qid": "TXT-030",
@@ -654,10 +654,10 @@
     "ground_truth_route": "text",
     "predicted_route": "text",
     "correct": true,
-    "latency_ms": 9803.520400004345,
+    "latency_ms": 869.0550999017432,
     "error": null,
-    "answer_snippet": "The Basel Committee for Banking Supervision has outlined several principles for managing credit risk, as detailed in their document from April 2025. These principles serve as guidelines for banking su",
-    "timestamp": "2026-04-26T19:09:03.862616"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:45:59.848591"
   },
   {
     "qid": "HYB-001",
@@ -665,10 +665,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 18607.949099998223,
+    "latency_ms": 1203.3306000521407,
     "error": null,
-    "answer_snippet": "There are several active customers with a pending KYC status. The following individuals are currently in this situation:\n\n1. Karim Osman - karim.osman.174@finmail.com\n2. Dina Soliman - dina.soliman.45",
-    "timestamp": "2026-04-26T19:09:23.471330"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:02.065276"
   },
   {
     "qid": "HYB-002",
@@ -676,10 +676,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 10468.697000003885,
+    "latency_ms": 2737.2181999962777,
     "error": null,
-    "answer_snippet": "There are 74 customers with a debt-to-income (DTI) ratio above 40% [source: SQL]. However, no specific details about these customers could be retrieved, as the query for their information returned no ",
-    "timestamp": "2026-04-26T19:09:34.940359"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:05.808530"
   },
   {
     "qid": "HYB-003",
@@ -687,10 +687,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 48458.64700000675,
+    "latency_ms": 2164.010400068946,
     "error": null,
-    "answer_snippet": "There are several Conservative portfolios that hold Equity assets. The following portfolios have been identified:\n\n1. **Income Portfolio 3** - Total Value: $1,688,453.69\n2. **Income Portfolio 4** - To",
-    "timestamp": "2026-04-26T19:10:24.399341"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:08.978983"
   },
   {
     "qid": "HYB-004",
@@ -698,10 +698,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 8317.801400000462,
+    "latency_ms": 1695.578100043349,
     "error": null,
-    "answer_snippet": "There are currently no debit transactions recorded above EGP 50,000 in the database, as the SQL query returned no results [source: transactions]. \n\nRegarding the AML (Anti-Money Laundering) policy and",
-    "timestamp": "2026-04-26T19:10:33.717723"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:11.686512"
   },
   {
     "qid": "HYB-005",
@@ -709,10 +709,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 49404.9251999968,
+    "latency_ms": 1623.2008000370115,
     "error": null,
-    "answer_snippet": "Several SME loans were disbursed to accounts that do not belong to the borrowing customers, which constitutes a policy violation. The details of these loans are as follows:\n\n1. Loan ID: 1\n   - Princip",
-    "timestamp": "2026-04-26T19:11:24.123243"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:14.317481"
   },
   {
     "qid": "HYB-006",
@@ -720,10 +720,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 9726.353900012327,
+    "latency_ms": 1330.4962000111118,
     "error": null,
-    "answer_snippet": "The average credit score of customers classified in the \"Very High\" risk tier is approximately 378.16 [source: risk_assessments]. \n\nRegarding the management of such borrowers, the Basel Committee for ",
-    "timestamp": "2026-04-26T19:11:34.850368"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:16.658835"
   },
   {
     "qid": "HYB-007",
@@ -731,10 +731,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "sql",
     "correct": false,
-    "latency_ms": 10979.56740000518,
+    "latency_ms": 1479.6629999764264,
     "error": null,
-    "answer_snippet": "The query to list employees who are paid above the top of their salary grade band returned no results. This means that there are currently no active employees in the database whose salaries exceed the",
-    "timestamp": "2026-04-26T19:11:46.830328"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:19.142111"
   },
   {
     "qid": "HYB-008",
@@ -742,10 +742,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 10878.742600005353,
+    "latency_ms": 1407.8911999240518,
     "error": null,
-    "answer_snippet": "The customers with expired KYC and active investment portfolios are as follows:\n\n1. Amr Bahgat - amr.bahgat.185@finmail.com\n2. Hana Mohamed - hana.mohamed.73@finmail.com\n3. Hassan Mostafa - hassan.mos",
-    "timestamp": "2026-04-26T19:11:58.709856"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:21.558186"
   },
   {
     "qid": "HYB-009",
@@ -753,10 +753,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 12081.871599992155,
+    "latency_ms": 1295.4123000381514,
     "error": null,
-    "answer_snippet": "The top 5 customers by total portfolio value are as follows:\n\n1. **Rana Nasser** - EGP 5,291,825.87\n2. **Sherif Osman** - EGP 4,046,725.73\n3. **Hana Bahgat** - EGP 3,512,699.56\n4. **Ahmed Attia** - EG",
-    "timestamp": "2026-04-26T19:12:11.792484"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:23.863119"
   },
   {
     "qid": "HYB-010",
@@ -764,10 +764,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 12950.2230000071,
+    "latency_ms": 1484.7252999898046,
     "error": null,
-    "answer_snippet": "In 2024, the transaction counts per channel for NileFinance are as follows:\n\n- **Branch**: 89 transactions\n- **ATM**: 89 transactions\n- **Mobile**: 88 transactions\n- **Online**: 88 transactions\n- **PO",
-    "timestamp": "2026-04-26T19:12:25.743282"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:26.356719"
   },
   {
     "qid": "HYB-011",
@@ -775,10 +775,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 21322.753000000375,
+    "latency_ms": 3590.928899939172,
     "error": null,
-    "answer_snippet": "The query regarding customers with rejected KYC records and the associated AML policy requirements has been addressed through two sub-tasks.\n\n1. **Customers with Rejected KYC Records**: The following ",
-    "timestamp": "2026-04-26T19:12:48.066820"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:30.951404"
   },
   {
     "qid": "HYB-012",
@@ -786,10 +786,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 116397.5655999966,
+    "latency_ms": 1655.8663999894634,
     "error": null,
-    "answer_snippet": "\n+------------------------------------------------------------------+\n|  QUERY   Which customers qualify for Premium wealth management status (combined EGP balance + portfolio ≥ 5,000,000)? What exclu",
-    "timestamp": "2026-04-26T19:14:45.465072"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:33.611377"
   },
   {
     "qid": "HYB-013",
@@ -797,10 +797,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 7450.300099997548,
+    "latency_ms": 1413.9295000350103,
     "error": null,
-    "answer_snippet": "There are currently no mortgage loans with an outstanding balance over EGP 2,000,000, as the SQL query returned no results [source: SQL query]. \n\nRegarding the credit policy for mortgage loans, it emp",
-    "timestamp": "2026-04-26T19:14:53.916019"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:36.035093"
   },
   {
     "qid": "HYB-014",
@@ -808,10 +808,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 23165.9780999762,
+    "latency_ms": 1570.5840999726206,
     "error": null,
-    "answer_snippet": "In the recorded period, several assets on the Egyptian Exchange (EGX) experienced a negative average price change. The following assets were identified:\n\n1. **Euro Corporate Bond Fund (EURBN)**: Avera",
-    "timestamp": "2026-04-26T19:15:18.082405"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:38.606118"
   },
   {
     "qid": "HYB-015",
@@ -819,10 +819,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 18762.38950001425,
+    "latency_ms": 1367.1956999460235,
     "error": null,
-    "answer_snippet": "In 2024, the number of missed loan payments per branch at NileFinance was as follows:\n\n- Alexandria Corniche: 60 missed payments\n- Cairo Main Branch: 22 missed payments\n- Luxor Branch: 46 missed payme",
-    "timestamp": "2026-04-26T19:15:37.845227"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:40.987550"
   },
   {
     "qid": "HYB-016",
@@ -830,10 +830,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 12664.981200010516,
+    "latency_ms": 1716.9905999908224,
     "error": null,
-    "answer_snippet": "There were no results found for customers from Alexandria with active current accounts and their balances. The SQL query executed did not return any rows, indicating that there are currently no such c",
-    "timestamp": "2026-04-26T19:15:51.510763"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:43.707737"
   },
   {
     "qid": "HYB-017",
@@ -841,10 +841,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 11846.323999983724,
+    "latency_ms": 1883.7380000622943,
     "error": null,
-    "answer_snippet": "Currently, there are three customers with active Auto Loans secured by a Vehicle collateral:\n\n1. **Rania Attia** - Email: rania.attia.17@finmail.com, Active Loans: 1\n2. **Nadia Mostafa** - Email: nadi",
-    "timestamp": "2026-04-26T19:16:04.357786"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:46.599258"
   },
   {
     "qid": "HYB-018",
@@ -852,10 +852,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 19542.697299999418,
+    "latency_ms": 1673.3725999947637,
     "error": null,
-    "answer_snippet": "To address your query regarding customers from the Cairo Main Branch who do not have an active investment portfolio, the SQL results indicate that there is at least one active investment portfolio, sp",
-    "timestamp": "2026-04-26T19:16:24.900876"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:49.281352"
   },
   {
     "qid": "HYB-019",
@@ -863,10 +863,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 7751.420199987479,
+    "latency_ms": 1340.3421000111848,
     "error": null,
-    "answer_snippet": "In 2024, there were no recorded loan repayment amounts collected via the Mobile App, as indicated by the SQL query results which returned no rows. This suggests that either no repayments were made thr",
-    "timestamp": "2026-04-26T19:16:33.652945"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:51.622781"
   },
   {
     "qid": "HYB-020",
@@ -874,10 +874,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 17634.752199985087,
+    "latency_ms": 1273.730400018394,
     "error": null,
-    "answer_snippet": "The following are the details of all restructured loans along with their respective customers:\n\n1. **Sara Ramadan**: \n   - Principal: EGP 2,674,163.38\n   - Outstanding Balance: EGP 2,413,392.26\n2. **R",
-    "timestamp": "2026-04-26T19:16:52.288378"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:53.903417"
   },
   {
     "qid": "HYB-021",
@@ -885,10 +885,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 18764.82740000938,
+    "latency_ms": 1935.144199989736,
     "error": null,
-    "answer_snippet": "Based on the analysis of the provided data, here are the findings regarding the original query about customers with transactions matching the smurfing pattern and the SAR filing requirements per the A",
-    "timestamp": "2026-04-26T19:17:12.053551"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:56.848584"
   },
   {
     "qid": "HYB-022",
@@ -896,10 +896,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 12311.21779998648,
+    "latency_ms": 1367.8923000115901,
     "error": null,
-    "answer_snippet": "In 2024, several Fixed Deposit accounts were opened, with the following balances:\n\n1. Account Number: EG100000116 - Balance: $231,941.62\n2. Account Number: EG100000251 - Balance: $199,236.06\n3. Accoun",
-    "timestamp": "2026-04-26T19:17:25.365520"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:46:59.222045"
   },
   {
     "qid": "HYB-023",
@@ -907,10 +907,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 10877.320900006453,
+    "latency_ms": 2203.6971000488847,
     "error": null,
-    "answer_snippet": "Aggressive portfolios that hold GoldCertificate assets include the following:\n\n1. **Equity Portfolio 20**\n2. **Growth Portfolio 12**\n3. **Fixed Income Portfolio 50**\n4. **Income Portfolio 87**\n5. **Fi",
-    "timestamp": "2026-04-26T19:17:37.243703"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:47:02.439375"
   },
   {
     "qid": "HYB-024",
@@ -918,10 +918,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 8112.957000004826,
+    "latency_ms": 1418.9777999417856,
     "error": null,
-    "answer_snippet": "In 2024, there were no Business Loans originated at any branch, as indicated by the SQL query results which returned an empty set of rows [source: SQL query]. \n\nRegarding the requirements for Business",
-    "timestamp": "2026-04-26T19:17:46.357128"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:47:04.859302"
   },
   {
     "qid": "HYB-025",
@@ -929,10 +929,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 19760.455399984494,
+    "latency_ms": 1165.075899916701,
     "error": null,
-    "answer_snippet": "There are several online transactions that have been reversed. Here is a list of those transactions:\n\n1. **Transaction ID:** 3\n   - **Account Number:** EG100000187\n   - **Amount:** 464.36\n   - **Trans",
-    "timestamp": "2026-04-26T19:18:07.117961"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:47:07.039635"
   },
   {
     "qid": "HYB-026",
@@ -940,10 +940,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 8867.409599974053,
+    "latency_ms": 1368.4768999228254,
     "error": null,
-    "answer_snippet": "In your portfolio holdings, the NASDAQ-listed assets with the highest unrealized profit and loss (P&L) are as follows:\n\n1. **Microsoft (MSFT)**: $71,882.58\n2. **Amazon (AMZN)**: $28,909.12\n3. **Apple ",
-    "timestamp": "2026-04-26T19:18:16.986007"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:47:09.417040"
   },
   {
     "qid": "HYB-027",
@@ -951,10 +951,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 96457.09690000513,
+    "latency_ms": 1527.9661000240594,
     "error": null,
-    "answer_snippet": "\n+------------------------------------------------------------------+\n|  QUERY   Show customers whose accounts have been inactive (no transactions) for more than 12 months. What fees and restrictions ",
-    "timestamp": "2026-04-26T19:19:54.443828"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:47:11.952982"
   },
   {
     "qid": "HYB-028",
@@ -962,10 +962,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 13351.06050001923,
+    "latency_ms": 1359.7362999571487,
     "error": null,
-    "answer_snippet": "The average default probability per branch is as follows:\n\n- **Aswan Branch**: 20.06%\n- **Giza Smart Village**: 14.69%\n- **Cairo Main Branch**: 17.10%\n- **Alexandria Corniche**: 16.22%\n- **Maadi Branc",
-    "timestamp": "2026-04-26T19:20:08.795258"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:47:14.327215"
   },
   {
     "qid": "HYB-029",
@@ -973,10 +973,10 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 8522.775499994168,
+    "latency_ms": 1299.335200106725,
     "error": null,
-    "answer_snippet": "There are currently no Youth Account holders with a balance above EGP 10,000, as indicated by the SQL query results which returned no rows. \n\nRegarding the auto-upgrade rules for Youth Accounts, the r",
-    "timestamp": "2026-04-26T19:20:18.318634"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:47:16.635143"
   },
   {
     "qid": "HYB-030",
@@ -984,9 +984,9 @@
     "ground_truth_route": "hybrid",
     "predicted_route": "hybrid",
     "correct": true,
-    "latency_ms": 28334.89019999979,
+    "latency_ms": 1566.1738999187946,
     "error": null,
-    "answer_snippet": "The query requested information on customers assessed by Compliance Officers as their relationship managers and the requirements of the AML policy regarding the review of flagged transactions.\n\n### Cu",
-    "timestamp": "2026-04-26T19:20:47.654265"
+    "answer_snippet": "",
+    "timestamp": "2026-04-30T11:47:19.210077"
   }
 ]
