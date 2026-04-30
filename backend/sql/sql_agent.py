@@ -12,6 +12,7 @@ from .. import config
 from .database import execute_query, get_db_connection, get_live_schema
 from .table_rag import (
     build_schema_index,
+    get_full_schema_context,
     get_schema_texts,
     retrieve_relevant_schema,
 )
@@ -99,8 +100,12 @@ def _extract_table_names(schema_context: str) -> list[str]:
 
 
 
-def _ensure_schema_index_exists() -> None:
-    """Build TableRAG schema index if it does not already exist or is stale."""
+def _ensure_schema_index_exists():
+    """Build TableRAG schema index if it does not already exist or is stale.
+
+    Always returns the loaded SchemaInfo so callers can pass it directly to
+    retrieve_relevant_schema(schema_info=...) and avoid a second DB round-trip.
+    """
     index_path = config.INDEX_DIR / "schema.faiss"
     meta_path  = config.INDEX_DIR / "schema_meta.json"
     if index_path.exists() and meta_path.exists():
@@ -108,13 +113,15 @@ def _ensure_schema_index_exists() -> None:
         with open(meta_path, "r", encoding="utf-8") as f:
             stored_meta = json.load(f)
         stored_tables = {entry["table"] for entry in stored_meta}
-        live_schema = get_live_schema()
+        live_schema = get_live_schema()                      # single DB call
         if stored_tables == set(live_schema.tables.keys()):
-            return  # schema unchanged
-
-    schema_info = get_live_schema()
+            return live_schema                               # index fresh — return schema for reuse
+        schema_info = live_schema                            # reuse — no second DB hit
+    else:
+        schema_info = get_live_schema()
     if schema_info.tables:
         build_schema_index(schema_info)
+    return schema_info
 
 
 def _resolve_schema_context(query: str, schema_context: str | None, top_k: int) -> str:
@@ -394,20 +401,15 @@ def run_table_rag_pipeline(
             combined_schema_lines = []
             schema_context_for_refiner = ""
         else:
-            # Retrieve a compact, query-specific fresh schema for the refiner.
-            # We intentionally do NOT mix in the stored cached schema: the ReAct
-            # agent accumulates multiple schema_lookup observations into
-            # schema_context, which can be 5–15 k tokens for complex queries.
-            # Passing that blob to the refiner bloats its prompt far beyond what
-            # individual ReAct steps process, making cache hits slower than misses.
-            _debug(f"[TableRAG Pipeline] Score {score:.4f} < {skip_refiner_threshold}. Retrieving fresh schema for refiner...")
-            _ensure_schema_index_exists()
+            # Pass the full schema to the refiner so it sees every table and
+            # column without a TableRAG LLM selection call.
+            _debug(f"[TableRAG Pipeline] Score {score:.4f} < {skip_refiner_threshold}. Passing full schema to refiner (no TableRAG)...")
+            _loaded_schema = _ensure_schema_index_exists()
             _t0 = time.time()
-            fresh_schema_rows = retrieve_relevant_schema(query, top_k=top_k)
-            _debug(f"[Timer] TableRAG Schema Retrieval took {(time.time() - _t0):.3f}s")
+            schema_context_for_refiner = get_full_schema_context(_loaded_schema)
+            _debug(f"[Timer] Full schema context built in {(time.time() - _t0):.3f}s")
 
-            combined_schema_lines = [row.strip() for row in fresh_schema_rows if row.strip()]
-            schema_context_for_refiner = "\n".join(combined_schema_lines)
+            combined_schema_lines = [schema_context_for_refiner] if schema_context_for_refiner else []
 
             _debug(f"[TableRAG Pipeline] Running LLM SQL refiner...")
             refined_sql = _refine_sql_from_cache(
@@ -469,8 +471,8 @@ def run_table_rag_pipeline(
 
     # 2. RUN FULL PIPELINE (If Cache MISS)
     _debug("[TableRAG Pipeline] AGENT PATH: Routing to agent...")
-    
-    _ensure_schema_index_exists()
+
+    _loaded_schema = _ensure_schema_index_exists()
 
     used_react = False
     if getattr(config, "SQL_REACT_ENABLED", True):
@@ -481,14 +483,14 @@ def run_table_rag_pipeline(
 
         if not agent_result["sql"] and not agent_result["result"]:
             _debug("[TableRAG Pipeline] ⚠️  ReAct agent produced no output — falling back to single-pass agent...")
-            schema_rows = retrieve_relevant_schema(query, top_k=top_k)
+            schema_rows = retrieve_relevant_schema(query, top_k=top_k, schema_info=_loaded_schema)
             agent_result = run_sql_agent(query, schema_context="\n".join(schema_rows), top_k=top_k)
         else:
             used_react = True
             if agent_result.get("schema_context"):
                 schema_rows = [agent_result["schema_context"]]
     else:
-        schema_rows = retrieve_relevant_schema(query, top_k=top_k)
+        schema_rows = retrieve_relevant_schema(query, top_k=top_k, schema_info=_loaded_schema)
         agent_result = run_sql_agent(query, schema_context="\n".join(schema_rows), top_k=top_k)
 
     # Logging: generated SQL

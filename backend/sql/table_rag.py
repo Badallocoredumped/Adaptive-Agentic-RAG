@@ -319,6 +319,24 @@ def retrieve_relevant_schema(
     return [_format_schema_context(selected_tables, schema_info, join_hint=join_hint)]
 
 
+def get_full_schema_context(schema_info: SchemaInfo | None = None) -> str:
+    """Return a formatted schema string for ALL tables, with no LLM call.
+
+    Used by the fast-track cache-hit refiner path so the refiner sees every
+    table and column without paying the cost of LLM table selection.
+    """
+    if schema_info is None:
+        try:
+            from backend.sql.database import get_live_schema
+            schema_info = get_live_schema()
+        except Exception as exc:
+            _debug(f"[TableRAG] Could not load live schema: {exc}")
+            return ""
+
+    all_tables = sorted(schema_info.tables.keys())
+    return _format_schema_context(all_tables, schema_info)
+
+
 # ---------------------------------------------------------------------------
 # Compact schema builder  (input to the LLM selector prompt)
 # ---------------------------------------------------------------------------
@@ -378,6 +396,21 @@ def _build_compact_schema(schema_info: SchemaInfo) -> str:
 # LLM selector call
 # ---------------------------------------------------------------------------
 
+_selector_client: Any = None
+
+
+def _get_selector_client() -> Any:
+    global _selector_client
+    if _selector_client is None:
+        from openai import OpenAI  # noqa: PLC0415
+        kwargs: dict = {"api_key": getattr(config, "OPENAI_API_KEY", "") or ""}
+        base_url = getattr(config, "LLM_BASE_URL", "") or ""
+        if base_url:
+            kwargs["base_url"] = base_url
+        _selector_client = OpenAI(**kwargs)
+    return _selector_client
+
+
 _SELECTOR_SYSTEM_PROMPT = """\
 You are a database schema expert. Given a user question and a database schema, \
 identify which tables are needed to answer the question.
@@ -407,17 +440,8 @@ def _llm_select_tables(
 ) -> list[str]:
     """Call the LLM to select relevant tables. Returns [] on any failure."""
     try:
-        from openai import OpenAI  # noqa: PLC0415
-
-        api_key  = getattr(config, "OPENAI_API_KEY", "") or ""
-        base_url = getattr(config, "LLM_BASE_URL", "") or ""
-        model    = getattr(config, "SQL_OPENAI_MODEL", "gpt-4o-mini")
-
-        client_kwargs: dict = {"api_key": api_key}
-        if base_url:
-            client_kwargs["base_url"] = base_url
-
-        client = OpenAI(**client_kwargs)
+        model  = getattr(config, "SQL_OPENAI_MODEL", "gpt-4o-mini")
+        client = _get_selector_client()
 
         user_msg = _SELECTOR_USER_TEMPLATE.format(
             query=query,
